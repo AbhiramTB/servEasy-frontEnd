@@ -1,5 +1,6 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import  { useState, ChangeEvent, FormEvent } from "react";
 import { makeRequest } from "../../utils/makeRequest";
+import  {useNavigate} from "react-router-dom"
 import {
   validateEmail,
   validatePhone,
@@ -23,6 +24,8 @@ const AuthPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [useEmail, setUseEmail] = useState<boolean>(true);
   const [isError, setError] = useState<boolean | string>(false);
+  const navigate=useNavigate()
+
   const [formData, setFormData] = useState<FormData>({
     email: "",
     phoneNumber: "",
@@ -79,6 +82,7 @@ const AuthPage = () => {
           isValidateEmailOrPhone = false;
           setError("Email or phone is empty.");
         }
+
       }
   
       isValidatePassword = validatePassword(submissionData.password);
@@ -88,8 +92,16 @@ const AuthPage = () => {
       if (isValid) {
         const endpoint = isSignIn ? "/signin" : "/signup";
         const res = await makeRequest(endpoint, "POST", submissionData);
-        
-        if (res.status === 200) {
+        console.log(res.status); // Check status
+        console.log(res); // Check status
+
+        if (res.status === 201) {
+          console.log(res);
+          
+           localStorage.setItem("registerEmailorPhone",res.data.regInfo)
+       
+           navigate('/otp')
+           
           toast.success(res?.data?.message, {
             position: "top-right",
             autoClose: 5000,
@@ -102,6 +114,8 @@ const AuthPage = () => {
             transition: Bounce,
           });
         } else {
+          console.log(res.status);
+          
           setError(res.data.message || 'An error occurred. Please try again.');
         }
       } else {
@@ -120,6 +134,8 @@ const AuthPage = () => {
       setLoading(false);
     }
   };
+
+  
 
   // const handleSocialLogin = async (provider: "google"): Promise<void> => {
   //   if (onSocialLogin) {
@@ -150,9 +166,9 @@ const AuthPage = () => {
   // };
 
   return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
-      <div className="card w-full max-w-md bg-base-100 shadow-xl">
-        <div className="card-body">
+    <div className="min-h-screen bg-base-200 flex items-center justify-center    p-4 ">
+      <div className="card w-full max-w-md bg-base-100 shadow-xl  mt-[-30px]">
+        <div className="card-body border   border-opacity-35 rounded-3xl border-primary">
           <h2 className="card-title text-2xl font-bold text-center">
             {isSignIn ? "Sign In" : "Create Account"}
           </h2>

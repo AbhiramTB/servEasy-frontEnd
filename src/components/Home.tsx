@@ -1,12 +1,12 @@
 import SkeletonHome from "../Skeleton/SkeletonHome"
-import SignInSingUp from "./AuthModel/SignInSingUp"
-
+ import {Link} from "react-router-dom"
 const Home = () => {
     
     const data=null
      return (
-    <div className="p-5 pl-12 align-content: center;" >
-  {data?<></> :    <div className="flex flex-row flex-wrap">
+    <>
+  {data?<> </>
+   :   <Link to={'/signin'}> <div  className="mt-10 flex flex-row flex-wrap justify-center">
 <SkeletonHome/>
 <SkeletonHome/>
 <SkeletonHome/>
@@ -15,11 +15,11 @@ const Home = () => {
 <SkeletonHome/>
 <SkeletonHome/>
 <SkeletonHome/>
-<SkeletonHome/>
-    </div>}
-<SignInSingUp/>
+    </div> 
+    </Link>}
 
-    </div>
+
+    </>
   )
 }
 

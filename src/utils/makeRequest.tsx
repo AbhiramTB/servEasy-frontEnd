@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { URL } from "./constant";
 export const makeRequest   = async(
   endPoint: string,
@@ -24,8 +24,9 @@ try {
     return response 
 
 } catch (error) {
+    console.log('axios error');
     
- console.log(error);
+    throw error as AxiosError
  
     
 }
