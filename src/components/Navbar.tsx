@@ -1,18 +1,19 @@
-import logo from '../assets/LOGO/logW.jpg'
+// import logo from '../assets/LOGO/logW.jpg'
 import ThemeChange from './ThemeChange'
 
 const Navbar = () => {
   return (
     <div>
-       <div className="navbar bg-base-100 border border-primary ">
+       <div className="navbar bg-base-100 border border-primary border-x-0 border-t-0 ">
   <div className="flex-1">
     <div className=" ">
-          <img 
+          {/* <img 
           className='w-24'
             alt="Tailwind CSS Navbar component"
-            src={logo} />
+            src={logo} /> */}
         </div>
-        <a className="btn btn-ghost text-xl">daisyUI</a>
+        
+        <a className="btn btn-ghost text-xl font-serif ">ServEasy</a>
 
   </div>
   <div className="flex-none gap-2">
@@ -24,9 +25,9 @@ const Navbar = () => {
     <div className="dropdown dropdown-end">
       <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
         <div className="w-10 rounded-full">
-          <img
+          {/* <img
             alt="Tailwind CSS Navbar component"
-            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" /> */}
         </div>
       </div>
       <ul
