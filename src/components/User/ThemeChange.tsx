@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { lightTheme,darkTheme } from "../utils/constant";
+import { lightTheme,darkTheme } from "../../utils/constant";
 const ThemeChange = () => {
 
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || lightTheme);
