@@ -1,4 +1,4 @@
-import SkeletonHome from "../Skeleton/SkeletonHome"
+import SkeletonHome from "../../Skeleton/SkeletonHome"
  import {Link} from "react-router-dom"
 const Home = () => {
     

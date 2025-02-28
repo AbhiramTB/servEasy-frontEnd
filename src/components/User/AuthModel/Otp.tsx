@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { makeRequest } from "../../utils/makeRequest";
+import { makeRequest } from "../../../utils/makeRequest";
 import { ToastContainer } from "react-toastify";
-import { toastifyError, toastifySuccess } from "../../utils/Toastify";
+import { toastifyError, toastifySuccess } from "../../../utils/Toastify";
 import { useNavigate } from "react-router-dom";
-import { apiEndPoint } from "../../utils/constant";
-import { validateEmail, validatePhone } from "../../utils/validate";
-
+import { apiEndPoint } from "../../../utils/constant";
+import { validateEmail, validatePhone } from "../../../utils/validate";
 const Otp = () => {
   const otpLength = 6;
   const [otp, setOtp] = useState(new Array(otpLength).fill(""));
@@ -13,7 +12,7 @@ const Otp = () => {
   const [emilOrPhone, setEmailOrphone] = useState<string | null>(null);
   // const [counter, setCounter] = useState<number>(59);
   const [loading, setLoading] = useState<boolean>(false);
-  const navigat = useNavigate();
+  const navigate = useNavigate();
   const [timer, setTimer] = useState<number>(() => {
     const savedTimer = localStorage.getItem("otpTimer");
 
@@ -89,7 +88,7 @@ const Otp = () => {
       if (res?.status === 200) {
         toastifySuccess(res.data.message);
 
-        navigat("/");
+        navigate("/");
       } else {
         console.log(res?.data?.errorMessage);
       }
@@ -130,8 +129,11 @@ const Otp = () => {
     }
   };
 
+
+
   return (
     <div className="flex justify-center pt-24">
+
       <div className="card bg-base-100 w-[500px]  border border-primary shadow-2xl">
         <div className="text-center mt-3">
           <h2 className=" font-mono font-bold text-xl">OTP Verification!</h2>
