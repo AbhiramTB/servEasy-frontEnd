@@ -10,8 +10,8 @@ export const validateEmail = (email: string): boolean =>
 export const validatePhone = (phone: string): boolean =>
  /^\d{10}$/.test(phone);
 
-export const validateUserName = (userName: string): boolean =>
-/^[a-zA-Z]{3,}$/?.test(userName);
+export const validateUserName = (userName: string): boolean => true
+// /^[a-zA-Z]{3,}$/?.test(userName);
 
 export const validatePassword = (password: string): boolean =>
 /^(?=.*[!@#$%&*])[a-zA-Z0-9!@#$%&*]{6,}$/.test(password);

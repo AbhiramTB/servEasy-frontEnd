@@ -39,5 +39,7 @@ export const apiEndPoint = {
 };
 
 export const routes={
-    siginSignup: "/signin"
+    siginSignup: "/signin",
+    home:"/"
+    
 }

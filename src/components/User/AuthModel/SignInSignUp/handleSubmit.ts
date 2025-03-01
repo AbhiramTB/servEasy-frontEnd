@@ -82,8 +82,9 @@ export const handleAuth = async (formData:FormData,isSignIn:boolean,setLoading:a
 
         if (res.status === 200) {
           console.log(res);
+          localStorage.setItem("accessToken", res.data.accessToken);
 
-          toastifySuccess("working");
+          
         } else {
           console.log(res.status);
 
