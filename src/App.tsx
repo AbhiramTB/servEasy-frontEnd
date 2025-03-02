@@ -3,6 +3,11 @@ import Home from "./components/User/Home";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Body from "./pages/Body";
 import Otp from "./components/User/AuthModel/Otp";
+import Register from "./components/ServiceProvider/Register.tsx";
+import AdminSignIn from "../src/components/admin/auth/Sigin.tsx" 
+import AdminHome from "../src/components/admin/Home.tsx" 
+import UserListingPage from "../src/components/admin/UserListingPage.tsx" 
+
 // import Sample from "./components/Sample/Sample";
 function App() {
   return (
@@ -13,9 +18,29 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/signIn" element={<AuthPage />} />
             <Route path="/otp" element={<Otp />} />
+           
+            <Route path="/register" element={<Register/>}>
+
+           </Route>
+
           </Route>
-          <Route  path="/dev" element={<></>} />
+          
+          <Route path="/service-provider">
+          
+
+          </Route >
+
+          <Route path="/admin">
+          <Route path="/admin/sigin" element={<AdminSignIn/>}/>
+
+          <Route path="/admin/home" element={<AdminHome/>}/>
+          <Route path="/admin/Users" element={<UserListingPage/>}/>
+
+          
+          </Route >
         </Routes>
+
+        
       </BrowserRouter>
     </>
   );

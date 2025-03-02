@@ -1,6 +1,5 @@
 import { toast,Bounce, Flip } from "react-toastify";
 import { darkTheme } from "./constant";
- 
 export const toastifySuccess=(message:string):void=>{
   const theme=localStorage.getItem("theme")
    
@@ -56,18 +55,4 @@ export const toastifyError=(message:string):void=>{
      
 
 }
-// export const toastify=(message:string,type:"success"|"warn"|"error"):void=>{
-//     toast.success(`${message} !`, {
-//         position: "top-right",
-//         autoClose: 5000,
-//         hideProgressBar: false,
-//         closeOnClick: false,
-//         pauseOnHover: true,
-//         draggable: true,
-//         progress: undefined,
-//         theme: "light",
-//         transition: Bounce,
-//         });
-     
 
-// }

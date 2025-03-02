@@ -36,7 +36,13 @@ export const apiEndPoint = {
   signUp: "/signup",
   SignInPhone: "/signin/phone",
   SignInEmail: "/signin/email",
+  getUserProfile:'/profile',
+
 };
+
+export const serviceProvider = {
+    serviceProviderRegister:"/service-providers/register"
+}
 
 export const routes={
     siginSignup: "/signin",

@@ -2,6 +2,8 @@ import {validateEmail,validatePhone,validatePassword,validateUserName} from '../
 import {toastifySuccess,toastifyError} from'../../../../utils/Toastify'
 import { makeRequest } from '../../../../utils/makeRequest';
 import { apiEndPoint } from "../../../../utils/constant";
+import axios from 'axios';
+import { URL } from '../../../../utils/constant';
 
 interface FormData {
     email?: string;
@@ -73,10 +75,13 @@ export const handleAuth = async (formData:FormData,isSignIn:boolean,setLoading:a
         } else if (submissionData.email) {
           localStorage.setItem("registerEmailorPhone", submissionData.email);
 
-          res = await makeRequest(
-            apiEndPoint.SignInEmail,
-            "POST",
-            submissionData
+        
+          res = await axios.post(
+            `${URL}${apiEndPoint.SignInEmail}`, 
+            submissionData, 
+            {
+              withCredentials: true, 
+            }
           );
         }
 
