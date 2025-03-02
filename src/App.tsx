@@ -7,8 +7,9 @@ import Register from "./components/ServiceProvider/Register.tsx";
 import AdminSignIn from "../src/components/admin/auth/Sigin.tsx" 
 import AdminHome from "../src/components/admin/Home.tsx" 
 import UserListingPage from "../src/components/admin/UserListingPage.tsx" 
-
+import Sample from "./sample.tsx";
 // import Sample from "./components/Sample/Sample";
+
 function App() {
   return (
     <>
@@ -38,6 +39,10 @@ function App() {
 
           
           </Route >
+
+          <Route path="/Test" element={<Sample/>}>
+
+          </Route>
         </Routes>
 
         
