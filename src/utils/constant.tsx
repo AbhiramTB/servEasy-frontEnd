@@ -47,7 +47,12 @@ export const apiEndPointServiceProvider = {
 
 export const apiEndPointAdmin={
     adminRefreshToken:"/admin-refresh-token",
-    AdminSignIn:'/admin/signin'
+    AdminSignIn:'/admin/signin',
+    getPrfoile:'/admin/profile',
+    getAllUsers:'/admin/users',
+    blockUnblockUser:'/admin/users/block-unblock',
+    
+
 }
 export const routes={
     siginSignup: "/signin",

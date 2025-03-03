@@ -90,6 +90,16 @@ export const adminPostRequest = async (url: string, data: any) => {
       throw error;
     }
   };
+
+  export const adminPachRequest = async (url: string, data: any) => {
+    try {
+      const response = await axiosInstance.patch(url, data);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+  
   
   // DELETE request
   export const adminDeleteRequest = async (url: string) => {
