@@ -3,9 +3,10 @@ import { useForm } from "react-hook-form";
 import { validateEmail, validatePhone } from "../../utils/validate";
 import { Toaster } from "react-hot-toast";
 import { HotToastError } from "../../utils/HotToasitify";
-import { serviceProvider } from "../../utils/constant";
+import { apiEndPointServiceProvider } from "../../utils/constant";
 import { postRequest } from "../../utils/makeRequestInstance";
-
+import { useDispatch } from "react-redux";
+import { addServiceProvider } from "../../redux/slices/serviceProvider";
 interface RegisterFormProps {
   className?: string;
 }
@@ -30,7 +31,7 @@ interface FormData {
   document?: string;
   services: string[];
   skills: Skill[];
-  description:string;
+  description: string;
 }
 
 const RegisterForm: React.FC<RegisterFormProps> = () => {
@@ -52,16 +53,15 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
   const [imageError, setImageError] = useState<string | null>(null);
   const [documentError, setDocumentError] = useState<string | null>(null);
   const [description, setDescription] = useState<string>("");
-
+  const dispatch = useDispatch();
   const UploadImage = () => {
     imageRef.current?.click();
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]; 
+    const file = event.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        
         setDocumentError("File size exceeds 5MB limit");
         return;
       }
@@ -69,7 +69,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
       setDocumentError(null);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setDocumentImg(reader.result as string); 
+        setDocumentImg(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -95,7 +95,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
       data.document = documentImg;
       data.services = services;
       data.skills = skills;
-      data.description=description
+      data.description = description;
       if (
         data.serviceProviderEmail &&
         !validateEmail(data.serviceProviderEmail)
@@ -113,20 +113,21 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
 
       console.log(data);
       const res = await postRequest(
-        serviceProvider.serviceProviderRegister,
+        apiEndPointServiceProvider.serviceProviderRegister,
         data
       );
       console.log(res);
 
       if (res.status == 201) {
         alert("Registration successful!");
-        console.log(res);
+        reset();
+
+         dispatch(addServiceProvider(res?.data.serviceProvider))
         
-        // reset();
-        // setServices([]);
-        // setSkills([]);
-        // setProfileImg(null);
-        // setDocumentImg(null);
+        setServices([]);
+        setSkills([]);
+        setProfileImg(null);
+        setDocumentImg(null);
       }
     } catch (error) {
       HotToastError("Registration failed. Please try again.");
@@ -140,7 +141,6 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        
         setImageError("File size exceeds 5MB limit");
         return;
       }
@@ -323,21 +323,21 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
 
           {/* Describe yourself */}
           <div className="form-control w-full mb-4">
-  <label className="label">
-    <span className="label-text">Describe Yourself</span>
-  </label>
-  <textarea
-    placeholder="Describe yourself and your expertise"
-    className={`textarea textarea-bordered w-full h-24 ${errors.businessType ? "textarea-error" : ""}`}
-    onChange={(e) => setDescription(e.target.value)}
-    value={description}
-  />
-  {errors.businessType && (
-    <p className="text-error text-sm">
-      {errors.businessType.message}
-    </p>
-  )}
-</div>
+            <label className="label">
+              <span className="label-text">Describe Yourself</span>
+            </label>
+            <textarea
+              placeholder="Describe yourself and your expertise"
+              className={`textarea textarea-bordered w-full h-24 ${errors.businessType ? "textarea-error" : ""}`}
+              onChange={(e) => setDescription(e.target.value)}
+              value={description}
+            />
+            {errors.businessType && (
+              <p className="text-error text-sm">
+                {errors.businessType.message}
+              </p>
+            )}
+          </div>
 
           {/* Services Offered - NEW FIELD */}
           <div className="form-control w-full mb-4">
