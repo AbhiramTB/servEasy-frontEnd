@@ -8,6 +8,7 @@ import AdminSignIn from "../src/components/admin/auth/Sigin.tsx"
 import AdminHome from "../src/components/admin/Home.tsx" 
 import UserListingPage from "../src/components/admin/UserListingPage.tsx" 
 import Sample from "./sample.tsx";
+import Dashboard from "./components/ServiceProvider/Dashboard.tsx";
 // import Sample from "./components/Sample/Sample";
 
 function App() {
@@ -24,12 +25,14 @@ function App() {
 
            </Route>
 
-          </Route>
-          
-          <Route path="/service-provider">
+           <Route path="/service-provider" element={<Dashboard/>}>
           
 
           </Route >
+          
+          </Route>
+          
+          
 
           <Route path="/admin">
           <Route path="/admin/sigin" element={<AdminSignIn/>}/>

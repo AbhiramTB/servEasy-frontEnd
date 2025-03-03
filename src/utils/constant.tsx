@@ -1,3 +1,4 @@
+
 export const URL: string = "http://localhost:5001";
 
 export const lightThems = {
@@ -40,12 +41,20 @@ export const apiEndPoint = {
 
 };
 
-export const serviceProvider = {
+export const apiEndPointServiceProvider = {
     serviceProviderRegister:"/service-providers/register"
 }
 
+export const apiEndPointAdmin={
+    adminRefreshToken:"/admin-refresh-token",
+    AdminSignIn:'/admin/signin'
+}
 export const routes={
     siginSignup: "/signin",
     home:"/"
     
+}
+export const adminRoutes={ 
+AdminSignIn:'/admin/sigin'
+
 }
