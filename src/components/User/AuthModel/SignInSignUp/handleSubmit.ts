@@ -1,20 +1,30 @@
-import {validateEmail,validatePhone,validatePassword,validateUserName} from '../../../../utils/validate'
-import {toastifySuccess,toastifyError} from'../../../../utils/Toastify'
-import { makeRequest } from '../../../../utils/makeRequest';
+import {
+  validateEmail,
+  validatePhone,
+  validatePassword,
+  validateUserName,
+} from "../../../../utils/validate";
+import { toastifySuccess, toastifyError } from "../../../../utils/Toastify";
+import { makeRequest } from "../../../../utils/makeRequest";
 import { apiEndPoint } from "../../../../utils/constant";
-import axios from 'axios';
-import { URL } from '../../../../utils/constant';
+import axios from "axios";
+import { URL } from "../../../../utils/constant";
+import { HotToastSuccess } from "../../../../utils/HotToasitify";
 
 interface FormData {
-    email?: string;
-    phoneNumber?: string;
-    password: string;
-    name: string;
-  }
+  email?: string;
+  phoneNumber?: string;
+  password: string;
+  name: string;
+}
 
-
-export const handleAuth = async (formData:FormData,isSignIn:boolean,setLoading:any,setError:any,navigate:any) => {
-   
+export const handleAuth = async (
+  formData: FormData,
+  isSignIn: boolean,
+  setLoading: any,
+  setError: any,
+  navigate: any
+) => {
   try {
     const submissionData: {
       userName?: string;
@@ -72,27 +82,26 @@ export const handleAuth = async (formData:FormData,isSignIn:boolean,setLoading:a
             "POST",
             submissionData
           );
+          if (res?.status === 200) {
+            HotToastSuccess("login successful");
+            navigate("/");
+          }
         } else if (submissionData.email) {
           localStorage.setItem("registerEmailorPhone", submissionData.email);
 
-        
           res = await axios.post(
-            `${URL}${apiEndPoint.SignInEmail}`, 
-            submissionData, 
+            `${URL}${apiEndPoint.SignInEmail}`,
+            submissionData,
             {
-              withCredentials: true, 
+              withCredentials: true,
             }
           );
         }
 
-        if (res.status === 200) {
-          console.log(res);
-          localStorage.setItem("accessToken", res.data.accessToken);
-
-          
+        if (res?.status === 200) {
+          HotToastSuccess("login successful");
+          navigate("/");
         } else {
-          console.log(res.status);
-
           setError(res.data.message || "An error occurred. Please try again.");
         }
       } else {
@@ -108,10 +117,8 @@ export const handleAuth = async (formData:FormData,isSignIn:boolean,setLoading:a
           console.log(res);
 
           localStorage.setItem("registerEmailorPhone", res.data.regInfo);
-          localStorage.removeItem('otpTimer')
+          localStorage.removeItem("otpTimer");
           navigate("/otp");
-         
-          
         } else {
           console.log(res.status);
 
@@ -130,14 +137,14 @@ export const handleAuth = async (formData:FormData,isSignIn:boolean,setLoading:a
       }
     }
   } catch (error: any) {
-    if(error?.response?.data?.message){
-        toastifyError(error?.response?.data?.message)
+    if (error?.response?.data?.message) {
+      toastifyError(error?.response?.data?.message);
     }
     if (error?.response?.data?.errorOtp) {
       navigate("/otp");
     }
     setError(error?.response?.data?.error);
-  }finally {
-        setLoading(false);
-      }
+  } finally {
+    setLoading(false);
+  }
 };

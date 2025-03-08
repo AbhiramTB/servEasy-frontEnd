@@ -6,7 +6,6 @@ const axiosInstance = axios.create({
   withCredentials: true, 
 });
 
-// Request Interceptor: Attach Access Token to Headers
 axiosInstance.interceptors.request.use((config) => {
   const adminToken = localStorage.getItem("adminToken");
 
@@ -90,8 +89,8 @@ export const adminPostRequest = async (url: string, data: any) => {
       throw error;
     }
   };
-
-  export const adminPachRequest = async (url: string, data: any) => {
+  
+  export const adminPatchRequest = async (url: string, data: any) => {
     try {
       const response = await axiosInstance.patch(url, data);
       return response;

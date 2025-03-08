@@ -11,8 +11,8 @@ interface UserState {
   serviceProvider?: string;
   isAdmin?: boolean;
   profileImage?: string;
-  serviceProviders: ServiceProvider[]; // Array to hold service providers
-  users: User[]; // Array to hold multiple users
+  serviceProviders: ServiceProvider[]; 
+  users: User[]; 
 }
 
 interface User {
@@ -59,6 +59,9 @@ const adminSlice = createSlice({
   name: "admin",
   initialState,
   reducers: {
+    addServiceProviders: (state, action: PayloadAction<ServiceProvider[]>) => {
+      state.serviceProviders = action.payload; 
+    },
     addProfile: (state, action: PayloadAction<User>) => {
       const { userName, email, phone, password, isVerified, isBlocked } = action.payload;
       state.userName = userName;
@@ -71,17 +74,8 @@ const adminSlice = createSlice({
     addUsers: (state, action: PayloadAction<User[]>) => {
         state.users = action.payload;
     },
-    clearUser: (state) => {
-      state.userName = "";
-      state.email = "";
-      state.phone = "";
-      state.password = "";
-      state.isVerified = false;
-      state.isBlocked = undefined;
-    },
-    addServiceProvider: (state, action: PayloadAction<ServiceProvider>) => {
-      state.serviceProviders.push(action.payload);
-    },
+   
+  
     verifyServiceProvider: (state, action: PayloadAction<string>) => {
       const provider = state.serviceProviders.find((sp) => sp._id === action.payload);
       if (provider) {
@@ -100,8 +94,7 @@ const adminSlice = createSlice({
 export const {
   addProfile,
   addUsers,
-  clearUser,
-  addServiceProvider,
+  addServiceProviders,
   verifyServiceProvider,
   rejectServiceProvider,
 } = adminSlice.actions;

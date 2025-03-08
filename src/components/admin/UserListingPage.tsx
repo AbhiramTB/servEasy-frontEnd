@@ -1,10 +1,12 @@
-import React, { useEffect, useCallback, useState, act } from "react";
+import React, { useEffect, useCallback, useState,  } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addUsers } from "../../redux/slices/adminSlice";
-import { adminGetRequest, adminPachRequest } from "../../utils/AxiosAdmin";
+import { adminGetRequest, adminPatchRequest } from "../../utils/AxiosAdmin";
 import { apiEndPointAdmin } from "../../utils/constant";
 import { RootState } from "../../redux/store";
 import UserProfileView from "./showProfile";
+import { HotToastSuccess } from "../../utils/HotToasitify";
+import { Toaster } from "react-hot-toast";
 
 const UserListingPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -33,10 +35,9 @@ const UserListingPage: React.FC = () => {
   const handleBlockUser =  async(userId: string,action:string) => {
     console.log(`Blocking user with ID: ${userId} ${action}`);
     const data={userId:userId,action:action}
-     const res  = await  adminPachRequest(apiEndPointAdmin.blockUnblockUser,data)
-      
-     console.log(res);
-     
+     const res  = await  adminPatchRequest(apiEndPointAdmin.blockUnblockUser,data)
+      HotToastSuccess(action+"user successfuly")
+     dispatch(addUsers(res.data.data));     
 
   };
 
@@ -48,22 +49,26 @@ const UserListingPage: React.FC = () => {
     setSelectedUserId(null);
   };
 
-  const handleToggleAdminPriority = (userId: string) => {
-    // Find user in the state
-    const user = users.find(u => u._id === userId);
+//   const handleToggleAdminPriority = (userId: string) => {
+//     // Find user in the state
+//     const user = users.find(u => u._id === userId);
     
-    if (user) {
-      const newPriorityStatus = !user.isAdmin;
-      console.log(`Setting priority for user ${userId} to ${newPriorityStatus}`);
+//     if (user) {
+//       const newPriorityStatus = !user.isAdmin;
+//       console.log(`Setting priority for user ${userId} to ${newPriorityStatus}`);
        
      
-    }
-  };
+//     }
+//   };
 
   const selectedUser = users.find(user => user._id === selectedUserId);
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200">
+        <Toaster
+  position="top-center"
+  reverseOrder={false}
+/>
       <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
           <div>
@@ -126,7 +131,7 @@ const UserListingPage: React.FC = () => {
                     </button>
                   </div>
                   <div className="flex border-t border-gray-700">
-                    <button
+                    {/* <button
                       onClick={() => handleToggleAdminPriority(user._id)}
                       className={`flex-1 py-3 text-sm font-medium flex items-center justify-center ${
                         user.isAdmin 
@@ -149,7 +154,7 @@ const UserListingPage: React.FC = () => {
                         />
                       </svg>
                       {user.isAdmin ? "Remove Priority" : "Set as Priority"}
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               ))
