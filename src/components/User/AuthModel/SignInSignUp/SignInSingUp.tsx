@@ -12,6 +12,8 @@ import { ToastContainer,  } from "react-toastify";
 import ErrorAlertInfo from "../../../alert's/ErrorAlert";
 import { toastifySuccess } from "../../../../utils/Toastify";
 import {handleAuth} from './handleSubmit'
+import { HotToastSuccess } from "../../../../utils/HotToasitify";
+import { Toaster } from "react-hot-toast";
 interface FormData {
   email?: string;
   phoneNumber?: string;
@@ -186,7 +188,8 @@ const AuthPage = () => {
     setLoading(true);
     (async ()=>{
      try{
-      await handleAuth(formData, isSignIn,setLoading, setError,navigate);
+       await handleAuth(formData, isSignIn,setLoading, setError,navigate);
+         
      }catch(err){
       console.log(err);
       
@@ -199,10 +202,14 @@ const AuthPage = () => {
 
   }
   return (
-    <div className="min-h-screen bg-base-200 flex  items-center justify-center    p-4 ">
+    <div className="flex items-center justify-center min-h-screen p-4 bg-base-200 ">
+      <Toaster
+  position="top-center"
+  reverseOrder={false}
+/>
       <div className="card w-full max-w-md bg-base-100 shadow-xl  mt-[-30px]">
-        <div className="card-body border   border-opacity-35 rounded-3xl border-primary">
-          <h2 className="card-title text-2xl font-bold text-center">
+        <div className="border card-body border-opacity-35 rounded-3xl border-primary">
+          <h2 className="text-2xl font-bold text-center card-title">
             {isSignIn ? "Sign In" : "Create Account"}
           </h2>
           <p className="text-center text-base-content/70">
@@ -211,7 +218,7 @@ const AuthPage = () => {
               : "Fill in the information to create your account"}
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+          <form onSubmit={handleSubmit} className="mt-4 space-y-4">
             {!isSignIn && (
               <div className="form-control">
                 <label className="label">
@@ -221,7 +228,7 @@ const AuthPage = () => {
                   type="text"
                   name="name"
                   placeholder="Name"
-                  className="input input-bordered w-full"
+                  className="w-full input input-bordered"
                   value={formData.name}
                   onChange={handleChange}
                   required
@@ -240,7 +247,7 @@ const AuthPage = () => {
                     checked={useEmail}
                     onChange={() => setUseEmail(true)}
                   />
-                  <span className="label-text ml-2">Email</span>
+                  <span className="ml-2 label-text">Email</span>
                 </label>
                 <label className="cursor-pointer label">
                   <input
@@ -250,7 +257,7 @@ const AuthPage = () => {
                     checked={!useEmail}
                     onChange={() => setUseEmail(false)}
                   />
-                  <span className="label-text ml-2">Phone Number</span>
+                  <span className="ml-2 label-text">Phone Number</span>
                 </label>
               </div>
 
@@ -260,7 +267,7 @@ const AuthPage = () => {
                     type="email"
                     name="email"
                     placeholder="Email"
-                    className="input input-bordered w-full"
+                    className="w-full input input-bordered"
                     value={formData.email}
                     onChange={handleChange}
                     required={useEmail}
@@ -273,7 +280,7 @@ const AuthPage = () => {
                     type="tel"
                     name="phoneNumber"
                     placeholder="phoneNumber"
-                    className="input input-bordered w-full"
+                    className="w-full input input-bordered"
                     value={formData.phoneNumber}
                     onChange={handleChange}
                     required={!useEmail}
@@ -302,7 +309,7 @@ const AuthPage = () => {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="******"
-                  className="input input-bordered w-full"
+                  className="w-full input input-bordered"
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -312,12 +319,12 @@ const AuthPage = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/70 hover:text-base-content"
+                  className="absolute -translate-y-1/2 right-3 top-1/2 text-base-content/70 hover:text-base-content"
                 >
                   {showPassword ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
+                      className="w-5 h-5"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -332,7 +339,7 @@ const AuthPage = () => {
                   ) : (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
+                      className="w-5 h-5"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -373,7 +380,7 @@ const AuthPage = () => {
 
           <div className="divider">OR</div>
 
-          <div className="text-center mt-4">
+          <div className="mt-4 text-center">
             {isSignIn ? (
               <p className="text-base-content/70">
                 Don't have an account?{" "}

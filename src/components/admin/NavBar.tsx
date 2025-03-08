@@ -1,64 +1,74 @@
-import React from "react";
+import { Link } from "react-router-dom";
+import { RootState } from "../../redux/store";
+import { useSelector } from "react-redux";
 
-interface NavBarProps {
-  userName: string;
-  profileImage?: string;
-  email: string;
-}
 
-const NavBar: React.FC<NavBarProps> = ({ userName, profileImage, email }) => {
+
+const NavBar = () => {
+  const admin=useSelector((state:RootState)=>({  userName: state.admin.userName,
+    email: state.admin.email,
+    phone: state.admin.phone,
+    isVerified: state.admin.isVerified,}))
+    
   return (
     <div>
       <nav className="bg-gray-800 border-b border-gray-700 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             {/* Logo and primary nav */}
             <div className=" flex ml-[-120px]">
-              <div className="flex-shrink-0 flex items-center">
+              <div className="flex items-center flex-shrink-0">
                 <span className="ml-2 text-xl font-bold text-white">
                   {" "}
-                  <a className="btn btn-ghost text-xl font-serif ">ServEasy</a>
+                  <a className="font-serif text-xl btn btn-ghost ">ServEasy</a>
                   Admin Panel
                 </span>
               </div>
               <div className="hidden ml-32 sm:flex sm:items-center">
                 <div className="flex space-x-4">
+                <Link to={'/admin/home'}>
                   <a
-                    href="#"
-                    className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                   
+                    className="px-3 py-2 text-sm font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white"
+                   
                   >
                     Dashboard
                   </a>
+                  </Link>
 
-                  <a
-                    href="#"
-                    className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                  <Link to={'/admin/users'}> <a
+                   
+                    
+                    className="px-3 py-2 text-sm font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white"
                   >
                     Users
                   </a>
+                  </Link>
+                  <Link to={"/admin/serviceProvider"}> 
                   <a
-                    href="#"
-                    className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                   
+                    className="px-3 py-2 text-sm font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white"
                   >
-                    Products
+                    serviceProviders
                   </a>
-                  <a
+                  </Link>
+                  {/* <a
                     href="#"
-                    className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                    className="px-3 py-2 text-sm font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white"
                   >
                     Analytics
-                  </a>
-                  <a
+                  </a> */}
+                  {/* <a
                     href="#"
-                    className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                    className="px-3 py-2 text-sm font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white"
                   >
                     Settings
-                  </a>
+                  </a> */}
                 </div>
               </div>
             </div>
 
-            <div className="hidden  sm:flex sm:items-center space-x-3">
+            <div className="hidden space-x-3 sm:flex sm:items-center">
               {/* Search */}
               <div className="relative">
                 <input
@@ -68,7 +78,7 @@ const NavBar: React.FC<NavBarProps> = ({ userName, profileImage, email }) => {
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 text-gray-400 absolute right-2 top-2"
+                  className="absolute w-4 h-4 text-gray-400 right-2 top-2"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -83,12 +93,12 @@ const NavBar: React.FC<NavBarProps> = ({ userName, profileImage, email }) => {
               </div>
 
               {/* Notification bell */}
-              <button className="p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+              <button className="p-1 text-gray-400 rounded-full hover:text-white focus:outline-none focus:ring-1 focus:ring-blue-500">
                 <span className="sr-only">View notifications</span>
                 <div className="relative">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
+                    className="w-6 h-6"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -100,7 +110,7 @@ const NavBar: React.FC<NavBarProps> = ({ userName, profileImage, email }) => {
                       d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                     />
                   </svg>
-                  <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
+                  <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
                 </div>
               </button>
 
@@ -108,29 +118,27 @@ const NavBar: React.FC<NavBarProps> = ({ userName, profileImage, email }) => {
               <div className="relative">
                 <button className="flex text-sm rounded-full focus:outline-none focus:ring-1 focus:ring-blue-500">
                   <span className="sr-only">Open user menu</span>
-                  <div className="ml-5 h-8 w-8 rounded-full  flex items-center justify-center">
+                  <div className="flex items-center justify-center w-8 h-8 ml-5 rounded-full">
                     <img
                       src={
-                        profileImage
-                          ? profileImage
-                          : "https://st2.depositphotos.com/2559749/11304/v/450/depositphotos_113040644-stock-illustration-flat-icon-isolate-on-white.jpg"
+                         "https://st2.depositphotos.com/2559749/11304/v/450/depositphotos_113040644-stock-illustration-flat-icon-isolate-on-white.jpg"
                       }
                       alt={" "}
-                      className="h-full w-full rounded-full"
+                      className="w-full h-full rounded-full"
                     />
-                    <p className="ml-3">{userName}</p>
-                    {email && <p className="mt-8 ml-[-25px]">{email}</p>}
+                    <p className="ml-3">{admin.userName}</p>
+                     {/* <p className="mt-8 ml-[-25px]">{admin?.email|| admin?.phone || ""}</p> */}
                   </div>
                 </button>
               </div>
             </div>
 
             {/* Mobile menu button */}
-            <div className="-mr-2 flex items-center sm:hidden">
+            <div className="flex items-center -mr-2 sm:hidden">
               <button>
                 <span className="sr-only">Open main menu</span>
                 <svg
-                  className="h-6 w-6"
+                  className="w-6 h-6"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"

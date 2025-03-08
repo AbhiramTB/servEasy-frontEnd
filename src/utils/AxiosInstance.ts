@@ -3,10 +3,9 @@ import { URL, apiEndPoint, routes } from "./constant";
 
 const axiosInstance = axios.create({
   baseURL: URL,
-  withCredentials: true, // Allows cookies to be sent with requests
+  withCredentials: true, 
 });
 
-// Request Interceptor: Attach Access Token to Headers
 axiosInstance.interceptors.request.use((config) => {
   const accessToken = localStorage.getItem("accessToken");
 

@@ -3,29 +3,29 @@ export const URL: string = "http://localhost:5001";
 
 export const lightThems = {
   theme1: "light",
-  theme2: "cupcake",
-  theme3: "bumblebee",
-  theme4: "emerald",
-  theme5: "corporate",
-  theme6: "synthwave",
-  theme7: "retro",
-  theme8: "valentine",
-  theme9: "garden",
-  theme10: "lofi",
+  // theme2: "cupcake",
+  // theme3: "bumblebee",
+  // theme4: "emerald",
+  // theme5: "corporate",
+  // theme6: "synthwave",
+  // theme7: "retro",
+  // theme8: "valentine",
+  // theme9: "garden",
+  // theme10: "lofi",
 };
 export const darkThemes = {
-  theme1: "dark",
-  theme2: "synthwave",
-  theme3: "halloween",
+  // theme1: "dark",
+  // theme2: "synthwave",
+  // theme3: "halloween",
   theme4: "forest",
-  theme5: "black",
-  theme6: "luxury",
-  theme7: "dracula",
-  theme8: "business",
-  theme9: "night",
-  theme10: "coffee",
-  theme11: "dim",
-  theme12: "sunset",
+  // theme5: "black",
+  // theme6: "luxury",
+  // theme7: "dracula",
+  // theme8: "business",
+  // theme9: "night",
+  // theme10: "coffee",
+  // theme11: "dim",
+  // theme12: "sunset",
 };
 
 export const lightTheme = lightThems.theme1; // "corporate"
@@ -51,7 +51,11 @@ export const apiEndPointAdmin={
     getPrfoile:'/admin/profile',
     getAllUsers:'/admin/users',
     blockUnblockUser:'/admin/users/block-unblock',
+    serviceProvider:'/admin/serviceProvider',
+    serviceProviderReject:'/admin/serviceProvider/reject',
+    serviceProviderVerify:'/admin/serviceProvider/verify'
     
+
 
 }
 export const routes={
@@ -63,3 +67,4 @@ export const adminRoutes={
 AdminSignIn:'/admin/sigin'
 
 }
+
