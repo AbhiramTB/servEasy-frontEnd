@@ -5,8 +5,14 @@ import { Toaster } from "react-hot-toast";
 import { HotToastError } from "../../utils/HotToasitify";
 import { serviceProvider } from "../../utils/constant";
 import { postRequest } from "../../utils/makeRequestInstance";
+
 interface RegisterFormProps {
   className?: string;
+}
+
+interface Skill {
+  name: string;
+  level: string; // "Beginner" | "Intermediate" | "Expert"
 }
 
 interface FormData {
@@ -18,10 +24,13 @@ interface FormData {
   experience: number;
   location: string;
   SocialMedia: string;
-  serviceProviderNumber: string;
-  BusinessEmail?: string;
-  profileImage?:string;
-  document?:string;
+  serviceProviderPhone: string;
+  serviceProviderEmail?: string;
+  profileImage?: string;
+  document?: string;
+  services: string[];
+  skills: Skill[];
+  description:string;
 }
 
 const RegisterForm: React.FC<RegisterFormProps> = () => {
@@ -32,76 +41,149 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
     formState: { errors },
   } = useForm<FormData>();
   const imageRef = useRef<HTMLInputElement>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [documentImg, setDocumentImg] = useState<string | null>(null);
+  const [profileImg, setProfileImg] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [services, setServices] = useState<string[]>([]);
+  const [newService, setNewService] = useState<string>("");
+  const [skills, setSkills] = useState<Skill[]>([]);
+  const [newSkill, setNewSkill] = useState<string>("");
+  const [newSkillLevel, setNewSkillLevel] = useState<string>("Intermediate");
+  const [imageError, setImageError] = useState<string | null>(null);
+  const [documentError, setDocumentError] = useState<string | null>(null);
+  const [description, setDescription] = useState<string>("");
 
   const UploadImage = () => {
     imageRef.current?.click();
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]; // Get the selected file
+    const file = event.target.files?.[0]; 
     if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        
+        setDocumentError("File size exceeds 5MB limit");
+        return;
+      }
+
+      setDocumentError(null);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result as string); // Set the image preview
-      };
-      reader.readAsDataURL(file); // Read the file as a data URL
-    }
-  };
-
-  const onSubmit = async (data: FormData) => {
-    setLoading(true)
-
-    try {
-      console.log(data);
-
-    if (data.BusinessEmail) {
-      if (!validateEmail(data.BusinessEmail)) {
-        HotToastError("Please enter a valid email ");
-        return
-      }
-    }
-
-    if (data.serviceProviderName) {
-      if (!validatePhone(data.serviceProviderName)) {
-        HotToastError("Please enter a valid 10-digit mobile number ");
-        return
-      }
-    }
- 
-    const res= await  postRequest(serviceProvider.serviceProviderRegister,data)
-
-    if(res.status==201){
-      alert('done ')
-    }
-    } catch (error) {
-      
-      
-    }finally{
-
-    }
-
-  }
-
-
-    
-  
-  
-
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]; 
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result as string);
+        setDocumentImg(reader.result as string); 
       };
       reader.readAsDataURL(file);
     }
   };
-  
+
+  const onSubmit = async (data: FormData) => {
+    setLoading(true);
+
+    try {
+      if (!profileImg) {
+        setImageError("Profile image is required");
+        setLoading(false);
+        return;
+      }
+
+      if (!documentImg) {
+        setDocumentError("Document image is required");
+        setLoading(false);
+        return;
+      }
+
+      data.profileImage = profileImg;
+      data.document = documentImg;
+      data.services = services;
+      data.skills = skills;
+      data.description=description
+      if (
+        data.serviceProviderEmail &&
+        !validateEmail(data.serviceProviderEmail)
+      ) {
+        HotToastError("Please enter a valid email");
+        setLoading(false);
+        return;
+      }
+
+      if (!validatePhone(data.serviceProviderPhone)) {
+        HotToastError("Please enter a valid 10-digit mobile number");
+        setLoading(false);
+        return;
+      }
+
+      console.log(data);
+      const res = await postRequest(
+        serviceProvider.serviceProviderRegister,
+        data
+      );
+      console.log(res);
+
+      if (res.status == 201) {
+        alert("Registration successful!");
+        console.log(res);
+        
+        // reset();
+        // setServices([]);
+        // setSkills([]);
+        // setProfileImg(null);
+        // setDocumentImg(null);
+      }
+    } catch (error) {
+      HotToastError("Registration failed. Please try again.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        
+        setImageError("File size exceeds 5MB limit");
+        return;
+      }
+
+      setImageError(null);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImg(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const addService = () => {
+    if (newService.trim() && !services.includes(newService.trim())) {
+      setServices([...services, newService.trim()]);
+      setNewService("");
+    }
+  };
+
+  const removeService = (index: number) => {
+    const updatedServices = [...services];
+    updatedServices.splice(index, 1);
+    setServices(updatedServices);
+  };
+
+  const addSkill = () => {
+    if (newSkill.trim()) {
+      const skill: Skill = {
+        name: newSkill.trim(),
+        level: newSkillLevel,
+      };
+      setSkills([...skills, skill]);
+      setNewSkill("");
+    }
+  };
+
+  const removeSkill = (index: number) => {
+    const updatedSkills = [...skills];
+    updatedSkills.splice(index, 1);
+    setSkills(updatedSkills);
+  };
+
   return (
     <div className="card w-full max-w-3xl mx-auto bg-base-300 mt-4 shadow-xl">
       <Toaster position="top-center" reverseOrder={false} />
@@ -111,15 +193,15 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Service Provider Name */}
+          {/* Service Provider Name with Profile Image */}
           <div className="form-control w-full mb-4 flex items-center gap-4">
             {/* Image Upload Section */}
             <div className="relative flex-shrink-0">
               <div className="w-20 h-20 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center">
-                {preview ? (
+                {profileImg ? (
                   <img
-                    src={preview}
-                    alt="Preview"
+                    src={profileImg}
+                    alt="profileImg"
                     className="w-full h-full object-cover"
                   />
                 ) : (
@@ -164,6 +246,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
                 className="hidden"
               />
             </div>
+            {imageError && <p className="text-error text-sm">{imageError}</p>}
 
             {/* Name Input Section */}
             <div className="form-control w-full mb-4">
@@ -172,7 +255,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
               </label>
               <input
                 type="text"
-                placeholder="Enter your  name"
+                placeholder="Enter your name"
                 className={`input input-bordered w-full ${errors.serviceProviderName ? "input-error" : ""}`}
                 {...register("serviceProviderName", {
                   required: "Service provider name is required",
@@ -186,27 +269,31 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
             </div>
           </div>
 
-          {/* service Provider phoneNumber */}
-
+          {/* Service Provider Phone Number */}
           <div className="form-control w-full mb-4">
             <label className="label">
-              <span className="label-text">Service Provider number</span>
+              <span className="label-text">Service Provider Phone Number</span>
             </label>
             <input
               type="text"
               placeholder="Enter your Phone Number"
-              className={`input input-bordered w-full ${errors.serviceProviderName ? "input-error" : ""}`}
-              {...register("serviceProviderNumber", {
-                required: "Service provider name is required",
+              className={`input input-bordered w-full ${errors.serviceProviderPhone ? "input-error" : ""}`}
+              {...register("serviceProviderPhone", {
+                required: "Phone number is required",
+                pattern: {
+                  value: /^\d{10}$/,
+                  message: "Please enter a valid 10-digit mobile number",
+                },
               })}
             />
-            {errors.serviceProviderName && (
+            {errors.serviceProviderPhone && (
               <p className="text-error text-sm">
-                {errors.serviceProviderName.message}
+                {errors.serviceProviderPhone.message}
               </p>
             )}
           </div>
 
+          {/* Business Email */}
           <div className="form-control w-full mb-4">
             <label className="label">
               <span className="label-text">
@@ -219,27 +306,133 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
             <input
               type="text"
               placeholder="Business Email"
-              className={`input input-bordered w-full`}
-              {...register("BusinessEmail")}
+              className={`input input-bordered w-full ${errors.serviceProviderEmail ? "input-error" : ""}`}
+              {...register("serviceProviderEmail", {
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address",
+                },
+              })}
             />
-          </div>
-          {/* describe yourself */}
-
-          <div className="form-control w-full mb-4">
-            <label className="label">
-              <span className="label-text">describe yourself</span>
-            </label>
-            <input
-              type="text"
-              placeholder="describe yourself"
-              className={`input input-bordered w-full ${errors.businessType ? "input-error" : ""}`}
-              {...register("businessType", { required: "describe  required" })}
-            />
-            {errors.businessType && (
+            {errors.serviceProviderEmail && (
               <p className="text-error text-sm">
-                {errors.businessType.message}
+                {errors.serviceProviderEmail.message}
               </p>
             )}
+          </div>
+
+          {/* Describe yourself */}
+          <div className="form-control w-full mb-4">
+  <label className="label">
+    <span className="label-text">Describe Yourself</span>
+  </label>
+  <textarea
+    placeholder="Describe yourself and your expertise"
+    className={`textarea textarea-bordered w-full h-24 ${errors.businessType ? "textarea-error" : ""}`}
+    onChange={(e) => setDescription(e.target.value)}
+    value={description}
+  />
+  {errors.businessType && (
+    <p className="text-error text-sm">
+      {errors.businessType.message}
+    </p>
+  )}
+</div>
+
+          {/* Services Offered - NEW FIELD */}
+          <div className="form-control w-full mb-4">
+            <label className="label">
+              <span className="label-text">Services Offered</span>
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Add a service you offer"
+                className="input input-bordered w-full"
+                value={newService}
+                onChange={(e) => setNewService(e.target.value)}
+              />
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={addService}
+              >
+                Add
+              </button>
+            </div>
+            {services.length === 0 && (
+              <p className="text-error text-sm mt-2">
+                Please add at least one service
+              </p>
+            )}
+            <div className="flex flex-wrap gap-2 mt-2">
+              {services.map((service, index) => (
+                <div key={index} className="badge badge-primary badge-lg gap-2">
+                  {service}
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-xs btn-circle"
+                    onClick={() => removeService(index)}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Skills - NEW FIELD */}
+          <div className="form-control w-full mb-4">
+            <label className="label">
+              <span className="label-text">Skills</span>
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Add a skill"
+                className="input input-bordered flex-grow"
+                value={newSkill}
+                onChange={(e) => setNewSkill(e.target.value)}
+              />
+              <select
+                className="select select-bordered w-40"
+                value={newSkillLevel}
+                onChange={(e) => setNewSkillLevel(e.target.value)}
+              >
+                <option>Beginner</option>
+                <option>Intermediate</option>
+                <option>Expert</option>
+              </select>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={addSkill}
+              >
+                Add
+              </button>
+            </div>
+            {skills.length === 0 && (
+              <p className="text-error text-sm mt-2">
+                Please add at least one skill
+              </p>
+            )}
+            <div className="flex flex-wrap gap-2 mt-2">
+              {skills.map((skill, index) => (
+                <div
+                  key={index}
+                  className="badge badge-secondary badge-lg gap-2"
+                >
+                  {skill.name} - {skill.level}
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-xs btn-circle"
+                    onClick={() => removeSkill(index)}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Business Type */}
@@ -357,6 +550,10 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
               {...register("experience", {
                 required: "Experience is required",
                 valueAsNumber: true,
+                min: {
+                  value: 0,
+                  message: "Experience cannot be negative",
+                },
               })}
             />
             {errors.experience && (
@@ -394,7 +591,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="input-group">
                 <span className="btn btn-square w-40 btn-ghost">
-                  {/* Instagram Icon */}
+                  {/* Social Media Icons */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -437,7 +634,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
                 </span>
                 <input
                   type="text"
-                  placeholder="Social Media  URL"
+                  placeholder="Social Media URL"
                   className="input input-bordered w-full"
                   {...register("SocialMedia")}
                 />
@@ -446,17 +643,17 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
           </div>
 
           {/* License/Certification Information */}
-          {!imagePreview && (
-            <div
-              className="form-control w-full mb-4 cursor-pointer"
-              
-            >
+          {!documentImg && (
+            <div className="form-control w-full mb-4 cursor-pointer">
               <label className="label">
                 <span className="label-text">
                   License/Certification or Aadhar Card
                 </span>
               </label>
-              <div className="border-2 border-dashed rounded-lg p-6 text-center" onClick={UploadImage}>
+              <div
+                className="border-2 border-dashed rounded-lg p-6 text-center"
+                onClick={UploadImage}
+              >
                 <div className="flex flex-col items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -477,8 +674,8 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
                     ref={imageRef}
                     className="hidden" // Hide the input element
                     onChange={handleFileChange} // Handle file selection
-                    accept="image/*" // Accept only image files
-                  />{" "}
+                    accept="image/*, application/pdf" // Accept image and PDF files
+                  />
                   <p className="mt-2 text-sm">
                     Drag and drop your Aadhar card or license, or{" "}
                     <span className="text-primary font-medium">
@@ -490,33 +687,52 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
                   </p>
                 </div>
               </div>
+              {documentError && (
+                <p className="text-error text-sm mt-1">{documentError}</p>
+              )}
             </div>
           )}
 
-          {imagePreview && (
+          {documentImg && (
             <div className="mt-4 mx-auto w-2/3 mb-4">
-              <img src={imagePreview} alt="" />
+              <img src={documentImg} alt="Document preview" />
+              <button
+                type="button"
+                className="btn btn-sm btn-error mt-2"
+                onClick={() => setDocumentImg(null)}
+              >
+                Remove Document
+              </button>
             </div>
           )}
 
           {/* Submit Button */}
-        { !loading && <div className="form-control mt-6">
-            <button type="submit" className="btn btn-primary">
-              Register
-            </button>
-          </div>}
+          {!loading && (
+            <div className="form-control mt-6">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={
+                  services.length === 0 ||
+                  skills.length === 0 ||
+                  !profileImg ||
+                  !documentImg
+                }
+              >
+                Register
+              </button>
+            </div>
+          )}
 
-          {loading&&
-          <div className="form-control mt-6">
-          <span className="loading loading-infinity loading-xl w-16 mx-auto pb-10 bg-primary"></span>
-
-        </div>
-          }
-
+          {loading && (
+            <div className="form-control mt-6">
+              <span className="loading loading-infinity loading-xl w-16 mx-auto pb-10 bg-primary"></span>
+            </div>
+          )}
         </form>
       </div>
     </div>
   );
-}
+};
 
 export default RegisterForm;

@@ -17,19 +17,16 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
-
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    
     if (!error.response) {
       console.error("Network error or server is unreachable", error);
       return Promise.reject({ message: "Network error", error });
     }
 
-    
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true; 
 
@@ -40,21 +37,18 @@ axiosInstance.interceptors.response.use(
         const response = await axios.post(
           `${URL}${apiEndPoint.refreshToken}`,
           {},
-          { withCredentials: true } 
+          { withCredentials: true }
         );
 
         const newAccessToken = response.data.accessToken;
 
-     
         localStorage.setItem("accessToken", newAccessToken);
 
-        
         originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
         return axios(originalRequest);
       } catch (refreshError) {
         console.error("Refresh token failed", refreshError);
 
-        
         localStorage.removeItem("accessToken");
         window.location.href = routes.siginSignup;
 
