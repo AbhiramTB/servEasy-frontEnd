@@ -10,8 +10,8 @@ export const makeRequest = async (
     const config = {
       method,
       url: `${URL}${endPoint}`,
-      withCredentials: true, // ✅ Ensures cookies (refreshToken) are sent
-    } as any; // ✅ Type assertion to allow optional properties
+      withCredentials: true, 
+    } as any; 
 
     if (data && (method === "POST" || method === "PUT")) {
       config.data = data;
@@ -24,3 +24,5 @@ export const makeRequest = async (
     throw error as AxiosError;
   }
 };
+
+

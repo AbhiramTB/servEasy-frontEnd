@@ -1,19 +1,14 @@
 import { useState, ChangeEvent, FormEvent } from "react";
-import { makeRequest } from "../../../../utils/makeRequest";
 import { useNavigate } from "react-router-dom";
-import { apiEndPoint } from "../../../../utils/constant";
-import {
-  validateEmail,
-  validatePhone,
-  validatePassword,
-  validateUserName,
-} from "../../../../utils/validate";
-import { ToastContainer,  } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import ErrorAlertInfo from "../../../alert's/ErrorAlert";
-import { toastifySuccess } from "../../../../utils/Toastify";
-import {handleAuth} from './handleSubmit'
+import { handleAuth } from "./handleSubmit";
+import GoogleButton from "./googleAuth";
+import ForgotPassword from "../../ForgotPassword/forgotPassword";
+
 interface FormData {
   email?: string;
+  
   phoneNumber?: string;
   password: string;
   name: string;
@@ -23,6 +18,8 @@ const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState<boolean>(true);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isforgotPassword, setForgot] = useState<boolean>(false);
+
   const [useEmail, setUseEmail] = useState<boolean>(true);
   const [isError, setError] = useState<boolean | string>(false);
   const navigate = useNavigate();
@@ -42,167 +39,28 @@ const AuthPage = () => {
     }));
   };
 
-  // const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
-  //   e.preventDefault();
-  //   setLoading(true);
-
-  //   try {
-  //     const submissionData: {
-  //       userName?: string;
-  //       email?: string;
-  //       phone?: string;
-  //       password: string;
-  //     } = { password: formData.password };
-
-  //     let isValidateEmailOrPhone: boolean;
-  //     let isValidatePassword: boolean;
-  //     let isValidateUserName: boolean = true;
-
-  //     if (isSignIn) {
-  //       if (formData.email) {
-  //         submissionData.email = formData.email;
-  //         isValidateEmailOrPhone = validateEmail(submissionData.email);
-  //       } else if (formData.phoneNumber) {
-  //         submissionData.phone = formData.phoneNumber;
-  //         isValidateEmailOrPhone = validatePhone(submissionData.phone);
-  //       } else {
-  //         isValidateEmailOrPhone = false;
-  //         setError("Email or phone is empty.");
-  //       }
-  //     } else {
-  //       submissionData.userName = formData.name;
-  //       isValidateUserName = validateUserName(submissionData.userName);
-
-  //       if (formData.email) {
-  //         submissionData.email = formData.email;
-  //         isValidateEmailOrPhone = validateEmail(submissionData.email);
-  //       } else if (formData.phoneNumber) {
-  //         submissionData.phone = formData.phoneNumber;
-  //         isValidateEmailOrPhone = validatePhone(submissionData.phone);
-  //       } else {
-  //         isValidateEmailOrPhone = false;
-  //         setError("Email or phone is empty.");
-  //       }
-  //     }
-
-  //     isValidatePassword = validatePassword(submissionData.password);
-
-  //     const isValid =
-  //       isValidateEmailOrPhone &&
-  //       isValidatePassword &&
-  //       (isSignIn || isValidateUserName);
-
-  //     if (isValid) {
-  //       if (isSignIn) {
-  //         let res;
-  //         if (submissionData.phone) {
-  //           localStorage.setItem("registerEmailorPhone", submissionData.phone);
-
-  //           res = await makeRequest(
-  //             apiEndPoint.SignInPhone,
-  //             "POST",
-  //             submissionData
-  //           );
-  //         } else if (submissionData.email) {
-  //           localStorage.setItem("registerEmailorPhone", submissionData.email);
-
-  //           res = await makeRequest(
-  //             apiEndPoint.SignInEmail,
-  //             "POST",
-  //             submissionData
-  //           );
-  //         }
-
-  //         if (res.status === 201) {
-  //           console.log(res);
-
-  //           toastifySuccess("working");
-  //         } else {
-  //           console.log(res.status);
-
-  //           setError(
-  //             res.data.message || "An error occurred. Please try again."
-  //           );
-  //         }
-  //       } else {
-  //         const res = await makeRequest(
-  //           apiEndPoint.signUp,
-  //           "POST",
-  //           submissionData
-  //         );
-  //         console.log(res.status);
-  //         console.log(res);
-
-  //         if (res.status === 201) {
-  //           console.log(res);
-
-  //           localStorage.setItem("registerEmailorPhone", res.data.regInfo);
-
-  //           toast.success(res?.data?.message, {
-  //             position: "top-right",
-  //             autoClose: 5000,
-  //             hideProgressBar: false,
-  //             closeOnClick: false,
-  //             pauseOnHover: true,
-  //             draggable: true,
-  //             progress: undefined,
-  //             theme: "colored",
-  //             transition: Bounce,
-  //           });
-  //         } else {
-  //           console.log(res.status);
-
-  //           setError(
-  //             res.data.message || "An error occurred. Please try again."
-  //           );
-  //         }
-  //       }
-  //     } else {
-  //       if (!isValidateEmailOrPhone) {
-  //         setError("Please enter a valid email or phone number.");
-  //       } else if (!isSignIn && !isValidateUserName) {
-  //         setError("Username must contain at least 3 characters.");
-  //       } else {
-  //         setError(
-  //           "Password must contain at least 6 characters, including one special character."
-  //         );
-  //       }
-  //     }
-  //   } catch (error: any) {
-  //     console.log(error?.response);
-
-  //     if (error?.response?.data?.errorOtp) {
-  //       navigate("/otp");
-  //     }
-  //     setError(error?.response?.data?.error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setLoading(true);
-    (async ()=>{
-     try{
-      await handleAuth(formData, isSignIn,setLoading, setError,navigate);
-     }catch(err){
-      console.log(err);
-      
-     }
-        })()
+    (async () => {
+      try {
+        await handleAuth(formData, isSignIn, setLoading, setError, navigate,useEmail);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  };
 
-    
-    
-      
 
-  }
   return (
-    <div className="min-h-screen bg-base-200 flex  items-center justify-center    p-4 ">
+   <div>
+    {isforgotPassword && <ForgotPassword setForget={setForgot}/>}
+
+    {!isforgotPassword && <div className="flex items-center justify-center min-h-screen p-4 bg-base-200 ">
       <div className="card w-full max-w-md bg-base-100 shadow-xl  mt-[-30px]">
-        <div className="card-body border   border-opacity-35 rounded-3xl border-primary">
-          <h2 className="card-title text-2xl font-bold text-center">
+        <div className="border card-body border-opacity-35 rounded-3xl border-primary">
+          <h2 className="text-2xl font-bold text-center card-title">
             {isSignIn ? "Sign In" : "Create Account"}
           </h2>
           <p className="text-center text-base-content/70">
@@ -211,7 +69,7 @@ const AuthPage = () => {
               : "Fill in the information to create your account"}
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+          <form onSubmit={handleSubmit} className="mt-4 space-y-4">
             {!isSignIn && (
               <div className="form-control">
                 <label className="label">
@@ -221,7 +79,7 @@ const AuthPage = () => {
                   type="text"
                   name="name"
                   placeholder="Name"
-                  className="input input-bordered w-full"
+                  className="w-full input input-bordered"
                   value={formData.name}
                   onChange={handleChange}
                   required
@@ -240,7 +98,7 @@ const AuthPage = () => {
                     checked={useEmail}
                     onChange={() => setUseEmail(true)}
                   />
-                  <span className="label-text ml-2">Email</span>
+                  <span className="ml-2 label-text">Email</span>
                 </label>
                 <label className="cursor-pointer label">
                   <input
@@ -250,7 +108,7 @@ const AuthPage = () => {
                     checked={!useEmail}
                     onChange={() => setUseEmail(false)}
                   />
-                  <span className="label-text ml-2">Phone Number</span>
+                  <span className="ml-2 label-text">Phone Number</span>
                 </label>
               </div>
 
@@ -260,7 +118,7 @@ const AuthPage = () => {
                     type="email"
                     name="email"
                     placeholder="Email"
-                    className="input input-bordered w-full"
+                    className="w-full input input-bordered"
                     value={formData.email}
                     onChange={handleChange}
                     required={useEmail}
@@ -273,7 +131,7 @@ const AuthPage = () => {
                     type="tel"
                     name="phoneNumber"
                     placeholder="phoneNumber"
-                    className="input input-bordered w-full"
+                    className="w-full input input-bordered"
                     value={formData.phoneNumber}
                     onChange={handleChange}
                     required={!useEmail}
@@ -289,9 +147,9 @@ const AuthPage = () => {
                 {isSignIn && (
                   <button
                     type="button"
-                    // onClick={handleForgotPassword}
                     className="label-text-alt link link-hover"
-                    disabled={!formData.email || loading}
+                    // disabled={!formData.email || loading}
+                    onClick={()=>setForgot(true)}
                   >
                     Forgot password?
                   </button>
@@ -302,7 +160,7 @@ const AuthPage = () => {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="******"
-                  className="input input-bordered w-full"
+                  className="w-full input input-bordered"
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -312,12 +170,12 @@ const AuthPage = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/70 hover:text-base-content"
+                  className="absolute -translate-y-1/2 right-3 top-1/2 text-base-content/70 hover:text-base-content"
                 >
                   {showPassword ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
+                      className="w-5 h-5"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -332,7 +190,7 @@ const AuthPage = () => {
                   ) : (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
+                      className="w-5 h-5"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -372,8 +230,14 @@ const AuthPage = () => {
           </form>
 
           <div className="divider">OR</div>
+          {/* <div className="flex w-full py-2 mx-auto rounded-lg shadow-lg opacity-75 scale-300 bg-slate-200"> */}
+         
+           <div className="mx-auto opacity-60 ">
+           <GoogleButton />
+           {/* </div> */}
+          </div>
 
-          <div className="text-center mt-4">
+          <div className="mt-4 text-center">
             {isSignIn ? (
               <p className="text-base-content/70">
                 Don't have an account?{" "}
@@ -409,7 +273,8 @@ const AuthPage = () => {
       </div>
 
       <ToastContainer />
-    </div>
+    </div>}
+   </div>
   );
 };
 

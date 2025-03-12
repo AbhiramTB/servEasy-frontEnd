@@ -6,18 +6,18 @@ import { useNavigate } from "react-router-dom";
 import { apiEndPoint } from "../../../utils/constant";
 import { validateEmail, validatePhone } from "../../../utils/validate";
 const Otp = () => {
+  const OtpTimer=60;
   const otpLength = 6;
   const [otp, setOtp] = useState(new Array(otpLength).fill(""));
   const sumbitRef = useRef<HTMLButtonElement | null>(null);
   const [emilOrPhone, setEmailOrphone] = useState<string | null>(null);
-  // const [counter, setCounter] = useState<number>(59);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const [timer, setTimer] = useState<number>(() => {
-    const savedTimer = localStorage.getItem("otpTimer");
-
+ const savedTimer = localStorage.getItem("otpTimer");
+    
     if (savedTimer === null) {
-      return 180;
+      return OtpTimer;
     }
 
     const parsedTimer = parseInt(savedTimer, 10);
@@ -119,7 +119,7 @@ const Otp = () => {
       }
       const res = await makeRequest(apiEndPoint.resendOtp, "POST", data);
       if (res.status == 200) {
-        setTimer(180);
+        setTimer(OtpTimer);
         toastifySuccess(res.data.message);
       }
     } catch (error) {
@@ -135,15 +135,15 @@ const Otp = () => {
     <div className="flex justify-center pt-24">
 
       <div className="card bg-base-100 w-[500px]  border border-primary shadow-2xl">
-        <div className="text-center mt-3">
-          <h2 className=" font-mono font-bold text-xl">OTP Verification!</h2>
-          <p className="mt-3  font-sans">
+        <div className="mt-3 text-center">
+          <h2 className="font-mono text-xl font-bold ">OTP Verification!</h2>
+          <p className="mt-3 font-sans">
             An OTP has already been sent to your {emilOrPhone}.
           </p>{" "}
         </div>
         <figure className="px-16 pt-5">
-          <div className="flex  ">
-            <div className=" flex  justify-evenly">
+          <div className="flex ">
+            <div className="flex justify-evenly">
               {otp.map((value, index) => {
                 return (
                   <input
@@ -156,7 +156,7 @@ const Otp = () => {
                     max={1}
                     onChange={(e) => handleChange(e, index)}
                     // onKeyDown={(e)=>handleKeyDown(e,index)}
-                    className="border border-primary bg-base-200 rounded-md textarea-primary text-center text-2xl w-14 h-14 m-3"
+                    className="m-3 text-2xl text-center border rounded-md border-primary bg-base-200 textarea-primary w-14 h-14"
                   />
                 );
               })}
@@ -166,16 +166,27 @@ const Otp = () => {
         <div className="flex justify-end">
           {timer <= 0 ? (
             <div className="">
-              <h1
-                className="mt-3 mr-10 opacity-90 cursor-pointer font-mono hover:text-primary"
+            {!resendOtpLoading&&
+            <h1
+                className="mt-3 mr-10 font-mono cursor-pointer opacity-90 hover:text-primary"
                 onClick={() => resendOtp()}
               >
                 resend Otp
               </h1>
+            
+            }
+              {resendOtpLoading&&
+              
+             
+                 <span className="mt-3 mr-10 font-mono cursor-pointer opacity-90 hover:text-primary loading loading-dots loading-sm"></span>
+             
+            
+              
+              }
             </div>
           ) : (
             <div className="">
-              <h1 className="mt-3 mr-10 opacity-90  font-mono">
+              <h1 className="mt-3 mr-10 font-mono opacity-90">
                 OTP expires in{" "}
                 {timer > 5 ? (
                   <span className="text-primary">{timer}</span>
@@ -187,7 +198,7 @@ const Otp = () => {
           )}
         </div>
 
-        <div className="card-body items-center text-center">
+        <div className="items-center text-center card-body">
           <div className="card-actions">
             {loading ? (
               <span className="loading loading-bars loading-lg bg-primary"></span>

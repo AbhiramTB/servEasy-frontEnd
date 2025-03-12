@@ -27,8 +27,8 @@ export const darkThemes = {
   theme12: "sunset",
 };
 
-export const lightTheme = lightThems.theme1; // "corporate"
-export const darkTheme = darkThemes.theme4;
+export const lightTheme = lightThems.theme2; // "corporate"
+export const darkTheme = darkThemes.theme4; 
 
 export const apiEndPoint = {
     refreshToken:"/refresh-token",
@@ -37,7 +37,11 @@ export const apiEndPoint = {
   SignInPhone: "/signin/phone",
   SignInEmail: "/signin/email",
   getUserProfile:'/profile',
-
+  googleSign:'/google/signin',
+  // forgotPassword
+ forgotPassword: "/forgot-password",
+forgotPasswordVerifyOtp:"/forgot-password/verify-otp",
+resetPassword:"/forgot-password/reset"
 };
 
 export const serviceProvider = {
@@ -46,6 +50,7 @@ export const serviceProvider = {
 
 export const routes={
     siginSignup: "/signin",
-    home:"/"
+    home:"/",
+    
     
 }
