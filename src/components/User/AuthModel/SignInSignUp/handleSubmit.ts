@@ -13,7 +13,7 @@ interface FormData {
   }
 
 
-export const handleAuth = async (formData:FormData,isSignIn:boolean,setLoading:any,setError:any,navigate:any) => {
+export const handleAuth = async (formData:FormData,isSignIn:boolean,setLoading:any,setError:any,navigate:any,isEmail:boolean) => {
    
   try {
     const submissionData: {
@@ -22,10 +22,19 @@ export const handleAuth = async (formData:FormData,isSignIn:boolean,setLoading:a
       phone?: string;
       password: string;
     } = { password: formData.password };
-
+      
     let isValidateEmailOrPhone: boolean;
     let isValidatePassword: boolean;
     let isValidateUserName: boolean = true;
+     console.log(formData);
+     
+    if(isEmail){
+      delete(submissionData.phone)
+      delete(formData.phoneNumber)
+    }else if(isEmail==false){
+      delete(formData.email)
+      delete(submissionData.email)
+    }
 
     if (isSignIn) {
       if (formData.email) {

@@ -11,7 +11,29 @@ export default {
   plugins: [
     daisyui
   ],
-  daisyui:{
-    themes: ["light", "dark", "cupcake","retro","forest","corporate" ,"pastel"],
+  daisyui: {
+    themes: ["light", "dark", "cupcake", "retro", "forest", "corporate", "pastel", "dark",
+      "synthwave",
+      "halloween",
+      "forest",
+      "black",
+      "luxury",
+      "dracula",
+      "business",
+      "night",
+      "coffee",
+      "dim",
+      "sunset",
+      "light",
+      "cupcake",
+      "bumblebee",
+      "emerald",
+      "corporate",
+      "synthwave",
+      "retro",
+      "valentine",
+      "garden",
+      "lofi",
+    ],
   }
 }
