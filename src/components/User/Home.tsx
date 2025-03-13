@@ -17,31 +17,29 @@ const Home = () => {
   const getUserProfile = async () => {
     try {
       
-      const user: any = await axiosInstance.get(apiEndPoint.getUserProfile);
-      console.log(user);
+      const res: any = await axiosInstance.get(apiEndPoint.getUserProfile);
+      console.log(res.data.user);
        
-      if (user) {
+      if (res.data.user) {
         
-        dispatch(addUser(user.data.data));
+        dispatch(addUser(res.data.user));
       }
     } catch (error) {
     console.log(error);
     }
   };
   // console.log(user);
-  
+  const services=null
   return (
     <>
-            <h1 className="text-red-700 bg-yellow-300">{user.name},{user.email}</h1>
+            
 
-      {user ? (
-        <div className="bg-yellow-400 w-40 h-40">
-        <h1 className="text-red-700 bg-yellow-300">{user.name}</h1>
-        </div>
+      {services ? (
+        <></>
       ) : (
-        <Link to={"/signin"}>
-          {" "}
-          <div className="mt-10 flex flex-row flex-wrap justify-center">
+        
+          
+          <div className="flex flex-row flex-wrap justify-center mt-10">
             <SkeletonHome />
             <SkeletonHome />
             <SkeletonHome />
@@ -51,7 +49,7 @@ const Home = () => {
             <SkeletonHome />
             <SkeletonHome />
           </div>
-        </Link>
+        
       )}
     </>
   );

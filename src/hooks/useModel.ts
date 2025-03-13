@@ -1,4 +1,3 @@
-// useModal.ts
 import { useRef } from 'react';
 
 const useModal = () => {

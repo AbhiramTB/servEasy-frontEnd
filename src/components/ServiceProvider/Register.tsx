@@ -1,11 +1,17 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState ,useEffect} from "react";
 import { useForm } from "react-hook-form";
 import { validateEmail, validatePhone } from "../../utils/validate";
 import { Toaster } from "react-hot-toast";
 import { HotToastError } from "../../utils/HotToasitify";
-import { serviceProvider } from "../../utils/constant";
+import { apiEndPoint, apiEndPointServiceProvider } from "../../utils/constant";
 import { postRequest } from "../../utils/makeRequestInstance";
-
+import { useDispatch } from "react-redux";
+import { addServiceProvider } from "../../redux/slices/serviceProvider";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { useNavigate } from "react-router-dom";
+import { addUser } from "../../redux/slices/userSlice";
+import axiosInstance from "../../utils/AxiosInstance";
 interface RegisterFormProps {
   className?: string;
 }
@@ -27,10 +33,10 @@ interface FormData {
   serviceProviderPhone: string;
   serviceProviderEmail?: string;
   profileImage?: string;
-  document?: string;
+  documentImg?: string;
   services: string[];
   skills: Skill[];
-  description:string;
+  description: string;
 }
 
 const RegisterForm: React.FC<RegisterFormProps> = () => {
@@ -52,16 +58,41 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
   const [imageError, setImageError] = useState<string | null>(null);
   const [documentError, setDocumentError] = useState<string | null>(null);
   const [description, setDescription] = useState<string>("");
-
+  const dispatch = useDispatch();
+  const navigate=useNavigate()
   const UploadImage = () => {
     imageRef.current?.click();
   };
+  const user = useSelector((state: RootState) => state.user);
+
+ useEffect(()=>{
+   getUserProfile();
+ 
+
+ },[])
+
+ if(user.serviceProvider){
+  navigate("/service-provider/dashboard")
+}
+ const getUserProfile = async () => {
+  try {
+    
+    const res: any = await axiosInstance.get(apiEndPoint.getUserProfile);
+    console.log(res.data.user);
+     
+    if (res.data.user) {
+      
+      dispatch(addUser(res.data.user));
+    }
+  } catch (error) {
+  console.log(error);
+  }
+};
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]; 
+    const file = event.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        
         setDocumentError("File size exceeds 5MB limit");
         return;
       }
@@ -69,7 +100,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
       setDocumentError(null);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setDocumentImg(reader.result as string); 
+        setDocumentImg(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -92,10 +123,10 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
       }
 
       data.profileImage = profileImg;
-      data.document = documentImg;
+      data.documentImg = documentImg;
       data.services = services;
       data.skills = skills;
-      data.description=description
+      data.description = description;
       if (
         data.serviceProviderEmail &&
         !validateEmail(data.serviceProviderEmail)
@@ -113,20 +144,21 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
 
       console.log(data);
       const res = await postRequest(
-        serviceProvider.serviceProviderRegister,
+        apiEndPointServiceProvider.serviceProviderRegister,
         data
       );
       console.log(res);
 
       if (res.status == 201) {
         alert("Registration successful!");
-        console.log(res);
+        reset();
+
+         dispatch(addServiceProvider(res?.data.serviceProvider))
         
-        // reset();
-        // setServices([]);
-        // setSkills([]);
-        // setProfileImg(null);
-        // setDocumentImg(null);
+        setServices([]);
+        setSkills([]);
+        setProfileImg(null);
+        setDocumentImg(null);
       }
     } catch (error) {
       HotToastError("Registration failed. Please try again.");
@@ -140,7 +172,6 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        
         setImageError("File size exceeds 5MB limit");
         return;
       }
@@ -185,24 +216,24 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
   };
 
   return (
-    <div className="card w-full max-w-3xl mx-auto bg-base-300 mt-4 shadow-xl">
+    <div className="w-full max-w-3xl mx-auto mt-4 shadow-xl card bg-base-300">
       <Toaster position="top-center" reverseOrder={false} />
       <div className="card-body">
-        <h2 className="card-title text-3xl font-bold text-center text-primary mx-auto mb-6">
+        <h2 className="mx-auto mb-6 text-3xl font-bold text-center card-title text-primary">
           Service Provider Registration
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Service Provider Name with Profile Image */}
-          <div className="form-control w-full mb-4 flex items-center gap-4">
+          <div className="flex items-center w-full gap-4 mb-4 form-control">
             {/* Image Upload Section */}
             <div className="relative flex-shrink-0">
-              <div className="w-20 h-20 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center">
+              <div className="flex items-center justify-center w-20 h-20 overflow-hidden bg-gray-100 rounded-full">
                 {profileImg ? (
                   <img
                     src={profileImg}
                     alt="profileImg"
-                    className="w-full h-full object-cover"
+                    className="object-cover w-full h-full"
                   />
                 ) : (
                   <svg
@@ -246,10 +277,10 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
                 className="hidden"
               />
             </div>
-            {imageError && <p className="text-error text-sm">{imageError}</p>}
+            {imageError && <p className="text-sm text-error">{imageError}</p>}
 
             {/* Name Input Section */}
-            <div className="form-control w-full mb-4">
+            <div className="w-full mb-4 form-control">
               <label className="label">
                 <span className="label-text">Service Provider Name</span>
               </label>
@@ -262,7 +293,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
                 })}
               />
               {errors.serviceProviderName && (
-                <p className="text-error text-sm">
+                <p className="text-sm text-error">
                   {errors.serviceProviderName.message}
                 </p>
               )}
@@ -270,7 +301,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
           </div>
 
           {/* Service Provider Phone Number */}
-          <div className="form-control w-full mb-4">
+          <div className="w-full mb-4 form-control">
             <label className="label">
               <span className="label-text">Service Provider Phone Number</span>
             </label>
@@ -287,18 +318,18 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
               })}
             />
             {errors.serviceProviderPhone && (
-              <p className="text-error text-sm">
+              <p className="text-sm text-error">
                 {errors.serviceProviderPhone.message}
               </p>
             )}
           </div>
 
           {/* Business Email */}
-          <div className="form-control w-full mb-4">
+          <div className="w-full mb-4 form-control">
             <label className="label">
               <span className="label-text">
                 Business Email{" "}
-                <span className="text-sm ml-2 opacity-40 hover:opacity-100">
+                <span className="ml-2 text-sm opacity-40 hover:opacity-100">
                   *optional
                 </span>
               </span>
@@ -315,32 +346,32 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
               })}
             />
             {errors.serviceProviderEmail && (
-              <p className="text-error text-sm">
+              <p className="text-sm text-error">
                 {errors.serviceProviderEmail.message}
               </p>
             )}
           </div>
 
           {/* Describe yourself */}
-          <div className="form-control w-full mb-4">
-  <label className="label">
-    <span className="label-text">Describe Yourself</span>
-  </label>
-  <textarea
-    placeholder="Describe yourself and your expertise"
-    className={`textarea textarea-bordered w-full h-24 ${errors.businessType ? "textarea-error" : ""}`}
-    onChange={(e) => setDescription(e.target.value)}
-    value={description}
-  />
-  {errors.businessType && (
-    <p className="text-error text-sm">
-      {errors.businessType.message}
-    </p>
-  )}
-</div>
+          <div className="w-full mb-4 form-control">
+            <label className="label">
+              <span className="label-text">Describe Yourself</span>
+            </label>
+            <textarea
+              placeholder="Describe yourself and your expertise"
+              className={`textarea textarea-bordered w-full h-24 ${errors.businessType ? "textarea-error" : ""}`}
+              onChange={(e) => setDescription(e.target.value)}
+              value={description}
+            />
+            {errors.businessType && (
+              <p className="text-sm text-error">
+                {errors.businessType.message}
+              </p>
+            )}
+          </div>
 
           {/* Services Offered - NEW FIELD */}
-          <div className="form-control w-full mb-4">
+          <div className="w-full mb-4 form-control">
             <label className="label">
               <span className="label-text">Services Offered</span>
             </label>
@@ -348,7 +379,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
               <input
                 type="text"
                 placeholder="Add a service you offer"
-                className="input input-bordered w-full"
+                className="w-full input input-bordered"
                 value={newService}
                 onChange={(e) => setNewService(e.target.value)}
               />
@@ -361,13 +392,13 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
               </button>
             </div>
             {services.length === 0 && (
-              <p className="text-error text-sm mt-2">
+              <p className="mt-2 text-sm text-error">
                 Please add at least one service
               </p>
             )}
             <div className="flex flex-wrap gap-2 mt-2">
               {services.map((service, index) => (
-                <div key={index} className="badge badge-primary badge-lg gap-2">
+                <div key={index} className="gap-2 badge badge-primary badge-lg">
                   {service}
                   <button
                     type="button"
@@ -382,7 +413,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
           </div>
 
           {/* Skills - NEW FIELD */}
-          <div className="form-control w-full mb-4">
+          <div className="w-full mb-4 form-control">
             <label className="label">
               <span className="label-text">Skills</span>
             </label>
@@ -390,12 +421,12 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
               <input
                 type="text"
                 placeholder="Add a skill"
-                className="input input-bordered flex-grow"
+                className="flex-grow input input-bordered"
                 value={newSkill}
                 onChange={(e) => setNewSkill(e.target.value)}
               />
               <select
-                className="select select-bordered w-40"
+                className="w-40 select select-bordered"
                 value={newSkillLevel}
                 onChange={(e) => setNewSkillLevel(e.target.value)}
               >
@@ -412,7 +443,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
               </button>
             </div>
             {skills.length === 0 && (
-              <p className="text-error text-sm mt-2">
+              <p className="mt-2 text-sm text-error">
                 Please add at least one skill
               </p>
             )}
@@ -420,7 +451,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
               {skills.map((skill, index) => (
                 <div
                   key={index}
-                  className="badge badge-secondary badge-lg gap-2"
+                  className="gap-2 badge badge-secondary badge-lg"
                 >
                   {skill.name} - {skill.level}
                   <button
@@ -436,7 +467,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
           </div>
 
           {/* Business Type */}
-          <div className="form-control w-full mb-4">
+          <div className="w-full mb-4 form-control">
             <label className="label">
               <span className="label-text">Business Type</span>
             </label>
@@ -449,14 +480,14 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
               })}
             />
             {errors.businessType && (
-              <p className="text-error text-sm">
+              <p className="text-sm text-error">
                 {errors.businessType.message}
               </p>
             )}
           </div>
 
           {/* Service Mode */}
-          <div className="form-control mb-4">
+          <div className="mb-4 form-control">
             <label className="label">
               <span className="label-text">Service Mode</span>
             </label>
@@ -464,7 +495,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
               {["Online", "Offline", "Both"].map((mode) => (
                 <label
                   key={mode}
-                  className="label cursor-pointer inline-flex items-center gap-2"
+                  className="inline-flex items-center gap-2 cursor-pointer label"
                 >
                   <input
                     type="radio"
@@ -479,13 +510,13 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
               ))}
             </div>
             {errors.serviceMode && (
-              <p className="text-error text-sm">{errors.serviceMode.message}</p>
+              <p className="text-sm text-error">{errors.serviceMode.message}</p>
             )}
           </div>
 
           {/* Category and Subcategory */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div className="form-control w-full">
+          <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2">
+            <div className="w-full form-control">
               <label className="label">
                 <span className="label-text">Category</span>
               </label>
@@ -499,11 +530,11 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
                 <option>Event Services</option>
               </select>
               {errors.category && (
-                <p className="text-error text-sm">{errors.category.message}</p>
+                <p className="text-sm text-error">{errors.category.message}</p>
               )}
             </div>
 
-            <div className="form-control w-full">
+            <div className="w-full form-control">
               <label className="label">
                 <span className="label-text">Subcategory</span>
               </label>
@@ -531,7 +562,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
                 </optgroup>
               </select>
               {errors.subcategory && (
-                <p className="text-error text-sm">
+                <p className="text-sm text-error">
                   {errors.subcategory.message}
                 </p>
               )}
@@ -539,7 +570,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
           </div>
 
           {/* Experience */}
-          <div className="form-control w-full mb-4">
+          <div className="w-full mb-4 form-control">
             <label className="label">
               <span className="label-text">Years of Experience</span>
             </label>
@@ -557,12 +588,12 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
               })}
             />
             {errors.experience && (
-              <p className="text-error text-sm">{errors.experience.message}</p>
+              <p className="text-sm text-error">{errors.experience.message}</p>
             )}
           </div>
 
           {/* Location */}
-          <div className="form-control w-full mb-4">
+          <div className="w-full mb-4 form-control">
             <label className="label">
               <span className="label-text">Location</span>
             </label>
@@ -573,7 +604,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
               {...register("location", { required: "Location is required" })}
             />
             {errors.location && (
-              <p className="text-error text-sm">{errors.location.message}</p>
+              <p className="text-sm text-error">{errors.location.message}</p>
             )}
           </div>
 
@@ -581,16 +612,16 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
           <label className="label">
             <span className="label-text">
               Social Media Links
-              <span className="text-sm ml-2 opacity-40 hover:opacity-100">
+              <span className="ml-2 text-sm opacity-40 hover:opacity-100">
                 *optional
               </span>
             </span>
           </label>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="input-group">
-                <span className="btn btn-square w-40 btn-ghost">
+                <span className="w-40 btn btn-square btn-ghost">
                   {/* Social Media Icons */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -635,7 +666,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
                 <input
                   type="text"
                   placeholder="Social Media URL"
-                  className="input input-bordered w-full"
+                  className="w-full input input-bordered"
                   {...register("SocialMedia")}
                 />
               </div>
@@ -644,20 +675,20 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
 
           {/* License/Certification Information */}
           {!documentImg && (
-            <div className="form-control w-full mb-4 cursor-pointer">
+            <div className="w-full mb-4 cursor-pointer form-control">
               <label className="label">
                 <span className="label-text">
                   License/Certification or Aadhar Card
                 </span>
               </label>
               <div
-                className="border-2 border-dashed rounded-lg p-6 text-center"
+                className="p-6 text-center border-2 border-dashed rounded-lg"
                 onClick={UploadImage}
               >
                 <div className="flex flex-col items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-12 w-12 text-primary"
+                    className="w-12 h-12 text-primary"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -678,7 +709,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
                   />
                   <p className="mt-2 text-sm">
                     Drag and drop your Aadhar card or license, or{" "}
-                    <span className="text-primary font-medium">
+                    <span className="font-medium text-primary">
                       browse files
                     </span>
                   </p>
@@ -688,17 +719,17 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
                 </div>
               </div>
               {documentError && (
-                <p className="text-error text-sm mt-1">{documentError}</p>
+                <p className="mt-1 text-sm text-error">{documentError}</p>
               )}
             </div>
           )}
 
           {documentImg && (
-            <div className="mt-4 mx-auto w-2/3 mb-4">
+            <div className="w-2/3 mx-auto mt-4 mb-4">
               <img src={documentImg} alt="Document preview" />
               <button
                 type="button"
-                className="btn btn-sm btn-error mt-2"
+                className="mt-2 btn btn-sm btn-error"
                 onClick={() => setDocumentImg(null)}
               >
                 Remove Document
@@ -708,7 +739,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
 
           {/* Submit Button */}
           {!loading && (
-            <div className="form-control mt-6">
+            <div className="mt-6 form-control">
               <button
                 type="submit"
                 className="btn btn-primary"
@@ -725,8 +756,8 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
           )}
 
           {loading && (
-            <div className="form-control mt-6">
-              <span className="loading loading-infinity loading-xl w-16 mx-auto pb-10 bg-primary"></span>
+            <div className="mt-6 form-control">
+              <span className="w-16 pb-10 mx-auto loading loading-infinity loading-xl bg-primary"></span>
             </div>
           )}
         </form>
