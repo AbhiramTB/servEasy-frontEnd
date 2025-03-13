@@ -6,7 +6,6 @@ const axiosInstance = axios.create({
   withCredentials: true, 
 });
 
-
 axiosInstance.interceptors.request.use((config) => {
   const accessToken = localStorage.getItem("accessToken");
 
@@ -61,3 +60,5 @@ axiosInstance.interceptors.response.use(
 );
 
 export default axiosInstance;
+
+

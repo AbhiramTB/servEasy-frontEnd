@@ -1,10 +1,10 @@
 import { getRequest } from "./utils/makeRequestInstance"
-
+import {adminGetRequest} from './utils/AxiosAdmin'
 
 const sample = () => {
   return (
     <div>
-      <button onClick={()=>getRequest("http://localhost:5001/service-providers/r")}>click
+      <button onClick={()=>adminGetRequest("http://localhost:5001/admin/r")}>click
       </button>
     </div>
   )
