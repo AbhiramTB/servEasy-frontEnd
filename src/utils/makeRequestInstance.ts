@@ -11,14 +11,14 @@ export const postRequest = async (url: string, data: any) => {
 };
 
 // GET request
-export const getRequest = async (url: string) => {
+export const getRequest = async (url: string, params?: object) => {
   try {
-    const response = await axiosInstance.get(url);
+    const response = await axiosInstance.get(url, { params });
     return response;
   } catch (error) {
     throw error;
   }
-};
+}
 
 // PUT request
 export const putRequest = async (url: string, data: any) => {
