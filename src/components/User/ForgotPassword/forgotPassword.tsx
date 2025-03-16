@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { validateEmail, validatePassword, validatePhone } from "../../../utils/validate";
 import { makeRequest } from "../../../utils/makeRequest";
 import { apiEndPoint } from "../../../utils/constant";
-import { useNavigate } from "react-router-dom";
 type Props = {
     setForget: React.Dispatch<React.SetStateAction<boolean>>;
   };

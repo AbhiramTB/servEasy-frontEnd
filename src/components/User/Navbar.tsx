@@ -1,17 +1,41 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import ThemeChange from "./ThemeChange";
-import { postRequest } from "../../utils/makeRequestInstance";
+import { getRequest, postRequest } from "../../utils/makeRequestInstance";
 import { apiEndPoint } from "../../utils/constant";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { Link } from "react-router-dom";
+import UserProfileModal from "./UpdateProfile";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../redux/slices/userSlice";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+
+  const user = useSelector((state: RootState) => state.user);
+
+  const [editProfile, setEditProfile] = useState<boolean>(false);
+  useEffect(() => {
+    getUserProfile();
+  }, []);
+
+  const getUserProfile = async () => {
+    try {
+      const res: any = await getRequest(apiEndPoint.getUserProfile);
+      console.log(res.data.user);
+
+      if (res.data.user) {
+        dispatch(addUser(res.data.user));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const profilePlaceHolder =
     "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp";
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [ProfileImg, setProfileImg] = useState<string | null>(null);
-  const user = useSelector((state: RootState) => state.user);
 
   const updateProfile = async () => {
     const data = { ProfileImg: ProfileImg };
@@ -66,11 +90,22 @@ const Navbar = () => {
               role="button"
               className="btn btn-ghost btn-circle avatar"
             >
-              <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS Navbar component"
-                  src={ProfileImg || user.profileImage || profilePlaceHolder}
-                />
+              <div className="rounded-full w-14">
+                {user.profileImage && (
+                  <img
+                    alt="Tailwind CSS Navbar component"
+                    src={user.profileImage}
+                  />
+                )}
+
+                
+                {  !user.profileImage && (
+                   <img               
+                    alt="Tailwind CSS Navbar component"
+                    src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"             
+
+                  />
+                )}
               </div>
             </div>
             <ul
@@ -78,7 +113,10 @@ const Navbar = () => {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-lg"
             >
               <li onClick={toggleUploadCard}>
-                <a className="justify-between">
+                <a
+                  className="justify-between"
+                  onClick={() => setEditProfile(true)}
+                >
                   Profile
                   <span className="badge badge-primary">New</span>
                 </a>
@@ -101,40 +139,45 @@ const Navbar = () => {
         </div>
       </div>
 
-      {isUploadOpen && (
-        <div className="absolute z-50 mt-2 border rounded-lg shadow-lg right-4 w-80 bg-base-100 border-primary">
-          <div className="p-4">
-            <h2 className="mb-2 text-lg font-semibold text-primary">
-              Upload Profile Image
-            </h2>
-            <form className="space-y-4">
-              <div className="form-control">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="w-full file-input file-input-bordered"
-                />
-              </div>
-              <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={updateProfile}
-                  className="btn btn-primary btn-sm"
-                >
-                  Upload
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-outline btn-secondary btn-sm"
-                  onClick={toggleUploadCard}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+      {editProfile && (
+        <UserProfileModal
+          user={user}
+          IsCloss={() => setEditProfile(false)}
+          getUserProfile={() => getUserProfile()}
+        />
+        // <div className="absolute z-50 mt-2 border rounded-lg shadow-lg right-4 w-80 bg-base-100 border-primary">
+        //   <div className="p-4">
+        //     <h2 className="mb-2 text-lg font-semibold text-primary">
+        //       Upload Profile Image
+        //     </h2>
+        //     <form className="space-y-4">
+        //       <div className="form-control">
+        //         <input
+        //           type="file"
+        //           accept="image/*"
+        //           onChange={handleImageUpload}
+        //           className="w-full file-input file-input-bordered"
+        //         />
+        //       </div>
+        //       <div className="flex justify-end gap-2">
+        //         <button
+        //           type="button"
+        //           onClick={updateProfile}
+        //           className="btn btn-primary btn-sm"
+        //         >
+        //           Upload
+        //         </button>
+        //         <button
+        //           type="button"
+        //           className="btn btn-outline btn-secondary btn-sm"
+        //           onClick={toggleUploadCard}
+        //         >
+        //           Cancel
+        //         </button>
+        //       </div>
+        //     </form>
+        //   </div>
+        // </div>
       )}
     </div>
   );

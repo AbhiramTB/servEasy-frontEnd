@@ -19,9 +19,7 @@ const Home = () => {
   const user = useSelector((state: RootState) => state.user);
   const [location, setLocation] = useState<Location | null>(null);
 
-  useEffect(() => {
-    getUserProfile();
-  }, []);
+
 
   const getUserProfile = async () => {
     try {
