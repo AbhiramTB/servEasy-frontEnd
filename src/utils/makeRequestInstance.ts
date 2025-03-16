@@ -30,6 +30,16 @@ export const putRequest = async (url: string, data: any) => {
   }
 };
 
+// PATCH request
+export const patchRequest = async (url: string, data: any) => {
+  try {
+    const response = await axiosInstance.patch(url, data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // DELETE request
 export const deleteRequest = async (url: string) => {
   try {

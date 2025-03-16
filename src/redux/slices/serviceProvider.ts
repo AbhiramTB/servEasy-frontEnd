@@ -12,7 +12,8 @@ interface UserState {
     serviceProviderName: string;
     serviceProviderPhone: string;
     services: string[];
-    skills: object[]; // Adjust the type of skills as needed
+    allServices: IService[]; 
+    skills: object[]; 
     socialMedia: string;
     updatedAt: string;
     __v: number;
@@ -27,6 +28,7 @@ const initialState: UserState = {
     isVerified: "pending",
     location: "",
     profileImage: "",
+    allServices: [],
     serviceProviderEmail: "",
     serviceProviderName: "",
     serviceProviderPhone: "",
@@ -37,6 +39,27 @@ const initialState: UserState = {
     __v: 0,
     _id: ""
 };
+export interface Location {
+    address: string;
+    latitude: number;
+    longitude: number;
+  }
+  
+ 
+  
+  export interface IService {
+    _id:string,
+    serviceName: string;
+    description: string;
+    serviceType: string;
+    category: string;
+    location: Location;
+    estimatedPrice: number;
+    serviceProviderId:string;
+    isActive?: boolean;
+    // review?: Review[];
+    serviceImage: string;
+  }
 
 const serviceProviderSlice = createSlice({
     name: "serviceProvider",
@@ -45,9 +68,13 @@ const serviceProviderSlice = createSlice({
         addServiceProvider: (state, action: PayloadAction<UserState>) => {
             return { ...state, ...action.payload }; 
         },
-        clearServiceProvider: () => initialState 
-    }
+        clearServiceProvider: () => initialState ,
+        addServices: (state, action: PayloadAction<IService[]>) => {
+            state.allServices= action.payload; 
+          },
+    },
+   
 });
 
-export const { addServiceProvider, clearServiceProvider } = serviceProviderSlice.actions;
+export const { addServiceProvider, clearServiceProvider,addServices } = serviceProviderSlice.actions;
 export default serviceProviderSlice.reducer;
