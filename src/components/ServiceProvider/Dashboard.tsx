@@ -1,19 +1,45 @@
 import Navbar from "./Navbar";
 import { RootState } from "../../redux/store";
-import { useSelector } from "react-redux";
 import PendingVerificationCard from "./pendingVerification";
+import { useEffect } from "react";
+import { getRequest } from "../../utils/makeRequestInstance";
+import { apiEndPointServiceProvider } from "../../utils/constant";
+import { addServiceProvider } from "../../redux/slices/serviceProvider";
+import { useDispatch, useSelector } from "react-redux";
 const Dashboard = () => {
   const serviceProviderInfo = useSelector(
     (state: RootState) => state.serviceProvider
   );
-  <Navbar profile={serviceProviderInfo.profileImage} ></Navbar>
+  const dispatch = useDispatch();
 
-  console.log(serviceProviderInfo);
+  <Navbar profile={serviceProviderInfo.profileImage}></Navbar>;
+  useEffect(() => {
+    getServiceProvider();
+  }, []);
+
+  const getServiceProvider = async () => {
+    try {
+      const res = await getRequest(
+        apiEndPointServiceProvider.getServiceProvider
+      );
+      console.log(res.data.serviceProvider);
+      
+      dispatch(addServiceProvider(res.data.serviceProvider));
+    } catch (error) {}
+  };
 
   return (
     <div>
-          <PendingVerificationCard email={serviceProviderInfo.serviceProviderEmail}/>
-     </div>
+       <div className="mb-6">
+          <h1 className="text-3xl font-bold text-white"> Dashboard</h1>
+          <p className="mt-1 text-gray-400">Welcome back,{serviceProviderInfo.serviceProviderName} </p>
+        </div>
+      {serviceProviderInfo.isVerified === "pending" && (
+        <PendingVerificationCard
+          email={serviceProviderInfo.serviceProviderEmail}
+        />
+      )}
+    </div>
   );
 };
 
