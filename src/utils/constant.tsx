@@ -38,7 +38,8 @@ export const apiEndPoint = {
   SignInEmail: "/signin/email",
   getUserProfile: "/profile",
   googleSign: "/google/signin",
-  // forgotPassword
+  updateProfileOtpVerfy:"/updateProfile/verifyotp",
+  updateProfile:'/updateProfile',
   forgotPassword: "/forgot-password",
   forgotPasswordVerifyOtp: "/forgot-password/verify-otp",
   resetPassword: "/forgot-password/reset",
