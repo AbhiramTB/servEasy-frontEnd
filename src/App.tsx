@@ -6,7 +6,7 @@ import Otp from "./components/User/AuthModel/Otp";
 import Register from "./components/ServiceProvider/Register.tsx";
 import AdminSignIn from "../src/components/admin/auth/Sigin.tsx";
 import AdminHome from "../src/components/admin/Home.tsx";
-import ServiceProviderListing from "../src/components/admin/serviceProviderListing.tsx";
+import ServiceProviderVerifiction from "./components/admin/ServiceProviderVerification.tsx";
 import UserListingPage from "../src/components/admin/UserListingPage.tsx";
 import Sample from "./sample.tsx";
 import Dashboard from "./components/ServiceProvider/Dashboard.tsx";
@@ -16,6 +16,9 @@ import ProtectedRoute from "./pages/ProtectedRoute.tsx";
 import AdminProtectedRoute from "./pages/AdminProtectedRoute"; 
 import AddnewService from "./components/ServiceProvider/service/AddnewService.tsx";
 import ServiceManagement from "./components/ServiceProvider/service/serviceManagement.tsx";
+import ServiceProviderListing from "./components/admin/serviceProviderListing.tsx";
+import Allservices from "./components/admin/service-management/Allservices.tsx";
+
 
 function App() {
   return (
@@ -47,7 +50,9 @@ function App() {
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="home" element={<AdminHome />} />
             <Route path="users" element={<UserListingPage />} />
-            <Route path="serviceProvider" element={<ServiceProviderListing />} />
+            <Route path="serviceProvider/verification" element={<ServiceProviderVerifiction />} />
+            <Route path="serviceProvider" element={< ServiceProviderListing/>} />
+            <Route path="service" element={< Allservices/>} />
 
           </Route>
         </Route>

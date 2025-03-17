@@ -83,11 +83,12 @@ const AdminSignIn: React.FC = () => {
 
       const res = await postRequest(apiEndPointAdmin.AdminSignIn, data);
       if (res.status == 200) {
-        console.log(res.data);
+        console.log(res.data.accessToken);
+        
+        localStorage.setItem("adminToken",res.data.accessToken);
+        
+    
         navigate("/admin/home")
-        localStorage.setItem("adminToken", res.data.accessToken);
-
-        HotToastSuccess("admin login successfully");
       }
     } catch (err) {
       setError(

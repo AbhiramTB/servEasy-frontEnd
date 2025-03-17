@@ -22,7 +22,8 @@ const AdminHomePage: React.FC = () => {
     try {
       
       const res = await adminGetRequest(apiEndPointAdmin.getPrfoile)
-      console.log(res.data.data);
+
+      console.log(res);
         
         dispatch(addProfile(res.data.data))
     } catch (error) {
