@@ -15,10 +15,10 @@ import ServiceProviderLayout from "./pages/ServiceProviderLayout.tsx";
 import ProtectedRoute from "./pages/ProtectedRoute.tsx"; 
 import AdminProtectedRoute from "./pages/AdminProtectedRoute"; 
 import AddnewService from "./components/ServiceProvider/service/AddnewService.tsx";
-import ServiceManagement from "./components/ServiceProvider/service/serviceManagement.tsx";
+
 import ServiceProviderListing from "./components/admin/serviceProviderListing.tsx";
 import Allservices from "./components/admin/service-management/Allservices.tsx";
-
+import ServiceManagement from "./components/ServiceProvider/service/ServiceManagement.tsx";
 
 function App() {
   return (
