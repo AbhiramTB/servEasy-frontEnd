@@ -374,7 +374,7 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
                     className="grow"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    minLength={8}
+                    minLength={6}
                     required
                   />
                   <button
@@ -460,7 +460,7 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
                     className="grow"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    minLength={8}
+                    minLength={6}
                     required
                   />
                   <button

@@ -1,11 +1,16 @@
-import React, { useEffect, useCallback, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addServiceProviders } from "../../redux/slices/adminSlice";
-import { adminGetRequest, adminPatchRequest } from "../../utils/AxiosAdmin";
-import { apiEndPointAdmin } from "../../utils/constant";
+import { useEffect, useState, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/store";
+import { addServiceProviders } from "../../redux/slices/adminSlice"; // Assuming this action exists
+import { adminGetRequest, adminPatchRequest } from "../../utils/AxiosAdmin"; // Assuming this utility exists
+import { apiEndPointAdmin } from "../../utils/constant"; // Assuming this config exists
 import { HotToastSuccess } from "../../utils/HotToasitify";
 import { Toaster } from "react-hot-toast";
+export interface Location {
+  address: string;
+  latitude: number;
+  longitude: number;
+}
 
 interface ServiceProvider {
   createdAt: string;
@@ -13,7 +18,7 @@ interface ServiceProvider {
   document: string;
   experience: number;
   isVerified: string;
-  location: string;
+  location: Location;
   profileImage: string;
   serviceProviderEmail: string;
   serviceProviderName: string;
@@ -22,69 +27,23 @@ interface ServiceProvider {
   skills: object[];
   socialMedia: string;
   updatedAt: string;
+  isBlocked?: boolean;
   __v: number;
   _id: string;
 }
 
-interface RejectModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (reason: string) => void;
-}
-
-const RejectModal: React.FC<RejectModalProps> = ({ isOpen, onClose, onSubmit }) => {
-  const [reason, setReason] = useState<string>("");
-
-  if (!isOpen) return null;
-
-  const handleSubmit = () => {
-    onSubmit(reason);
-    setReason("");
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-gray-800 rounded-lg p-6 w-full max-w-md">
-        <h3 className="text-xl font-bold text-white mb-4">Rejection Reason</h3>
-        <textarea
-          className="w-full bg-gray-700 text-white rounded-md p-3 mb-4 min-h-32"
-          placeholder="Please provide a reason for rejection..."
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-        />
-        <div className="flex justify-end space-x-3">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-700 text-gray-300 rounded-md hover:bg-gray-600"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSubmit}
-            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-            disabled={!reason.trim()}
-          >
-            Submit
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const ServiceProviderVerification: React.FC = () => {
+const ServiceProviderListing = () => {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState<boolean>(true);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [isRejectModalOpen, setIsRejectModalOpen] = useState<boolean>(false);
-  const [selectedProviderId, setSelectedProviderId] = useState<string | null>(null);
-  const [imagePreview, setImagePreview] = useState<{ open: boolean; url: string }>({
-    open: false,
-    url: "",
-  });
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("all");
+
+  const serviceProviders = useSelector(
+    (state: RootState) => state.admin.serviceProviders
+  );
 
   const getAllServiceProviders = useCallback(async () => {
     try {
+      setLoading(true);
       const res = await adminGetRequest(apiEndPointAdmin.serviceProvider);
       if (res.data && res.data.data) {
         dispatch(addServiceProviders(res.data.data));
@@ -96,375 +55,423 @@ const ServiceProviderVerification: React.FC = () => {
     }
   }, [dispatch]);
 
- 
-
   useEffect(() => {
     getAllServiceProviders();
   }, [getAllServiceProviders]);
-  const serviceProviders = useSelector(
-    (state: RootState) => state.admin.serviceProviders
+
+  // Filter service providers based on active tab
+  const filteredServiceProviders = serviceProviders.filter(
+    (provider: ServiceProvider) => {
+      switch (activeTab) {
+        case "verified":
+          return provider.isVerified === "verified";
+        case "rejected":
+          return provider.isVerified === "rejected";
+        case "blocked":
+          return provider.isBlocked === true; // Check explicitly for true
+        case "nonBlocked":
+          return provider.isBlocked !== true; // Check if false or undefined
+        default:
+          return true; // 'all' tab
+      }
+    }
   );
-  const handleVerify = async (providerId: string) => {
-    try {
-      const data = { serviceProviderId: providerId, action: "verify" };
-      const res = await adminPatchRequest(
-        apiEndPointAdmin.serviceProviderVerify,
-        data
-      );
-      console.log(res.data.data);
-      
-    //   dispatch(addServiceProviders(res.data.data));
-      HotToastSuccess("Service provider verified successfully");
-    //   dispatch(addServiceProviders(res.data.data));
-    getAllServiceProviders()
-    } catch (error) {
-      console.error("Error verifying service provider:", error);
-    }
+
+  const handleTabChange = (tabName: string) => {
+    setActiveTab(tabName);
   };
 
-  const openRejectModal = (providerId: string) => {
-    setSelectedProviderId(providerId);
-    setIsRejectModalOpen(true);
-  };
 
-  const handleReject = async (reason: string) => {
-    if (!selectedProviderId) return;
-    
+  const handleBlockProvider = async (providerId:String)=>{
+      try {
+
+       const  res =await adminPatchRequest(apiEndPointAdmin.blockUnblockServiceProvider ,{providerId,action:'Block'})
+       console.log(res);
+       
+       if( res.status==200){
+        HotToastSuccess(res.data.message)
+        getAllServiceProviders()
+
+       }
+      } catch (error) {
+        console.log(error);
+      }
+  }
+
+  const handleUnblockProvider = async (providerId:String)=>{
     try {
-      const data = {
-        serviceProviderId: selectedProviderId,
-        action: "reject",
-        reason: reason,
-      };
-      const res = await adminPatchRequest(
-        apiEndPointAdmin.serviceProviderReject,
-        data
-      );
-      HotToastSuccess("Service provider rejected");
+
+     const  res =await adminPatchRequest(apiEndPointAdmin.blockUnblockServiceProvider,{providerId,action:'Unblock'})
+     console.log(res);
+     if( res.status==200){
+      HotToastSuccess(res.data.message)
       getAllServiceProviders()
-    //   dispatch(addServiceProviders(res.data.data));
-      setIsRejectModalOpen(false);
-      setSelectedProviderId(null);
+     }
     } catch (error) {
-      console.error("Error rejecting service provider:", error);
+      console.log(error);
     }
-  };
-
-  const handleToggleExpand = (id: string) => {
-    setExpandedId(expandedId === id ? null : id);
-  };
-
-  const handleImagePreview = (url: string) => {
-    setImagePreview({ open: true, url });
-  };
-
-  const closeImagePreview = () => {
-    setImagePreview({ open: false, url: "" });
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  };
+}
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-200">
-      <Toaster position="top-center" reverseOrder={false} />
-      
-      {/* Image Preview Modal */}
-      {imagePreview.open && (
-        <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
-          <div className="relative max-w-4xl max-h-screen p-4">
-            <button
-              onClick={closeImagePreview}
-              className="absolute top-0 right-0 bg-gray-800 rounded-full p-2 m-2"
-            >
+    <div className="container px-4 py-8 mx-auto">
+      <h1 className="mb-6 text-3xl font-bold">Service Providers</h1>
+          <Toaster/>
+      {/* Tab navigation - Using Daisy UI tabs */}
+      <div className="mb-6 tabs tabs-boxed">
+        <button
+          className={`tab ${activeTab === "all" ? "tab-active" : ""}`}
+          onClick={() => handleTabChange("all")}
+        >
+          All Providers
+        </button>
+        <button
+          className={`tab ${activeTab === "verified" ? "tab-active" : ""}`}
+          onClick={() => handleTabChange("verified")}
+        >
+          Verified
+        </button>
+        <button
+          className={`tab ${activeTab === "rejected" ? "tab-active" : ""}`}
+          onClick={() => handleTabChange("rejected")}
+        >
+          Rejected
+        </button>
+        <button
+          className={`tab ${activeTab === "blocked" ? "tab-active" : ""}`}
+          onClick={() => handleTabChange("blocked")}
+        >
+          Blocked
+        </button>
+        <button
+          className={`tab ${activeTab === "nonBlocked" ? "tab-active" : ""}`}
+          onClick={() => handleTabChange("nonBlocked")}
+        >
+          Non-Blocked
+        </button>
+      </div>
+
+      {/* Loading state - Using Daisy UI skeleton */}
+      {loading ? (
+        <div className="flex flex-col items-center justify-center py-10">
+          <div className="flex flex-col w-full gap-4">
+            <div className="w-full h-32 skeleton"></div>
+            <div className="w-full h-32 skeleton"></div>
+            <div className="w-full h-32 skeleton"></div>
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Service providers listing */}
+          {filteredServiceProviders.length === 0 ? (
+            <div className="alert alert-info">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-white"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="currentColor"
+                className="w-6 h-6 stroke-current shrink-0"
               >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
+                  strokeWidth="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
               </svg>
-            </button>
-            <img
-              src={imagePreview.url}
-              alt="Preview"
-              className="max-h-screen max-w-full object-contain"
-            />
-          </div>
-        </div>
-      )}
- 
-
-      {/* Reject Modal */}
-       <RejectModal
-        isOpen={isRejectModalOpen}
-        onClose={() => setIsRejectModalOpen(false)}
-        onSubmit={handleReject}
-      /> 
-
-      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-white">Service Provider Verification</h1>
-          <p className="mt-1 text-gray-400">
-            Review and verify service provider applications
-          </p>
-        </div>
-
-        {loading ? (
-          <div className="flex justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            
-            { serviceProviders.length>0 &&
-              serviceProviders.map((provider: ServiceProvider) => (
-                <div
-                  key={provider._id}
-                  className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden shadow-lg"
-                >
-                  <div className="p-5">
-                    <div className="flex flex-col md:flex-row">
-                      {/* Profile section */}
-                      <div className="flex items-start md:w-1/3">
-                        <div className="relative h-20 w-20 rounded-lg overflow-hidden cursor-pointer"
-                          onClick={() => handleImagePreview(provider.profileImage)}>
-                          <img
-                            src={provider.profileImage}
-                            alt={provider.serviceProviderName}
-                            className="h-full w-full object-cover"
-                          />
-                          <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 flex items-center justify-center">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-6 w-6 text-white opacity-0 hover:opacity-100"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                              />
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                              />
-                            </svg>
-                          </div>
+              <span>No service providers found in this category.</span>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {filteredServiceProviders.map((provider: ServiceProvider) => (
+                <div key={provider._id} className="shadow-xl card bg-base-100">
+                  <figure className="relative">
+                    <img
+                      src={provider.profileImage || "/default-profile.png"}
+                      alt={provider.serviceProviderName}
+                      className="object-cover w-full h-48"
+                    />
+                    <div className="absolute flex flex-col gap-1 top-2 right-2">
+                      {provider.isVerified === "verified" && (
+                        <div className="gap-1 badge badge-success">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                            />
+                          </svg>
+                          Verified
                         </div>
-                        <div className="ml-4">
-                          <h3 className="text-xl font-semibold text-white">
-                            {provider.serviceProviderName}
-                          </h3>
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            <span
-                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                provider.isVerified === "verified"
-                                  ? "bg-green-900/30 text-green-400"
-                                  : provider.isVerified === "rejected"
-                                  ? "bg-red-900/30 text-red-400"
-                                  : "bg-yellow-900/30 text-yellow-400"
-                              }`}
-                            >
-                              {provider.isVerified === "verified"
-                                ? "Verified"
-                                : provider.isVerified === "rejected"
-                                ? "Rejected"
-                                : "Pending"}
-                            </span>
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-900/30 text-blue-400">
-                              {provider.experience} Years Exp
-                            </span>
-                          </div>
-                          <p className="text-gray-400 mt-1">
-                            {provider.location}
-                          </p>
+                      )}
+                      {provider.isVerified === "rejected" && (
+                        <div className="gap-1 badge badge-error">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M6 18 18 6M6 6l12 12"
+                            />
+                          </svg>
+                          Rejected
                         </div>
-                      </div>
-
-                      {/* Contact info */}
-                      <div className="mt-4 md:mt-0 md:w-1/3">
-                        <div className="space-y-2 text-sm">
-                          <p className="flex items-center text-gray-300">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4 mr-2 text-gray-400"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                              />
-                            </svg>
-                            {provider.serviceProviderEmail}
-                          </p>
-                          <p className="flex items-center text-gray-300">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4 mr-2 text-gray-400"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                              />
-                            </svg>
-                            {provider.serviceProviderPhone}
-                          </p>
-                          <p className="flex items-center text-gray-300">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4 mr-2 text-gray-400"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                              />
-                            </svg>
-                            Joined: {formatDate(provider.createdAt)}
-                          </p>
+                      )}
+                      {provider.isBlocked === true && (
+                        <div className="gap-1 badge badge-neutral">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636"
+                            />
+                          </svg>
+                          Blocked
                         </div>
-                      </div>
+                      )}
+                    </div>
+                  </figure>
 
-                      {/* Actions */}
-                      <div className="mt-4 md:mt-0 md:w-1/3 flex flex-col md:items-end gap-2">
-                        {provider.isVerified === "pending" && (
-                          <>
-                            <button
-                              onClick={() => handleVerify(provider._id)}
-                              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
-                            >
-                              Verify Provider
-                            </button>
-                            <button
-                              onClick={() => openRejectModal(provider._id)}
-                              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
-                            >
-                              Reject Application
-                            </button>
-                          </>
+                  <div className="card-body">
+                    <h2 className="card-title">
+                      {provider.serviceProviderName}
+                    </h2>
+                    <p className="text-sm text-base-content/70 line-clamp-2">
+                      {provider.description}
+                    </p>
+
+                    <div className="my-1 divider"></div>
+
+                    <div className="mb-2">
+                      <h3 className="mb-1 text-sm font-medium">Services:</h3>
+                      <div className="flex flex-wrap gap-1">
+                        {provider.services.slice(0, 3).map((service, index) => (
+                          <span
+                            key={index}
+                            className="badge badge-primary badge-outline"
+                          >
+                            {service}
+                          </span>
+                        ))}
+                        {provider.services.length > 3 && (
+                          <span className="badge badge-ghost">
+                            +{provider.services.length - 3} more
+                          </span>
                         )}
-                        <button
-                          onClick={() => handleToggleExpand(provider._id)}
-                          className="px-4 py-2 bg-gray-700 text-gray-300 rounded-md hover:bg-gray-600 transition"
-                        >
-                          {expandedId === provider._id ? "Hide Details" : "View Details"}
-                        </button>
                       </div>
                     </div>
 
-                    {/* Expanded details */}
-                    {expandedId === provider._id && (
-                      <div className="mt-6 border-t border-gray-700 pt-4">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                          {/* Services & Skills */}
-                          <div>
-                            <h4 className="text-lg font-medium text-white mb-2">
-                              Services & Skills
-                            </h4>
-                            <div className="space-y-3">
-                              <div>
-                                <span className="text-gray-400 text-sm">Services:</span>
-                                <div className="flex flex-wrap gap-1 mt-1">
-                                  {provider.services.map((service, idx) => (
-                                    <span
-                                      key={idx}
-                                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-900/30 text-indigo-400"
-                                    >
-                                      {service}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
-                              <div>
-                                <span className="text-gray-400 text-sm">Skills:</span>
-                                <div className="flex flex-wrap gap-1 mt-1">
-                                  {provider.skills.map((skill: any, idx) => (
-                                    <span
-                                      key={idx}
-                                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-900/30 text-purple-400"
-                                    >
-                                      {skill.name || JSON.stringify(skill)}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Description */}
-                          <div>
-                            <h4 className="text-lg font-medium text-white mb-2">
-                              Description
-                            </h4>
-                            <p className="text-gray-300 text-sm">
-                              {provider.description || "No description provided."}
-                            </p>
-                          </div>
-
-                          {/* Document */}
-                          <div>
-                            <h4 className="text-lg font-medium text-white mb-2">
-                              Verification Document
-                            </h4>
-                            <div
-                              className="h-40 w-full rounded-lg overflow-hidden border border-gray-700 cursor-pointer"
-                              onClick={() => handleImagePreview(provider.document)}
-                            >
-                              <img
-                                src={provider.document}
-                                alt="Verification Document"
-                                className="h-full w-full object-cover"
-                              />
-                            </div>
-                            <p className="text-xs text-gray-500 mt-1">
-                              Click to view full document
-                            </p>
-                          </div>
-                        </div>
+                    <div className="space-y-1 text-sm">
+                      <div className="flex items-center gap-2">
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                          ></path>
+                        </svg>
+                        <span className="truncate">
+                          {provider.serviceProviderEmail}
+                        </span>
                       </div>
-                    )}
+                      <div className="flex items-center gap-2">
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                          ></path>
+                        </svg>
+                        <span>{provider.serviceProviderPhone}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                          ></path>
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                          ></path>
+                        </svg>
+                        <span className="truncate">
+                          {provider.location.address}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-4 h-4"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                          />
+                        </svg>
+                        <span>Experience: {provider.experience} years</span>
+                      </div>
+                    </div>
+
+                    <div className="justify-end mt-4 card-actions">
+                      <button className="btn btn-primary btn-sm">
+                        View Details
+                      </button>
+                      <li className="flex items-center gap-2">
+  {/* Unblock Button */}
+  {provider.isBlocked && (
+    <button
+      onClick={() => handleUnblockProvider(provider._id)}
+      className="flex items-center gap-2 p-2 text-white transition rounded-md bg-success hover:bg-success-focus"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-5 h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M5 13l4 4L19 7"
+        />
+      </svg>
+      <span className="font-medium">Unblock Provider</span>
+    </button>
+  )}
+
+  {/* Block Button */}
+  {provider.isBlocked==false && (
+    <button
+      onClick={() => handleBlockProvider(provider._id)}
+      className="flex items-center gap-2 p-2 text-white transition rounded-md bg-error hover:bg-error-focus"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-5 h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+      <span className="font-medium">Block Provider</span>
+    </button>
+  )}
+</li>
+                      <div className="dropdown dropdown-end">
+                        <div
+                          tabIndex={0}
+                          role="button"
+                          className="btn btn-ghost btn-sm btn-square"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            className="inline-block w-5 h-5 stroke-current"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
+                            ></path>
+                          </svg>
+                        </div>
+                        <ul
+                          tabIndex={0}
+                          className="z-10 p-2 shadow dropdown-content menu bg-base-100 rounded-box w-52"
+                        >
+                          <li>
+                            <a>Edit Profile</a>
+                          </li>
+                          {/* <li>
+                            {provider.isVerified !== "verified" ? (
+                              <a className="text-success">Verify Provider</a>
+                            ) : (
+                              <a className="text-error">Revoke Verification</a>
+                            )}
+                          </li> */}
+                        </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              ))
-            }
-          </div>
-          
-        )}
-      </main>
+              ))}
+            </div>
+          )}
+
+          {/* Pagination - Using Daisy UI */}
+          {/* {filteredServiceProviders.length > 0 && (
+            <div className="flex justify-center mt-8">
+              <div className="join">
+                <button className="join-item btn btn-sm">«</button>
+                <button className="join-item btn btn-sm btn-active">1</button>
+                <button className="join-item btn btn-sm">2</button>
+                <button className="join-item btn btn-sm">3</button>
+                <button className="join-item btn btn-sm">»</button>
+              </div>
+            </div>
+          )} */}
+        </>
+      )}
     </div>
   );
 };
 
-export default ServiceProviderVerification;
+export default ServiceProviderListing;

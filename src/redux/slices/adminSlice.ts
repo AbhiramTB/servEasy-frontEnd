@@ -13,6 +13,7 @@ interface UserState {
   profileImage?: string;
   serviceProviders: ServiceProvider[]; 
   users: User[]; 
+  allServices:IService[];
 }
 
 interface User {
@@ -28,13 +29,19 @@ interface User {
 
 }
 
-interface ServiceProvider {
+export interface Location {
+  address: string;
+  latitude: number;  
+  longitude: number;
+}
+
+export interface ServiceProvider {
   createdAt: string;
   description: string;
   document: string;
   experience: number;
   isVerified: string;
-  location: string;
+  location: Location;
   profileImage: string;
   serviceProviderEmail: string;
   serviceProviderName: string;
@@ -45,6 +52,7 @@ interface ServiceProvider {
   updatedAt: string;
   __v: number;
   _id: string;
+  
 }
 
 const initialState: UserState = {
@@ -53,7 +61,25 @@ const initialState: UserState = {
   isVerified: false,
   serviceProviders: [],
   users: [], 
+  allServices:[]
 };
+
+export interface IService {
+    _id:string,
+    serviceName: string;
+    description: string;
+    serviceType: string;
+    category: string;
+    location: Location;
+    estimatedPrice: number;
+    serviceProviderId:string;
+    isActive?: boolean;
+    // review?: Review[];
+    serviceImage: string;
+    serviceProviderDetails:ServiceProvider[]
+  }
+
+
 
 const adminSlice = createSlice({
   name: "admin",
@@ -87,6 +113,10 @@ const adminSlice = createSlice({
       if (provider) {
         provider.isVerified = "rejected";
       }
+      
+    },
+    addServices: (state, action: PayloadAction<IService[]>) => {
+      state.allServices= action.payload; 
     },
   },
 });
@@ -97,6 +127,7 @@ export const {
   addServiceProviders,
   verifyServiceProvider,
   rejectServiceProvider,
+  addServices,
 } = adminSlice.actions;
 
 export default adminSlice.reducer;

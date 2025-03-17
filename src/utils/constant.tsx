@@ -61,6 +61,11 @@ export const apiEndPointAdmin = {
   serviceProvider: "/admin/serviceProvider",
   serviceProviderReject: "/admin/serviceProvider/reject",
   serviceProviderVerify: "/admin/serviceProvider/verify",
+  getAllservices:"/admin/service",
+  blockUnblokServices:"/admin/service",
+  blockUnblockServiceProvider :"/admin/serviceprovider",
+  adminLogout:"/admin/logout"
+
 };
 export const serviceEndPoint={
   addNewService:"/service/",
