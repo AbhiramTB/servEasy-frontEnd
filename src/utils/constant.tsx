@@ -43,7 +43,8 @@ export const apiEndPoint = {
   forgotPassword: "/forgot-password",
   forgotPasswordVerifyOtp: "/forgot-password/verify-otp",
   resetPassword: "/forgot-password/reset",
-  locationAutocomplete:"/location/autocomplete"
+  locationAutocomplete:"/location/autocomplete",
+  logoutUser:"/logout"
 };
 
 export const apiEndPointServiceProvider = {
