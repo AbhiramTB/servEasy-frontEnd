@@ -37,25 +37,26 @@ const Navbar = () => {
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [ProfileImg, setProfileImg] = useState<string | null>(null);
 
-  const updateProfile = async () => {
-    const data = { ProfileImg: ProfileImg };
-    await postRequest(apiEndPoint.getUserProfile, data);
+  const logOutUser = async () => {
+    try {
+      const res = await getRequest(apiEndPoint.logoutUser);
+      
+      if (res.status === 200) {
+        localStorage.removeItem("accessToken");
+        
+        window.location.href = "/signin";
+      } else {
+        console.error("Logout failed:", res.data.message);
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
   };
 
   const toggleUploadCard = () => {
     setIsUploadOpen(!isUploadOpen);
   };
-  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>): void => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const result = reader.result as string;
-        setProfileImg(result); // Save Base64 string to state
-      };
-      reader.readAsDataURL(file); // Convert image to Base64
-    }
-  };
+ 
 
   return (
     <div>
@@ -127,8 +128,9 @@ const Navbar = () => {
               <li>
                 <a
                   onClick={() => {
-                    localStorage.removeItem("accessToken");
-                    window.location.href = "/signin";
+                    logOutUser()
+                    
+
                   }}
                 >
                   Logout
