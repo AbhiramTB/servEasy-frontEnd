@@ -1,17 +1,18 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import ThemeChange from "./ThemeChange";
 import { getRequest, postRequest } from "../../utils/makeRequestInstance";
-import { apiEndPoint } from "../../utils/constant";
+import { apiEndPoint, apiEndPointServiceProvider } from "../../utils/constant";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserProfileModal from "./UpdateProfile";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../redux/slices/userSlice";
+import { HotToastSuccess } from "../../utils/HotToasitify";
 
 const Navbar = () => {
   const dispatch = useDispatch();
-
+const navigate = useNavigate()
   const user = useSelector((state: RootState) => state.user);
 
   const [editProfile, setEditProfile] = useState<boolean>(false);
@@ -56,6 +57,21 @@ const Navbar = () => {
       reader.readAsDataURL(file); // Convert image to Base64
     }
   };
+  const verifyServiceProvider = async()=>{
+    try {
+      const res=await getRequest(apiEndPointServiceProvider.verifyServiceProvider)
+      console.log(res);
+      if(res.status===200){
+        HotToastSuccess('verification successful')
+        navigate("/service-provider/dashboard")
+       }
+       
+       
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
 
   return (
     <div>
@@ -76,12 +92,11 @@ const Navbar = () => {
           )}
 
           {user.serviceProvider && (
-            <Link to={"/service-provider/dashboard"}>
-              {" "}
-              <button className="hidden btn btn-outline btn-secondary md:inline-block">
+            
+              <button className="hidden btn btn-outline btn-secondary md:inline-block" onClick={()=>verifyServiceProvider()}>
                 Go to Service Dashboard
-              </button>{" "}
-            </Link>
+              </button>
+            
           )}
 
           <div className="dropdown dropdown-end">

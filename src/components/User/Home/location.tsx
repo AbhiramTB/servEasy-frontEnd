@@ -4,7 +4,7 @@ import { apiEndPoint } from "../../../utils/constant";
 import { getRequest } from "../../../utils/makeRequestInstance";
 import { MapPin, Search, Loader2 } from "lucide-react";
 
-interface Location {
+export interface Location {
   address: string;
   latitude: number;
   longitude: number;
@@ -12,10 +12,13 @@ interface Location {
 
 interface LocationSearchProps {
   onLocationSelect: (location: Location | null) => void;
+  initialLocation?:string
 }
 
-const LocationSearch: React.FC<LocationSearchProps> = ({ onLocationSelect }) => {
-  const [query, setQuery] = useState<string>("");
+const LocationSearch: React.FC<LocationSearchProps> = ({ onLocationSelect,initialLocation }) => {
+  const [query, setQuery] = useState<string>(initialLocation?initialLocation:""
+
+  );
   const [results, setResults] = useState<Location[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const debounce = lodash.debounce;
