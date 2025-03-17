@@ -27,8 +27,8 @@ export const darkThemes = {
   theme12: "sunset",
 };
 
-export const lightTheme = lightThems.theme10;
-export const darkTheme = darkThemes.theme9;
+export const lightTheme = lightThems.theme4;
+export const darkTheme = darkThemes.theme4;
 
 export const apiEndPoint = {
   refreshToken: "/refresh-token",
@@ -47,7 +47,9 @@ export const apiEndPoint = {
 };
 
 export const apiEndPointServiceProvider = {
+  verifyServiceProvider:'/service-providers/verify',
   serviceProviderRegister: "/service-providers/register",
+  getServiceProvider:"/service-providers/",
 };
 
 export const apiEndPointAdmin = {
@@ -60,6 +62,12 @@ export const apiEndPointAdmin = {
   serviceProviderReject: "/admin/serviceProvider/reject",
   serviceProviderVerify: "/admin/serviceProvider/verify",
 };
+export const serviceEndPoint={
+  addNewService:"/service/",
+  getAllService:"/service/",
+  updateService:"/service/",
+  blockUnblock:"/service/block-unblock"
+}
 export const routes = {
   siginSignup: "/signin",
   home: "/",

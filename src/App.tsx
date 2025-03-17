@@ -14,6 +14,8 @@ import AdminLayout from "./pages/AdminLayout.tsx";
 import ServiceProviderLayout from "./pages/ServiceProviderLayout.tsx";
 import ProtectedRoute from "./pages/ProtectedRoute.tsx"; 
 import AdminProtectedRoute from "./pages/AdminProtectedRoute"; 
+import AddnewService from "./components/ServiceProvider/service/AddnewService.tsx";
+import ServiceManagement from "./components/ServiceProvider/service/serviceManagement.tsx";
 
 function App() {
   return (
@@ -31,6 +33,10 @@ function App() {
           <Route path="/service-provider" element={<ServiceProviderLayout />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="register" element={<Register />} />
+                        {/* <Route path="/service" element={<AddnewService/>} /> */}
+       
+        <Route path="service-management" element={<ServiceManagement/>} />
+
           </Route>
         </Route>
 
@@ -42,11 +48,11 @@ function App() {
             <Route path="home" element={<AdminHome />} />
             <Route path="users" element={<UserListingPage />} />
             <Route path="serviceProvider" element={<ServiceProviderListing />} />
+
           </Route>
         </Route>
 
         
-        <Route path="/Test" element={<Sample />} />
       </Routes>
     </BrowserRouter>
   );
