@@ -1,6 +1,6 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ThemeChange from "./ThemeChange";
-import { getRequest, postRequest } from "../../utils/makeRequestInstance";
+import { getRequest } from "../../utils/makeRequestInstance";
 import { apiEndPoint, apiEndPointServiceProvider } from "../../utils/constant";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -12,7 +12,7 @@ import { HotToastSuccess } from "../../utils/HotToasitify";
 
 const Navbar = () => {
   const dispatch = useDispatch();
-const navigate = useNavigate()
+  const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.user);
 
   const [editProfile, setEditProfile] = useState<boolean>(false);
@@ -33,45 +33,20 @@ const navigate = useNavigate()
     }
   };
 
-  const profilePlaceHolder =
-    "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp";
-  const [isUploadOpen, setIsUploadOpen] = useState(false);
-  const [ProfileImg, setProfileImg] = useState<string | null>(null);
-
-  const updateProfile = async () => {
-    const data = { ProfileImg: ProfileImg };
-    await postRequest(apiEndPoint.getUserProfile, data);
-  };
-
-  const toggleUploadCard = () => {
-    setIsUploadOpen(!isUploadOpen);
-  };
-  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>): void => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const result = reader.result as string;
-        setProfileImg(result); // Save Base64 string to state
-      };
-      reader.readAsDataURL(file); // Convert image to Base64
-    }
-  };
-  const verifyServiceProvider = async()=>{
+  const verifyServiceProvider = async () => {
     try {
-      const res=await getRequest(apiEndPointServiceProvider.verifyServiceProvider)
+      const res = await getRequest(
+        apiEndPointServiceProvider.verifyServiceProvider
+      );
       console.log(res);
-      if(res.status===200){
-        HotToastSuccess('verification successful')
-        navigate("/service-provider/dashboard")
-       }
-       
-       
+      if (res.status === 200) {
+        HotToastSuccess("verification successful");
+        navigate("/service-provider/dashboard");
+      }
     } catch (error) {
       console.log(error);
-      
     }
-  }
+  };
 
   return (
     <div>
@@ -82,7 +57,6 @@ const navigate = useNavigate()
           </a>
         </div>
         <div className="flex-none gap-4">
-          <ThemeChange />
           {!user.serviceProvider && (
             <Link to={"service-provider/register"}>
               <button className="hidden btn btn-outline btn-primary md:inline-block">
@@ -92,11 +66,12 @@ const navigate = useNavigate()
           )}
 
           {user.serviceProvider && (
-            
-              <button className="hidden btn btn-outline btn-secondary md:inline-block" onClick={()=>verifyServiceProvider()}>
-                Go to Service Dashboard
-              </button>
-            
+            <button
+              className="hidden btn btn-outline btn-secondary md:inline-block"
+              onClick={() => verifyServiceProvider()}
+            >
+              Go to Service Dashboard
+            </button>
           )}
 
           <div className="dropdown dropdown-end">
@@ -113,12 +88,10 @@ const navigate = useNavigate()
                   />
                 )}
 
-                
-                {  !user.profileImage && (
-                   <img               
+                {!user.profileImage && (
+                  <img
                     alt="Tailwind CSS Navbar component"
-                    src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"             
-
+                    src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
                   />
                 )}
               </div>
@@ -127,19 +100,25 @@ const navigate = useNavigate()
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-lg"
             >
-              <li onClick={toggleUploadCard}>
+              <li>
                 <a
                   className="justify-between"
                   onClick={() => setEditProfile(true)}
                 >
                   Profile
-                  <span className="badge badge-primary">New</span>
+                  {/* <span className="badge badge-primary">New</span> */}
                 </a>
               </li>
               <li>
                 <a>Settings</a>
               </li>
               <li>
+                <li>
+                  <a>
+                    {" "}
+                    <ThemeChange />
+                  </a>
+                </li>
                 <a
                   onClick={() => {
                     localStorage.removeItem("accessToken");
