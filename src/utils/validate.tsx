@@ -11,8 +11,7 @@ export const validatePhone = (phone: string): boolean =>
  /^\d{10}$/.test(phone);
 
 
-export const validateUserName = (userName: string): boolean => 
-/^(?=.*[a-zA-Z].*[a-zA-Z].*[a-zA-Z])[a-zA-Z\s]+$/.test(userName); 
+export const validateUserName = (userName: string): boolean => userName.length>3 
 
 
 
