@@ -43,7 +43,8 @@ export const apiEndPoint = {
   forgotPassword: "/forgot-password",
   forgotPasswordVerifyOtp: "/forgot-password/verify-otp",
   resetPassword: "/forgot-password/reset",
-  locationAutocomplete:"/location/autocomplete"
+  locationAutocomplete:"/location/autocomplete",
+  getServices:"/getactive/services"
 };
 
 export const apiEndPointServiceProvider = {
@@ -57,7 +58,7 @@ export const apiEndPointAdmin = {
   AdminSignIn: "/admin/signin",
   getPrfoile: "/admin/profile",
   getAllUsers: "/admin/users",
-  blockUnblockUser: "/admin/users/block-unblock",
+  blockUnblockUser: "/admin/users/block-unblock",  
   serviceProvider: "/admin/serviceProvider",
   serviceProviderReject: "/admin/serviceProvider/reject",
   serviceProviderVerify: "/admin/serviceProvider/verify",

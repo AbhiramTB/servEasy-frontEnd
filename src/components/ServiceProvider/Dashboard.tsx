@@ -30,15 +30,19 @@ const Dashboard = () => {
 
   return (
     <div>
-       <div className="mb-6">
-          <h1 className="text-3xl font-bold text-white"> Dashboard</h1>
-          <p className="mt-1 text-gray-400">Welcome back,{serviceProviderInfo.serviceProviderName} </p>
-        </div>
+      
       {serviceProviderInfo.isVerified === "pending" && (
         <PendingVerificationCard
           email={serviceProviderInfo.serviceProviderEmail}
         />
       )}
+
+      {serviceProviderInfo.isVerified ==="verified" &&
+          <div className="mx-auto text-center ">
+          <h1 className="font-mono text-[200px] text-primary opacity-30"> Dashboard</h1>
+          <p className="mt-1 text-2xl text-base-content">Welcome back,{serviceProviderInfo.serviceProviderName} </p>
+        </div>
+      }
     </div>
   );
 };
