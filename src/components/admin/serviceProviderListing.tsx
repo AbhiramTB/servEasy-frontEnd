@@ -81,41 +81,43 @@ const ServiceProviderListing = () => {
     setActiveTab(tabName);
   };
 
-
-  const handleBlockProvider = async (providerId:String)=>{
-      try {
-
-       const  res =await adminPatchRequest(apiEndPointAdmin.blockUnblockServiceProvider ,{providerId,action:'Block'})
-       console.log(res);
-       
-       if( res.status==200){
-        HotToastSuccess(res.data.message)
-        getAllServiceProviders()
-
-       }
-      } catch (error) {
-        console.log(error);
-      }
-  }
-
-  const handleUnblockProvider = async (providerId:String)=>{
+  const handleBlockProvider = async (providerId: String) => {
     try {
+      const res = await adminPatchRequest(
+        apiEndPointAdmin.blockUnblockServiceProvider,
+        { providerId, action: "Block" }
+      );
+      console.log(res);
 
-     const  res =await adminPatchRequest(apiEndPointAdmin.blockUnblockServiceProvider,{providerId,action:'Unblock'})
-     console.log(res);
-     if( res.status==200){
-      HotToastSuccess(res.data.message)
-      getAllServiceProviders()
-     }
+      if (res.status == 200) {
+        HotToastSuccess(res.data.message);
+        getAllServiceProviders();
+      }
     } catch (error) {
       console.log(error);
     }
-}
+  };
+
+  const handleUnblockProvider = async (providerId: String) => {
+    try {
+      const res = await adminPatchRequest(
+        apiEndPointAdmin.blockUnblockServiceProvider,
+        { providerId, action: "Unblock" }
+      );
+      console.log(res);
+      if (res.status == 200) {
+        HotToastSuccess(res.data.message);
+        getAllServiceProviders();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="container px-4 py-8 mx-auto">
       <h1 className="mb-6 text-3xl font-bold">Service Providers</h1>
-          <Toaster/>
+      <Toaster />
       {/* Tab navigation - Using Daisy UI tabs */}
       <div className="mb-6 tabs tabs-boxed">
         <button
@@ -361,59 +363,61 @@ const ServiceProviderListing = () => {
                     </div>
 
                     <div className="justify-end mt-4 card-actions">
-                      <button className="btn btn-primary btn-sm">
+                      {/* <button className="btn btn-primary btn-sm">
                         View Details
-                      </button>
+                      </button> */}
                       <li className="flex items-center gap-2">
-  {/* Unblock Button */}
-  {provider.isBlocked && (
-    <button
-      onClick={() => handleUnblockProvider(provider._id)}
-      className="flex items-center gap-2 p-2 text-white transition rounded-md bg-success hover:bg-success-focus"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-5 h-5"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M5 13l4 4L19 7"
-        />
-      </svg>
-      <span className="font-medium">Unblock Provider</span>
-    </button>
-  )}
+                        {/* Unblock Button */}
+                        {provider.isBlocked && (
+                          <button
+                            onClick={() => handleUnblockProvider(provider._id)}
+                            className="flex items-center gap-2 p-2 text-white transition rounded-md bg-success hover:bg-success-focus"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-5 h-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                            <span className="font-medium">
+                              Unblock Provider
+                            </span>
+                          </button>
+                        )}
 
-  {/* Block Button */}
-  {provider.isBlocked==false && (
-    <button
-      onClick={() => handleBlockProvider(provider._id)}
-      className="flex items-center gap-2 p-2 text-white transition rounded-md bg-error hover:bg-error-focus"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-5 h-5"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M6 18L18 6M6 6l12 12"
-        />
-      </svg>
-      <span className="font-medium">Block Provider</span>
-    </button>
-  )}
-</li>
-                      <div className="dropdown dropdown-end">
+                        {/* Block Button */}
+                        {provider.isBlocked == false && (
+                          <button
+                            onClick={() => handleBlockProvider(provider._id)}
+                            className="flex items-center gap-2 p-2 text-white transition rounded-md bg-error hover:bg-error-focus"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-5 h-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                            <span className="font-medium">Block Provider</span>
+                          </button>
+                        )}
+                      </li>
+                      {/* <div className="dropdown dropdown-end">
                         <div
                           tabIndex={0}
                           role="button"
@@ -439,16 +443,16 @@ const ServiceProviderListing = () => {
                         >
                           <li>
                             <a>Edit Profile</a>
-                          </li>
-                          {/* <li>
+                          </li> 
+                         <li>
                             {provider.isVerified !== "verified" ? (
                               <a className="text-success">Verify Provider</a>
                             ) : (
                               <a className="text-error">Revoke Verification</a>
                             )}
-                          </li> */}
-                        </ul>
-                      </div>
+                          </li> 
+                         </ul> 
+                      </div> */}
                     </div>
                   </div>
                 </div>

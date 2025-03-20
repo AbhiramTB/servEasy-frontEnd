@@ -64,13 +64,13 @@ const UserListingPage: React.FC = () => {
   const selectedUser = users.find(user => user._id === selectedUserId);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-200">
+    <div className="min-h-screen text-gray-200 bg-gray-900">
         <Toaster
   position="top-center"
   reverseOrder={false}
 />
-      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+      <main className="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="flex flex-col mb-6 md:flex-row md:items-center md:justify-between">
           <div>
             <h1 className="text-3xl font-bold text-white">Users</h1>
             <p className="mt-1 text-gray-400">Manage user accounts here.</p>
@@ -80,19 +80,19 @@ const UserListingPage: React.FC = () => {
         {selectedUser && <UserProfileView user={selectedUser} onClose={handleCloseProfile} />}
 
         {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <span className="text-gray-400 text-lg">Loading users...</span>
+          <div className="flex items-center justify-center h-64">
+            <span className="text-lg text-gray-400">Loading users...</span>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {users.length > 0 ? (
               users.map((user) => (
-                <div key={user._id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden shadow-md">
+                <div key={user._id} className="overflow-hidden bg-gray-800 border border-gray-700 rounded-lg shadow-md">
                   <div className="p-5">
                     <div className="flex items-center mb-4">
-                      <div className="h-12 w-12 rounded-full flex items-center justify-center bg-blue-600">
-                        <span className="font-medium text-lg text-white">
-                          {user.userName?.substring(0, 2) || "NA"}
+                      <div className="flex items-center justify-center w-12 h-12 bg-blue-600 rounded-full">
+                        <span className="text-lg font-medium text-white">
+                          {user.userName?.substring(0,2) || "NA"}
                         </span>
                       </div>
                       <div className="ml-4">
@@ -119,13 +119,13 @@ const UserListingPage: React.FC = () => {
                   <div className="flex border-t border-gray-700">
                     <button 
                       onClick={() => handleViewProfile(user._id)}
-                      className="flex-1 py-3 text-gray-300 hover:bg-gray-700 text-sm font-medium"
+                      className="flex-1 py-3 text-sm font-medium text-gray-300 hover:bg-gray-700"
                     >
                       View Profile
                     </button>
                     <button
                       onClick={() => handleBlockUser(user._id,user.isBlocked ? "Unblock" : "Block")}
-                      className="flex-1 py-3 text-red-400 hover:bg-gray-700 text-sm font-medium flex items-center justify-center"
+                      className="flex items-center justify-center flex-1 py-3 text-sm font-medium text-red-400 hover:bg-gray-700"
                     >
                       {user.isBlocked ? "Unblock" : "Block"}
                     </button>
@@ -141,7 +141,7 @@ const UserListingPage: React.FC = () => {
                     >
                       <svg 
                         xmlns="http://www.w3.org/2000/svg" 
-                        className="h-4 w-4 mr-2" 
+                        className="w-4 h-4 mr-2" 
                         fill={user.isAdmin ? "currentColor" : "none"} 
                         viewBox="0 0 24 24" 
                         stroke="currentColor"
@@ -159,7 +159,7 @@ const UserListingPage: React.FC = () => {
                 </div>
               ))
             ) : (
-              <p className="text-gray-400 text-center col-span-full">No users found.</p>
+              <p className="text-center text-gray-400 col-span-full">No users found.</p>
             )}
           </div>
         )}

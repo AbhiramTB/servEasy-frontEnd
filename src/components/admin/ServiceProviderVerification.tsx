@@ -13,7 +13,6 @@ export interface Location {
   longitude: number;
 }
 
-
 interface ServiceProvider {
   createdAt: string;
   description: string;
@@ -39,7 +38,11 @@ interface RejectModalProps {
   onSubmit: (reason: string) => void;
 }
 
-const RejectModal: React.FC<RejectModalProps> = ({ isOpen, onClose, onSubmit }) => {
+const RejectModal: React.FC<RejectModalProps> = ({
+  isOpen,
+  onClose,
+  onSubmit,
+}) => {
   const [reason, setReason] = useState<string>("");
 
   if (!isOpen) return null;
@@ -84,8 +87,13 @@ const ServiceProviderVerification: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [isRejectModalOpen, setIsRejectModalOpen] = useState<boolean>(false);
-  const [selectedProviderId, setSelectedProviderId] = useState<string | null>(null);
-  const [imagePreview, setImagePreview] = useState<{ open: boolean; url: string }>({
+  const [selectedProviderId, setSelectedProviderId] = useState<string | null>(
+    null
+  );
+  const [imagePreview, setImagePreview] = useState<{
+    open: boolean;
+    url: string;
+  }>({
     open: false,
     url: "",
   });
@@ -103,8 +111,6 @@ const ServiceProviderVerification: React.FC = () => {
     }
   }, [dispatch]);
 
- 
-
   useEffect(() => {
     getAllServiceProviders();
   }, [getAllServiceProviders]);
@@ -119,11 +125,11 @@ const ServiceProviderVerification: React.FC = () => {
         data
       );
       console.log(res.data.data);
-      
-    //   dispatch(addServiceProviders(res.data.data));
+
+      //   dispatch(addServiceProviders(res.data.data));
       HotToastSuccess("Service provider verified successfully");
-    //   dispatch(addServiceProviders(res.data.data));
-    getAllServiceProviders()
+      //   dispatch(addServiceProviders(res.data.data));
+      getAllServiceProviders();
     } catch (error) {
       console.error("Error verifying service provider:", error);
     }
@@ -136,7 +142,7 @@ const ServiceProviderVerification: React.FC = () => {
 
   const handleReject = async (reason: string) => {
     if (!selectedProviderId) return;
-    
+
     try {
       const data = {
         serviceProviderId: selectedProviderId,
@@ -148,8 +154,8 @@ const ServiceProviderVerification: React.FC = () => {
         data
       );
       HotToastSuccess("Service provider rejected");
-      getAllServiceProviders()
-    //   dispatch(addServiceProviders(res.data.data));
+      getAllServiceProviders();
+      //   dispatch(addServiceProviders(res.data.data));
       setIsRejectModalOpen(false);
       setSelectedProviderId(null);
     } catch (error) {
@@ -171,17 +177,17 @@ const ServiceProviderVerification: React.FC = () => {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
   return (
     <div className="min-h-screen text-gray-200 bg-gray-900">
       <Toaster position="top-center" reverseOrder={false} />
-      
+
       {/* Image Preview Modal */}
       {imagePreview.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
@@ -213,18 +219,19 @@ const ServiceProviderVerification: React.FC = () => {
           </div>
         </div>
       )}
- 
 
       {/* Reject Modal */}
-       <RejectModal
+      <RejectModal
         isOpen={isRejectModalOpen}
         onClose={() => setIsRejectModalOpen(false)}
         onSubmit={handleReject}
-      /> 
+      />
 
       <main className="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-white">Service Provider Verification</h1>
+          <h1 className="text-3xl font-bold text-white">
+            Service Provider Verification
+          </h1>
           <p className="mt-1 text-gray-400">
             Review and verify service provider applications
           </p>
@@ -236,8 +243,7 @@ const ServiceProviderVerification: React.FC = () => {
           </div>
         ) : (
           <div className="space-y-6">
-            
-            { serviceProviders.length>0 &&
+            {serviceProviders.length > 0 &&
               serviceProviders.map((provider: ServiceProvider) => (
                 <div
                   key={provider._id}
@@ -247,8 +253,12 @@ const ServiceProviderVerification: React.FC = () => {
                     <div className="flex flex-col md:flex-row">
                       {/* Profile section */}
                       <div className="flex items-start md:w-1/3">
-                        <div className="relative w-20 h-20 overflow-hidden rounded-lg cursor-pointer"
-                          onClick={() => handleImagePreview(provider.profileImage)}>
+                        <div
+                          className="relative w-20 h-20 overflow-hidden rounded-lg cursor-pointer"
+                          onClick={() =>
+                            handleImagePreview(provider.profileImage)
+                          }
+                        >
                           <img
                             src={provider.profileImage}
                             alt={provider.serviceProviderName}
@@ -287,15 +297,15 @@ const ServiceProviderVerification: React.FC = () => {
                                 provider.isVerified === "verified"
                                   ? "bg-green-900/30 text-green-400"
                                   : provider.isVerified === "rejected"
-                                  ? "bg-red-900/30 text-red-400"
-                                  : "bg-yellow-900/30 text-yellow-400"
+                                    ? "bg-red-900/30 text-red-400"
+                                    : "bg-yellow-900/30 text-yellow-400"
                               }`}
                             >
                               {provider.isVerified === "verified"
                                 ? "Verified"
                                 : provider.isVerified === "rejected"
-                                ? "Rejected"
-                                : "Pending"}
+                                  ? "Rejected"
+                                  : "Pending"}
                             </span>
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-900/30 text-blue-400">
                               {provider.experience} Years Exp
@@ -366,6 +376,14 @@ const ServiceProviderVerification: React.FC = () => {
 
                       {/* Actions */}
                       <div className="flex flex-col gap-2 mt-4 md:mt-0 md:w-1/3 md:items-end">
+                        {provider.isVerified === "rejected" && (
+                          <button
+                            onClick={() => handleVerify(provider._id)}
+                            className="px-4 py-2 text-white transition bg-green-600 rounded-md hover:bg-green-700"
+                          >
+                            Verify Provider
+                          </button>
+                        )}
                         {provider.isVerified === "pending" && (
                           <>
                             <button
@@ -386,7 +404,9 @@ const ServiceProviderVerification: React.FC = () => {
                           onClick={() => handleToggleExpand(provider._id)}
                           className="px-4 py-2 text-gray-300 transition bg-gray-700 rounded-md hover:bg-gray-600"
                         >
-                          {expandedId === provider._id ? "Hide Details" : "View Details"}
+                          {expandedId === provider._id
+                            ? "Hide Details"
+                            : "View Details"}
                         </button>
                       </div>
                     </div>
@@ -402,7 +422,9 @@ const ServiceProviderVerification: React.FC = () => {
                             </h4>
                             <div className="space-y-3">
                               <div>
-                                <span className="text-sm text-gray-400">Services:</span>
+                                <span className="text-sm text-gray-400">
+                                  Services:
+                                </span>
                                 <div className="flex flex-wrap gap-1 mt-1">
                                   {provider.services.map((service, idx) => (
                                     <span
@@ -415,7 +437,9 @@ const ServiceProviderVerification: React.FC = () => {
                                 </div>
                               </div>
                               <div>
-                                <span className="text-sm text-gray-400">Skills:</span>
+                                <span className="text-sm text-gray-400">
+                                  Skills:
+                                </span>
                                 <div className="flex flex-wrap gap-1 mt-1">
                                   {provider.skills.map((skill: any, idx) => (
                                     <span
@@ -436,7 +460,8 @@ const ServiceProviderVerification: React.FC = () => {
                               Description
                             </h4>
                             <p className="text-sm text-gray-300">
-                              {provider.description || "No description provided."}
+                              {provider.description ||
+                                "No description provided."}
                             </p>
                           </div>
 
@@ -447,7 +472,9 @@ const ServiceProviderVerification: React.FC = () => {
                             </h4>
                             <div
                               className="w-full h-40 overflow-hidden border border-gray-700 rounded-lg cursor-pointer"
-                              onClick={() => handleImagePreview(provider.document)}
+                              onClick={() =>
+                                handleImagePreview(provider.document)
+                              }
                             >
                               <img
                                 src={provider.document}
@@ -464,10 +491,8 @@ const ServiceProviderVerification: React.FC = () => {
                     )}
                   </div>
                 </div>
-              ))
-            }
+              ))}
           </div>
-          
         )}
       </main>
     </div>

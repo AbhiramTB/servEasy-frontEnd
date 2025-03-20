@@ -30,14 +30,35 @@ const Dashboard = () => {
 
   return (
     <div>
-      
-      {serviceProviderInfo.isVerified === "pending" && (
+      {serviceProviderInfo.isBlocked==true &&
+       <div className="text-center">
+       <h2 className="text-xl font-bold"> Profile Blocked</h2>
+       <p className="mt-3">Your profile has been blocked by the admin.</p>
+       
+     </div>
+    
+  
+
+      }
+
+{serviceProviderInfo.isVerified=="rejected" &&
+       <div className="text-center">
+       <h2 className="text-xl font-bold">User Profile Blocked</h2>
+       <p className="mt-3">Your profile has been blocked by the admin.</p>
+       
+     </div>
+    
+  
+
+      }
+
+      {serviceProviderInfo.isVerified === "pending"  && (
         <PendingVerificationCard
           email={serviceProviderInfo.serviceProviderEmail}
         />
       )}
 
-      {serviceProviderInfo.isVerified ==="verified" &&
+      {serviceProviderInfo.isVerified ==="verified" && serviceProviderInfo.isBlocked==false &&
           <div className="mx-auto text-center ">
           <h1 className="font-mono text-[200px] text-primary opacity-30"> Dashboard</h1>
           <p className="mt-1 text-2xl text-base-content">Welcome back,{serviceProviderInfo.serviceProviderName} </p>

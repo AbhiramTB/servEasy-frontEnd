@@ -66,14 +66,18 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
             </button>
           </div>
 
-          <a className="font-serif text-xl btn btn-ghost text-primary-content">
+<Link to={'/'}>
+
+<a className="font-serif text-xl btn btn-ghost text-primary-content">
             ServEasy
           </a>
+</Link>
+          
         </div>
 
         {/* Desktop menu */}
 
-        {serviceProviderInfo.isVerified == "verified" && (
+        {serviceProviderInfo.isVerified == "verified" && serviceProviderInfo.isBlocked==false  && (
           <div className="hidden navbar-center text-primary-content lg:flex">
             <ul className="px-1 menu menu-horizontal">
               <Link to={"/service-provider/dashboard"}>
@@ -96,7 +100,9 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
           </div>
         )}
 
-        <div className="navbar-end">
+      {serviceProviderInfo.isVerified == "verified" && serviceProviderInfo.isBlocked==false  &&
+        (
+          <div className="navbar-end">
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
@@ -140,9 +146,12 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
             </ul>
           </div>
         </div>
+        )
+      }
       </div>
+                
 
-      {/* Mobile menu dropdown */}
+     
       {isMenuOpen && (
         <div className="shadow-lg lg:hidden bg-primary">
           <ul className="w-full px-4 py-2 menu menu-vertical text-primary-content">
