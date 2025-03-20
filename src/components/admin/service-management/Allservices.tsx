@@ -150,7 +150,7 @@ const Allservices = () => {
 
                 {/* Action Buttons */}
                 <div className="grid grid-cols-3 gap-2 mt-4">
-                  <button
+                  {/* <button
                     onClick={() => handleEdit(service._id.toString())}
                     className="flex items-center justify-center px-4 py-2 text-sm font-medium rounded text-primary-content bg-primary hover:bg-primary-focus"
                   >
@@ -169,7 +169,7 @@ const Allservices = () => {
                       />
                     </svg>
                     Edit
-                  </button>
+                  </button> */}
 
                   {service.isActive ? (
                     <button

@@ -108,7 +108,7 @@ const AdminSignIn: React.FC = () => {
       }}
     >
       <div className="w-full max-w-md bg-gray-800 border border-gray-700 shadow-xl card">
-        <figure className="px-6 pt-6">
+        {/* <figure className="px-6 pt-6">
           <div className="flex items-center justify-center w-32 h-32 p-4 bg-blue-900 rounded-full">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -125,7 +125,7 @@ const AdminSignIn: React.FC = () => {
               />
             </svg>
           </div>
-        </figure>
+        </figure> */}
         <div className="card-body">
           <h2 className="mb-6 text-2xl font-bold text-center text-blue-400">
             Admin Sign In
@@ -211,12 +211,7 @@ const AdminSignIn: React.FC = () => {
                 <span className="font-medium text-blue-400 label-text">
                   Password
                 </span>
-                <a
-                  href="#"
-                  className="text-blue-400 label-text-alt hover:text-blue-300 link"
-                >
-                  Forgot password?
-                </a>
+               
               </label>
               <input
                 type="password"
@@ -240,16 +235,16 @@ const AdminSignIn: React.FC = () => {
             </div>
           </form>
 
-          <div className="mt-6 text-gray-500 divider">OR</div>
+          {/* <div className="mt-6 text-gray-500 divider">OR</div> */}
 
-          <div className="text-center">
+          {/* <div className="text-center">
             <p className="text-sm text-gray-400">
               Need access?{" "}
               <a href="#" className="text-blue-400 hover:text-blue-300 link">
                 Contact system administrator
               </a>
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

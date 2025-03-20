@@ -18,6 +18,7 @@ interface UserState {
     updatedAt: string;
     __v: number;
     _id: string;
+    isBlocked:boolean
 }
 
 const initialState: UserState = {
@@ -28,6 +29,7 @@ const initialState: UserState = {
     isVerified: "pending",
     location: "",
     profileImage: "",
+    isBlocked:false,
     allServices: [],
     serviceProviderEmail: "",
     serviceProviderName: "",

@@ -17,22 +17,25 @@ import ServiceProviderListing from "./components/admin/serviceProviderListing.ts
 import Allservices from "./components/admin/service-management/Allservices.tsx";
 import ServiceManagement from "./components/ServiceProvider/service/ServiceManagement.tsx";
 
-
 function App() {
-
-
+  const token = localStorage.getItem("accessToken");
+  const adminToken = localStorage.getItem("adminToken");
+  console.log(adminToken);
+  
   return (
     <BrowserRouter basename="/">
       <Routes>
-        <Route path="/signIn" element={<AuthPage />} />
-        
+        <Route
+          path="/signIn"
+          element={token ? <Navigate to="/" replace /> : <AuthPage />}
+        />
+
         <Route path="otp" element={<Otp />} />
 
         <Route path="/" element={<Body />}>
           <Route index element={<Home />} />
         </Route>
 
-   
         <Route element={<ProtectedRoute />}>
           <Route path="/service-provider" element={<ServiceProviderLayout />}>
             <Route path="dashboard" element={<Dashboard />} />
@@ -43,7 +46,12 @@ function App() {
           </Route>
         </Route>
 
-        <Route path="admin/sigin" element={<AdminSignIn />} />
+        <Route
+          path="admin/sigin"
+          element={
+            adminToken ? <Navigate to={"/admin/home"} replace /> : <AdminSignIn />
+          }
+        />
 
         <Route element={<AdminProtectedRoute />}>
           <Route path="/admin" element={<AdminLayout />}>
@@ -52,7 +60,7 @@ function App() {
             <Route
               path="serviceProvider/verification"
               element={<ServiceProviderVerifiction />}
-            />
+          />
             <Route
               path="serviceProvider"
               element={<ServiceProviderListing />}

@@ -3,6 +3,7 @@ import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import { adminGetRequest } from "../../utils/AxiosAdmin";
 import { apiEndPointAdmin } from "../../utils/constant";
+import ThemeChange from "../User/ThemeChange";
 const NavBar = () => {
   const admin = useSelector((state: RootState) => ({
     userName: state.admin.userName,
@@ -170,10 +171,10 @@ const NavBar = () => {
             </li>
             {/* <li>
               <a>Profile</a>
-            </li>
-            <li>
-              <a>Settings</a>
             </li> */}
+            {/* <li>
+            <ThemeChange/>
+            </li>  */}
             <li>
               <a onClick={handleLogOut}>Logout</a>
             </li>

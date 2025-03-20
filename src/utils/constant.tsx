@@ -44,7 +44,8 @@ export const apiEndPoint = {
   forgotPasswordVerifyOtp: "/forgot-password/verify-otp",
   resetPassword: "/forgot-password/reset",
   locationAutocomplete:"/location/autocomplete",
-  getServices:"/getactive/services"
+  getServices:"/getactive/services",
+  logOutUser:"/logout"
 };
 
 export const apiEndPointServiceProvider = {
