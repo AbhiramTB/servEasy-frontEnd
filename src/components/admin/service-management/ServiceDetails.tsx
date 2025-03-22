@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
+import CategoryList from "./Addcategory";
 interface ServiceDetails {
   _id: string;
   serviceName: string;
@@ -32,6 +33,25 @@ interface ServiceDetailsProps {
   onBlock: (id: string) => void;
   onUnblock: (id: string) => void;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const ServiceDetails: React.FC<ServiceDetailsProps> = ({
   service,
@@ -426,10 +446,16 @@ Edit Service
   </svg>
   Close
 </button>
+
+
 </div>
 </div>
 </div>
+
 </div>
+
+
+
 
       )
 
