@@ -38,20 +38,20 @@ export const apiEndPoint = {
   SignInEmail: "/signin/email",
   getUserProfile: "/profile",
   googleSign: "/google/signin",
-  updateProfileOtpVerfy:"/updateProfile/verifyotp",
-  updateProfile:'/updateProfile',
+  updateProfileOtpVerfy: "/updateProfile/verifyotp",
+  updateProfile: "/updateProfile",
   forgotPassword: "/forgot-password",
   forgotPasswordVerifyOtp: "/forgot-password/verify-otp",
   resetPassword: "/forgot-password/reset",
-  locationAutocomplete:"/location/autocomplete",
-  getServices:"/getactive/services",
-  logOutUser:"/logout"
+  locationAutocomplete: "/location/autocomplete",
+  getServices: "/getactive/services",
+  logOutUser: "/logout",
 };
 
 export const apiEndPointServiceProvider = {
-  verifyServiceProvider:'/service-providers/verify',
+  verifyServiceProvider: "/service-providers/verify",
   serviceProviderRegister: "/service-providers/register",
-  getServiceProvider:"/service-providers/",
+  getServiceProvider: "/service-providers/",
 };
 
 export const apiEndPointAdmin = {
@@ -59,22 +59,27 @@ export const apiEndPointAdmin = {
   AdminSignIn: "/admin/signin",
   getPrfoile: "/admin/profile",
   getAllUsers: "/admin/users",
-  blockUnblockUser: "/admin/users/block-unblock",  
+  blockUnblockUser: "/admin/users/block-unblock",
   serviceProvider: "/admin/serviceProvider",
   serviceProviderReject: "/admin/serviceProvider/reject",
   serviceProviderVerify: "/admin/serviceProvider/verify",
-  getAllservices:"/admin/service",
-  blockUnblokServices:"/admin/service",
-  blockUnblockServiceProvider :"/admin/serviceprovider",
-  adminLogout:"/admin/logout"
-
+  getAllservices: "/admin/service",
+  blockUnblokServices: "/admin/service",
+  blockUnblockServiceProvider: "/admin/serviceprovider",
+  fetchCategories: "/admin/categorie",
+  addCategory: "/admin/categorie",
+  updateCategory: "/admin/categorie",
+  deleteCategory:"/admin/categorie",
+  addService: "/admin/categorie/service",
+  adminLogout: "/admin/logout",
 };
-export const serviceEndPoint={
-  addNewService:"/service/",
-  getAllService:"/service/",
-  updateService:"/service/",
-  blockUnblock:"/service/block-unblock"
-}
+
+export const serviceEndPoint = {
+  addNewService: "/service/",
+  getAllService: "/service/",
+  updateService: "/service/",
+  blockUnblock: "/service/block-unblock",
+};
 export const routes = {
   siginSignup: "/signin",
   home: "/",

@@ -7,6 +7,18 @@ import { RootState } from "../../../redux/store";
 import ServiceDetails from "./ServiceDetails";
 import { HotToastError, HotToastSuccess } from "../../../utils/HotToasitify";
 import { Toaster } from "react-hot-toast";
+import CategoryList from "./Addcategory";
+
+
+
+
+
+
+
+
+
+
+
 const Allservices = () => {
   const dispatch = useDispatch();
   const services = useSelector((state: RootState) => state.admin.allServices);
@@ -261,6 +273,9 @@ const Allservices = () => {
           onClose={() => setDetails(null)}
         />
       )}
+
+<CategoryList />
+
     </div>
   );
 };
