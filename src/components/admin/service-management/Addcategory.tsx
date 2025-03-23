@@ -4,9 +4,8 @@ import { adminGetRequest, adminPostRequest, adminDeleteRequest, adminPutRequest,
 import { HotToastSuccess } from "../../../utils/HotToasitify";
 import { Edit, Eye, EyeOff, Trash2, Plus, Save, X, AlertTriangle } from "lucide-react";
 
-const { fetchCategories, addCategory, addService ,updateCategory,deleteCategory} = apiEndPointAdmin;
-const deleteService = " ";
-const updateService = " ";
+const { fetchCategories, addCategory, addService ,updateCategory,deleteCategory,updateService,deleteService} = apiEndPointAdmin;
+
 
 interface TypeService {
   _id?: string | number;
@@ -117,10 +116,12 @@ const CategoryList: React.FC<CategoryListProps> = ({ initialData = [] }) => {
     }
   };
 
+
   const handleDeleteService = async (categoryId: string | number, serviceId: string | number) => {
     try {
       setIsLoading(true);
-      const res = await adminDeleteRequest(`${deleteService}/${categoryId}/${serviceId}`);
+      alert(`${deleteService}/${categoryId}/${serviceId}`)
+const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${serviceId}`);
       
       if(res.status === 200) {
         HotToastSuccess('Service deleted successfully');
@@ -154,8 +155,9 @@ const CategoryList: React.FC<CategoryListProps> = ({ initialData = [] }) => {
   const handleToggleServiceVisibility = async (categoryId: string | number, serviceId: string | number, currentStatus: boolean = false) => {
     try {
       setIsLoading(true);
-      const res = await adminPostRequest(`${updateService}/${categoryId}/${serviceId}`, {
-        isHidden: !currentStatus
+      const res = await adminPatchRequest(updateService, {
+        categoryId,
+        serviceId
       });
       
       if(res.status === 200) {
@@ -514,7 +516,7 @@ const CategoryList: React.FC<CategoryListProps> = ({ initialData = [] }) => {
                               </button>
                               <button 
                                 className="btn btn-xs btn-circle btn-outline btn-warning hover:scale-110 transition-all duration-200"
-                                onClick={() => handleToggleServiceVisibility(category._id!, service._id!, service.isHidden)}
+                                onClick={() => handleToggleServiceVisibility(category._id+"", service._id+"", service.isHidden)}
                                 title={service.isHidden ? "Show Service" : "Hide Service"}
                               >
                                 {service.isHidden ? (
