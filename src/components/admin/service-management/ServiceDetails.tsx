@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import CategoryList from "./Addcategory";
 interface ServiceDetails {
   _id: string;
   serviceName: string;
@@ -34,50 +33,26 @@ interface ServiceDetailsProps {
   onUnblock: (id: string) => void;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const ServiceDetails: React.FC<ServiceDetailsProps> = ({
   service,
   onClose,
   onEdit,
   onBlock,
-  onUnblock
+  onUnblock,
 }) => {
-  const handleEdit = (id: string) => {
-    onEdit(id);
-  };
+  
 
- 
-
-  // Lock body scroll when modal is open
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = "auto";
     };
   }, []);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-  <Toaster/>
-  <div className="relative w-full h-full overflow-y-auto shadow-xl md:h-screen bg-base-100 animate-fadeIn">
+      <Toaster />
+      <div className="relative w-full h-full overflow-y-auto shadow-xl md:h-screen bg-base-100 animate-fadeIn">
         {/* Close button absolute positioned */}
         <button
           onClick={onClose}
@@ -101,11 +76,11 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
 
         {/* Hero image with service name overlay */}
         <div className="relative h-64 overflow-hidden rounded-t-lg">
-        <img
-    src={service.serviceImage}
-    alt={service.description}
-    className="object-contain w-full h-auto max-h-[50vh]"
-  />
+          <img
+            src={service.serviceImage}
+            alt={service.description}
+            className="object-contain w-full h-auto max-h-[50vh]"
+          />
           <div className="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-black/80 to-transparent">
             <div className="flex items-center justify-between">
               <h3 className="text-3xl font-bold text-white">
@@ -122,11 +97,13 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
         <div className="p-6">
           {/* Status Badge */}
           <div className="mb-6">
-            <span className={`px-4 py-2 text-sm font-medium rounded-full ${
-              service.isBlocked 
-                ? "bg-error/10 text-error border border-error/20" 
-                : "bg-success/10 text-success border border-success/20"
-            }`}>
+            <span
+              className={`px-4 py-2 text-sm font-medium rounded-full ${
+                service.isBlocked
+                  ? "bg-error/10 text-error border border-error/20"
+                  : "bg-success/10 text-success border border-success/20"
+              }`}
+            >
               {service.isBlocked ? "Service Blocked" : "Service Active"}
             </span>
           </div>
@@ -196,12 +173,16 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
               {/* Price card */}
               <div className="p-4 mb-6 border rounded-lg shadow-sm bg-base-100 border-base-200">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm font-medium text-base-content/70">Estimated Price</span>
-                  <div className="text-2xl font-bold text-primary">₹{service.estimatedPrice}</div>
+                  <span className="text-sm font-medium text-base-content/70">
+                    Estimated Price
+                  </span>
+                  <div className="text-2xl font-bold text-primary">
+                    ₹{service.estimatedPrice}
+                  </div>
                 </div>
-                
+
                 <div className="my-2 divider"></div>
-                
+
                 <div className="flex items-center gap-2 mb-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -217,7 +198,9 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
                       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  <span className="text-sm text-base-content/80">Professional Service</span>
+                  <span className="text-sm text-base-content/80">
+                    Professional Service
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg
@@ -234,16 +217,20 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
                       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  <span className="text-sm text-base-content/80">Qualified Provider</span>
+                  <span className="text-sm text-base-content/80">
+                    Qualified Provider
+                  </span>
                 </div>
               </div>
-              
+
               {/* Service provider card */}
               <div className="overflow-hidden border rounded-lg shadow-sm bg-base-100 border-base-200">
                 <div className="p-4 bg-primary/5">
-                  <h4 className="font-semibold text-base-content">Service Provider</h4>
+                  <h4 className="font-semibold text-base-content">
+                    Service Provider
+                  </h4>
                 </div>
-                
+
                 <div className="p-4">
                   <div className="flex items-start gap-4">
                     <img
@@ -262,7 +249,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="mt-4 space-y-3">
                     <div className="flex items-center gap-2">
                       <svg
@@ -283,7 +270,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
                         {service.serviceProviderDetails.serviceProviderEmail}
                       </span>
                     </div>
-                    
+
                     <div className="flex items-center gap-2">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -303,7 +290,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
                         {service.serviceProviderDetails.serviceProviderPhone}
                       </span>
                     </div>
-                    
+
                     <div className="flex items-center gap-2">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -329,7 +316,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
                         {service.serviceProviderDetails.location.address}
                       </span>
                     </div>
-                    
+
                     <div className="flex items-center gap-2">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -357,108 +344,75 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
 
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-3 pt-6 mt-6 border-t border-base-200">
-            {/* <button
-              onClick={() => handleEdit(service._id)}
-              className="flex items-center justify-center px-6 py-3 text-sm font-medium transition-colors rounded-full text-primary-content bg-primary hover:bg-primary-focus"
+            {service.isActive ? (
+              <button
+                onClick={() => onBlock(service._id)}
+                className="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded bg-error hover:bg-error-focus"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4 mr-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+                  />
+                </svg>
+                Block
+              </button>
+            ) : (
+              <button
+                onClick={() => onUnblock(service._id)}
+                className="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded bg-success hover:bg-success-focus"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4 mr-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
+                </svg>
+                Unblock
+              </button>
+            )}
+
+            <button
+              onClick={onClose}
+              className="flex items-center justify-center px-6 py-3 text-sm font-medium transition-colors rounded-full text-base-content bg-base-300 hover:bg-base-200"
             >
-              <svg 
-  xmlns="http://www.w3.org/2000/svg" 
-  className="w-4 h-4 mr-2" 
-  fill="none" 
-  viewBox="0 0 24 24" 
-  stroke="currentColor"
->
-  <path 
-    strokeLinecap="round" 
-    strokeLinejoin="round" 
-    strokeWidth={2} 
-    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" 
-  />
-</svg>
-Edit Service
-</button> */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-{service.isActive ? (
-                    <button
-                      onClick={() =>
-                        onBlock(service._id)
-                      }
-                      className="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded bg-error hover:bg-error-focus"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-4 h-4 mr-1"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
-                        />
-                      </svg>
-                      Block
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() =>
-                        onUnblock(service._id)
-                      }
-                      className="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded bg-success hover:bg-success-focus"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-4 h-4 mr-1"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M13 10V3L4 14h7v7l9-11h-7z"
-                        />
-                      </svg>
-                      Unblock
-                    </button>
-                  )}
-                  
-<button
-  onClick={onClose}
-  className="flex items-center justify-center px-6 py-3 text-sm font-medium transition-colors rounded-full text-base-content bg-base-300 hover:bg-base-200"
->
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    className="w-4 h-4 mr-2" 
-    fill="none" 
-    viewBox="0 0 24 24" 
-    stroke="currentColor"
-  >
-    <path 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      strokeWidth={2} 
-      d="M6 18L18 6M6 6l12 12" 
-    />
-  </svg>
-  Close
-</button>
-
-
-</div>
-</div>
-</div>
-
-</div>
-
-
-
-
-      )
-
-    }
-
-    export default ServiceDetails
+export default ServiceDetails;

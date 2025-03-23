@@ -34,14 +34,14 @@ const AdminHomePage: React.FC = () => {
  
 
   return (
-    <div className="min-h-screen text-gray-200 bg-gray-900">
+    <div className="min-h-screen text-base-content bg-base">
     
      
 
       <main className="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
-          <p className="mt-1 text-gray-400">Welcome back, {admin.userName}. </p>
+          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+          <p className="mt-1 text-primary">Welcome back, {admin.userName}. </p>
         </div>
 
    

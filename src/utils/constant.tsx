@@ -27,8 +27,8 @@ export const darkThemes = {
   theme12: "sunset",
 };
 
-export const lightTheme = lightThems.theme4;
-export const darkTheme = darkThemes.theme4;
+export const lightTheme = lightThems.theme9;
+export const darkTheme = darkThemes.theme10;
 
 export const apiEndPoint = {
   refreshToken: "/refresh-token",
