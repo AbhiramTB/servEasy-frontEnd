@@ -16,12 +16,13 @@ import AdminProtectedRoute from "./pages/AdminProtectedRoute";
 import ServiceProviderListing from "./components/admin/serviceProviderListing.tsx";
 import Allservices from "./components/admin/service-management/Allservices.tsx";
 import ServiceManagement from "./components/ServiceProvider/service/ServiceManagement.tsx";
+import CategoryList from "./components/admin/service-management/CategoryManagement.tsx";
 
 function App() {
   const token = localStorage.getItem("accessToken");
   const adminToken = localStorage.getItem("adminToken");
   console.log(adminToken);
-  
+
   return (
     <BrowserRouter basename="/">
       <Routes>
@@ -49,7 +50,11 @@ function App() {
         <Route
           path="admin/sigin"
           element={
-            adminToken ? <Navigate to={"/admin/home"} replace /> : <AdminSignIn />
+            adminToken ? (
+              <Navigate to={"/admin/home"} replace />
+            ) : (
+              <AdminSignIn />
+            )
           }
         />
 
@@ -60,11 +65,14 @@ function App() {
             <Route
               path="serviceProvider/verification"
               element={<ServiceProviderVerifiction />}
-          />
+            />
+            <Route path="categoryManagement" element={<CategoryList />} />
+
             <Route
               path="serviceProvider"
               element={<ServiceProviderListing />}
             />
+
             <Route path="service" element={<Allservices />} />
           </Route>
         </Route>

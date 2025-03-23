@@ -96,6 +96,12 @@ const NavBar = () => {
               service-managment
             </Link>
           </li>
+
+          <li>
+            <Link to="/admin/categorymanagement" className="text-sm font-medium">
+              categoryManagement{" "}
+            </Link>
+          </li>
         </ul>
       </div>
 
@@ -169,12 +175,12 @@ const NavBar = () => {
             <li className="pb-2 -mt-2 text-xs text-center text-base-content/70">
               {admin.email || admin.phone || ""}
             </li>
-            {/* <li>
+            <li>
               <a>Profile</a>
-            </li> */}
-            {/* <li>
-            <ThemeChange/>
-            </li>  */}
+            </li>
+            <li>
+              <ThemeChange />
+            </li>
             <li>
               <a onClick={handleLogOut}>Logout</a>
             </li>

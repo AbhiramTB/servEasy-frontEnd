@@ -185,20 +185,20 @@ const ServiceProviderVerification: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen text-gray-200 bg-gray-900">
+    <div className="min-h-screen bg-base-100 text-base-content">
       <Toaster position="top-center" reverseOrder={false} />
-
+  
       {/* Image Preview Modal */}
       {imagePreview.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
           <div className="relative max-w-4xl max-h-screen p-4">
             <button
               onClick={closeImagePreview}
-              className="absolute top-0 right-0 p-2 m-2 bg-gray-800 rounded-full"
+              className="absolute top-0 right-0 p-2 m-2 bg-base-200 rounded-full"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 text-white"
+                className="w-6 h-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -219,27 +219,27 @@ const ServiceProviderVerification: React.FC = () => {
           </div>
         </div>
       )}
-
+  
       {/* Reject Modal */}
       <RejectModal
         isOpen={isRejectModalOpen}
         onClose={() => setIsRejectModalOpen(false)}
         onSubmit={handleReject}
       />
-
+  
       <main className="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-white">
+          <h1 className="text-3xl font-bold">
             Service Provider Verification
           </h1>
-          <p className="mt-1 text-gray-400">
+          <p className="mt-1 text-base-content/70">
             Review and verify service provider applications
           </p>
         </div>
-
+  
         {loading ? (
           <div className="flex justify-center py-12">
-            <div className="w-12 h-12 border-t-2 border-b-2 border-blue-500 rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-t-2 border-b-2 border-primary rounded-full animate-spin"></div>
           </div>
         ) : (
           <div className="space-y-6">
@@ -247,7 +247,7 @@ const ServiceProviderVerification: React.FC = () => {
               serviceProviders.map((provider: ServiceProvider) => (
                 <div
                   key={provider._id}
-                  className="overflow-hidden bg-gray-800 border border-gray-700 rounded-lg shadow-lg"
+                  className="overflow-hidden bg-base-200 border border-base-300 rounded-lg shadow-lg"
                 >
                   <div className="p-5">
                     <div className="flex flex-col md:flex-row">
@@ -288,17 +288,17 @@ const ServiceProviderVerification: React.FC = () => {
                           </div>
                         </div>
                         <div className="ml-4">
-                          <h3 className="text-xl font-semibold text-white">
+                          <h3 className="text-xl font-semibold">
                             {provider.serviceProviderName}
                           </h3>
                           <div className="flex flex-wrap gap-1 mt-1">
                             <span
                               className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                                 provider.isVerified === "verified"
-                                  ? "bg-green-900/30 text-green-400"
+                                  ? "bg-success/20 text-success"
                                   : provider.isVerified === "rejected"
-                                    ? "bg-red-900/30 text-red-400"
-                                    : "bg-yellow-900/30 text-yellow-400"
+                                    ? "bg-error/20 text-error"
+                                    : "bg-warning/20 text-warning"
                               }`}
                             >
                               {provider.isVerified === "verified"
@@ -307,23 +307,23 @@ const ServiceProviderVerification: React.FC = () => {
                                   ? "Rejected"
                                   : "Pending"}
                             </span>
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-900/30 text-blue-400">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/20 text-primary">
                               {provider.experience} Years Exp
                             </span>
                           </div>
-                          <p className="mt-1 text-gray-400">
+                          <p className="mt-1 text-base-content/70">
                             {provider.location.address}
                           </p>
                         </div>
                       </div>
-
+  
                       {/* Contact info */}
                       <div className="mt-4 md:mt-0 md:w-1/3">
                         <div className="space-y-2 text-sm">
-                          <p className="flex items-center text-gray-300">
+                          <p className="flex items-center">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="w-4 h-4 mr-2 text-gray-400"
+                              className="w-4 h-4 mr-2 text-base-content/50"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -337,10 +337,10 @@ const ServiceProviderVerification: React.FC = () => {
                             </svg>
                             {provider.serviceProviderEmail}
                           </p>
-                          <p className="flex items-center text-gray-300">
+                          <p className="flex items-center">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="w-4 h-4 mr-2 text-gray-400"
+                              className="w-4 h-4 mr-2 text-base-content/50"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -354,10 +354,10 @@ const ServiceProviderVerification: React.FC = () => {
                             </svg>
                             {provider.serviceProviderPhone}
                           </p>
-                          <p className="flex items-center text-gray-300">
+                          <p className="flex items-center">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="w-4 h-4 mr-2 text-gray-400"
+                              className="w-4 h-4 mr-2 text-base-content/50"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -373,13 +373,13 @@ const ServiceProviderVerification: React.FC = () => {
                           </p>
                         </div>
                       </div>
-
+  
                       {/* Actions */}
                       <div className="flex flex-col gap-2 mt-4 md:mt-0 md:w-1/3 md:items-end">
                         {provider.isVerified === "rejected" && (
                           <button
                             onClick={() => handleVerify(provider._id)}
-                            className="px-4 py-2 text-white transition bg-green-600 rounded-md hover:bg-green-700"
+                            className="px-4 py-2 text-success-content transition bg-success rounded-md hover:bg-success-focus"
                           >
                             Verify Provider
                           </button>
@@ -388,13 +388,13 @@ const ServiceProviderVerification: React.FC = () => {
                           <>
                             <button
                               onClick={() => handleVerify(provider._id)}
-                              className="px-4 py-2 text-white transition bg-green-600 rounded-md hover:bg-green-700"
+                              className="px-4 py-2 text-success-content transition bg-success rounded-md hover:bg-success-focus"
                             >
                               Verify Provider
                             </button>
                             <button
                               onClick={() => openRejectModal(provider._id)}
-                              className="px-4 py-2 text-white transition bg-red-600 rounded-md hover:bg-red-700"
+                              className="px-4 py-2 text-error-content transition bg-error rounded-md hover:bg-error-focus"
                             >
                               Reject Application
                             </button>
@@ -402,7 +402,7 @@ const ServiceProviderVerification: React.FC = () => {
                         )}
                         <button
                           onClick={() => handleToggleExpand(provider._id)}
-                          className="px-4 py-2 text-gray-300 transition bg-gray-700 rounded-md hover:bg-gray-600"
+                          className="px-4 py-2 transition bg-base-300 rounded-md hover:bg-base-300/80"
                         >
                           {expandedId === provider._id
                             ? "Hide Details"
@@ -410,26 +410,26 @@ const ServiceProviderVerification: React.FC = () => {
                         </button>
                       </div>
                     </div>
-
+  
                     {/* Expanded details */}
                     {expandedId === provider._id && (
-                      <div className="pt-4 mt-6 border-t border-gray-700">
+                      <div className="pt-4 mt-6 border-t border-base-300">
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                           {/* Services & Skills */}
                           <div>
-                            <h4 className="mb-2 text-lg font-medium text-white">
+                            <h4 className="mb-2 text-lg font-medium">
                               Services & Skills
                             </h4>
                             <div className="space-y-3">
                               <div>
-                                <span className="text-sm text-gray-400">
+                                <span className="text-sm text-base-content/70">
                                   Services:
                                 </span>
                                 <div className="flex flex-wrap gap-1 mt-1">
                                   {provider.services.map((service, idx) => (
                                     <span
                                       key={idx}
-                                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-900/30 text-indigo-400"
+                                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/20 text-primary"
                                     >
                                       {service}
                                     </span>
@@ -437,14 +437,14 @@ const ServiceProviderVerification: React.FC = () => {
                                 </div>
                               </div>
                               <div>
-                                <span className="text-sm text-gray-400">
+                                <span className="text-sm text-base-content/70">
                                   Skills:
                                 </span>
                                 <div className="flex flex-wrap gap-1 mt-1">
                                   {provider.skills.map((skill: any, idx) => (
                                     <span
                                       key={idx}
-                                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-900/30 text-purple-400"
+                                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary/20 text-secondary"
                                     >
                                       {skill.name || JSON.stringify(skill)}
                                     </span>
@@ -453,25 +453,25 @@ const ServiceProviderVerification: React.FC = () => {
                               </div>
                             </div>
                           </div>
-
+  
                           {/* Description */}
                           <div>
-                            <h4 className="mb-2 text-lg font-medium text-white">
+                            <h4 className="mb-2 text-lg font-medium">
                               Description
                             </h4>
-                            <p className="text-sm text-gray-300">
+                            <p className="text-sm">
                               {provider.description ||
                                 "No description provided."}
                             </p>
                           </div>
-
+  
                           {/* Document */}
                           <div>
-                            <h4 className="mb-2 text-lg font-medium text-white">
+                            <h4 className="mb-2 text-lg font-medium">
                               Verification Document
                             </h4>
                             <div
-                              className="w-full h-40 overflow-hidden border border-gray-700 rounded-lg cursor-pointer"
+                              className="w-full h-40 overflow-hidden border border-base-300 rounded-lg cursor-pointer"
                               onClick={() =>
                                 handleImagePreview(provider.document)
                               }
@@ -482,7 +482,7 @@ const ServiceProviderVerification: React.FC = () => {
                                 className="object-cover w-full h-full"
                               />
                             </div>
-                            <p className="mt-1 text-xs text-gray-500">
+                            <p className="mt-1 text-xs text-base-content/50">
                               Click to view full document
                             </p>
                           </div>
