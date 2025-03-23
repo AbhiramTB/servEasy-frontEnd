@@ -66,11 +66,15 @@ export const apiEndPointAdmin = {
   getAllservices: "/admin/service",
   blockUnblokServices: "/admin/service",
   blockUnblockServiceProvider: "/admin/serviceprovider",
-  fetchCategories: "/admin/categorie",
-  addCategory: "/admin/categorie",
-  updateCategory: "/admin/categorie",
-  deleteCategory:"/admin/categorie",
-  addService: "/admin/categorie/service",
+  fetchCategories: "/admin/category",
+  addCategory: "/admin/category",
+  updateCategory: "/admin/category",
+  deleteCategory:"/admin/category",
+  addService: "/admin/category/service",
+  updateService :"/admin/category/service",
+  deleteService :"/admin/category/service/",
+
+
   adminLogout: "/admin/logout",
 };
 
