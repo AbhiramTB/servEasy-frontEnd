@@ -1,8 +1,8 @@
-import React, { useRef, useState ,useEffect} from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { validateEmail, validatePhone } from "../../utils/validate";
 import { Toaster } from "react-hot-toast";
-import { HotToastError } from "../../utils/HotToasitify";
+import { HotToastError, HotToastSuccess } from "../../utils/HotToasitify";
 import { apiEndPoint, apiEndPointServiceProvider } from "../../utils/constant";
 import { postRequest } from "../../utils/makeRequestInstance";
 import { useDispatch } from "react-redux";
@@ -10,30 +10,31 @@ import { addServiceProvider } from "../../redux/slices/serviceProvider";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
-import { addUser } from "../../redux/slices/userSlice";
+ 
 import axiosInstance from "../../utils/AxiosInstance";
+import LocationSearch, { Location } from "../User/Home/location";
 interface RegisterFormProps {
   className?: string;
 }
 
 interface Skill {
   name: string;
-  level: string; // "Beginner" | "Intermediate" | "Expert"
+  level: string;
 }
 
 interface FormData {
   serviceProviderName: string;
   businessType: string;
   serviceMode: string;
-  category: string;
+  // category: string;
   subcategory: string;
   experience: number;
-  location: string;
-  SocialMedia: string;
+  location: Location;
+  SocialMedia?: string;
   serviceProviderPhone: string;
   serviceProviderEmail?: string;
-  profileImage?: string;
-  documentImg?: string;
+  profileImage: string;
+  documentImg: string;
   services: string[];
   skills: Skill[];
   description: string;
@@ -58,36 +59,35 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
   const [imageError, setImageError] = useState<string | null>(null);
   const [documentError, setDocumentError] = useState<string | null>(null);
   const [description, setDescription] = useState<string>("");
+  const [location, setLocation] = useState<Location | null>(null);
+  const [locationError, setLocationError] = useState<string>("");
   const dispatch = useDispatch();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const UploadImage = () => {
     imageRef.current?.click();
   };
   const user = useSelector((state: RootState) => state.user);
 
- useEffect(()=>{
-   getUserProfile();
- 
+  useEffect(() => {
+    getUserProfile();
+  }, []);
 
- },[])
-
- if(user.serviceProvider){
-  navigate("/service-provider/dashboard")
-}
- const getUserProfile = async () => {
-  try {
-    
-    const res: any = await axiosInstance.get(apiEndPoint.getUserProfile);
-    console.log(res.data.user);
-     
-    if (res.data.user) {
-      
-      dispatch(addUser(res.data.user));
-    }
-  } catch (error) {
-  console.log(error);
+  if (user.serviceProvider) {
+    navigate("/service-provider/dashboard");
   }
-};
+  const getUserProfile = async () => {
+    try {
+      const res: any = await axiosInstance.get(apiEndPoint.getUserProfile);
+      console.log(res.data.user);
+          
+      if (res.data.user) {
+
+        dispatch(addServiceProvider(res.data.user));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -121,12 +121,20 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
         setLoading(false);
         return;
       }
+      if (!location) {
+        setLocationError(
+          "Location is required. Please select a valid location"
+        );
+        setLoading(false);
+        return;
+      }
 
       data.profileImage = profileImg;
       data.documentImg = documentImg;
       data.services = services;
       data.skills = skills;
       data.description = description;
+     data.location=location
       if (
         data.serviceProviderEmail &&
         !validateEmail(data.serviceProviderEmail)
@@ -150,11 +158,12 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
       console.log(res);
 
       if (res.status == 201) {
-        alert("Registration successful!");
+        HotToastSuccess("Registration successful!");
         reset();
+            
+        dispatch(addServiceProvider(res?.data.serviceProvider));
+        navigate("/service-provider/dashboard");
 
-         dispatch(addServiceProvider(res?.data.serviceProvider))
-        
         setServices([]);
         setSkills([]);
         setProfileImg(null);
@@ -363,11 +372,6 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
               onChange={(e) => setDescription(e.target.value)}
               value={description}
             />
-            {errors.businessType && (
-              <p className="text-sm text-error">
-                {errors.businessType.message}
-              </p>
-            )}
           </div>
 
           {/* Services Offered - NEW FIELD */}
@@ -466,26 +470,6 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
             </div>
           </div>
 
-          {/* Business Type */}
-          <div className="w-full mb-4 form-control">
-            <label className="label">
-              <span className="label-text">Business Type</span>
-            </label>
-            <input
-              type="text"
-              placeholder="Type of service you provide"
-              className={`input input-bordered w-full ${errors.businessType ? "input-error" : ""}`}
-              {...register("businessType", {
-                required: "Business type is required",
-              })}
-            />
-            {errors.businessType && (
-              <p className="text-sm text-error">
-                {errors.businessType.message}
-              </p>
-            )}
-          </div>
-
           {/* Service Mode */}
           <div className="mb-4 form-control">
             <label className="label">
@@ -515,7 +499,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
           </div>
 
           {/* Category and Subcategory */}
-          <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2">
+          {/* <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2">
             <div className="w-full form-control">
               <label className="label">
                 <span className="label-text">Category</span>
@@ -567,7 +551,7 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
                 </p>
               )}
             </div>
-          </div>
+          </div> */}
 
           {/* Experience */}
           <div className="w-full mb-4 form-control">
@@ -597,14 +581,12 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
             <label className="label">
               <span className="label-text">Location</span>
             </label>
-            <input
-              type="text"
-              placeholder="Enter your service area or location"
-              className={`input input-bordered w-full ${errors.location ? "input-error" : ""}`}
-              {...register("location", { required: "Location is required" })}
-            />
-            {errors.location && (
-              <p className="text-sm text-error">{errors.location.message}</p>
+
+            <div className="ml-[-250px]">
+              <LocationSearch onLocationSelect={setLocation} />
+            </div>
+            {locationError && (
+              <p className="text-sm text-error">{locationError}</p>
             )}
           </div>
 

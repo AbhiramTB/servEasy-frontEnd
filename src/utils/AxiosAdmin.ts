@@ -3,7 +3,7 @@ import { URL, adminRoutes, apiEndPointAdmin, routes } from "./constant";
 
 const axiosInstance = axios.create({
   baseURL: URL,
-  withCredentials: true, 
+  withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use((config) => {
@@ -27,7 +27,7 @@ axiosInstance.interceptors.response.use(
     }
 
     if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true; 
+      originalRequest._retry = true;
 
       try {
         console.warn("Access token expired, attempting refresh...");
@@ -38,8 +38,8 @@ axiosInstance.interceptors.response.use(
           { withCredentials: true }
         );
 
-        const newAccessToken = response.data.accessToken;
-
+        const newAccessToken = response.data.adminToken;
+        console.log(newAccessToken);
         localStorage.setItem("adminToken", newAccessToken);
 
         originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
@@ -47,8 +47,8 @@ axiosInstance.interceptors.response.use(
       } catch (refreshError) {
         console.error("Refresh token failed", refreshError);
 
-        localStorage.removeItem("adminToken"); 
-        window.location.href = adminRoutes.AdminSignIn; 
+        localStorage.removeItem("adminToken");
+        window.location.href = adminRoutes.AdminSignIn;
 
         return Promise.reject(refreshError);
       }
@@ -60,52 +60,50 @@ axiosInstance.interceptors.response.use(
 
 export default axiosInstance;
 
-
 export const adminPostRequest = async (url: string, data: any) => {
-    try {
-      const response = await axiosInstance.post(url, data);
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  };
-  
-  // GET request
-  export const adminGetRequest = async (url: string) => {
-    try {
-      const response = await axiosInstance.get(url);
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  };
-  
-  // PUT request
-  export const adminPutRequest = async (url: string, data: any) => {
-    try {
-      const response = await axiosInstance.put(url, data);
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  };
-  
-  export const adminPatchRequest = async (url: string, data: any) => {
-    try {
-      const response = await axiosInstance.patch(url, data);
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  };
-  
-  
-  // DELETE request
-  export const adminDeleteRequest = async (url: string) => {
-    try {
-      const response = await axiosInstance.delete(url);
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  };
+  try {
+    const response = await axiosInstance.post(url, data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// GET request
+export const adminGetRequest = async (url: string) => {
+  try {
+    const response = await axiosInstance.get(url);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// PUT request
+export const adminPutRequest = async (url: string, data: any) => {
+  try {
+    const response = await axiosInstance.put(url, data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const adminPatchRequest = async (url: string, data: any) => {
+  try {
+    const response = await axiosInstance.patch(url, data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// DELETE request
+export const adminDeleteRequest = async (url: string) => {
+  try {
+    const response = await axiosInstance.delete(url);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

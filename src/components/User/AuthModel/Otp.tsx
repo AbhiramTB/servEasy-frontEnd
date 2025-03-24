@@ -146,6 +146,7 @@ const Otp = () => {
             <div className="flex justify-evenly">
               {otp.map((value, index) => {
                 return (
+                  
                   <input
                     type="text"
                     ref={(el) => {

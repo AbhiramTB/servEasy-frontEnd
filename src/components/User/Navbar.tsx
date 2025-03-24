@@ -1,23 +1,38 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import ThemeChange from "./ThemeChange";
-import { getRequest, postRequest } from "../../utils/makeRequestInstance";
-import { apiEndPoint } from "../../utils/constant";
+import { useEffect, useState } from "react";
+import ThemeChange from "../ThemeChange";
+import { getRequest } from "../../utils/makeRequestInstance";
+import { apiEndPoint, apiEndPointServiceProvider } from "../../utils/constant";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserProfileModal from "./UpdateProfile";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../redux/slices/userSlice";
+import { HotToastSuccess } from "../../utils/HotToasitify";
 
 const Navbar = () => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.user);
 
   const [editProfile, setEditProfile] = useState<boolean>(false);
   useEffect(() => {
     getUserProfile();
   }, []);
+
+   const handleLogOut = async () => {
+      try {
+        const res = await getRequest(apiEndPoint.logOutUser)
+        if (res.status == 200) {
+          localStorage.removeItem("accessToken");
+          window.location.href = "/signin";
+        } else {
+          console.error("Logout failed:", res.data.message);
+        }
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
+    };
 
   const getUserProfile = async () => {
     try {
@@ -32,31 +47,20 @@ const Navbar = () => {
     }
   };
 
-  const profilePlaceHolder =
-    "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp";
-  const [isUploadOpen, setIsUploadOpen] = useState(false);
-  const [ProfileImg, setProfileImg] = useState<string | null>(null);
-
-  const logOutUser = async () => {
+  const verifyServiceProvider = async () => {
     try {
-      const res = await getRequest(apiEndPoint.logoutUser);
-      
+      const res = await getRequest(
+        apiEndPointServiceProvider.verifyServiceProvider
+      );
+      console.log(res);
       if (res.status === 200) {
-        localStorage.removeItem("accessToken");
-        
-        window.location.href = "/signin";
-      } else {
-        console.error("Logout failed:", res.data.message);
+        HotToastSuccess("verification successful");
+        navigate("/service-provider/dashboard");
       }
     } catch (error) {
-      console.error("Error during logout:", error);
+      console.log(error);
     }
   };
-
-  const toggleUploadCard = () => {
-    setIsUploadOpen(!isUploadOpen);
-  };
- 
 
   return (
     <div>
@@ -67,7 +71,6 @@ const Navbar = () => {
           </a>
         </div>
         <div className="flex-none gap-4">
-          <ThemeChange />
           {!user.serviceProvider && (
             <Link to={"service-provider/register"}>
               <button className="hidden btn btn-outline btn-primary md:inline-block">
@@ -77,12 +80,12 @@ const Navbar = () => {
           )}
 
           {user.serviceProvider && (
-            <Link to={"/service-provider/dashboard"}>
-              {" "}
-              <button className="hidden btn btn-outline btn-secondary md:inline-block">
-                Go to Service Dashboard
-              </button>{" "}
-            </Link>
+            <button
+              className="hidden btn btn-outline btn-secondary md:inline-block"
+              onClick={() => verifyServiceProvider()}
+            >
+              Go to Service Dashboard
+            </button>
           )}
 
           <div className="dropdown dropdown-end">
@@ -99,12 +102,10 @@ const Navbar = () => {
                   />
                 )}
 
-                
-                {  !user.profileImage && (
-                   <img               
+                {!user.profileImage && (
+                  <img
                     alt="Tailwind CSS Navbar component"
-                    src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"             
-
+                    src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
                   />
                 )}
               </div>
@@ -113,24 +114,31 @@ const Navbar = () => {
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-lg"
             >
-              <li onClick={toggleUploadCard}>
+       
+         <li>
                 <a
                   className="justify-between"
                   onClick={() => setEditProfile(true)}
                 >
                   Profile
-                  <span className="badge badge-primary">New</span>
+                  {/* <span className="badge badge-primary">New</span> */}
                 </a>
               </li>
               <li>
                 <a>Settings</a>
               </li>
-              <li>
+              
+                <li>
+                  <a>
+                    {" "}
+                    <ThemeChange />
+                  </a>
+                </li>
+                <li>
                 <a
                   onClick={() => {
-                    logOutUser()
-                    
-
+                    handleLogOut()
+                   
                   }}
                 >
                   Logout
