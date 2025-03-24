@@ -1,3 +1,4 @@
+
 export const URL: string = "http://localhost:5001";
 
 export const lightThems = {
@@ -27,28 +28,32 @@ export const darkThemes = {
   theme12: "sunset",
 };
 
-export const lightTheme = lightThems.theme10;
-export const darkTheme = darkThemes.theme9;
+export const lightTheme = lightThems.theme1;
+export const darkTheme = darkThemes.theme1;
 
 export const apiEndPoint = {
-  refreshToken: "/refresh-token",
+    refreshToken:"/refresh-token",
   resendOtp: "/resend-otp",
   signUp: "/signup",
   SignInPhone: "/signin/phone",
   SignInEmail: "/signin/email",
   getUserProfile: "/profile",
   googleSign: "/google/signin",
-  updateProfileOtpVerfy:"/updateProfile/verifyotp",
-  updateProfile:'/updateProfile',
+  updateProfileOtpVerfy: "/updateProfile/verifyotp",
+  updateProfile: "/updateProfile",
   forgotPassword: "/forgot-password",
   forgotPasswordVerifyOtp: "/forgot-password/verify-otp",
   resetPassword: "/forgot-password/reset",
-  locationAutocomplete:"/location/autocomplete",
-  logoutUser:"/logout"
+  locationAutocomplete: "/location/autocomplete",
+  getSingleService:"/user/service",
+  getServices: "/getactive/services",
+  logOutUser: "/logout",
 };
 
 export const apiEndPointServiceProvider = {
+  verifyServiceProvider: "/service-providers/verify",
   serviceProviderRegister: "/service-providers/register",
+  getServiceProvider: "/service-providers/",
 };
 
 export const apiEndPointAdmin = {
@@ -60,6 +65,25 @@ export const apiEndPointAdmin = {
   serviceProvider: "/admin/serviceProvider",
   serviceProviderReject: "/admin/serviceProvider/reject",
   serviceProviderVerify: "/admin/serviceProvider/verify",
+  getAllservices: "/admin/service",
+  blockUnblokServices: "/admin/service",
+  blockUnblockServiceProvider: "/admin/serviceprovider",
+  fetchCategories: "/admin/category",
+  addCategory: "/admin/category",
+  updateCategory: "/admin/category",
+  deleteCategory:"/admin/category",
+  addService: "/admin/category/service",
+  updateService :"/admin/category/service",
+  deleteService :"/admin/category/service/",
+
+  adminLogout: "/admin/logout",
+};
+
+export const serviceEndPoint = {
+  addNewService: "/service/",
+  getAllService: "/service/",
+  updateService: "/service/",
+  blockUnblock: "/service/block-unblock",
 };
 export const routes = {
   siginSignup: "/signin",

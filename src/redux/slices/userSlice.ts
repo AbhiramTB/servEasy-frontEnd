@@ -12,6 +12,7 @@ export interface UserState {
     serviceProvider?: string;
     profileImage?: string;
     isAdmin?: boolean;
+    allServices:[]
 }
 
 const initialState: UserState = {
@@ -26,6 +27,7 @@ const initialState: UserState = {
     serviceProvider: undefined,
     profileImage: "",
     isAdmin: undefined,
+    allServices:[]
 };
 
 const userSlice = createSlice({
@@ -51,10 +53,13 @@ const userSlice = createSlice({
             state.profileImage = "";
             state.isAdmin = undefined;
         },
+         addServicesUser: (state, action) => {
+              state.allServices= action.payload; 
+            },
     },
 });
 
-export const { addUser, clearUser } = userSlice.actions;
+export const { addUser, clearUser,addServicesUser } = userSlice.actions;
 export default userSlice.reducer;
 
 

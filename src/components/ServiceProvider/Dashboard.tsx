@@ -12,10 +12,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      
           <PendingVerificationCard email={serviceProviderInfo.serviceProviderEmail}/>
-
-      
      </div>
   );
 };
