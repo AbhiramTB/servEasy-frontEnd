@@ -48,12 +48,18 @@ export const apiEndPoint = {
   getSingleService:"/user/service",
   getServices: "/getactive/services",
   logOutUser: "/logout",
+  addNewAddress:'/user/addresses',
+  editAddress:"/user/addresses",
+  deleteAddress:"/user/addresses",
+  getAddress:"/user/addresses"
+
 };
 
 export const apiEndPointServiceProvider = {
   verifyServiceProvider: "/service-providers/verify",
   serviceProviderRegister: "/service-providers/register",
   getServiceProvider: "/service-providers/",
+ 
 };
 
 export const apiEndPointAdmin = {
@@ -84,6 +90,7 @@ export const serviceEndPoint = {
   getAllService: "/service/",
   updateService: "/service/",
   blockUnblock: "/service/block-unblock",
+   bookservice:"/service/bookservice"
 };
 export const routes = {
   siginSignup: "/signin",
