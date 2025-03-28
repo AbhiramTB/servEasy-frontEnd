@@ -16,7 +16,8 @@ import AdminProtectedRoute from "./pages/AdminProtectedRoute";
 import ServiceProviderListing from "./components/admin/serviceProviderListing.tsx";
 import Allservices from "./components/admin/service-management/Allservices.tsx";
 import ServiceManagement from "./components/ServiceProvider/service/ServiceManagement.tsx";
-import SingleServiceCard from "./components/User/Home/SinglePage.tsx";
+import SingleServiceCard from "./components/User/bookService/SinglePage.tsx";
+import BookService from "./components/User/bookService/bookService.tsx";
 
 function App() {
   const token = localStorage.getItem("accessToken");
@@ -36,6 +37,8 @@ function App() {
         <Route path="/" element={<Body />}>
           <Route index element={<Home />} />
           <Route path="/service-details/:id" element={<SingleServiceCard />} />
+          <Route path="/bookService/:id" element={<BookService/> } />
+
         </Route>
 
         <Route element={<ProtectedRoute />}>
