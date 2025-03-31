@@ -3,7 +3,7 @@ import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import PendingVerificationCard from "./pendingVerification";
 const Dashboard = () => {
-  const serviceProviderInfo = useSelector(
+  const serviceProviderInfo:any= useSelector(
     (state: RootState) => state.serviceProvider
   );
   <Navbar profile={serviceProviderInfo.profileImage} ></Navbar>

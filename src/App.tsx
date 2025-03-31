@@ -18,6 +18,9 @@ import Allservices from "./components/admin/service-management/Allservices.tsx";
 import ServiceManagement from "./components/ServiceProvider/service/ServiceManagement.tsx";
 import SingleServiceCard from "./components/User/bookService/SinglePage.tsx";
 import BookService from "./components/User/bookService/bookService.tsx";
+import BookedService from "./components/User/bookService/BookedService.tsx";
+import ViewSIngleBookedService from "./components/User/bookService/ViewSIngleBookedService.tsx";
+import BookedServiceServiceProvider from "./components/ServiceProvider/booking/bookedServices.tsx";
 
 function App() {
   const token = localStorage.getItem("accessToken");
@@ -38,14 +41,15 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/service-details/:id" element={<SingleServiceCard />} />
           <Route path="/bookService/:id" element={<BookService/> } />
-
+           <Route path="/sample/op"  element={<BookedService/>} />
+           <Route path="/sample/singelBooking/:id" element={<ViewSIngleBookedService/>} />
         </Route>
 
         <Route element={<ProtectedRoute />}>
           <Route path="/service-provider" element={<ServiceProviderLayout />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="register" element={<Register />} />
-            {/* <Route path="/service" element={<AddnewService/>} /> */}
+            <Route path="booked-services" element={<BookedServiceServiceProvider/>} />
 
             <Route path="service-management" element={<ServiceManagement />} />
           </Route>
