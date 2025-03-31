@@ -90,7 +90,10 @@ export const serviceEndPoint = {
   getAllService: "/service/",
   updateService: "/service/",
   blockUnblock: "/service/block-unblock",
-   bookservice:"/service/bookservice"
+   bookservice:"/service/book",
+   getUserBookService:"/service/bookings",
+   getSingleBookedService:"/services/bookings",
+  getServiceProviderBookService:"/service/bookings/serviceprovider"
 };
 export const routes = {
   siginSignup: "/signin",

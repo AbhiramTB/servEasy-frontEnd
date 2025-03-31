@@ -7,7 +7,7 @@ import {
   Save,
   XCircle,
   Upload,
-  Phone,
+
 } from "lucide-react";
 import { UserState } from "../../redux/slices/userSlice";
 import { validateEmail, validatePhone } from "../../utils/validate";

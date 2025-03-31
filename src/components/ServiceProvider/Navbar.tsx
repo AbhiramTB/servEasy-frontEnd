@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { RootState } from "../../redux/store";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getRequest } from "../../utils/makeRequestInstance";
 import { addServiceProvider } from "../../redux/slices/serviceProvider";
 import { apiEndPointServiceProvider } from "../../utils/constant";
-import { useSelector } from "react-redux";
 import ThemeChange from "../admin/ThemeChange";
 
 interface NavbarProps {
@@ -19,7 +18,6 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
   );
   const dispatch = useDispatch();
 
-  <Navbar profile={serviceProviderInfo.profileImage}></Navbar>;
   useEffect(() => {
     getServiceProvider();
   }, []);
@@ -29,10 +27,10 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
       const res = await getRequest(
         apiEndPointServiceProvider.getServiceProvider
       );
-      console.log(res.data.serviceProvider);
-
       dispatch(addServiceProvider(res.data.serviceProvider));
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error fetching service provider:", error);
+    }
   };
 
   const toggleMenu = () => {
@@ -66,122 +64,114 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
             </button>
           </div>
 
-<Link to={'/'}>
-
-<a className="font-serif text-xl btn btn-ghost text-primary-content">
-            ServEasy
-          </a>
-</Link>
-          
+          {/* Logo */}
+          <Link to="/">
+            <p className="font-serif text-xl btn btn-ghost text-primary-content">
+              ServEasy
+            </p>
+          </Link>
         </div>
 
         {/* Desktop menu */}
-
-        {serviceProviderInfo.isVerified == "verified" && serviceProviderInfo.isBlocked==false  && (
-          <div className="hidden navbar-center text-primary-content lg:flex">
-            <ul className="px-1 menu menu-horizontal">
-              <Link to={"/service-provider/dashboard"}>
+        {serviceProviderInfo.isVerified === "verified" &&
+          serviceProviderInfo.isBlocked === false && (
+            <div className="hidden navbar-center text-primary-content lg:flex">
+              <ul className="px-1 menu menu-horizontal">
                 <li>
-                  <a className="font-medium">Home</a>
+                  <Link
+                    to="/service-provider/dashboard"
+                    className="font-medium"
+                  >
+                    Home
+                  </Link>
                 </li>
-              </Link>
-              <Link to={"/service-provider/service-management"}>
                 <li>
-                  <p className="font-medium">Service Management</p>
+                  <Link
+                    to="/service-provider/service-management"
+                    className="font-medium"
+                  >
+                    Service Management
+                  </Link>
                 </li>
-              </Link>
-              <li>
-                <a className="font-medium">Booking</a>
-              </li>
-              <li>
-                <a className="font-medium">Contact</a>
-              </li>
-            </ul>
-          </div>
-        )}
+                <li>
+                  <p className="font-medium">Booking</p>
+                </li>
+                <li>
+                  <p className="font-medium">Contact</p>
+                </li>
+              </ul>
+            </div>
+          )}
 
-      {serviceProviderInfo.isVerified == "verified" && serviceProviderInfo.isBlocked==false  &&
-        (
-          <div className="navbar-end">
-          <div className="dropdown dropdown-end">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle avatar"
-            >
-              <div className="w-10 rounded-full md:w-12 lg:w-16">
-                <img alt="profile Image" src={profile} />
+        {/* Profile Section */}
+        {serviceProviderInfo.isVerified === "verified" &&
+          serviceProviderInfo.isBlocked === false && (
+            <div className="navbar-end">
+              <div className="dropdown dropdown-end">
+                <button
+                  tabIndex={0}
+                  role="button"
+                  className="btn btn-ghost btn-circle avatar"
+                >
+                  <div className="w-10 rounded-full md:w-12 lg:w-16">
+                    <img alt="Profile Image" src={profile} />
+                  </div>
+                </button>
+                <ul
+                  tabIndex={0}
+                  className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-lg"
+                >
+                  <li>
+                    <ThemeChange />
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => {
+                        localStorage.removeItem("accessToken");
+                        window.location.href = "/signin";
+                      }}
+                      className="w-full text-left"
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </ul>
               </div>
             </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-lg"
-            >
-              <li>
-                {/* <a
-                  className="justify-between"
-                >
-                  Profile
-                </a> */}
-              </li>
-              {/* <li>
-                <a>Settings</a>
-              </li> */}
-              <li>
-                <li>
-                  <a>
-                    {" "}
-                    <ThemeChange />
-                  </a>
-                </li>
-                <a
-                  onClick={() => {
-                    localStorage.removeItem("accessToken");
-                    window.location.href = "/signin";
-                  }}
-                >
-                  Logout
-                </a>{" "}
-              </li>
-            </ul>
-          </div>
-        </div>
-        )
-      }
+          )}
       </div>
-                
 
-     
+      {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="shadow-lg lg:hidden bg-primary">
           <ul className="w-full px-4 py-2 menu menu-vertical text-primary-content">
             <li>
-              <a className="py-2 font-medium">Home</a>
+              <p className="py-2 font-medium">Home</p>
             </li>
             <li className="py-2">
               <details>
                 <summary className="font-medium">Services</summary>
                 <ul className="p-2 mt-2 rounded bg-base-100">
                   <li>
-                    <a className="py-2">Add New Services</a>
+                    <p className="py-2">Add New Services</p>
                   </li>
                   <li>
-                    <a className="py-2">Edit Services</a>
+                    <p className="py-2">Edit Services</p>
                   </li>
                   <li>
-                    <a className="py-2">Enable/Disable</a>
+                    <p className="py-2">Enable/Disable</p>
                   </li>
                 </ul>
               </details>
             </li>
             <li>
-              <a className="py-2 font-medium">Service Management</a>
+              <p className="py-2 font-medium">Service Management</p>
             </li>
             <li>
-              <a className="py-2 font-medium">Booking</a>
+              <p className="py-2 font-medium">Booking</p>
             </li>
             <li>
-              <a className="py-2 font-medium">Contact</a>
+              <p className="py-2 font-medium">Contact</p>
             </li>
           </ul>
         </div>
