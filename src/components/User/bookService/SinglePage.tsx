@@ -89,39 +89,7 @@ const SingleServiceCard = () => {
      postRequest(serviceEndPoint.bookservice,{serviceId:id})
   }
 
-  // Mock reviews data
 
-
-//   const recommendedServices: RecommendedService[] = [
-//     {
-//       id: "1",
-//       name: "Electrical Wiring",
-//       provider: "ElectriPro",
-//       image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?ixlib=rb-4.0.3",
-//       rating: 4.8
-//     },
-//     {
-//       id: "2",
-//       name: "Circuit Repair",
-//       provider: "PowerFix",
-//       image: "https://images.unsplash.com/photo-1565043589221-1a6fd9ae45d7?ixlib=rb-4.0.3",
-//       rating: 4.7
-//     },
-//     {
-//       id: "3",
-//       name: "Light Installation",
-//       provider: "BrightSpark",
-//       image: "https://images.unsplash.com/photo-1563453392212-326f5e854473?ixlib=rb-4.0.3",
-//       rating: 4.9
-//     },
-//     {
-//       id: "4",
-//       name: "Emergency Repairs",
-//       provider: "QuickFix",
-//       image: "https://images.unsplash.com/photo-1581092921461-7031e4bfb83a?ixlib=rb-4.0.3",
-//       rating: 4.6
-//     }
-//   ];
   
 
   if (!service) {

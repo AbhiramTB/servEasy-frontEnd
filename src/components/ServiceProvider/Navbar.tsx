@@ -94,7 +94,10 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                   </Link>
                 </li>
                 <li>
+                <Link to={'/service-provider/booked-services'}>
+
                   <p className="font-medium">Booking</p>
+                  </Link>
                 </li>
                 <li>
                   <p className="font-medium">Contact</p>
@@ -168,7 +171,9 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
               <p className="py-2 font-medium">Service Management</p>
             </li>
             <li>
+              
               <p className="py-2 font-medium">Booking</p>
+
             </li>
             <li>
               <p className="py-2 font-medium">Contact</p>

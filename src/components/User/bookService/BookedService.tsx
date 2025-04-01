@@ -49,7 +49,7 @@ const BookedService = () => {
         
         <div className="grid gap-4 ">
           {bookedServices.map((service) => (
-            <Link to={`/sample/singelBooking/${service._id}`}>
+            <Link to={`/booked-service/${service._id}`}>
             <ServiceBookingCard booking={service} key={service._id} />
             </Link>
           ))}

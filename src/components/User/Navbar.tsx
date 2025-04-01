@@ -20,19 +20,19 @@ const Navbar = () => {
     getUserProfile();
   }, []);
 
-   const handleLogOut = async () => {
-      try {
-        const res = await getRequest(apiEndPoint.logOutUser)
-        if (res.status == 200) {
-          localStorage.removeItem("accessToken");
-          window.location.href = "/signin";
-        } else {
-          console.error("Logout failed:", res.data.message);
-        }
-      } catch (error) {
-        console.error("Logout failed:", error);
+  const handleLogOut = async () => {
+    try {
+      const res = await getRequest(apiEndPoint.logOutUser);
+      if (res.status == 200) {
+        localStorage.removeItem("accessToken");
+        window.location.href = "/signin";
+      } else {
+        console.error("Logout failed:", res.data.message);
       }
-    };
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   const getUserProfile = async () => {
     try {
@@ -67,7 +67,11 @@ const Navbar = () => {
       <div className="border-b shadow-md navbar bg-base-100 border-primary">
         <div className="flex-1">
           <a className="font-serif text-2xl btn btn-ghost text-primary">
+          <Link to={"/"}> 
             ServEasy
+          
+          </Link>
+
           </a>
         </div>
         <div className="flex-none gap-4">
@@ -114,8 +118,7 @@ const Navbar = () => {
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-lg"
             >
-       
-         <li>
+              <li>
                 <a
                   className="justify-between"
                   onClick={() => setEditProfile(true)}
@@ -125,20 +128,21 @@ const Navbar = () => {
                 </a>
               </li>
               <li>
-                <a>Settings</a>
+                <Link to={"/booked-services/"}>
+                <a>your booking</a>
+                </Link>
               </li>
-              
-                <li>
-                  <a>
-                    {" "}
-                    <ThemeChange />
-                  </a>
-                </li>
-                <li>
+
+              <li>
+                <a>
+                  {" "}
+                  <ThemeChange />
+                </a>
+              </li>
+              <li>
                 <a
                   onClick={() => {
-                    handleLogOut()
-                   
+                    handleLogOut();
                   }}
                 >
                   Logout
