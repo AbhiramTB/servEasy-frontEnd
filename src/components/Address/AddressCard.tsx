@@ -7,7 +7,6 @@ interface AddressCardProps {
   address: IAddress;
   onEdit: (address: IAddress) => void;
   onDelete: (id: string) => void;
-  onSetDefault?: (id: string) => void;
   onSelect?: () => void;
   isSelected?: boolean;
 }
@@ -16,7 +15,6 @@ export const AddressCard: React.FC<AddressCardProps> = ({
   address, 
   onEdit, 
   onDelete, 
-  onSetDefault,
   onSelect,
   isSelected
 }) => {
@@ -88,19 +86,7 @@ export const AddressCard: React.FC<AddressCardProps> = ({
           </p>
         </div>
 
-        {!address.isDefault && onSetDefault && (
-          <div className="card-actions justify-end mt-4">
-            <button 
-              className="btn btn-outline btn-primary btn-sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                onSetDefault(address._id);
-              }}
-            >
-              Set as Default
-            </button>
-          </div>
-        )}
+     
       </div>
     </div>
   );

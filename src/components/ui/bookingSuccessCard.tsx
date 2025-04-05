@@ -1,4 +1,5 @@
 import { CheckCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface BookingSuccessProps {
   service?: string;
@@ -24,13 +25,17 @@ export default function BookingSuccess({
           {successTitle}
         </h2>
         <p className="text-base-content mb-4">{successSubTitle}</p>
-        {ButtonFn && (
-          <button
-            onClick={ButtonFn}
+        {buttonText && (
+         <div>
+          <Link to={'/booked-services/'}>
+           <button
+            // onClick={ButtonFn}
             className="bg-primary hover:bg-primary-focus text-white py-2 px-4 rounded-md w-full"
           >
             {buttonText}{" "}
           </button>
+          </Link>
+         </div>
         )}
       </div>
     </div>

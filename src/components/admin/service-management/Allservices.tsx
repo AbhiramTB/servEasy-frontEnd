@@ -8,16 +8,6 @@ import ServiceDetails from "./ServiceDetails";
 import { HotToastError, HotToastSuccess } from "../../../utils/HotToasitify";
 import { Toaster } from "react-hot-toast";
 
-
-
-
-
-
-
-
-
-
-
 const Allservices = () => {
   const dispatch = useDispatch();
   const services = useSelector((state: RootState) => state.admin.allServices);
@@ -61,15 +51,15 @@ const Allservices = () => {
   };
 
   const block = (serviceId: string) => {
-    handleToggleBlock(serviceId.toString(), false)
+    handleToggleBlock(serviceId.toString(), false);
   };
   const unBlock = (serviceId: string) => {
-    handleToggleBlock(serviceId.toString(), true)
+    handleToggleBlock(serviceId.toString(), true);
   };
   return (
     <div>
       <Toaster />
-     
+
       {services && (
         <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service: any) => (
@@ -273,8 +263,6 @@ const Allservices = () => {
           onClose={() => setDetails(null)}
         />
       )}
-
-
     </div>
   );
 };
