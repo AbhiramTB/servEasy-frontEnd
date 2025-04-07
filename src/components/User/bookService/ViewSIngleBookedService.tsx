@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getRequest } from "../../../utils/makeRequestInstance";
+import RazorpayButton from "../../ui/PaymentButton";
 
 interface Address {
   name: string;
@@ -10,6 +11,14 @@ interface Address {
   phone: string;
 }
 
+interface Ipayment {
+  serviceCost?: number;
+  metaialCost?: number;
+  travelCost?: number;
+  inspectionCost?: number;
+  total: number;
+  convenienceFee?: number;
+}
 interface Location {
   address: string;
   latitude: number;
@@ -60,6 +69,7 @@ interface BookedService {
   createdAt: string;
   updatedAt: string;
   cancelReason?: string;
+  payment?: Ipayment;
 }
 
 interface BookingData {
@@ -87,6 +97,8 @@ const ServiceBookingDetails = () => {
       console.log(res.data);
 
       if (res.status === 200) {
+        console.log(res.data);
+
         setBookingData(res.data.service);
       }
     } catch (err) {
@@ -99,7 +111,7 @@ const ServiceBookingDetails = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-base-200">
+      <div className="flex items-center justify-center min-h-screen bg-base-200">
         <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
     );
@@ -107,11 +119,11 @@ const ServiceBookingDetails = () => {
 
   if (error || !bookingData) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-base-200">
+      <div className="flex items-center justify-center min-h-screen bg-base-200">
         <div className="alert alert-error">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="stroke-current shrink-0 h-6 w-6"
+            className="w-6 h-6 stroke-current shrink-0"
             fill="none"
             viewBox="0 0 24 24"
           >
@@ -158,6 +170,8 @@ const ServiceBookingDetails = () => {
         return 2;
       case "inProgress":
         return 3;
+      case "requested":
+        return 3;
       case "completed":
         return 4;
       case "cancelled":
@@ -172,9 +186,9 @@ const ServiceBookingDetails = () => {
   const isCompleted = bookedService.serviceStatus === "completed";
 
   return (
-    <div className="container mx-auto bg-base-200 min-h-screen py-4 px-4">
+    <div className="container min-h-screen px-4 py-4 mx-auto bg-base-200">
       {/* Breadcrumb */}
-      <div className="text-sm breadcrumbs mb-4 text-base-content">
+      <div className="mb-4 text-sm breadcrumbs text-base-content">
         <ul>
           <li>
             <Link to="/">Home</Link>
@@ -185,7 +199,7 @@ const ServiceBookingDetails = () => {
           <li>
             <Link to="/booked-services/">My Bookings</Link>
           </li>
-    
+
           <li>{bookedService._id}</li>
         </ul>
       </div>
@@ -197,7 +211,7 @@ const ServiceBookingDetails = () => {
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="stroke-current shrink-0 h-6 w-6"
+            className="w-6 h-6 stroke-current shrink-0"
             fill="none"
             viewBox="0 0 24 24"
           >
@@ -231,7 +245,7 @@ const ServiceBookingDetails = () => {
       )}
 
       {/* Main Card */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {/* Service and Timeline Details - 2/3 width */}
         <div className="md:col-span-2">
           {/* Service Details Card */}
@@ -239,8 +253,8 @@ const ServiceBookingDetails = () => {
             className={`card bg-base-100 shadow-xl ${isCancelled ? "border-error border" : isCompleted ? "border-success border" : ""}`}
           >
             <div className="card-body">
-              <div className="flex flex-col md:flex-row md:items-center mb-4 gap-4">
-                <div className="flex-shrink-0 relative">
+              <div className="flex flex-col gap-4 mb-4 md:flex-row md:items-center">
+                <div className="relative flex-shrink-0">
                   <img
                     src={service.serviceImage}
                     alt={service.serviceName}
@@ -264,24 +278,24 @@ const ServiceBookingDetails = () => {
                     {service.serviceName}
                   </h2>
                   <div className="flex items-center">
-                    <span className="badge badge-outline badge-sm mr-2">
+                    <span className="mr-2 badge badge-outline badge-sm">
                       {service.category}
                     </span>
                     <span className="badge badge-outline badge-sm">
                       {service.serviceType}
                     </span>
                     {isCancelled && (
-                      <span className="badge badge-error badge-sm ml-2">
+                      <span className="ml-2 badge badge-error badge-sm">
                         Cancelled
                       </span>
                     )}
                     {isCompleted && (
-                      <span className="badge badge-success badge-sm ml-2">
+                      <span className="ml-2 badge badge-success badge-sm">
                         Completed
                       </span>
                     )}
                   </div>
-                  <p className="text-base-content/70 mt-2 text-sm">
+                  <p className="mt-2 text-sm text-base-content/70">
                     {service.description}
                   </p>
                   <div className="mt-3">
@@ -296,7 +310,7 @@ const ServiceBookingDetails = () => {
 
               {/* Service Provider Info */}
               <div className="flex items-center mb-6">
-                <div className="avatar mr-4">
+                <div className="mr-4 avatar">
                   <div className="w-12 h-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                     <img
                       src={serviceProvider.profileImage}
@@ -321,14 +335,14 @@ const ServiceBookingDetails = () => {
 
               {/* Status Timeline */}
               <div className="mt-6 mb-6">
-                <h3 className="font-semibold mb-4 text-primary">
+                <h3 className="mb-4 font-semibold text-primary">
                   Booking Status
                 </h3>
                 {isCancelled ? (
                   <div className="alert alert-error">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="stroke-current shrink-0 h-6 w-6"
+                      className="w-6 h-6 stroke-current shrink-0"
                       fill="none"
                       viewBox="0 0 24 24"
                     >
@@ -342,7 +356,7 @@ const ServiceBookingDetails = () => {
                     <span>Service has been cancelled</span>
                   </div>
                 ) : (
-                  <ul className="steps steps-horizontal w-full">
+                  <ul className="w-full steps steps-horizontal">
                     <li
                       className={`step ${statusStep >= 1 ? "step-primary" : ""}`}
                     >
@@ -369,8 +383,8 @@ const ServiceBookingDetails = () => {
 
               {/* Cancelled Reason - Only shown if cancelled */}
               {isCancelled && (
-                <div className="bg-error/10 p-4 rounded-lg mb-6">
-                  <h3 className="font-semibold mb-2 text-error">
+                <div className="p-4 mb-6 rounded-lg bg-error/10">
+                  <h3 className="mb-2 font-semibold text-error">
                     Cancellation Details
                   </h3>
                   <p className="text-sm">
@@ -382,17 +396,17 @@ const ServiceBookingDetails = () => {
                     })}
                     .
                   </p>
-                  <p className="text-sm mt-2">
+                  <p className="mt-2 text-sm">
                     <strong>Reason:</strong> {bookedService.cancelReason}
                   </p>
-                  <p className="text-sm mt-2"></p>
+                  <p className="mt-2 text-sm"></p>
                 </div>
               )}
 
               {/* Completion Details - Only shown if completed */}
               {isCompleted && (
-                <div className="bg-success/10 p-4 rounded-lg mb-6">
-                  <h3 className="font-semibold mb-2 text-success">
+                <div className="p-4 mb-6 rounded-lg bg-success/10">
+                  <h3 className="mb-2 font-semibold text-success">
                     Service Completion Details
                   </h3>
                   <p className="text-sm">
@@ -405,10 +419,10 @@ const ServiceBookingDetails = () => {
                     .
                   </p>
                   <div className="mt-4">
-                    <h4 className="font-medium text-sm mb-2">
+                    <h4 className="mb-2 text-sm font-medium">
                       Service Provider Notes:
                     </h4>
-                    <p className="text-sm italic bg-base-200 p-2 rounded">
+                    <p className="p-2 text-sm italic rounded bg-base-200">
                       "Service completed successfully. Thank you for choosing
                       our service!"
                     </p>
@@ -416,16 +430,16 @@ const ServiceBookingDetails = () => {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+              <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-2">
                 {/* Booking Time */}
-                <div className="bg-base-200 p-4 rounded-lg">
-                  <h3 className="font-semibold mb-2 text-primary">
+                <div className="p-4 rounded-lg bg-base-200">
+                  <h3 className="mb-2 font-semibold text-primary">
                     Booking Schedule
                   </h3>
-                  <div className="flex items-center text-sm mb-2">
+                  <div className="flex items-center mb-2 text-sm">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 mr-2 text-primary"
+                      className="w-4 h-4 mr-2 text-primary"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -442,7 +456,7 @@ const ServiceBookingDetails = () => {
                   <div className="flex items-center text-sm">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 mr-2 text-primary"
+                      className="w-4 h-4 mr-2 text-primary"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -465,10 +479,10 @@ const ServiceBookingDetails = () => {
                     </span>
                   </div>
                   {isCompleted && (
-                    <div className="flex items-center text-sm mt-2 text-success">
+                    <div className="flex items-center mt-2 text-sm text-success">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 mr-2 text-success"
+                        className="w-4 h-4 mr-2 text-success"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -486,14 +500,14 @@ const ServiceBookingDetails = () => {
                 </div>
 
                 {/* Payment Info */}
-                <div className="bg-base-200 p-4 rounded-lg">
-                  <h3 className="font-semibold mb-2 text-primary">
+                <div className="p-4 rounded-lg bg-base-200">
+                  <h3 className="mb-2 font-semibold text-primary">
                     Payment Details
                   </h3>
-                  <div className="flex items-center text-sm mb-2">
+                  <div className="flex items-center mb-2 text-sm">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 mr-2 text-primary"
+                      className="w-4 h-4 mr-2 text-primary"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -510,7 +524,7 @@ const ServiceBookingDetails = () => {
                   <div className="flex items-center text-sm">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 mr-2 text-primary"
+                      className="w-4 h-4 mr-2 text-primary"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -529,7 +543,7 @@ const ServiceBookingDetails = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="card-actions justify-end mt-8">
+              <div className="justify-end mt-8 card-actions">
                 {bookedService.serviceStatus === "pending" && (
                   <button className="btn btn-error">Cancel Booking</button>
                 )}
@@ -538,7 +552,7 @@ const ServiceBookingDetails = () => {
                     Contact Service Provider
                   </button>
                 )}
-               
+
                 {isCompleted && (
                   <button className="btn btn-success">Download Invoice</button>
                 )}
@@ -550,15 +564,11 @@ const ServiceBookingDetails = () => {
         {/* Right Side - Details and Price Summary - 1/3 width */}
         <div className="md:col-span-1">
           {/* Address Card */}
-          <div className="card bg-base-100 shadow-xl mb-6">
+          <div className="mb-6 shadow-xl card bg-base-100">
             <div className="card-body">
-              <div className="flex justify-between items-center mb-4">
+              <div className="flex items-center justify-between mb-4">
                 <h3 className="font-semibold text-primary">Service Address</h3>
-                {!isCancelled && !isCompleted && (
-                  <button className="btn btn-sm btn-ghost text-primary">
-                    Change
-                  </button>
-                )}
+                
               </div>
               <div className="text-sm">
                 <p className="font-medium">{bookedService.address.name}</p>
@@ -567,10 +577,10 @@ const ServiceBookingDetails = () => {
                   {bookedService.address.state} -{" "}
                   {bookedService.address.pincode}
                 </p>
-                <div className="mt-2 flex items-center">
+                <div className="flex items-center mt-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 mr-2 text-primary"
+                    className="w-4 h-4 mr-2 text-primary"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -584,29 +594,22 @@ const ServiceBookingDetails = () => {
                   </svg>
                   <span>{bookedService.address.phone}</span>
                 </div>
-                {!isCancelled && !isCompleted && (
-                  <div className="mt-2">
-                    <button className="btn btn-sm btn-outline btn-primary">
-                      Change or Add number
-                    </button>
-                  </div>
-                )}
+               
               </div>
             </div>
           </div>
-
-          {/* Price Details Card */}
-          {/* <div className="card bg-base-100 shadow-xl">
+          {/* 
+           <div className="shadow-xl card bg-base-100">
             <div className="card-body">
-              <h3 className="font-semibold mb-4 text-primary">Price Details</h3>
+              <h3 className="mb-4 font-semibold text-primary">Price Details</h3>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span>List price</span>
-                  <span>₹{(service.estimatedPrice * 1.25).toFixed(0)}</span>
-                </div>
+                  {/* <span>₹{(service.booked * 1.25).toFixed(0)}</span> */}
+          {/* </div>
                 <div className="flex justify-between">
                   <span>Selling price</span>
-                  <span>₹{service.estimatedPrice}</span>
+                  <span>₹{service.payment.convenienceFee}</span>
                 </div>
                 <div className="flex justify-between text-success">
                   <span>Discount</span>
@@ -630,7 +633,7 @@ const ServiceBookingDetails = () => {
                     <span>- ₹0</span>
                   </div>
                 )}
-                <div className="divider my-2"></div>
+                <div className="my-2 divider"></div>
                 <div className="flex justify-between font-bold">
                   <span>Total Amount</span>
                   {isCancelled ? (
@@ -640,13 +643,13 @@ const ServiceBookingDetails = () => {
                   )}
                 </div>
                 {isCompleted && (
-                  <div className="flex justify-between text-success font-medium">
+                  <div className="flex justify-between font-medium text-success">
                     <span>Payment Received</span>
                     <span>₹{service.estimatedPrice}</span>
                   </div>
                 )}
                 {isCancelled && (
-                  <div className="flex justify-between text-error font-medium">
+                  <div className="flex justify-between font-medium text-error">
                     <span>Refund Amount</span>
                     <span>₹{service.estimatedPrice}</span>
                   </div>
@@ -660,110 +663,83 @@ const ServiceBookingDetails = () => {
                 )}
               </div>
             </div>
-          </div>
-           */}
+          </div> */}
 
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h3 className="font-semibold mb-4 text-primary">Price Details</h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>List price</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="">
-                    estimatedPrice
-                    <span className="block mt-1 text-sm text-gray-500">
-                      (depends on your service & duration)
-                    </span>
-                  </span>{" "}
-                  <span>{service.estimatedPrice}</span>
-                </div>
-                <div className="flex justify-between text-success">
-                  <span>Discounts & Offers</span>
-                  <span>------</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>material Cost</span>
-                  <span>------</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Traveling Cost</span>
-                  <span>------</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Delivery Charge</span>
-                  <span>------</span>
-                </div>
-                {isCancelled && (
-                  <div className="flex justify-between text-error">
-                    <span>Cancellation Fee</span>
-                    <span>------</span>
+          {bookedService.payment && (
+            <div className="shadow card bg-base-100">
+              <div className="p-4 card-body">
+                <h3 className="text-base card-title">Price Details</h3>
+                <div className="space-y-1 text-sm">
+                  <div className="flex justify-between">
+                    <span>service Cost</span>
+                    <span>₹{bookedService.payment.serviceCost}</span>
                   </div>
-                )}
-                <div className="divider my-2"></div>
-                <div className="flex justify-between font-bold">
-                  <span>Total Amount</span>
-                  {isCancelled ? (
-                    <span className="line-through">
-                      <span>------------------</span>
-                    </span>
-                  ) : (
-                    <span>------------------</span>
-                  )}
-                </div>
-                {isCompleted && (
-                  <div className="flex justify-between text-success font-medium">
-                    <span>Payment Received</span>
-                    <span>------------------</span>
+                  <div className="flex justify-between">
+                    <span> metaialCost</span>
+                    <span>₹{bookedService.payment.metaialCost}</span>
                   </div>
-                )}
+                  <div className="flex justify-between">
+                    <span>travelCost</span>
+                    <span>₹{bookedService.payment.travelCost}</span>
+                  </div>
+
+                  <div className="my-1 divider"></div>
+                  <div className="flex justify-between font-bold">
+                    <span>Total</span>
+                    <span>₹{bookedService.payment.total}</span>
+                  </div>
+                  <div className="flex justify-between mt-1 text-xs opacity-75">
+                    <span>convenience Fee (10%)</span>
+                    <span>₹{bookedService.payment?.convenienceFee} </span>
+                  </div>
+                </div>
               </div>
-              <span className="text-sm mt-3  text-base-content opacity-40 italic">
-              *Final payment will be confirmed after service completion.
-              Estimated costs are available while chatting or calling the
-              service provider.*
-            </span>
+              {id && (
+                <RazorpayButton
+                  serviceid={id}
+                  reloadData={() => getBookedService(id)}
+                  total={bookedService.payment.total}
+                />
+              )}
             </div>
-           
-          </div>
+          )}
 
           {/* Feedback Section */}
           {isCompleted && (
-            <div className="card bg-base-100 shadow-xl mt-6">
+            <div className="mt-6 shadow-xl card bg-base-100">
               <div className="card-body">
-                <h3 className="font-semibold mb-4 text-primary">
+                <h3 className="mb-4 font-semibold text-primary">
                   Rate your experience
                 </h3>
-                <div className="rating rating-lg flex justify-center mb-4">
+                <div className="flex justify-center mb-4 rating rating-lg">
                   <input
                     type="radio"
                     name="rating-2"
-                    className="mask mask-star-2 bg-orange-400"
+                    className="bg-orange-400 mask mask-star-2"
                   />
                   <input
                     type="radio"
                     name="rating-2"
-                    className="mask mask-star-2 bg-orange-400"
+                    className="bg-orange-400 mask mask-star-2"
                   />
                   <input
                     type="radio"
                     name="rating-2"
-                    className="mask mask-star-2 bg-orange-400"
+                    className="bg-orange-400 mask mask-star-2"
                   />
                   <input
                     type="radio"
                     name="rating-2"
-                    className="mask mask-star-2 bg-orange-400"
+                    className="bg-orange-400 mask mask-star-2"
                   />
                   <input
                     type="radio"
                     name="rating-2"
-                    className="mask mask-star-2 bg-orange-400"
+                    className="bg-orange-400 mask mask-star-2"
                   />
                 </div>
                 <textarea
-                  className="textarea textarea-bordered w-full mb-2"
+                  className="w-full mb-2 textarea textarea-bordered"
                   placeholder="Share your experience (optional)"
                 ></textarea>
                 <button className="btn btn-primary btn-block">
@@ -774,15 +750,15 @@ const ServiceBookingDetails = () => {
           )}
 
           {!isCompleted && (
-            <div className="card bg-base-100 shadow-xl mt-6">
+            <div className="mt-6 shadow-xl card bg-base-100">
               <div className="card-body">
-                <h3 className="font-semibold mb-2 text-primary">
+                <h3 className="mb-2 font-semibold text-primary">
                   More options
                 </h3>
-                {/* <button className="btn btn-outline btn-sm w-full">
+                {/* <button className="w-full btn btn-outline btn-sm">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-2"
+                    className="w-5 h-5 mr-2"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -796,10 +772,10 @@ const ServiceBookingDetails = () => {
                   </svg>
                   Did you find this page helpful?
                 </button> */}
-                {/* <button className="btn btn-outline btn-sm w-full mt-2">
+                {/* <button className="w-full mt-2 btn btn-outline btn-sm">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-2"
+                    className="w-5 h-5 mr-2"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"

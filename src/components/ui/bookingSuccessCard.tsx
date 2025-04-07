@@ -17,25 +17,24 @@ export default function BookingSuccess({
   buttonText,
 }: BookingSuccessProps) {
   return (
-    <div className="flex justify-center items-center ">
-
-      <div className="w-full max-w-md p-6 shadow-lg bg-base-200 rounded-2xl  text-center">
-        <CheckCircle size={60} className="text-primary mx-auto mb-4" />
-        <h2 className="text-2xl font-semibold text-primary mb-2">
+    <div className="flex items-center justify-center ">
+      <div className="w-full max-w-md p-6 text-center shadow-lg bg-base-200 rounded-2xl">
+        <CheckCircle size={60} className="mx-auto mb-4 text-primary" />
+        <h2 className="mb-2 text-2xl font-semibold text-primary">
           {successTitle}
         </h2>
-        <p className="text-base-content mb-4">{successSubTitle}</p>
+        <p className="mb-4 text-base-content">{successSubTitle}</p>
         {buttonText && (
-         <div>
-          <Link to={'/booked-services/'}>
-           <button
-            // onClick={ButtonFn}
-            className="bg-primary hover:bg-primary-focus text-white py-2 px-4 rounded-md w-full"
-          >
-            {buttonText}{" "}
-          </button>
-          </Link>
-         </div>
+          <div>
+            <Link to={"/booked-services/"}>
+              <button
+                // onClick={ButtonFn}
+                className="w-full px-4 py-2 text-white rounded-md bg-primary hover:bg-primary-focus"
+              >
+                {buttonText}{" "}
+              </button>
+            </Link>
+          </div>
         )}
       </div>
     </div>

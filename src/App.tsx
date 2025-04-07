@@ -22,6 +22,7 @@ import BookedService from "./components/User/bookService/BookedService.tsx";
 import ViewSIngleBookedService from "./components/User/bookService/ViewSIngleBookedService.tsx";
 import BookedServiceServiceProvider from "./components/ServiceProvider/booking/bookedServices.tsx";
 import ServiceBookingManage from "./components/ServiceProvider/booking/SingleBooking.tsx";
+import PaymentVerify from "./components/ui/PaymentVerify.tsx";
 
 function App() {
   const token = localStorage.getItem("accessToken");
@@ -30,7 +31,10 @@ function App() {
   
   return (
     <BrowserRouter basename="/">
+
       <Routes>
+      <Route path="/payment/verify" element={<PaymentVerify />} />
+
         <Route
           path="/signIn"
           element={token ? <Navigate to="/" replace /> : <AuthPage />}
