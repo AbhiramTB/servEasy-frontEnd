@@ -35,6 +35,8 @@ const ServiceBookingCard: React.FC<ServiceBookingCardProps> = ({ booking }) => {
         return "badge-error";
       case "in progress":
         return "badge-info";
+      case "requested":
+        return "badge-info";
       default:
         return "badge-ghost";
     }
@@ -54,16 +56,16 @@ const ServiceBookingCard: React.FC<ServiceBookingCardProps> = ({ booking }) => {
   };
 
   return (
-    <div className="card card-side bg-base-200  border-primary shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border ">
+    <div className="overflow-hidden transition-all duration-300 border shadow-xl card card-side bg-base-200 border-primary hover:shadow-2xl ">
       <figure className="w-1/4 min-w-32">
         <img
           src={booking.serviceImage}
           alt={booking.serviceName}
-          className="h-full w-full object-cover"
+          className="object-cover w-full h-full"
         />
       </figure>
-      <div className="card-body p-4">
-        <div className="flex justify-between items-start">
+      <div className="p-4 card-body">
+        <div className="flex items-start justify-between">
           <h2 className="card-title text-primary">{booking.serviceName}</h2>
           <div className="flex gap-2">
             <span className={`badge ${getStatusColor(booking.serviceStatus)}`}>
@@ -74,28 +76,34 @@ const ServiceBookingCard: React.FC<ServiceBookingCardProps> = ({ booking }) => {
             </span>
           </div>
         </div>
-        
-        <div className="divider my-1"></div>
-        
+
+        <div className="my-1 divider"></div>
+
         <div className="grid grid-cols-2 gap-2">
           <div className="flex items-center gap-2">
-            <Briefcase className="h-4 w-4 opacity-70" />
+            <Briefcase className="w-4 h-4 opacity-70" />
             <span className="text-sm">{booking.serviceType}</span>
           </div>
-          
+
           <div className="flex items-center gap-2">
-            <Mail className="h-4 w-4 opacity-70" />
+            <Mail className="w-4 h-4 opacity-70" />
             <span className="text-sm">{booking.serviceBookedAddress.name}</span>
           </div>
-          
+
           <div className="flex items-center gap-2">
-            <Home className="h-4 w-4 opacity-70" />
-            <span className="text-sm truncate">{booking.serviceBookedAddress.houseName}, {booking.serviceBookedAddress.state} - {booking.serviceBookedAddress.pincode}</span>
+            <Home className="w-4 h-4 opacity-70" />
+            <span className="text-sm truncate">
+              {booking.serviceBookedAddress.houseName},{" "}
+              {booking.serviceBookedAddress.state} -{" "}
+              {booking.serviceBookedAddress.pincode}
+            </span>
           </div>
-          
+
           <div className="flex items-center gap-2">
-            <Phone className="h-4 w-4 opacity-70" />
-            <span className="text-sm">{booking.serviceBookedAddress.phone}</span>
+            <Phone className="w-4 h-4 opacity-70" />
+            <span className="text-sm">
+              {booking.serviceBookedAddress.phone}
+            </span>
           </div>
         </div>
       </div>
