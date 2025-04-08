@@ -106,7 +106,7 @@ export const adminRoutes = {
 export const paymentRoutes={
   getServiceProviderPayments:"/payment/service-provider/",
   getServiceAdminPayments:"/payment/admin/"
-
+  
 }
 
 
