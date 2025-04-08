@@ -58,6 +58,9 @@ const NavBar = () => {
             <li>
               <Link to="/admin/serviceProvider">Service Providers</Link>
             </li>
+            <li>
+              <Link to="/admin/serviceProvider">Service Providers</Link>
+            </li>
           </ul>
         </div>
         <Link to="/admin/home" className="font-serif text-xl btn btn-ghost">
@@ -95,6 +98,9 @@ const NavBar = () => {
             <Link to="/admin/service" className="text-sm font-medium">
               service-managment
             </Link>
+          </li>
+          <li>
+            <Link to="/admin/booking-management">booking management</Link>
           </li>
         </ul>
       </div>
