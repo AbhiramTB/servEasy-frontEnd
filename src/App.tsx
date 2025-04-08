@@ -23,7 +23,7 @@ import ViewSIngleBookedService from "./components/User/bookService/ViewSIngleBoo
 import BookedServiceServiceProvider from "./components/ServiceProvider/booking/bookedServices.tsx";
 import ServiceBookingManage from "./components/ServiceProvider/booking/SingleBooking.tsx";
 import PaymentVerify from "./components/ui/PaymentVerify.tsx";
-
+import PaymentManagement from "./components/ServiceProvider/paymentManagement/paymentManagement.tsx";
 function App() {
   const token = localStorage.getItem("accessToken");
   const adminToken = localStorage.getItem("adminToken");
@@ -57,6 +57,7 @@ function App() {
             <Route path="booked-services" element={<BookedServiceServiceProvider/>} />
             <Route path="booked-services/:id" element={<ServiceBookingManage/>} />
             <Route path="service-management" element={<ServiceManagement />} />
+             <Route path="payment-management" element={<PaymentManagement/>} />
           </Route>
         </Route>
 
