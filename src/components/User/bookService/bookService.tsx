@@ -147,7 +147,7 @@ const BookService = () => {
             successTitle="Booking Confirmed!"
             successSubTitle="Your service  has been successfully booked."
             buttonText="View Booked Service"
-            ButtonFn={() => alert("happy Allea")}
+            // ButtonFn={}
           />
         </div>
       )}
@@ -183,7 +183,6 @@ const BookService = () => {
                       address={address}
                       onEdit={() => openAddressModal(address)}
                       onDelete={() => handleDeleteAddress(address._id)}
-                      onSetDefault={() => handleSetDefaultAddress(address._id)}
                       onSelect={() => handleAddressSelect(address)}
                       isSelected={selectedAddress?._id === address._id}
                     />

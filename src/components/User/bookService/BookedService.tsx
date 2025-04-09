@@ -27,7 +27,6 @@ const BookedService = () => {
   const [bookedServices, setBookedServices] = useState<Booking[]>([]);
   useEffect(() => {
     getBookedService();
-
   }, []);
 
   const getBookedService = async () => {
@@ -43,18 +42,16 @@ const BookedService = () => {
   };
 
   return (
-    <div className="bg-base-100 p-4">
-      <h1 className="text-xl font-bold mb-4">Booked Services</h1>
+    <div className="p-4 bg-base-100">
+      <h1 className="mb-4 text-xl font-bold">Booked Services</h1>
       {bookedServices.length > 0 ? (
-        
         <div className="grid gap-4 ">
           {bookedServices.map((service) => (
             <Link to={`/booked-service/${service._id}`}>
-            <ServiceBookingCard booking={service} key={service._id} />
+              <ServiceBookingCard booking={service} key={service._id} />
             </Link>
           ))}
         </div>
-        
       ) : (
         <p className="text-gray-600">No booked services found.</p>
       )}

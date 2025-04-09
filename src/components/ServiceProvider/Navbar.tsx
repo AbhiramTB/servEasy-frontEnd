@@ -100,7 +100,11 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                   </Link>
                 </li>
                 <li>
-                  <p className="font-medium">Contact</p>
+                <Link to={'/service-provider/payment-management'}>
+
+                  <p className="font-medium">payment management</p>
+                  </Link>
+
                 </li>
               </ul>
             </div>
