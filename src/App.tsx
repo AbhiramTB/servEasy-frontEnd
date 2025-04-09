@@ -22,7 +22,9 @@ import BookedService from "./components/User/bookService/BookedService.tsx";
 import ViewSIngleBookedService from "./components/User/bookService/ViewSIngleBookedService.tsx";
 import BookedServiceServiceProvider from "./components/ServiceProvider/booking/bookedServices.tsx";
 import ServiceBookingManage from "./components/ServiceProvider/booking/SingleBooking.tsx";
-
+import PaymentVerify from "./components/ui/PaymentVerify.tsx";
+import PaymentManagement from "./components/ServiceProvider/paymentManagement/paymentManagement.tsx";
+import BookingManagement from "./components/admin/bookingManagement/booking-management.tsx";
 function App() {
   const token = localStorage.getItem("accessToken");
   const adminToken = localStorage.getItem("adminToken");
@@ -30,7 +32,10 @@ function App() {
   
   return (
     <BrowserRouter basename="/">
+
       <Routes>
+      <Route path="/payment/verify" element={<PaymentVerify />} />
+
         <Route
           path="/signIn"
           element={token ? <Navigate to="/" replace /> : <AuthPage />}
@@ -53,6 +58,7 @@ function App() {
             <Route path="booked-services" element={<BookedServiceServiceProvider/>} />
             <Route path="booked-services/:id" element={<ServiceBookingManage/>} />
             <Route path="service-management" element={<ServiceManagement />} />
+             <Route path="payment-management" element={<PaymentManagement/>} />
           </Route>
         </Route>
 
@@ -76,6 +82,7 @@ function App() {
               element={<ServiceProviderListing />}
             />
             <Route path="service" element={<Allservices />} />
+            <Route path="booking-management" element={<BookingManagement/>}></Route>
           </Route>
         </Route>
       </Routes>

@@ -66,13 +66,9 @@ const Navbar = () => {
     <div>
       <div className="border-b shadow-md navbar bg-base-100 border-primary">
         <div className="flex-1">
-          <a className="font-serif text-2xl btn btn-ghost text-primary">
-          <Link to={"/"}> 
-            ServEasy
-          
-          </Link>
-
-          </a>
+          <p className="font-serif text-2xl btn btn-ghost text-primary">
+            <Link to={"/"}>ServEasy</Link>
+            </p>
         </div>
         <div className="flex-none gap-4">
           {!user.serviceProvider && (
@@ -119,34 +115,34 @@ const Navbar = () => {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-lg"
             >
               <li>
-                <a
+                <p
                   className="justify-between"
                   onClick={() => setEditProfile(true)}
                 >
                   Profile
                   {/* <span className="badge badge-primary">New</span> */}
-                </a>
+                </p>
               </li>
               <li>
                 <Link to={"/booked-services/"}>
-                <a>your booking</a>
+                  <a>your booking</a>
                 </Link>
               </li>
 
               <li>
-                <a>
+                <p>
                   {" "}
                   <ThemeChange />
-                </a>
+                  </p>
               </li>
               <li>
-                <a
+                <p
                   onClick={() => {
                     handleLogOut();
                   }}
                 >
                   Logout
-                </a>{" "}
+                  </p>{" "}
               </li>
             </ul>
           </div>

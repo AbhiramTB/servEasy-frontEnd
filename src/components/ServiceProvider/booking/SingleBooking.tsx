@@ -1,10 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getRequest, putRequest } from "../../../utils/makeRequestInstance";
+import {
+  getRequest,
+  postRequest,
+  putRequest,
+} from "../../../utils/makeRequestInstance";
 import { HotToastError, HotToastSuccess } from "../../../utils/HotToasitify";
 import { Toaster } from "react-hot-toast";
+import PaymentModal from "./paymentModal";
 
 // Interfaces
+interface Ipayment {
+  serviceCost?: number;
+  metaialCost?: number;
+  travelCost?: number;
+  inspectionCost?: number;
+  total: number;
+  convenienceFee?: number;
+}
+
 interface BookingData {
   bookedService: {
     _id: string;
@@ -23,6 +37,7 @@ interface BookingData {
       state: string;
       phone: string;
     };
+    payment?: Ipayment;
     cancellationReason?: string;
   };
   service: {
@@ -53,8 +68,9 @@ const ServiceProviderBookingManage = () => {
   const [estimatedTime, setEstimatedTime] = useState<string>("");
   const [cancelReason, setCancelReason] = useState<string>("");
   const [newStatus, setNewStatus] = useState<string>("");
-  const [invoiceFile, setInvoiceFile] = useState<File | null>(null);
- 
+  const [invoiceFiles, setInvoiceFiles] = useState<File[]>([]);
+  const [payment, setPayment] = useState<Ipayment | null>();
+  const [paymentForm, setPaymentForm] = useState<boolean>(false);
   useEffect(() => {
     if (id) {
       getBookedService(id);
@@ -85,7 +101,6 @@ const ServiceProviderBookingManage = () => {
 
   const handleAcceptBooking = async () => {
     try {
-        
       if (!estimatedTime) {
         HotToastError("Please provide an estimated service time");
         return;
@@ -118,10 +133,13 @@ const ServiceProviderBookingManage = () => {
         return;
       }
 
-      const res = await putRequest(`service/service-provider/bookings/${id}/cancel`, {
-        serviceStatus: "cancelled",
-        cancellationReason: cancelReason,
-      });
+      const res = await putRequest(
+        `service/service-provider/bookings/${id}/cancel`,
+        {
+          serviceStatus: "cancelled",
+          cancellationReason: cancelReason,
+        }
+      );
 
       if (res.status === 200) {
         HotToastSuccess("Booking cancelled successfully");
@@ -130,17 +148,19 @@ const ServiceProviderBookingManage = () => {
         getBookedService(id as string);
       }
     } catch (err) {
-    
-      HotToastError("Failed to cancel booking")
+      HotToastError("Failed to cancel booking");
       console.error(err);
     }
   };
 
   const handleStatusUpdate = async () => {
     try {
-      const res = await putRequest(`service/service-provider/bookings/${id}/status`, {
-        serviceStatus: newStatus,
-      });
+      const res = await putRequest(
+        `service/service-provider/bookings/${id}/status`,
+        {
+          serviceStatus: newStatus,
+        }
+      );
 
       if (res.status === 200) {
         HotToastSuccess("Status updated successfully");
@@ -149,16 +169,19 @@ const ServiceProviderBookingManage = () => {
         getBookedService(id as string);
       }
     } catch (err) {
-        HotToastError("Failed to update status");
+      HotToastError("Failed to update status");
       console.error(err);
     }
   };
 
-  const handlePaymentRequest = async () => {
+  const handlePaymentRequest = async (): Promise<void> => {
     try {
+      console.log(payment);
+
       const res = await putRequest(
         `service/service-provider/bookings/${id}/payment-request`,
         {
+          payment,
           paymentStatus: "requested",
         }
       );
@@ -169,36 +192,51 @@ const ServiceProviderBookingManage = () => {
         getBookedService(id as string);
       }
     } catch (err) {
-        HotToastError("Failed to request payment");
+      HotToastError("Failed to request payment");
       console.error(err);
     }
   };
 
   const handleInvoiceUpload = async () => {
     try {
-      if (!invoiceFile) {
-        HotToastError("Please select an invoice file to upload");
+      if (!invoiceFiles || invoiceFiles.length === 0) {
+        HotToastError("Please select at least one invoice image to upload");
         return;
       }
 
-      const formData = new FormData();
-      formData.append("invoice", invoiceFile);
+      // Convert invoiceFiles to base64 strings
+      const base64Invoices = await Promise.all(
+        invoiceFiles.map((file: File) => {
+          return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = (error) => reject(error);
+          });
+        })
+      );
 
-      // Note: You may need to adjust this based on your actual API
-      // const res = await putRequest(`service-provider/bookings/${id}/invoice`, formData, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data'
-      //   }
-      // });
+      // Prepare data to send
+      const formData = {
+        invoices: base64Invoices,
+      };
 
-      // if (res.status === 200) {
-      //   setActionSuccess('Invoice uploaded successfully');
-      //   setShowInvoiceModal(false);
-      //   // Refresh booking data
-      //   getBookedService(id as string);
-      // }
+      // Send request using postRequest
+      const response = await postRequest(
+        `service/service-provider/uploadbills/${id}/`,
+        formData
+      );
+
+      if (response.status === 201) {
+        HotToastSuccess(
+          `Successfully uploaded ${invoiceFiles.length} invoice image(s)`
+        );
+      }
+
+      setShowInvoiceModal(false);
+      setInvoiceFiles([]);
     } catch (err) {
-        HotToastError("Failed to upload invoice");
+      HotToastError("Failed to upload invoice images");
       console.error(err);
     }
   };
@@ -241,23 +279,20 @@ const ServiceProviderBookingManage = () => {
   const isInProgress = bookedService.serviceStatus === "inProgress";
   const isCompleted = bookedService.serviceStatus === "completed";
   const isCancelled = bookedService.serviceStatus === "cancelled";
-
+  const isPaymentRequested = bookedService.serviceStatus === "requested";
   const getStatusClass = () => {
     if (isPending) return "alert-warning";
     if (isConfirmed) return "alert-info";
     if (isInProgress) return "alert-info";
+    if (isPaymentRequested) return "alert-success";
     if (isCompleted) return "alert-success";
     if (isCancelled) return "alert-error";
     return "";
   };
-  
 
   return (
     <div className="container mx-auto p-4 max-w-4xl bg-base-200 min-h-screen">
       {/* Feedback messages */}
-      
-
-    
 
       {/* <div className="text-sm breadcrumbs mb-4">
         <ul>
@@ -275,7 +310,7 @@ const ServiceProviderBookingManage = () => {
         </ul>
       </div> */}
 
-<Toaster></Toaster>
+      <Toaster></Toaster>
 
       {/* Status Banner */}
       <div className={`alert ${getStatusClass()} mb-4`}>
@@ -360,19 +395,24 @@ const ServiceProviderBookingManage = () => {
             ) : (
               <ul className="steps steps-horizontal w-full">
                 <li
-                  className={`step ${isPending || isInProgress || isCompleted ? "step-primary" : ""}`}
+                  className={`step ${isPending || isConfirmed || isInProgress || isPaymentRequested || isCompleted ? "step-primary" : ""}`}
                 >
                   Pending
                 </li>
                 <li
-                  className={`step ${isConfirmed || isInProgress || isCompleted ? "step-primary" : ""}`}
+                  className={`step ${isConfirmed || isInProgress || isPaymentRequested || isCompleted ? "step-primary" : ""}`}
                 >
                   Confirmed
                 </li>
                 <li
-                  className={`step ${isInProgress || isCompleted ? "step-primary" : ""}`}
+                  className={`step ${isInProgress || isPaymentRequested || isCompleted ? "step-primary" : ""}`}
                 >
                   In Progress
+                </li>
+                <li
+                  className={`step ${isPaymentRequested || isCompleted ? "step-primary" : ""}`}
+                >
+                  Payment Requested
                 </li>
                 <li className={`step ${isCompleted ? "step-primary" : ""}`}>
                   Completed
@@ -456,32 +496,36 @@ const ServiceProviderBookingManage = () => {
               </>
             )}
 
-            {isCompleted && bookedService.paymentStatus !== "paid" && (
-              <button
-                className="btn btn-warning"
-                onClick={handlePaymentRequest}
-                disabled={bookedService.paymentStatus === "requested"}
-              >
-                {bookedService.paymentStatus === "requested"
-                  ? "Payment Requested"
-                  : "Request Payment"}
-              </button>
-            )}
+            {isConfirmed ||
+              (isInProgress && (
+                <button
+                  className="btn btn-warning"
+                  onClick={() => setPaymentForm(true)} // handlePaymentRequest
+                >
+                  Request Payment
+                </button>
+              ))}
 
-            {isCompleted && (
-              <button
-                className="btn btn-info"
-                onClick={() => setShowInvoiceModal(true)}
-              >
-                Upload Invoice
-              </button>
+            {paymentForm && (
+              <PaymentModal
+                setPayment={(data: Ipayment) => setPayment(data)}
+                closeModal={() => setPaymentForm(false)}
+                makePaymentRequest={handlePaymentRequest}
+              />
             )}
+            {isCompleted ||
+              (isPaymentRequested && (
+                <button
+                  className="btn btn-info"
+                  onClick={() => setShowInvoiceModal(true)}
+                >
+                  Upload Bills 
+                </button>
+              ))}
           </div>
         </div>
 
-        {/* Side Panel - 1/3 width */}
         <div className="md:col-span-1">
-          {/* Address Card */}
           <div className="card bg-base-100 shadow mb-4">
             <div className="card-body p-4">
               <h3 className="card-title text-base">Service Address</h3>
@@ -498,38 +542,50 @@ const ServiceProviderBookingManage = () => {
           </div>
 
           {/* Price Details */}
-          {/* <div className="card bg-base-100 shadow">
-            <div className="card-body p-4">
-              <h3 className="card-title text-base">Price Details</h3>
-              <div className="space-y-1 text-sm">
-                <div className="flex justify-between">
-                  <span>Base Price</span>
-                  <span>₹{service.estimatedPrice}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Service Fee</span>
-                  <span>₹{Math.floor(service.estimatedPrice * 0.03)}</span>
-                </div>
-                <div className="divider my-1"></div>
-                <div className="flex justify-between font-bold">
-                  <span>Total</span>
-                  <span>
-                    ₹
-                    {service.estimatedPrice +
-                      Math.floor(service.estimatedPrice * 0.03)}
-                  </span>
-                </div>
-                <div className="flex justify-between text-xs opacity-75 mt-1">
-                  <span>Your Earnings</span>
-                  <span>
-                    ₹
-                    {service.estimatedPrice -
-                      Math.floor(service.estimatedPrice * 0.05)}
-                  </span>
+          {bookedService.payment && (
+            <div className="card bg-base-100 shadow">
+              <div className="card-body p-4">
+                <h3 className="card-title text-base">Price Details</h3>
+                <div className="space-y-1 text-sm">
+                  <div className="flex justify-between">
+                    <span>service Cost</span>
+                    <span>₹{bookedService.payment.serviceCost}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span> metaialCost</span>
+                    <span>₹{bookedService.payment.metaialCost}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>travelCost</span>
+                    <span>₹{bookedService.payment.travelCost}</span>
+                  </div>
+
+                  <div className="divider my-1"></div>
+                  <div className="flex justify-between font-bold">
+                    <span>Total</span>
+                    <span>₹{bookedService.payment.total}</span>
+                  </div>
+                  <div className="flex justify-between text-xs opacity-75 mt-1">
+                    <span>convenience Fee (10%)</span>
+                    <span>₹{bookedService.payment?.convenienceFee} </span>
+                  </div>
+                  {bookedService.payment?.total &&
+                    bookedService.payment.convenienceFee && (
+                      <div className="flex justify-between text-xs opacity-75 mt-1">
+                        <span>Your Earnings</span>
+                        <span>
+                          ₹
+                          {Math.floor(
+                            bookedService.payment?.total -
+                              bookedService.payment?.convenienceFee
+                          )}{" "}
+                        </span>
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
-          </div> */}
+          )}
         </div>
       </div>
 
@@ -614,7 +670,6 @@ const ServiceProviderBookingManage = () => {
               >
                 <option value="confirmed">Confirmed</option>
                 <option value="inProgress">In Progress</option>
-                <option value="completed">Completed</option>
               </select>
             </div>
 
@@ -634,28 +689,64 @@ const ServiceProviderBookingManage = () => {
       {showInvoiceModal && (
         <div className="modal modal-open">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">Upload Invoice</h3>
+            <h3 className="font-bold text-lg">Upload Invoice Images</h3>
 
             <div className="form-control mb-4">
               <label className="label">
-                <span className="label-text">Select Invoice File</span>
+                <span className="label-text">Select Invoice Images</span>
               </label>
               <input
                 type="file"
                 className="file-input file-input-bordered w-full"
-                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                accept="image/jpeg,image/png,image/jpg,image/gif"
+                multiple
                 onChange={(e) => {
                   if (e.target.files && e.target.files.length > 0) {
-                    setInvoiceFile(e.target.files[0]);
+                    setInvoiceFiles(Array.from(e.target.files));
                   }
                 }}
               />
               <label className="label">
-                <span className="label-text-alt">
-                  Accepted formats: PDF, DOC, DOCX, JPG, PNG
-                </span>
+                <span className="label-text-alt">Accepted formats:image</span>
               </label>
             </div>
+
+            {/* Preview area for selected images */}
+            {invoiceFiles && invoiceFiles.length > 0 && (
+              <div className="mt-4">
+                <p className="font-medium">
+                  Selected Images ({invoiceFiles.length}):
+                </p>
+                <div className="grid grid-cols-3 gap-2 mt-2">
+                  {invoiceFiles.map((file, index) => (
+                    <div key={index} className="relative border rounded p-2">
+                      {/* Image preview thumbnail */}
+                      <div className="h-16 flex items-center justify-center mb-1">
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={file.name}
+                          className="max-h-full max-w-full object-contain"
+                          onLoad={() =>
+                            URL.revokeObjectURL(URL.createObjectURL(file))
+                          }
+                        />
+                      </div>
+                      <div className="text-xs truncate">{file.name}</div>
+                      <button
+                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs"
+                        onClick={() => {
+                          const newFiles = [...invoiceFiles];
+                          newFiles.splice(index, 1);
+                          setInvoiceFiles(newFiles);
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="modal-action">
               <button
@@ -664,8 +755,15 @@ const ServiceProviderBookingManage = () => {
               >
                 Cancel
               </button>
-              <button className="btn btn-info" onClick={handleInvoiceUpload}>
-                Upload Invoice
+              <button
+                className="btn btn-info"
+                onClick={handleInvoiceUpload}
+                disabled={!invoiceFiles || invoiceFiles.length === 0}
+              >
+                Upload{" "}
+                {invoiceFiles && invoiceFiles.length > 0
+                  ? `(${invoiceFiles.length})`
+                  : ""}
               </button>
             </div>
           </div>

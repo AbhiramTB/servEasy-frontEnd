@@ -14,9 +14,9 @@ import EditService from "./editService";
 const ServiceManagement = () => {
   const dispatch = useDispatch();
   const [addService, setService] = useState(false);
-  const [filter, setFilter] = useState("all"); 
-  const [viewMore,setViewMore]=useState<string|null>(null)
-  const [isEdit,setEdit]=useState<string|null>(null);
+  const [filter, setFilter] = useState("all");
+  const [viewMore, setViewMore] = useState<string | null>(null);
+  const [isEdit, setEdit] = useState<string | null>(null);
 
   const allService = useSelector(
     (state: RootState) => state.serviceProvider.allServices
@@ -41,30 +41,32 @@ const ServiceManagement = () => {
     return true;
   });
 
-  const handleViewMore=(id:string)=>{
-    setViewMore(id)
-  }
+  const handleViewMore = (id: string) => {
+    setViewMore(id);
+  };
 
-  const handleBlock= async (serviceId:string,action:string)=>{
-try {
-  console.log(action);
-  
- const res =await  patchRequest(serviceEndPoint.blockUnblock,{serviceId,action})
-  if(res.status==200){
-    console.log(res);
-    
-   HotToastSuccess(res.data.message)
-   await getAllServices()
-  }
-} catch (error) {
-  console.log(error);
-  
-}
-  }
+  const handleBlock = async (serviceId: string, action: string) => {
+    try {
+      console.log(action);
+
+      const res = await patchRequest(serviceEndPoint.blockUnblock, {
+        serviceId,
+        action,
+      });
+      if (res.status == 200) {
+        console.log(res);
+
+        HotToastSuccess(res.data.message);
+        await getAllServices();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="p-4 bg-base-200">
-      <Toaster/>
+      <Toaster />
       {/* Header and Buttons */}
       <div className="flex flex-wrap gap-2 mb-4">
         <button
@@ -143,51 +145,69 @@ try {
 
             {/* Action Buttons */}
             <div className="flex justify-between p-2 border-t">
-              <button className="btn btn-xs btn-primary" onClick={()=>handleViewMore(service._id)}>View</button>
-             
+              <button
+                className="btn btn-xs btn-primary"
+                onClick={() => handleViewMore(service._id)}
+              >
+                View
+              </button>
+
               <div className="flex gap-1">
-                <button className="btn btn-xs btn-ghost" title="Edit" onClick={()=>setEdit(service._id)}>
+                <button
+                  className="btn btn-xs btn-ghost"
+                  title="Edit"
+                  onClick={() => setEdit(service._id)}
+                >
                   <Edit size={14} />
                 </button>
-             {service.isActive&&
-                <button className="btn btn-xs btn-ghost" title="Hide" onClick={()=>handleBlock(service._id,'Block')}>
-                <Eye size={14} />
-              </button>
-             
-             }
-                {!service.isActive &&
-                <button className="btn btn-xs btn-ghost" title="Show" onClick={()=>handleBlock(service._id,"Unblock")}>
-                <Eye size={14} />
-              </button>}
-                <button className="btn btn-xs btn-ghost" title="Delete">
+                {service.isActive && (
+                  <button
+                    className="btn btn-xs btn-ghost"
+                    title="Hide"
+                    onClick={() => handleBlock(service._id, "Block")}
+                  >
+                    <Eye size={14} />
+                  </button>
+                )}
+                {!service.isActive && (
+                  <button
+                    className="btn btn-xs btn-ghost"
+                    title="Show"
+                    onClick={() => handleBlock(service._id, "Unblock")}
+                  >
+                    <Eye size={14} />
+                  </button>
+                )}
+                {/* <button className="btn btn-xs btn-ghost" title="Delete">
                   <Trash2 size={14} />
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      { viewMore&&
-                <ServiceDetailsView serviceId={viewMore} onClose={()=>setViewMore(null)}/>
-              }
+      {viewMore && (
+        <ServiceDetailsView
+          serviceId={viewMore}
+          onClose={() => setViewMore(null)}
+        />
+      )}
 
+      {isEdit && (
+        <EditService
+          serviceId={isEdit}
+          onClose={() => setEdit(null)}
+          getAllServices={() => getAllServices()}
+        />
+      )}
 
-
-      {isEdit&& 
-          <EditService serviceId={isEdit} onClose={()=>setEdit(null)} getAllServices={()=>getAllServices()}/>
-
-      
-      }
-      
       {/* Empty State */}
       {filteredServices.length === 0 && (
         <div className="p-8 mt-4 text-center rounded-lg bg-base-100">
           <p>No services found.</p>
         </div>
       )}
-
-      
     </div>
   );
 };

@@ -102,3 +102,14 @@ export const routes = {
 export const adminRoutes = {
   AdminSignIn: "/admin/sigin",
 };
+
+export const paymentRoutes={
+  getServiceProviderPayments:"/payment/service-provider/",
+  getServiceAdminPayments:"/payment/admin/"
+  
+}
+
+
+
+
+
