@@ -7,27 +7,38 @@ import { RootState } from "../../redux/store";
 import UserProfileView from "./showProfile";
 import { HotToastSuccess } from "../../utils/HotToasitify";
 import { Toaster } from "react-hot-toast";
+import Pagination from "../../utils/ui/pagination";
 
 const UserListingPage: React.FC = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [crrPage, setPage] = useState<number>(0);
+  const [totalData, setTotalData] = useState<number>(0);
+  const dataLimit = 5;
+  const getAllUser = useCallback(
+    async (page: number) => {
+      try {
+        const res = await adminGetRequest(
+          `${apiEndPointAdmin.getAllUsers}?page=${page}&limit=${dataLimit}`
+        );
+        if (res.status) {
+          dispatch(addUsers(res.data.users));
+          setTotalData(res.data.count);
+          setPage(page)
 
-  const getAllUser = useCallback(async () => {
-    try {
-      const res = await adminGetRequest(apiEndPointAdmin.getAllUsers);
-      if (res.data && res.data.data) {
-        dispatch(addUsers(res.data.data));
+        }
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [dispatch]);
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
-    getAllUser();
+    getAllUser(crrPage);
   }, [getAllUser]);
 
   const users = useSelector((state: RootState) => state.admin.users);
@@ -51,27 +62,30 @@ const UserListingPage: React.FC = () => {
     setSelectedUserId(null);
   };
 
-
   const selectedUser = users.find((user) => user._id === selectedUserId);
 
-  return  (
+  return (
     <div className="min-h-screen bg-base-100 text-base-content">
       <Toaster position="top-center" reverseOrder={false} />
       <main className="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="flex flex-col mb-6 md:flex-row md:items-center md:justify-between">
           <div>
             <h1 className="text-3xl font-bold">Users</h1>
-            <p className="mt-1 text-base-content/70">Manage user accounts here.</p>
+            <p className="mt-1 text-base-content/70">
+              Manage user accounts here.
+            </p>
           </div>
         </div>
-  
+
         {selectedUser && (
           <UserProfileView user={selectedUser} onClose={handleCloseProfile} />
         )}
-  
+
         {loading ? (
           <div className="flex items-center justify-center h-64">
-            <span className="text-lg text-base-content/70">Loading users...</span>
+            <span className="text-lg text-base-content/70">
+              Loading users...
+            </span>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -79,11 +93,11 @@ const UserListingPage: React.FC = () => {
               users.map((user) => (
                 <div
                   key={user._id}
-                  className="overflow-hidden bg-base-200 border border-base-300 rounded-lg shadow-md"
+                  className="overflow-hidden border rounded-lg shadow-md bg-base-200 border-base-300"
                 >
                   <div className="p-5">
                     <div className="flex items-center mb-4">
-                      <div className="flex items-center justify-center w-12 h-12 bg-primary rounded-full">
+                      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary">
                         <span className="text-lg font-medium text-primary-content">
                           {user.userName?.substring(0, 2) || "NA"}
                         </span>
@@ -134,8 +148,7 @@ const UserListingPage: React.FC = () => {
                       {user.isBlocked ? "Unblock" : "Block"}
                     </button>
                   </div>
-                  <div className="flex border-t border-base-300">
-                  </div>
+                  <div className="flex border-t border-base-300"></div>
                 </div>
               ))
             ) : (
@@ -146,9 +159,15 @@ const UserListingPage: React.FC = () => {
           </div>
         )}
       </main>
+
+      <Pagination
+        crrPage={crrPage}
+        dataLimit={dataLimit}
+        totaldata={totalData}
+        fetchData={(p: number) => getAllUser(p)}
+      />
     </div>
   );
-
 };
 
 export default UserListingPage;
