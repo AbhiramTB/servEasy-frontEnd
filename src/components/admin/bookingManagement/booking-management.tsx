@@ -13,18 +13,25 @@ const BookingManagement: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ActiveTabType>("bookings");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [crrPage, setCrrPage] = useState<number>(0);
+  const [totaldata, setTotalData] = useState<number>(0);
   console.log(bookings[0]?.payment);
-
+  const dataLimit = 6;
   useEffect(() => {
-    getBookingInfo();
+    getBookingInfo(crrPage);
   }, []);
 
-  const getBookingInfo = async (): Promise<void> => {
+  const getBookingInfo = async (page: number): Promise<void> => {
     try {
       setLoading(true);
-      const response = await getRequest(paymentRoutes.getServiceAdminPayments);
-      if (response && response.data) {
-        setBookings(response.data);
+      const response = await getRequest(
+        `${paymentRoutes.getServiceAdminPayments}?page=${page}&limit=${dataLimit}`
+      );
+
+      if (response.status === 200 && response.data) {
+        setTotalData(response.data.count);
+        setBookings(response.data.data);
+        setCrrPage(page);
       }
       setLoading(false);
     } catch (error) {
@@ -74,7 +81,7 @@ const BookingManagement: React.FC = () => {
       <div className="px-4 py-3 mt-4 text-red-700 bg-red-100 border border-red-400 rounded-md">
         <p>{error}</p>
         <button
-          onClick={getBookingInfo}
+          onClick={() => getBookingInfo(crrPage)}
           className="px-4 py-2 mt-2 text-white bg-red-600 rounded hover:bg-red-700"
         >
           Try Again
@@ -85,27 +92,11 @@ const BookingManagement: React.FC = () => {
 
   return (
     <div className="p-2">
-      <div className="flex mb-6 border-b">
-        <button
-          className={`py-2 px-4 mr-2 ${activeTab === "bookings" ? "border-b-2 border-blue-500 text-blue-500 font-medium" : "text-gray-500"}`}
-          onClick={() => setActiveTab("bookings")}
-        >
-          Booking Management
-        </button>
-        <button
-          className={`py-2 px-4 ${activeTab === "payments" ? "border-b-2 border-blue-500 text-blue-500 font-medium" : "text-gray-500"}`}
-          onClick={() => setActiveTab("payments")}
-        >
-          Payment Management
-        </button>
-      </div>
-
-      <div className="flex flex-col justify-between mb-6 md:flex-row">
-        <div className="flex flex-col gap-4 mb-4 md:flex-row md:mb-0">
-          <div>
+      <div className="flex justify-end mb-6 border-b ">
+      <div className="mb-2 mr-3 bg-base-200">
             <label
               htmlFor="statusFilter"
-              className="block mb-1 text-sm font-medium text-gray-700"
+              className="block mb-1 text-sm font-medium text-base-content"
             >
               Status Filter
             </label>
@@ -115,7 +106,7 @@ const BookingManagement: React.FC = () => {
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                 setStatusFilter(e.target.value)
               }
-              className="w-full p-2 border border-gray-300 rounded-md md:w-40"
+              className="w-full p-2 border border-none rounded-md md:w-40"
             >
               {statusOptions.map((status: string) => (
                 <option key={status} value={status}>
@@ -124,12 +115,10 @@ const BookingManagement: React.FC = () => {
               ))}
             </select>
           </div>
-        </div>
-
-        <div className="w-full md:w-64">
+          <div className="w-full md:w-64">
           <label
             htmlFor="search"
-            className="block mb-1 text-sm font-medium text-gray-700"
+            className="block mb-1 text-sm font-medium text-base-content"
           >
             Search
           </label>
@@ -141,10 +130,13 @@ const BookingManagement: React.FC = () => {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setSearchTerm(e.target.value)
             }
-            className="w-full p-2 border border-gray-300 rounded-md"
+            className="w-full p-2 border-none rounded-md"
           />
         </div>
+      
       </div>
+
+   
 
       {activeTab === "bookings" && <Bookings bookings={filteredBookings} />}
 
@@ -153,6 +145,27 @@ const BookingManagement: React.FC = () => {
           <p>Payment management view will be implemented here.</p>
         </div>
       )}
+      <div className="flex justify-center mt-10 mb-10 join">
+        <button
+          className="text-3xl font-bold join-item btn bg-primary text-primary-content"
+          onClick={() => getBookingInfo(crrPage - 1)}
+          disabled={crrPage === 0}
+        >
+          «
+        </button>
+
+        <button className="join-item btn bg-base-300">
+          Page {crrPage + 1}
+        </button>
+
+        <button
+          className="text-3xl font-bold join-item btn bg-primary text-primary-content"
+          onClick={() => getBookingInfo(crrPage + 1)}
+          disabled={(crrPage + 1) * dataLimit >= totaldata}
+        >
+          »
+        </button>
+      </div>
     </div>
   );
 };
