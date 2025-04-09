@@ -6,6 +6,7 @@ import { adminGetRequest, adminPatchRequest } from "../../utils/AxiosAdmin"; // 
 import { apiEndPointAdmin } from "../../utils/constant"; // Assuming this config exists
 import { HotToastSuccess } from "../../utils/HotToasitify";
 import { Toaster } from "react-hot-toast";
+import Pagination from "../../utils/ui/pagination";
 export interface Location {
   address: string;
   latitude: number;
@@ -37,16 +38,30 @@ const ServiceProviderListing = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("all");
 
+  const [crrPage, setCrrPage] = useState<number>(0);
+  const [totalData, setTotalData] = useState<number>(0);
+  
+  const dataLimit = 3;
+  
+
+        
+
+
+
   const serviceProviders = useSelector(
     (state: RootState) => state.admin.serviceProviders
   );
 
-  const getAllServiceProviders = useCallback(async () => {
+  const getAllServiceProviders = useCallback(async (page:number) => {
     try {
       setLoading(true);
-      const res = await adminGetRequest(apiEndPointAdmin.serviceProvider);
+      const res = await adminGetRequest(`${apiEndPointAdmin.serviceProvider}?page=${page}&limit=${dataLimit}`);
+      setCrrPage(page)
       if (res.data && res.data.data) {
+        console.log(res.data);
+        
         dispatch(addServiceProviders(res.data.data));
+        setTotalData(res.data.count)
       }
     } catch (error) {
       console.error("Error fetching service providers:", error);
@@ -56,7 +71,7 @@ const ServiceProviderListing = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    getAllServiceProviders();
+    getAllServiceProviders(crrPage);
   }, [getAllServiceProviders]);
 
   // Filter service providers based on active tab
@@ -91,7 +106,7 @@ const ServiceProviderListing = () => {
 
       if (res.status == 200) {
         HotToastSuccess(res.data.message);
-        getAllServiceProviders();
+        getAllServiceProviders(crrPage);
       }
     } catch (error) {
       console.log(error);
@@ -107,7 +122,7 @@ const ServiceProviderListing = () => {
       console.log(res);
       if (res.status == 200) {
         HotToastSuccess(res.data.message);
-        getAllServiceProviders();
+        getAllServiceProviders(crrPage);
       }
     } catch (error) {
       console.log(error);
@@ -460,20 +475,18 @@ const ServiceProviderListing = () => {
             </div>
           )}
 
-          {/* Pagination - Using Daisy UI */}
-          {/* {filteredServiceProviders.length > 0 && (
-            <div className="flex justify-center mt-8">
-              <div className="join">
-                <button className="join-item btn btn-sm">«</button>
-                <button className="join-item btn btn-sm btn-active">1</button>
-                <button className="join-item btn btn-sm">2</button>
-                <button className="join-item btn btn-sm">3</button>
-                <button className="join-item btn btn-sm">»</button>
-              </div>
-            </div>
-          )} */}
+          
         </>
       )}
+
+
+
+      <Pagination
+      crrPage={crrPage}
+      dataLimit={dataLimit}
+      totaldata={totalData}
+      fetchData={(p: number) => getAllServiceProviders(p)}
+    />
     </div>
   );
 };
