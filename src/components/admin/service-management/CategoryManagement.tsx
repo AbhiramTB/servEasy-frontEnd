@@ -243,28 +243,28 @@ const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${se
   
 
   return (
-    <div className="container p-6 mx-auto bg-base-100 border rounded-lg border-primary shadow-lg">
+    <div className="container p-6 mx-auto border rounded-lg shadow-lg bg-base-100 border-primary">
       <h2 className="mb-6 text-2xl font-bold text-primary">
         Service Categories
       </h2>
 
       {error && (
-        <div className="mb-4 alert alert-error shadow-md">
+        <div className="mb-4 shadow-md alert alert-error">
           <AlertTriangle size={18} />
           <span>{error}</span>
         </div>
       )}
 
-      <div className="mb-6 card bg-base-200 shadow-xl hover:shadow-2xl transition-all duration-300">
+      <div className="mb-6 transition-all duration-300 shadow-xl card bg-base-200 hover:shadow-2xl">
         <div className="card-body">
-          <h3 className="card-title text-base-content flex items-center">
+          <h3 className="flex items-center card-title text-base-content">
             <Plus size={18} className="mr-2 text-primary" />
             Add New Category
           </h3>
           <form className="flex gap-3" onSubmit={handleAddCategorySubmit}>
             <input
               type="text"
-              className="w-full input input-bordered focus:ring-2 focus:ring-primary transition-all duration-200"
+              className="w-full transition-all duration-200 input input-bordered focus:ring-2 focus:ring-primary"
               placeholder="Enter category name (e.g., Electrical)"
               value={newCategory}
               onChange={(e) => setNewCategory(e.target.value)}
@@ -283,9 +283,9 @@ const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${se
       </div>
 
       {data && (
-        <div className="mb-6 card bg-base-200 shadow-xl hover:shadow-2xl transition-all duration-300">
+        <div className="mb-6 transition-all duration-300 shadow-xl card bg-base-200 hover:shadow-2xl">
           <div className="card-body">
-            <h3 className="card-title text-base-content flex items-center">
+            <h3 className="flex items-center card-title text-base-content">
               <Plus size={18} className="mr-2 text-primary" />
               Add New Service
             </h3>
@@ -294,7 +294,7 @@ const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${se
               className="flex flex-col gap-3"
             >
               <select
-                className="w-full select select-bordered focus:ring-2 focus:ring-primary transition-all duration-200"
+                className="w-full transition-all duration-200 select select-bordered focus:ring-2 focus:ring-primary"
                 value={selectedCategory !== null ? selectedCategory : ""}
                 onChange={(e) => setSelectedCategory(Number(e.target.value))}
                 disabled={isLoading}
@@ -309,7 +309,7 @@ const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${se
 
               <input
                 type="text"
-                className="w-full input input-bordered focus:ring-2 focus:ring-primary transition-all duration-200"
+                className="w-full transition-all duration-200 input input-bordered focus:ring-2 focus:ring-primary"
                 placeholder="Service name"
                 value={newServiceName}
                 onChange={(e) => setNewServiceName(e.target.value)}
@@ -317,7 +317,7 @@ const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${se
               />
 
               <textarea
-                className="w-full textarea textarea-bordered focus:ring-2 focus:ring-primary transition-all duration-200"
+                className="w-full transition-all duration-200 textarea textarea-bordered focus:ring-2 focus:ring-primary"
                 placeholder="Service description"
                 value={newServiceDescription}
                 onChange={(e) => setNewServiceDescription(e.target.value)}
@@ -352,28 +352,28 @@ const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${se
       {/* Edit Category Modal */}
       {editingCategory && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
-          <div className="w-96 p-6 bg-base-100 rounded-lg shadow-2xl transform transition-all duration-300">
-            <h3 className="mb-4 text-xl font-bold text-primary flex items-center">
+          <div className="p-6 transition-all duration-300 transform rounded-lg shadow-2xl w-96 bg-base-100">
+            <h3 className="flex items-center mb-4 text-xl font-bold text-primary">
               <Edit size={18} className="mr-2" />
               Edit Category
             </h3>
             <input
               type="text"
-              className="w-full mb-4 input input-bordered focus:ring-2 focus:ring-primary transition-all duration-200"
+              className="w-full mb-4 transition-all duration-200 input input-bordered focus:ring-2 focus:ring-primary"
               value={editingCategory.name}
               onChange={(e) => setEditingCategory({...editingCategory, name: e.target.value})}
               autoFocus
             />
             <div className="flex justify-end gap-2">
               <button 
-                className="btn btn-outline flex items-center gap-1 hover:bg-base-300 transition-all duration-200" 
+                className="flex items-center gap-1 transition-all duration-200 btn btn-outline hover:bg-base-300" 
                 onClick={() => setEditingCategory(null)}
               >
                 <X size={18} />
                 Cancel
               </button>
               <button 
-                className="btn btn-primary flex items-center gap-1 hover:brightness-110 transition-all duration-200" 
+                className="flex items-center gap-1 transition-all duration-200 btn btn-primary hover:brightness-110" 
                 onClick={handleUpdateCategory}
                 disabled={!editingCategory.name.trim()}
               >
@@ -388,21 +388,21 @@ const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${se
       {/* Edit Service Modal */}
       {editingService && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
-          <div className="w-96 p-6 bg-base-100 rounded-lg shadow-2xl transform transition-all duration-300">
-            <h3 className="mb-4 text-xl font-bold text-primary flex items-center">
+          <div className="p-6 transition-all duration-300 transform rounded-lg shadow-2xl w-96 bg-base-100">
+            <h3 className="flex items-center mb-4 text-xl font-bold text-primary">
               <Edit size={18} className="mr-2" />
               Edit Service
             </h3>
             <input
               type="text"
-              className="w-full mb-3 input input-bordered focus:ring-2 focus:ring-primary transition-all duration-200"
+              className="w-full mb-3 transition-all duration-200 input input-bordered focus:ring-2 focus:ring-primary"
               placeholder="Service Name"
               value={editingService.name}
               onChange={(e) => setEditingService({...editingService, name: e.target.value})}
               autoFocus
             />
             <textarea
-              className="w-full mb-4 textarea textarea-bordered focus:ring-2 focus:ring-primary transition-all duration-200"
+              className="w-full mb-4 transition-all duration-200 textarea textarea-bordered focus:ring-2 focus:ring-primary"
               placeholder="Service Description"
               value={editingService.description}
               onChange={(e) => setEditingService({...editingService, description: e.target.value})}
@@ -410,14 +410,14 @@ const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${se
             />
             <div className="flex justify-end gap-2">
               <button 
-                className="btn btn-outline flex items-center gap-1 hover:bg-base-300 transition-all duration-200" 
+                className="flex items-center gap-1 transition-all duration-200 btn btn-outline hover:bg-base-300" 
                 onClick={() => setEditingService(null)}
               >
                 <X size={18} />
                 Cancel
               </button>
               <button 
-                className="btn btn-primary flex items-center gap-1 hover:brightness-110 transition-all duration-200" 
+                className="flex items-center gap-1 transition-all duration-200 btn btn-primary hover:brightness-110" 
                 onClick={handleUpdateService}
                 disabled={!editingService.name.trim() || !editingService.description.trim()}
               >
@@ -432,13 +432,13 @@ const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${se
       <div className="space-y-6">
         {data ? (
           data.map((category, categoryIndex) => (
-            <div key={categoryIndex} className="card bg-base-200 shadow-xl hover:shadow-2xl transition-all duration-300">
+            <div key={categoryIndex} className="transition-all duration-300 shadow-xl card bg-base-200 hover:shadow-2xl">
               <div className="card-body">
-                <div className="flex justify-between items-center">
-                  <h3 className="card-title text-primary flex items-center">
+                <div className="flex items-center justify-between">
+                  <h3 className="flex items-center card-title text-primary">
                     {category.category}
                     {category.isHidden && (
-                      <span className="ml-2 badge badge-warning gap-1">
+                      <span className="gap-1 ml-2 badge badge-warning">
                         <EyeOff size={12} />
                         Hidden
                       </span>
@@ -446,14 +446,14 @@ const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${se
                   </h3>
                   <div className="flex gap-2">
                     <button 
-                      className="btn btn-sm btn-circle btn-outline btn-info hover:scale-110 transition-all duration-200"
+                      className="transition-all duration-200 btn btn-sm btn-circle btn-outline btn-info hover:scale-110"
                       onClick={() => setEditingCategory({id: category._id!, name: category.category})}
                       title="Edit Category"
                     >
                       <Edit size={16} />
                     </button>
                     <button 
-                      className="btn btn-sm btn-circle btn-outline btn-warning hover:scale-110 transition-all duration-200"
+                      className="transition-all duration-200 btn btn-sm btn-circle btn-outline btn-warning hover:scale-110"
                       onClick={() => handleVisibilityCategory(category._id+"",category.isHidden || false)}
                       title={category.isHidden ? "Show Category" : "Hide Category"}
                     >
@@ -464,7 +464,7 @@ const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${se
                       )}
                     </button>
                     <button 
-                      className="btn btn-sm btn-circle btn-outline btn-error hover:scale-110 transition-all duration-200"
+                      className="transition-all duration-200 btn btn-sm btn-circle btn-outline btn-error hover:scale-110"
                       onClick={() => {
                         if(window.confirm('Are you sure you want to delete this category?')) {
                           handleDeleteCategory(category._id!);
@@ -486,24 +486,24 @@ const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${se
                             service.isHidden ? 'opacity-60' : ''
                           } hover:shadow-md transition-all duration-200`}
                         >
-                          <div className="flex justify-between items-start">
+                          <div className="flex items-start justify-between">
                             <div>
-                              <h4 className="font-semibold text-base-content flex items-center">
+                              <h4 className="flex items-center font-semibold text-base-content">
                                 {service.serviceName}
                                 {service.isHidden && (
-                                  <span className="ml-2 badge badge-warning badge-sm gap-1">
+                                  <span className="gap-1 ml-2 badge badge-warning badge-sm">
                                     <EyeOff size={10} />
                                     Hidden
                                   </span>
                                 )}
                               </h4>
-                              <p className="text-base-content/70 mt-1">
+                              <p className="mt-1 text-base-content/70">
                                 {service.serviceDescription}
                               </p>
                             </div>
                             <div className="flex gap-1 ml-2">
                               <button 
-                                className="btn btn-xs btn-circle btn-outline btn-info hover:scale-110 transition-all duration-200"
+                                className="transition-all duration-200 btn btn-xs btn-circle btn-outline btn-info hover:scale-110"
                                 onClick={() => setEditingService({
                                   categoryId: category._id!,
                                   serviceId: service._id!,
@@ -515,7 +515,7 @@ const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${se
                                 <Edit size={12} />
                               </button>
                               <button 
-                                className="btn btn-xs btn-circle btn-outline btn-warning hover:scale-110 transition-all duration-200"
+                                className="transition-all duration-200 btn btn-xs btn-circle btn-outline btn-warning hover:scale-110"
                                 onClick={() => handleToggleServiceVisibility(category._id+"", service._id+"", service.isHidden)}
                                 title={service.isHidden ? "Show Service" : "Hide Service"}
                               >
@@ -526,7 +526,7 @@ const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${se
                                 )}
                               </button>
                               <button 
-                                className="btn btn-xs btn-circle btn-outline btn-error hover:scale-110 transition-all duration-200"
+                                className="transition-all duration-200 btn btn-xs btn-circle btn-outline btn-error hover:scale-110"
                                 onClick={() => {
                                   if(window.confirm('Are you sure you want to delete this service?')) {
                                     handleDeleteService(category._id!, service._id!);
@@ -542,7 +542,7 @@ const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${se
                       ))}
                     </div>
                   ) : (
-                    <p className="italic text-base-content/50 p-3 bg-base-300 rounded-lg">
+                    <p className="p-3 italic rounded-lg text-base-content/50 bg-base-300">
                       No services added yet
                     </p>
                   )}
@@ -551,11 +551,13 @@ const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${se
             </div>
           ))
         ) : !isLoading ? (
-          <div className="p-6 text-center text-base-content/50 bg-base-200 rounded-lg shadow-md">
+          <div className="p-6 text-center rounded-lg shadow-md text-base-content/50 bg-base-200">
             No categories available. Add a new category to get started.
           </div>
         ) : null}
       </div>
+
+      
     </div>
   );
 };

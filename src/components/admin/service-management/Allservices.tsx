@@ -7,36 +7,41 @@ import { RootState } from "../../../redux/store";
 import ServiceDetails from "./ServiceDetails";
 import { HotToastError, HotToastSuccess } from "../../../utils/HotToasitify";
 import { Toaster } from "react-hot-toast";
-
-
-
-
-
-
-
-
+import Pagination from "../../../utils/ui/pagination";
 
 
 
 const Allservices = () => {
   const dispatch = useDispatch();
   const services = useSelector((state: RootState) => state.admin.allServices);
-
+  const [crrPage, setCrrPage] = useState<number>(0);
+  const [totalData, setTotalData] = useState<number>(0);
+  
+  const dataLimit = 6;
   const [details, setDetails] = useState<null | object>();
-  const getServices = useCallback(async () => {
-    try {
-      const res = await adminGetRequest(apiEndPointAdmin.getAllservices);
+  const getServices = useCallback(
+    async (page: number) => {
+      try {
+        const res = await adminGetRequest(
+          `${apiEndPointAdmin.getAllservices}?page=${page}&limit=${dataLimit}`
+        );
 
-      if (res.status === 200) {
-        dispatch(addServices(res.data.allServices));
+        setCrrPage(page);
+        if (res.status === 200) {
+          console.log(res.data);
+          
+          dispatch(addServices(res.data.allServices));
+          setTotalData(res.data.count);
+        }
+      } catch (error) {
+        console.error("Error fetching services:", error);
       }
-    } catch (error) {
-      console.error("Error fetching services:", error);
-    }
-  }, [dispatch]);
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
-    getServices();
+    getServices(crrPage);
   }, [getServices]);
 
   const handleEdit = (serviceId: string) => {
@@ -52,7 +57,7 @@ const Allservices = () => {
       );
       console.log(res);
       if (res.status === 200) {
-        getServices();
+        getServices(crrPage);
         HotToastSuccess(res.data.message);
       } else if (res.status === 400) {
         HotToastError(res.data.message);
@@ -61,15 +66,15 @@ const Allservices = () => {
   };
 
   const block = (serviceId: string) => {
-    handleToggleBlock(serviceId.toString(), false)
+    handleToggleBlock(serviceId.toString(), false);
   };
   const unBlock = (serviceId: string) => {
-    handleToggleBlock(serviceId.toString(), true)
+    handleToggleBlock(serviceId.toString(), true);
   };
   return (
     <div>
       <Toaster />
-     
+
       {services && (
         <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service: any) => (
@@ -274,9 +279,17 @@ const Allservices = () => {
         />
       )}
 
-
+      <Pagination
+        crrPage={crrPage}
+        dataLimit={dataLimit}
+        totaldata={totalData}
+        fetchData={(p: number) => getServices(p)}
+      />
     </div>
   );
 };
 
 export default Allservices;
+
+
+
