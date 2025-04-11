@@ -12,12 +12,15 @@ export interface Location {
 
 interface LocationSearchProps {
   onLocationSelect: (location: Location | null) => void;
-  initialLocation?:string
+  initialLocation?: string;
 }
 
-const LocationSearch: React.FC<LocationSearchProps> = ({ onLocationSelect,initialLocation }) => {
-  const [query, setQuery] = useState<string>(initialLocation?initialLocation:""
-
+const LocationSearch: React.FC<LocationSearchProps> = ({
+  onLocationSelect,
+  initialLocation,
+}) => {
+  const [query, setQuery] = useState<string>(
+    initialLocation ? initialLocation : ""
   );
   const [results, setResults] = useState<Location[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -51,21 +54,21 @@ const LocationSearch: React.FC<LocationSearchProps> = ({ onLocationSelect,initia
     const value = e.target.value;
     setQuery(value);
     if (!value) {
-      onLocationSelect(null); 
+      onLocationSelect(null);
     }
     debouncedFetchLocations(value);
   };
 
   const handleSuggestionClick = (location: Location) => {
     setQuery(location.address);
-    onLocationSelect(location); 
+    onLocationSelect(location);
     setResults([]);
   };
 
   const handleClear = () => {
     setQuery("");
     setResults([]);
-    onLocationSelect(null); 
+    onLocationSelect(null);
   };
 
   return (
@@ -86,35 +89,54 @@ const LocationSearch: React.FC<LocationSearchProps> = ({ onLocationSelect,initia
           />
           {isLoading ? (
             <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-              <Loader2 size={18} className="animate-spin text-primary dark:text-primary-foreground" />
+              <Loader2
+                size={18}
+                className="animate-spin text-primary dark:text-primary-foreground"
+              />
             </div>
-          ) : query && (
-            <button 
-              onClick={handleClear}
-              className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
+          ) : (
+            query && (
+              <button
+                onClick={handleClear}
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            )
           )}
         </div>
-        
+
         {results.length > 0 && (
-          <div className="absolute z-10 w-full mt-1 overflow-hidden border rounded-lg shadow-lg bg-card text-card-foreground border-border">
+          <div className="absolute z-[100] w-full mt-1 border rounded-lg shadow-lg bg-base-100 bg-card text-card-foreground border-border">
             <ul className="py-1 overflow-y-auto max-h-60">
               {results.map((location, index) => (
-                <li 
-                  key={index} 
+                <li
+                  key={index}
                   className="px-4 py-2.5 flex items-start hover:bg-primary hover:text-primary-content cursor-pointer transition-colors duration-150"
                   onClick={() => handleSuggestionClick(location)}
                 >
-                  <MapPin size={18} className="mr-2 text-primary dark:text-primary hover:text-primary-content" />
+                  <MapPin
+                    size={18}
+                    className="mr-2 text-primary dark:text-primary hover:text-primary-content"
+                  />
                   <div>
                     <p className="font-medium">{location.address}</p>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      {location.latitude.toFixed(6)}, {location.longitude.toFixed(6)}
+                      {location.latitude.toFixed(6)},{" "}
+                      {location.longitude.toFixed(6)}
                     </p>
                   </div>
                 </li>
@@ -122,8 +144,6 @@ const LocationSearch: React.FC<LocationSearchProps> = ({ onLocationSelect,initia
             </ul>
           </div>
         )}
-        
-      
       </div>
     </div>
   );

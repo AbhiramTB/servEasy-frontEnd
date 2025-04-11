@@ -59,7 +59,8 @@ export const apiEndPointServiceProvider = {
   verifyServiceProvider: "/service-providers/verify",
   serviceProviderRegister: "/service-providers/register",
   getServiceProvider: "/service-providers/",
- 
+  getCategories:"/service-providers/categories"
+
 };
 
 export const apiEndPointAdmin = {
@@ -93,7 +94,7 @@ export const serviceEndPoint = {
    bookservice:"/service/book",
    getUserBookService:"/service/bookings",
    getSingleBookedService:"/services/bookings",
-  getServiceProviderBookService:"/service/bookings/serviceprovider"
+  getServiceProviderBookService:"/service/bookings/serviceprovider",
 };
 export const routes = {
   siginSignup: "/signin",
