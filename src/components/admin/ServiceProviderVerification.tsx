@@ -126,9 +126,7 @@ const ServiceProviderVerification: React.FC = () => {
       );
       console.log(res.data.data);
 
-      //   dispatch(addServiceProviders(res.data.data));
       HotToastSuccess("Service provider verified successfully");
-      //   dispatch(addServiceProviders(res.data.data));
       getAllServiceProviders();
     } catch (error) {
       console.error("Error verifying service provider:", error);
@@ -194,7 +192,7 @@ const ServiceProviderVerification: React.FC = () => {
           <div className="relative max-w-4xl max-h-screen p-4">
             <button
               onClick={closeImagePreview}
-              className="absolute top-0 right-0 p-2 m-2 bg-base-200 rounded-full"
+              className="absolute top-0 right-0 p-2 m-2 rounded-full bg-base-200"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -239,7 +237,7 @@ const ServiceProviderVerification: React.FC = () => {
   
         {loading ? (
           <div className="flex justify-center py-12">
-            <div className="w-12 h-12 border-t-2 border-b-2 border-primary rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-t-2 border-b-2 rounded-full border-primary animate-spin"></div>
           </div>
         ) : (
           <div className="space-y-6">
@@ -247,7 +245,7 @@ const ServiceProviderVerification: React.FC = () => {
               serviceProviders.map((provider: ServiceProvider) => (
                 <div
                   key={provider._id}
-                  className="overflow-hidden bg-base-200 border border-base-300 rounded-lg shadow-lg"
+                  className="overflow-hidden border rounded-lg shadow-lg bg-base-200 border-base-300"
                 >
                   <div className="p-5">
                     <div className="flex flex-col md:flex-row">
@@ -379,7 +377,7 @@ const ServiceProviderVerification: React.FC = () => {
                         {provider.isVerified === "rejected" && (
                           <button
                             onClick={() => handleVerify(provider._id)}
-                            className="px-4 py-2 text-success-content transition bg-success rounded-md hover:bg-success-focus"
+                            className="px-4 py-2 transition rounded-md text-success-content bg-success hover:bg-success-focus"
                           >
                             Verify Provider
                           </button>
@@ -388,13 +386,13 @@ const ServiceProviderVerification: React.FC = () => {
                           <>
                             <button
                               onClick={() => handleVerify(provider._id)}
-                              className="px-4 py-2 text-success-content transition bg-success rounded-md hover:bg-success-focus"
+                              className="px-4 py-2 transition rounded-md text-success-content bg-success hover:bg-success-focus"
                             >
                               Verify Provider
                             </button>
                             <button
                               onClick={() => openRejectModal(provider._id)}
-                              className="px-4 py-2 text-error-content transition bg-error rounded-md hover:bg-error-focus"
+                              className="px-4 py-2 transition rounded-md text-error-content bg-error hover:bg-error-focus"
                             >
                               Reject Application
                             </button>
@@ -402,7 +400,7 @@ const ServiceProviderVerification: React.FC = () => {
                         )}
                         <button
                           onClick={() => handleToggleExpand(provider._id)}
-                          className="px-4 py-2 transition bg-base-300 rounded-md hover:bg-base-300/80"
+                          className="px-4 py-2 transition rounded-md bg-base-300 hover:bg-base-300/80"
                         >
                           {expandedId === provider._id
                             ? "Hide Details"
@@ -471,7 +469,7 @@ const ServiceProviderVerification: React.FC = () => {
                               Verification Document
                             </h4>
                             <div
-                              className="w-full h-40 overflow-hidden border border-base-300 rounded-lg cursor-pointer"
+                              className="w-full h-40 overflow-hidden border rounded-lg cursor-pointer border-base-300"
                               onClick={() =>
                                 handleImagePreview(provider.document)
                               }

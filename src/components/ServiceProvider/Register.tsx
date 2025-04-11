@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import { validateEmail, validatePhone } from "../../utils/validate";
 import { Toaster } from "react-hot-toast";
 import { HotToastError, HotToastSuccess } from "../../utils/HotToasitify";
-import { apiEndPoint, apiEndPointServiceProvider } from "../../utils/constant";
-import { postRequest } from "../../utils/makeRequestInstance";
+import { apiEndPoint, apiEndPointServiceProvider, serviceEndPoint } from "../../utils/constant";
+import { getRequest, postRequest } from "../../utils/makeRequestInstance";
 import { useDispatch } from "react-redux";
 import { addServiceProvider } from "../../redux/slices/serviceProvider";
 import { useSelector } from "react-redux";
@@ -40,6 +40,23 @@ interface FormData {
   description: string;
 }
 
+export interface IService {
+  _id: string;
+  serviceName: string;
+  serviceDescription: string;
+  isHidden: boolean;
+  createdAt: string; 
+  updatedAt: string; 
+  __v: number;
+}
+
+export interface ICategory {
+  _id: string;
+  category: string;
+  isHidden: boolean;
+  typeService: IService[];
+}
+
 const RegisterForm: React.FC<RegisterFormProps> = () => {
   const {
     register,
@@ -61,8 +78,32 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
   const [description, setDescription] = useState<string>("");
   const [location, setLocation] = useState<Location | null>(null);
   const [locationError, setLocationError] = useState<string>("");
+  const [category,setCategory]=useState<ICategory[]>()
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState("");
+const [availableServices, setAvailableServices] = useState<IService[]>([]);
+const [selectedService, setSelectedService] = useState("");
+
+
+
+
+useEffect(() => {
+  if (selectedCategory && category) {
+    const categoryData = category.find(cat => cat._id === selectedCategory);
+    if (categoryData) {
+      setAvailableServices(categoryData.typeService);
+    } else {
+      setAvailableServices([]);
+    }
+  } else {
+    setAvailableServices([]);
+  }
+}, [selectedCategory, category]);
+
+
+
+
   const UploadImage = () => {
     imageRef.current?.click();
   };
@@ -70,7 +111,17 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
 
   useEffect(() => {
     getUserProfile();
+    getServices()
   }, []);
+
+  const getServices = async ()=>{
+   const res=await getRequest(apiEndPointServiceProvider.getCategories) 
+   console.log(res.data);
+   if(res.status==200){
+    setCategory(res.data)
+
+   }
+  }
 
   if (user.serviceProvider) {
     navigate("/service-provider/dashboard");
@@ -287,6 +338,73 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
               />
             </div>
             {imageError && <p className="text-sm text-error">{imageError}</p>}
+
+
+
+
+
+
+
+
+
+{/* Services Offered from Selected Category */}
+<div className="w-full mb-4 form-control">
+  <label className="label">
+    <span className="label-text">Services Offered</span>
+  </label>
+  <div className="flex gap-2">
+    <select
+      className="w-full select select-bordered"
+      value={selectedService}
+      onChange={(e) => setSelectedService(e.target.value)}
+      disabled={!selectedCategory || availableServices.length === 0}
+    >
+      <option value="">Select a service</option>
+      {availableServices.map((service) => (
+        <option key={service._id} value={service.serviceName}>
+          {service.serviceName}
+        </option>
+      ))}
+    </select>
+    <button
+      type="button"
+      className="btn btn-primary"
+      onClick={() => {
+        if (selectedService && !services.includes(selectedService)) {
+          setServices([...services, selectedService]);
+          setSelectedService("");
+        }
+      }}
+      disabled={!selectedService}
+    >
+      Add
+    </button>
+  </div>
+  {services.length === 0 && (
+    <p className="mt-2 text-sm text-error">
+      Please add at least one service
+    </p>
+  )}
+  <div className="flex flex-wrap gap-2 mt-2">
+    {services.map((service, index) => (
+      <div key={index} className="gap-2 badge badge-primary badge-lg">
+        {service}
+        <button
+          type="button"
+          className="btn btn-ghost btn-xs btn-circle"
+          onClick={() => removeService(index)}
+        >
+          ✕
+        </button>
+      </div>
+    ))}
+  </div>
+</div>
+
+
+
+
+
 
             {/* Name Input Section */}
             <div className="w-full mb-4 form-control">
