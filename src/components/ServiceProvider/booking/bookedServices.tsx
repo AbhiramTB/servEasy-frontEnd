@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getRequest } from "../../../utils/makeRequestInstance";
 import { serviceEndPoint } from "../../../utils/constant";
 
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ServiceBookingCard from "../../User/bookService/ServiceBookingCard";
+import Pagination from "../../ui/Pagination";
 
 interface Address {
   name: string;
@@ -25,21 +26,27 @@ interface Booking {
 }
 
 const BookedServiceServiceProvider = () => {
+  const dataLimit=4
   const [bookedServices, setBookedServices] = useState<Booking[]>([]);
+  const [crrPage,setCrrPage]=useState<number>(0)
+  const [totaldata,setTotaldata]=useState<number>(0)
+
   useEffect(() => {
-    getBookedService();
+    getBookedService(crrPage);
   }, []);
 
-  const getBookedService = async () => {
+  const getBookedService = async (page:number) => {
     try {
       const res = await getRequest(
-        serviceEndPoint.getServiceProviderBookService
+        
+        `${serviceEndPoint.getServiceProviderBookService}?page=${page}&limit=${dataLimit}`
       );
+      setCrrPage(page)
       console.log(res);
-      
+
       if (res.status === 200) {
-        console.log(res.data.service);
         setBookedServices(res.data.service);
+        setTotaldata(res.data.count)
       }
     } catch (error) {
       console.error("Error fetching booked services", error);
@@ -47,12 +54,12 @@ const BookedServiceServiceProvider = () => {
   };
 
   return (
-    <div className="bg-base-100 p-4">
-      <h1 className="text-xl font-bold mb-4">Booked Services</h1>
+    <div className="p-4 bg-base-100">
+      <h1 className="mb-4 text-xl font-bold">Booked Services</h1>
       {bookedServices.length > 0 ? (
         <div className="grid gap-4 ">
           {bookedServices.map((service) => (
-            <Link to={"/service-provider/booked-services/"+service._id}>
+            <Link to={"/service-provider/booked-services/" + service._id}>
               <ServiceBookingCard booking={service} key={service._id} />
             </Link>
           ))}
@@ -60,6 +67,8 @@ const BookedServiceServiceProvider = () => {
       ) : (
         <p className="text-gray-600">No booked services found.</p>
       )}
+
+      <Pagination crrPage={crrPage} dataLimit={dataLimit} totaldata={totaldata} fetchData={(p)=>getBookedService(p)}/>
     </div>
   );
 };
