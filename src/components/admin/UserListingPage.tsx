@@ -79,11 +79,11 @@ const UserListingPage: React.FC = () => {
               users.map((user) => (
                 <div
                   key={user._id}
-                  className="overflow-hidden bg-base-200 border border-base-300 rounded-lg shadow-md"
+                  className="overflow-hidden border rounded-lg shadow-md bg-base-200 border-base-300"
                 >
                   <div className="p-5">
                     <div className="flex items-center mb-4">
-                      <div className="flex items-center justify-center w-12 h-12 bg-primary rounded-full">
+                      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary">
                         <span className="text-lg font-medium text-primary-content">
                           {user.userName?.substring(0, 2) || "NA"}
                         </span>

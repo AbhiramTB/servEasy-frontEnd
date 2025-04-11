@@ -13,6 +13,23 @@ import { addServiceProvider } from "../../../redux/slices/serviceProvider";
 import { useDispatch } from "react-redux";
 import { Toaster } from "react-hot-toast";
 
+export interface IService {
+  _id: string;
+  serviceName: string;
+  serviceDescription: string;
+  isHidden: boolean;
+  createdAt: string; 
+  updatedAt: string; 
+  __v: number;
+}
+
+export interface ICategory {
+  _id: string;
+  category: string;
+  isHidden: boolean;
+  typeService: IService[];
+}
+
 interface EditServiceProps {
   onClose: () => void;
   serviceId: string;
@@ -29,13 +46,16 @@ const EditService: React.FC<EditServiceProps> = ({
   const [serviceType, setServiceType] = useState<"Online" | "Offline" | string>(
     "Online"
   );
-  const [category, setCategory] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [availableServices, setAvailableServices] = useState<IService[]>([]);
   const [location, setLocation] = useState<Location | null>(null);
   const [estimatedPrice, setEstimatedPrice] = useState<number | "">("");
   const [serviceImage, setServiceImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [initialLoad, setInitialLoad] = useState<boolean>(true);
 
   const dispatch = useDispatch();
 
@@ -54,18 +74,51 @@ const EditService: React.FC<EditServiceProps> = ({
     if (!serviceProviderInfo) {
       getServiceProvider();
     }
+    
+    getCategories();
+  }, []);
 
-    // Set default values from the service object
-    if (service) {
-      setServiceName(service.serviceName || "");
+  // Update available services when category changes
+  useEffect(() => {
+    if (selectedCategory && categories && categories.length > 0) {
+      const categoryData = categories.find(cat => cat._id === selectedCategory);
+      if (categoryData) {
+        setAvailableServices(categoryData.typeService);
+      } else {
+        setAvailableServices([]);
+      }
+    } else {
+      setAvailableServices([]);
+    }
+  }, [selectedCategory, categories]);
+
+  // Set default values from the service object after we have loaded categories
+  useEffect(() => {
+    if (service && categories.length > 0 && initialLoad) {
       setDescription(service.description || "");
       setServiceType(service.serviceType || "Online");
-      setCategory(service.category || "");
+      setSelectedCategory(service.category || "");
       setLocation(service.location || null);
       setEstimatedPrice(service.estimatedPrice || "");
       setPreviewUrl(service.serviceImage || null);
+      
+      // Find the matching category for this service
+      const matchingCategory = categories.find(cat => cat._id === service.category);
+      if (matchingCategory) {
+        // Find the matching service in the category
+        const matchingService = matchingCategory.typeService.find(
+          svc => svc.serviceName === service.serviceName
+        );
+        if (matchingService) {
+          setServiceName(matchingService.serviceName);
+        } else {
+          setServiceName(service.serviceName || "");
+        }
+      }
+      
+      setInitialLoad(false);
     }
-  }, [service]);
+  }, [service, categories, initialLoad]);
 
   const getServiceProvider = async () => {
     try {
@@ -73,7 +126,20 @@ const EditService: React.FC<EditServiceProps> = ({
         apiEndPointServiceProvider.getServiceProvider
       );
       dispatch(addServiceProvider(res.data.serviceProvider));
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error fetching service provider:", error);
+    }
+  };
+
+  const getCategories = async () => {
+    try {
+      const res = await getRequest(apiEndPointServiceProvider.getCategories);
+      if (res.status === 200) {
+        setCategories(res.data);
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -110,7 +176,7 @@ const EditService: React.FC<EditServiceProps> = ({
       return;
     }
 
-    if (!category) {
+    if (!selectedCategory) {
       HotToastError("Please select a category");
       setLoading(false);
       return;
@@ -141,7 +207,7 @@ const EditService: React.FC<EditServiceProps> = ({
         serviceName,
         description,
         serviceType,
-        category,
+        category: selectedCategory,
         location,
         estimatedPrice,
         serviceImage: previewUrl,
@@ -158,7 +224,6 @@ const EditService: React.FC<EditServiceProps> = ({
       if (res.status === 200) {
         HotToastSuccess("Service updated successfully");
         onClose();
-
         getAllServices();
       }
     } catch (error) {
@@ -231,36 +296,53 @@ const EditService: React.FC<EditServiceProps> = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <div>
-              <label className="block mb-2 font-medium text-base-content">
-                Service Name
-              </label>
-              <input
-                type="text"
-                value={serviceName}
-                onChange={(e) => setServiceName(e.target.value)}
-                className="w-full p-3 transition-colors border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-base-100 border-base-300 text-base-content"
-                placeholder="Enter service name"
-              />
-            </div>
+          {/* Category Selection */}
+          <div className="w-full mb-4 form-control">
+            <label className="block mb-2 font-medium text-base-content">
+              Category
+            </label>
+            <select
+              className="w-full p-3 transition-colors border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-base-100 border-base-300 text-base-content"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+            >
+              <option value="">Select a category</option>
+              {categories?.map((cat) => (
+                <option key={cat._id} value={cat._id}>
+                  {cat.category}
+                </option>
+              ))}
+            </select>
+          </div>
 
-            <div>
-              <label className="block mb-2 font-medium text-base-content">
-                Category
-              </label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full p-3 transition-colors border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-base-100 border-base-300 text-base-content"
-              >
-                <option value="">Choose a category</option>
-                <option value="Plumbing">Plumbing</option>
-                <option value="Electrical">Electrical</option>
-                <option value="Cleaning">Cleaning</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
+          {/* Service Selection from Category */}
+          <div className="w-full mb-4 form-control">
+            <label className="block mb-2 font-medium text-base-content">
+              Service Name
+            </label>
+            <select
+              className="w-full p-3 transition-colors border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-base-100 border-base-300 text-base-content"
+              value={serviceName}
+              onChange={(e) => setServiceName(e.target.value)}
+              disabled={!selectedCategory || availableServices.length === 0}
+            >
+              <option value="">Select a service</option>
+              {availableServices.map((service) => (
+                <option key={service._id} value={service.serviceName}>
+                  {service.serviceName}
+                </option>
+              ))}
+            </select>
+            {!selectedCategory && (
+              <p className="mt-1 text-xs text-base-content opacity-70">
+                Please select a category first
+              </p>
+            )}
+            {selectedCategory && availableServices.length === 0 && (
+              <p className="mt-1 text-xs text-base-content opacity-70">
+                No services available for this category
+              </p>
+            )}
           </div>
 
           <div>
@@ -313,7 +395,7 @@ const EditService: React.FC<EditServiceProps> = ({
               </label>
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-base-content opacity-70">
-                  ₹
+                  $
                 </span>
                 <input
                   type="number"

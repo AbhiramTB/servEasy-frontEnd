@@ -102,6 +102,13 @@ const NavBar = () => {
           <li>
             <Link to="/admin/booking-management">booking management</Link>
           </li>
+
+          <li>
+            <Link to="/admin/category-management" className="text-sm font-medium">
+              categoryManagement{" "}
+            </Link>
+          </li>
+          
         </ul>
       </div>
 

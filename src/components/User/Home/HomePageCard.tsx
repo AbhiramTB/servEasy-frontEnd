@@ -37,11 +37,11 @@ const HomePageCard: React.FC<HomePageCardProps> = ({ service }) => {
             <h2 className="truncate card-title text-base-content">
               {service.serviceName}
             </h2>
-            <div
-              className={`badge badge-sm ${service.isActive ? "badge-success" : "badge-error"}`}
+            {/* <div
+              // className={`badge badge-sm ${service.isActive ? "badge-success" : "badge-error"}`}
             >
               {service.isActive ? "Active" : "Inactive"}
-            </div>
+            </div> */}
           </div>
           <div className="flex items-center text-sm">
             <span className="mr-2 font-medium text-base-content/80">Category:</span>
