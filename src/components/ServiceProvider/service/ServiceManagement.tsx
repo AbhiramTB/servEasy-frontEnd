@@ -29,6 +29,8 @@ const ServiceManagement = () => {
   const getAllServices = async () => {
     try {
       const res = await getRequest(serviceEndPoint.getAllService);
+      console.log(res);
+      
       dispatch(addServices(res.data.allServices));
     } catch (error) {
       console.log(error);

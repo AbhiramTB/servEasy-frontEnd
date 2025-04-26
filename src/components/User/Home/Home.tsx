@@ -33,12 +33,10 @@ const Home = () => {
       setLocation(JSON.parse(savedLocation));
     }
     
-    // Always get all services on initial load
     getAllServices();
   }, []);
 
   useEffect(() => {
-    // Save location to localStorage whenever it changes
     if (location) {
       localStorage.setItem("userLocation", JSON.stringify(location));
       getAllServices();
@@ -48,10 +46,8 @@ const Home = () => {
   // Filter services based on search term
   useEffect(() => {
     if (searchTerm.trim() === "") {
-      // If search is empty, use all services
       dispatch(addServicesUser(allServicesData));
     } else {
-      // Filter services by name
       const filteredServices = allServicesData.filter(service => 
         service.serviceName.toLowerCase().includes(searchTerm.toLowerCase())
       );

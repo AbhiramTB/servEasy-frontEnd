@@ -3,6 +3,7 @@ import { apiEndPointAdmin } from "../../../utils/constant";
 import { adminGetRequest, adminPostRequest, adminDeleteRequest, adminPutRequest, adminPatchRequest } from "../../../utils/AxiosAdmin";
 import { HotToastSuccess } from "../../../utils/HotToasitify";
 import { Edit, Eye, EyeOff, Trash2, Plus, Save, X, AlertTriangle } from "lucide-react";
+import { Toaster } from "react-hot-toast";
 
 const { fetchCategories, addCategory, addService ,updateCategory,deleteCategory,updateService,deleteService} = apiEndPointAdmin;
 
@@ -244,6 +245,7 @@ const res = await adminDeleteRequest(`/admin/category/service/${categoryId}/${se
 
   return (
     <div className="container p-6 mx-auto border rounded-lg shadow-lg bg-base-100 border-primary">
+      <Toaster/>
       <h2 className="mb-6 text-2xl font-bold text-primary">
         Service Categories
       </h2>

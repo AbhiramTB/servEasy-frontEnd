@@ -348,7 +348,7 @@ useEffect(() => {
 
 
 {/* Services Offered from Selected Category */}
-<div className="w-full mb-4 form-control">
+{/* <div className="w-full mb-4 form-control">
   <label className="label">
     <span className="label-text">Services Offered</span>
   </label>
@@ -399,7 +399,7 @@ useEffect(() => {
       </div>
     ))}
   </div>
-</div>
+</div> */}
 
 
 
