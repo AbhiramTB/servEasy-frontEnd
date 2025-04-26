@@ -1,4 +1,3 @@
-
 export const URL: string = "http://localhost:5001";
 
 export const lightThems = {
@@ -32,7 +31,7 @@ export const lightTheme = lightThems.theme1;
 export const darkTheme = darkThemes.theme1;
 
 export const apiEndPoint = {
-    refreshToken:"/refresh-token",
+  refreshToken: "/refresh-token",
   resendOtp: "/resend-otp",
   signUp: "/signup",
   SignInPhone: "/signin/phone",
@@ -45,22 +44,20 @@ export const apiEndPoint = {
   forgotPasswordVerifyOtp: "/forgot-password/verify-otp",
   resetPassword: "/forgot-password/reset",
   locationAutocomplete: "/location/autocomplete",
-  getSingleService:"/user/service",
+  getSingleService: "/user/service",
   getServices: "/getactive/services",
   logOutUser: "/logout",
-  addNewAddress:'/user/addresses',
-  editAddress:"/user/addresses",
-  deleteAddress:"/user/addresses",
-  getAddress:"/user/addresses"
-
+  addNewAddress: "/user/addresses",
+  editAddress: "/user/addresses",
+  deleteAddress: "/user/addresses",
+  getAddress: "/user/addresses",
 };
 
 export const apiEndPointServiceProvider = {
   verifyServiceProvider: "/service-providers/verify",
   serviceProviderRegister: "/service-providers/register",
   getServiceProvider: "/service-providers/",
-  getCategories:"/service-providers/categories"
-
+  getCategories: "/service-providers/categories",
 };
 
 export const apiEndPointAdmin = {
@@ -78,10 +75,10 @@ export const apiEndPointAdmin = {
   fetchCategories: "/admin/category",
   addCategory: "/admin/category",
   updateCategory: "/admin/category",
-  deleteCategory:"/admin/category",
+  deleteCategory: "/admin/category",
   addService: "/admin/category/service",
-  updateService :"/admin/category/service",
-  deleteService :"/admin/category/service/",
+  updateService: "/admin/category/service",
+  deleteService: "/admin/category/service/",
 
   adminLogout: "/admin/logout",
 };
@@ -91,10 +88,10 @@ export const serviceEndPoint = {
   getAllService: "/service/",
   updateService: "/service/",
   blockUnblock: "/service/block-unblock",
-   bookservice:"/service/book",
-   getUserBookService:"/service/bookings",
-   getSingleBookedService:"/services/bookings",
-  getServiceProviderBookService:"/service/bookings/serviceprovider",
+  bookservice: "/service/book",
+  getUserBookService: "/service/bookings",
+  getSingleBookedService: "/services/bookings",
+  getServiceProviderBookService: "/service/bookings/serviceprovider",
 };
 export const routes = {
   siginSignup: "/signin",
@@ -104,13 +101,7 @@ export const adminRoutes = {
   AdminSignIn: "/admin/sigin",
 };
 
-export const paymentRoutes={
-  getServiceProviderPayments:"/payment/service-provider/",
-  getServiceAdminPayments:"/payment/admin/"
-  
-}
-
-
-
-
-
+export const paymentRoutes = {
+  getServiceProviderPayments: "/payment/service-provider/",
+  getServiceAdminPayments: "/payment/admin/",
+};

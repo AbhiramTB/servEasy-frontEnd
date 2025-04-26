@@ -35,7 +35,6 @@ const ThemeChange = () => {
           <span className="text-sm font-medium">Light Mode</span>
         </div>
 
-        {/* Moon icon when light mode is active (to switch to dark) */}
         <div className="flex items-center gap-2 swap-on">
           <svg
             className="w-6 h-6 fill-current"

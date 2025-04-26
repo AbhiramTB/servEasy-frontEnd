@@ -26,16 +26,16 @@ import PaymentVerify from "./components/ui/PaymentVerify.tsx";
 import PaymentManagement from "./components/ServiceProvider/paymentManagement/paymentManagement.tsx";
 import BookingManagement from "./components/admin/bookingManagement/booking-management.tsx";
 import CategoryList from "./components/admin/service-management/CategoryManagement.tsx";
+import Chat from "./components/User/chat/Chat.tsx";
 function App() {
   const token = localStorage.getItem("accessToken");
   const adminToken = localStorage.getItem("adminToken");
   console.log(adminToken);
-  
+
   return (
     <BrowserRouter basename="/">
-
       <Routes>
-      <Route path="/payment/verify" element={<PaymentVerify />} />
+        <Route path="/payment/verify" element={<PaymentVerify />} />
 
         <Route
           path="/signIn"
@@ -47,27 +47,40 @@ function App() {
         <Route path="/" element={<Body />}>
           <Route index element={<Home />} />
           <Route path="/service-details/:id" element={<SingleServiceCard />} />
-          <Route path="/bookService/:id" element={<BookService/> } />
-           <Route path="/booked-services/"  element={<BookedService/>} />
-           <Route path="/booked-service/:id" element={<ViewSIngleBookedService/>} />
-
+          <Route path="/bookService/:id" element={<BookService />} />
+          <Route path="/booked-services/" element={<BookedService />} />
+          <Route
+            path="/booked-service/:id"
+            element={<ViewSIngleBookedService />}
+          />
+          <Route path="/chat/:serviceProviderId" element={<Chat />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>
           <Route path="/service-provider" element={<ServiceProviderLayout />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="register" element={<Register />} />
-            <Route path="booked-services" element={<BookedServiceServiceProvider/>} />
-            <Route path="booked-services/:id" element={<ServiceBookingManage/>} />
+            <Route
+              path="booked-services"
+              element={<BookedServiceServiceProvider />}
+            />
+            <Route
+              path="booked-services/:id"
+              element={<ServiceBookingManage />}
+            />
             <Route path="service-management" element={<ServiceManagement />} />
-             <Route path="payment-management" element={<PaymentManagement/>} />
+            <Route path="payment-management" element={<PaymentManagement />} />
           </Route>
         </Route>
 
         <Route
           path="admin/sigin"
           element={
-            adminToken ? <Navigate to={"/admin/home"} replace /> : <AdminSignIn />
+            adminToken ? (
+              <Navigate to={"/admin/home"} replace />
+            ) : (
+              <AdminSignIn />
+            )
           }
         />
 
@@ -78,15 +91,17 @@ function App() {
             <Route
               path="serviceProvider/verification"
               element={<ServiceProviderVerifiction />}
-          />
+            />
             <Route
               path="serviceProvider"
               element={<ServiceProviderListing />}
             />
             <Route path="service" element={<Allservices />} />
-            <Route path="booking-management" element={<BookingManagement/>}></Route>
+            <Route
+              path="booking-management"
+              element={<BookingManagement />}
+            ></Route>
             <Route path="category-management" element={<CategoryList />} />
-
           </Route>
         </Route>
       </Routes>
