@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Send } from "lucide-react";
-
+import { useParams } from "react-router-dom";
 const Chat = () => {
   const [messages, setMessages] = useState([
     { id: 1, text: "Hello!", from: "bot" },
     { id: 2, text: "Hey! Why not reply?", from: "bot" }
   ]);
+  const {serviceProviderId} =useParams()
+
   const [newMessage, setNewMessage] = useState("");
 
   const handleSend = () => {
@@ -14,10 +16,10 @@ const Chat = () => {
     setNewMessage("");
   };
 
+
   return (
     <div className="container">
     <div className="flex flex-col justify-between p-4 mx-auto shadow-lg rounded-xl bg-base-100">
-      {/* Messages */}
       <div className="flex-1 space-y-4 overflow-y-auto">
         {messages.map((msg) => (
           <div
@@ -40,7 +42,7 @@ const Chat = () => {
           </div>
         ))}
       </div>
-
+           {serviceProviderId && <h1>hello{serviceProviderId}</h1>}
       <div className="flex items-center gap-2 mt-4">
         <input
           type="text"

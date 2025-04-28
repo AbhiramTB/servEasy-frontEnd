@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getRequest } from "../../../utils/makeRequestInstance";
 import RazorpayButton from "../../ui/PaymentButton";
+import ShowBills from "../../ui/ShowBills";
 
 interface Address {
   name: string;
@@ -68,6 +69,8 @@ interface BookedService {
   address: Address;
   createdAt: string;
   updatedAt: string;
+  serviceBills?: [string];
+
   cancelReason?: string;
   payment?: Ipayment;
 }
@@ -83,7 +86,7 @@ const ServiceBookingDetails = () => {
   const [bookingData, setBookingData] = useState<BookingData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+  const [showBills,setShowBills]=useState(false)
   useEffect(() => {
     if (id) {
       getBookedService(id);
@@ -94,13 +97,12 @@ const ServiceBookingDetails = () => {
     try {
       setLoading(true);
       const res = await getRequest(`service/bookings${id}`);
-      console.log(res.data);
 
       if (res.status === 200) {
-        console.log(res.data);
-
         setBookingData(res.data.service);
       }
+        console.log(bookingData);
+      
     } catch (err) {
       setError("Failed to load booking details");
       console.error(err);
@@ -547,6 +549,9 @@ const ServiceBookingDetails = () => {
                 {bookedService.serviceStatus === "pending" && (
                   <button className="btn btn-error">Cancel Booking</button>
                 )}
+                {bookingData.bookedService.serviceBills  && (
+                  <button onClick={()=>setShowBills(true)} className="btn btn-primary">show bills</button>
+                )}
                 {!isCancelled && (
                   <button className="btn btn-primary">
                     Contact Service Provider
@@ -568,7 +573,6 @@ const ServiceBookingDetails = () => {
             <div className="card-body">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-semibold text-primary">Service Address</h3>
-                
               </div>
               <div className="text-sm">
                 <p className="font-medium">{bookedService.address.name}</p>
@@ -594,7 +598,6 @@ const ServiceBookingDetails = () => {
                   </svg>
                   <span>{bookedService.address.phone}</span>
                 </div>
-               
               </div>
             </div>
           </div>
@@ -789,11 +792,29 @@ const ServiceBookingDetails = () => {
                   </svg>
                   Send Order Details
                 </button> */}
+
+
+
+
+                {showBills&& bookingData.bookedService.serviceBills &&
+                  <ShowBills close={()=>setShowBills(false)} serviceName={bookingData.service.serviceName} bills={bookingData.bookedService.serviceBills}></ShowBills>
+                  }
+
+                
               </div>
             </div>
           )}
         </div>
       </div>
+
+
+        
+
+
+
+
+
+
     </div>
   );
 };

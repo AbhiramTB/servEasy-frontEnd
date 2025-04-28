@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams} from "react-router-dom";
 import {
   getRequest,
   postRequest,
@@ -8,16 +8,7 @@ import {
 import { HotToastError, HotToastSuccess } from "../../../utils/HotToasitify";
 import { Toaster } from "react-hot-toast";
 import PaymentModal from "./paymentModal";
-
-// Interfaces
-interface Ipayment {
-  serviceCost?: number;
-  metaialCost?: number;
-  travelCost?: number;
-  inspectionCost?: number;
-  total: number;
-  convenienceFee?: number;
-}
+import { Ipayment } from "../../../utils/types/Ipayment";
 
 interface BookingData {
   bookedService: {
@@ -69,7 +60,15 @@ const ServiceProviderBookingManage = () => {
   const [cancelReason, setCancelReason] = useState<string>("");
   const [newStatus, setNewStatus] = useState<string>("");
   const [invoiceFiles, setInvoiceFiles] = useState<File[]>([]);
-  const [payment, setPayment] = useState<Ipayment | null>();
+  const [payment, setPayment] = useState<Ipayment>({
+    serviceCost: 0,
+    materialCost: 0,
+    travelCost: 0,
+    inspectionCost: 0,
+    total: 0,
+    convenienceFee: 0,
+  });
+  
   const [paymentForm, setPaymentForm] = useState<boolean>(false);
   useEffect(() => {
     if (id) {
@@ -117,7 +116,6 @@ const ServiceProviderBookingManage = () => {
       if (res.status === 200) {
         HotToastSuccess("Booking accepted successfully");
         setShowAcceptModal(false);
-        // Refresh booking data
         getBookedService(id as string);
       }
     } catch (err) {
@@ -144,7 +142,6 @@ const ServiceProviderBookingManage = () => {
       if (res.status === 200) {
         HotToastSuccess("Booking cancelled successfully");
         setShowCancelModal(false);
-        // Refresh booking data
         getBookedService(id as string);
       }
     } catch (err) {
@@ -165,7 +162,6 @@ const ServiceProviderBookingManage = () => {
       if (res.status === 200) {
         HotToastSuccess("Status updated successfully");
         setShowStatusModal(false);
-        // Refresh booking data
         getBookedService(id as string);
       }
     } catch (err) {
@@ -188,12 +184,11 @@ const ServiceProviderBookingManage = () => {
 
       if (res.status === 200) {
         HotToastSuccess("Payment requested successfully");
-        // Refresh booking data
         getBookedService(id as string);
       }
     } catch (err) {
-      HotToastError("Failed to request payment");
       console.error(err);
+      HotToastError("Failed to request payment");
     }
   };
 
@@ -243,7 +238,7 @@ const ServiceProviderBookingManage = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-base-200">
+      <div className="flex items-center justify-center min-h-screen bg-base-200">
         <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
     );
@@ -251,7 +246,7 @@ const ServiceProviderBookingManage = () => {
 
   if (error || !bookingData) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-base-200">
+      <div className="flex items-center justify-center min-h-screen bg-base-200">
         <div className="alert alert-error">
           <span>Error: {error || "Booking not found"}</span>
         </div>
@@ -291,10 +286,10 @@ const ServiceProviderBookingManage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-4xl bg-base-200 min-h-screen">
+    <div className="container max-w-4xl min-h-screen p-4 mx-auto bg-base-200">
       {/* Feedback messages */}
 
-      {/* <div className="text-sm breadcrumbs mb-4">
+      {/* <div className="mb-4 text-sm breadcrumbs">
         <ul>
           <li>
             <Link to="/dashboard" className="link link-primary">
@@ -317,7 +312,7 @@ const ServiceProviderBookingManage = () => {
         <div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="stroke-current flex-shrink-0 h-6 w-6"
+            className="flex-shrink-0 w-6 h-6 stroke-current"
             fill="none"
             viewBox="0 0 24 24"
           >
@@ -342,10 +337,10 @@ const ServiceProviderBookingManage = () => {
       </div>
 
       {/* Main Content */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {/* Service Details - 2/3 width */}
-        <div className="md:col-span-2 bg-base-100 p-4 rounded-box shadow">
-          <div className="flex flex-col md:flex-row gap-4 mb-4">
+        <div className="p-4 shadow md:col-span-2 bg-base-100 rounded-box">
+          <div className="flex flex-col gap-4 mb-4 md:flex-row">
             <div className="avatar">
               <div className="w-24 h-24 rounded">
                 <img src={service.serviceImage} alt={service.serviceName} />
@@ -353,13 +348,13 @@ const ServiceProviderBookingManage = () => {
             </div>
             <div>
               <h2 className="text-xl font-bold">{service.serviceName}</h2>
-              <div className="space-x-2 my-1">
+              <div className="my-1 space-x-2">
                 <span className="badge badge-primary">{service.category}</span>
                 <span className="badge badge-secondary">
                   {service.serviceType}
                 </span>
               </div>
-              <p className="text-sm opacity-75 my-1">{service.description}</p>
+              <p className="my-1 text-sm opacity-75">{service.description}</p>
               <div className="mt-2">
                 <strong className="text-xl text-primary">
                   ₹{service.estimatedPrice}
@@ -372,7 +367,7 @@ const ServiceProviderBookingManage = () => {
 
           {/* Customer Details */}
           <div className="flex items-center mb-4">
-            <div className="avatar mr-3">
+            <div className="mr-3 avatar">
               <div className="w-10 h-10 rounded-full">
                 <img src={user.profileImage} alt={user.userName} />
               </div>
@@ -389,11 +384,11 @@ const ServiceProviderBookingManage = () => {
 
           {/* Status Timeline */}
           <div className="mb-4">
-            <h3 className="font-medium mb-2">Booking Status</h3>
+            <h3 className="mb-2 font-medium">Booking Status</h3>
             {isCancelled ? (
               <div className="text-error">Service has been cancelled</div>
             ) : (
-              <ul className="steps steps-horizontal w-full">
+              <ul className="w-full steps steps-horizontal">
                 <li
                   className={`step ${isPending || isConfirmed || isInProgress || isPaymentRequested || isCompleted ? "step-primary" : ""}`}
                 >
@@ -422,9 +417,9 @@ const ServiceProviderBookingManage = () => {
           </div>
 
           {/* Schedule and Payment Summary */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-            <div className="bg-base-200 p-3 rounded-box">
-              <h3 className="font-medium mb-2">Schedule</h3>
+          <div className="grid grid-cols-1 gap-4 mb-4 sm:grid-cols-2">
+            <div className="p-3 bg-base-200 rounded-box">
+              <h3 className="mb-2 font-medium">Schedule</h3>
               <div className="text-sm">
                 <p>Booked: {formattedBookedDate}</p>
                 <p>
@@ -439,8 +434,8 @@ const ServiceProviderBookingManage = () => {
               </div>
             </div>
 
-            <div className="bg-base-200 p-3 rounded-box">
-              <h3 className="font-medium mb-2">Payment</h3>
+            <div className="p-3 bg-base-200 rounded-box">
+              <h3 className="mb-2 font-medium">Payment</h3>
               <div className="text-sm">
                 <p>
                   Status:{" "}
@@ -465,7 +460,7 @@ const ServiceProviderBookingManage = () => {
           </div>
 
           {/* Action Buttons */}
-          <div className="mt-4 flex flex-wrap gap-2 justify-end">
+          <div className="flex flex-wrap justify-end gap-2 mt-4">
             {isPending && (
               <>
                 <button
@@ -500,7 +495,7 @@ const ServiceProviderBookingManage = () => {
               (isInProgress && (
                 <button
                   className="btn btn-warning"
-                  onClick={() => setPaymentForm(true)} // handlePaymentRequest
+                  onClick={() => setPaymentForm(true)}
                 >
                   Request Payment
                 </button>
@@ -508,6 +503,7 @@ const ServiceProviderBookingManage = () => {
 
             {paymentForm && (
               <PaymentModal
+                payment={payment}
                 setPayment={(data: Ipayment) => setPayment(data)}
                 closeModal={() => setPaymentForm(false)}
                 makePaymentRequest={handlePaymentRequest}
@@ -519,16 +515,16 @@ const ServiceProviderBookingManage = () => {
                   className="btn btn-info"
                   onClick={() => setShowInvoiceModal(true)}
                 >
-                  Upload Bills 
+                  Upload Bills
                 </button>
               ))}
           </div>
         </div>
 
         <div className="md:col-span-1">
-          <div className="card bg-base-100 shadow mb-4">
-            <div className="card-body p-4">
-              <h3 className="card-title text-base">Service Address</h3>
+          <div className="mb-4 shadow card bg-base-100">
+            <div className="p-4 card-body">
+              <h3 className="text-base card-title">Service Address</h3>
               <div className="text-sm">
                 <p className="font-medium">{bookedService.address.name}</p>
                 <p>{bookedService.address.houseName}</p>
@@ -543,35 +539,35 @@ const ServiceProviderBookingManage = () => {
 
           {/* Price Details */}
           {bookedService.payment && (
-            <div className="card bg-base-100 shadow">
-              <div className="card-body p-4">
-                <h3 className="card-title text-base">Price Details</h3>
+            <div className="shadow card bg-base-100">
+              <div className="p-4 card-body">
+                <h3 className="text-base card-title">Price Details</h3>
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between">
                     <span>service Cost</span>
                     <span>₹{bookedService.payment.serviceCost}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span> metaialCost</span>
-                    <span>₹{bookedService.payment.metaialCost}</span>
+                    <span> material Cost</span>
+                    <span>₹{bookedService.payment.materialCost}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>travelCost</span>
                     <span>₹{bookedService.payment.travelCost}</span>
                   </div>
 
-                  <div className="divider my-1"></div>
+                  <div className="my-1 divider"></div>
                   <div className="flex justify-between font-bold">
                     <span>Total</span>
                     <span>₹{bookedService.payment.total}</span>
                   </div>
-                  <div className="flex justify-between text-xs opacity-75 mt-1">
+                  <div className="flex justify-between mt-1 text-xs opacity-75">
                     <span>convenience Fee (10%)</span>
                     <span>₹{bookedService.payment?.convenienceFee} </span>
                   </div>
                   {bookedService.payment?.total &&
                     bookedService.payment.convenienceFee && (
-                      <div className="flex justify-between text-xs opacity-75 mt-1">
+                      <div className="flex justify-between mt-1 text-xs opacity-75">
                         <span>Your Earnings</span>
                         <span>
                           ₹
@@ -593,10 +589,10 @@ const ServiceProviderBookingManage = () => {
       {showAcceptModal && (
         <div className="modal modal-open">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">Accept Booking</h3>
+            <h3 className="text-lg font-bold">Accept Booking</h3>
             <p className="py-4">Please provide an estimated service time:</p>
 
-            <div className="form-control mb-4">
+            <div className="mb-4 form-control">
               <label className="label">
                 <span className="label-text">
                   Estimated Service Date and Time
@@ -626,10 +622,10 @@ const ServiceProviderBookingManage = () => {
       {showCancelModal && (
         <div className="modal modal-open">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">Cancel Booking</h3>
+            <h3 className="text-lg font-bold">Cancel Booking</h3>
             <p className="py-4">Please provide a reason for cancellation:</p>
 
-            <div className="form-control mb-4">
+            <div className="mb-4 form-control">
               <label className="label">
                 <span className="label-text">Cancellation Reason</span>
               </label>
@@ -657,9 +653,9 @@ const ServiceProviderBookingManage = () => {
       {showStatusModal && (
         <div className="modal modal-open">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">Update Service Status</h3>
+            <h3 className="text-lg font-bold">Update Service Status</h3>
 
-            <div className="form-control mb-4">
+            <div className="mb-4 form-control">
               <label className="label">
                 <span className="label-text">Select New Status</span>
               </label>
@@ -689,15 +685,15 @@ const ServiceProviderBookingManage = () => {
       {showInvoiceModal && (
         <div className="modal modal-open">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">Upload Invoice Images</h3>
+            <h3 className="text-lg font-bold">Upload Invoice Images</h3>
 
-            <div className="form-control mb-4">
+            <div className="mb-4 form-control">
               <label className="label">
                 <span className="label-text">Select Invoice Images</span>
               </label>
               <input
                 type="file"
-                className="file-input file-input-bordered w-full"
+                className="w-full file-input file-input-bordered"
                 accept="image/jpeg,image/png,image/jpg,image/gif"
                 multiple
                 onChange={(e) => {
@@ -719,13 +715,13 @@ const ServiceProviderBookingManage = () => {
                 </p>
                 <div className="grid grid-cols-3 gap-2 mt-2">
                   {invoiceFiles.map((file, index) => (
-                    <div key={index} className="relative border rounded p-2">
+                    <div key={index} className="relative p-2 border rounded">
                       {/* Image preview thumbnail */}
-                      <div className="h-16 flex items-center justify-center mb-1">
+                      <div className="flex items-center justify-center h-16 mb-1">
                         <img
                           src={URL.createObjectURL(file)}
                           alt={file.name}
-                          className="max-h-full max-w-full object-contain"
+                          className="object-contain max-w-full max-h-full"
                           onLoad={() =>
                             URL.revokeObjectURL(URL.createObjectURL(file))
                           }
@@ -733,7 +729,7 @@ const ServiceProviderBookingManage = () => {
                       </div>
                       <div className="text-xs truncate">{file.name}</div>
                       <button
-                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs"
+                        className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs text-white bg-red-500 rounded-full"
                         onClick={() => {
                           const newFiles = [...invoiceFiles];
                           newFiles.splice(index, 1);
