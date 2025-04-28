@@ -15,6 +15,7 @@ interface CardProps {
   serviceProviderName?: string;
   estimatedPrice?: number;
   bookService?: () => void;
+  handleChat?:()=>void
 }
 
 const Card: React.FC<CardProps> = ({
@@ -31,6 +32,7 @@ const Card: React.FC<CardProps> = ({
   serviceType,
   rating = 5,
   reviewsCount = 0,
+  handleChat,
   bookService,
 }) => {
   return (
@@ -118,7 +120,7 @@ const Card: React.FC<CardProps> = ({
           <button className="flex items-center justify-center py-3 font-medium text-white transition duration-200 rounded-lg bg-primary hover:bg-primary/90">
             Call
           </button>
-          <button className="flex items-center justify-center py-3 font-medium text-white transition duration-200 bg-green-600 rounded-lg hover:bg-green-700">
+          <button onClick={handleChat} className="flex items-center justify-center py-3 font-medium text-white transition duration-200 bg-green-600 rounded-lg hover:bg-green-700">
             Chat
           </button>
         </div>
