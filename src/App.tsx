@@ -26,7 +26,7 @@ import PaymentVerify from "./components/ui/PaymentVerify.tsx";
 import PaymentManagement from "./components/ServiceProvider/paymentManagement/paymentManagement.tsx";
 import BookingManagement from "./components/admin/bookingManagement/booking-management.tsx";
 import CategoryList from "./components/admin/service-management/CategoryManagement.tsx";
-import Chat from "./components/User/chat/Chat.tsx";
+import Chat from "./components/User/chat/ChatUser.tsx";
 function App() {
   const token = localStorage.getItem("accessToken");
   const adminToken = localStorage.getItem("adminToken");
