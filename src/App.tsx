@@ -28,6 +28,8 @@ import BookingManagement from "./components/admin/bookingManagement/booking-mana
 import CategoryList from "./components/admin/service-management/CategoryManagement.tsx";
 import Chat from "./components/User/chat/ChatUser.tsx";
 import ChatServiceProvider from "./components/User/chat/ChatServiceProvider.tsx";
+import ChatUI from "./components/User/chat/AllChatsServiceProvider.tsx";
+import ChatsUser from "./components/User/chat/AllchatsUser.tsx";
 function App() {
   const token = localStorage.getItem("accessToken");
   const adminToken = localStorage.getItem("adminToken");
@@ -55,6 +57,7 @@ function App() {
             element={<ViewSIngleBookedService />}
           />
           <Route path="chat/:serviceProviderId" element={<Chat />} />
+          <Route path="chats"element={<ChatsUser/>}></Route>
         </Route>
 
         <Route element={<ProtectedRoute />}>
@@ -65,8 +68,9 @@ function App() {
               path="booked-services"
               element={<BookedServiceServiceProvider />}
             />
-<Route path="chat/:userid" element={<ChatServiceProvider />} />
+            <Route path="chats" element={<ChatUI />}></Route>
 
+            <Route path="chat/:userid" element={<ChatServiceProvider />} />
             <Route
               path="booked-services/:id"
               element={<ServiceBookingManage />}

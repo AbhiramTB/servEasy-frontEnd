@@ -138,7 +138,7 @@ const SingleServiceCard = () => {
           
           <div className="md:col-span-1">
           
-          <Card bookService={()=>bookService(service._id)} title={service.serviceName} category={service.category} description={service.description} image={service.serviceProviderDetails.profileImage} price={service.estimatedPrice+""} location={service.location.address}  reviewsCount={24} handleChat={()=>navigate('/chat/'+service.serviceProviderId)} />
+          <Card bookService={()=>bookService(service._id)} title={service.serviceName} category={service.category} description={service.description} image={service.serviceProviderDetails.profileImage} price={service.estimatedPrice+""} location={service.location.address}  reviewsCount={24} handleChat={()=>navigate('/chat/'+service.serviceProviderDetails.userId)} />
 
             
           <ServiceProviderDetailsCard email={service.serviceProviderDetails.serviceProviderEmail} phone={service.serviceProviderDetails.serviceProviderPhone} experience={service.serviceProviderDetails.experience} location={service.serviceProviderDetails.location.address}  />

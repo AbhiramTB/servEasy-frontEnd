@@ -19,7 +19,8 @@ import { RootState } from "../../../redux/store";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { getAllchats, getProfile } from "./getAllchats";
+import { getAllchats } from "./getAllchats";
+import { getRequest } from "../../../utils/makeRequestInstance";
 
 // Add the relativeTime plugin to format last seen properly
 dayjs.extend(relativeTime);
@@ -61,10 +62,7 @@ const ChatUser = () => {
     const fetchData = async (): Promise<void> => {
       try {
         if (userid) {
-          const userRes: any = await getProfile(userid);
-          if (userRes.status === 200) {
-            setUserData(userRes.data);
-          }
+          getProfile(userid);
         }
 
         const chatRes: any = await getAllchats(
@@ -158,7 +156,7 @@ const ChatUser = () => {
   // Handle sending messages
   const handleSend = () => {
     if (!newMessage.trim()) return;
-    
+
     const socket = getSocket();
     const id = Date.now().toString();
 
@@ -179,7 +177,7 @@ const ChatUser = () => {
 
     setMessages((prev) => [...prev, message]);
     setNewMessage("");
-    
+
     // Focus back on input field after sending
     inputRef.current?.focus();
 
@@ -191,14 +189,24 @@ const ChatUser = () => {
         )
       );
     }, 1000);
-    
+
     setTimeout(() => {
       setMessages((prev) =>
-        prev.map((msg) => 
-          msg.id === id ? { ...msg, status: "read" } : msg
-        )
+        prev.map((msg) => (msg.id === id ? { ...msg, status: "read" } : msg))
       );
     }, 2000);
+  };
+
+  const getProfile = async (id: string) => {
+    try {
+
+      const res = await getRequest("/user/profile/"+id);
+      if (res.status === 200) {
+        setUserData(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // Handle emoji selection
@@ -227,11 +235,11 @@ const ChatUser = () => {
   // Format last seen time nicely
   const formatLastSeen = (timestamp: string | null) => {
     if (!timestamp) return "";
-    
+
     const date = dayjs(timestamp);
     const now = dayjs();
-    
-    if (now.diff(date, 'day') <= 1) {
+
+    if (now.diff(date, "day") <= 1) {
       return `Last seen ${date.fromNow()}`;
     } else {
       return `Last seen on ${date.format("DD MMM, hh:mm A")}`;
@@ -241,10 +249,9 @@ const ChatUser = () => {
   // Message status indicator component
   const MessageStatus = ({ status }: { status?: MessageStatus }) => {
     if (!status) return null;
-    
-    const checkClass = status === "read" 
-      ? "text-primary" 
-      : "text-base-content/70";
+
+    const checkClass =
+      status === "read" ? "text-primary" : "text-base-content/70";
 
     return (
       <div className="relative">
@@ -282,13 +289,11 @@ const ChatUser = () => {
               {isOnline ? (
                 <p className="text-xs text-success">Online</p>
               ) : (
-                <p className="text-xs opacity-70">
-                  {formatLastSeen(lastSeen)}
-                </p>
+                <p className="text-xs opacity-70">{formatLastSeen(lastSeen)}</p>
               )}
             </div>
           </div>
-          
+
           <div className="flex space-x-3">
             <button className="btn btn-circle btn-ghost">
               <Phone size={18} />
@@ -311,7 +316,8 @@ const ChatUser = () => {
                   Start your conversation
                 </h3>
                 <p className="text-sm">
-                  Send a message to begin chatting with {userData?.userName || "User"}
+                  Send a message to begin chatting with{" "}
+                  {userData?.userName || "User"}
                 </p>
               </div>
             </div>
@@ -337,7 +343,7 @@ const ChatUser = () => {
                       </div>
                     </div>
                   )}
-                  
+
                   <div
                     className={`chat-bubble ${
                       msg.sender === "serviceProvider"
@@ -347,12 +353,10 @@ const ChatUser = () => {
                   >
                     {msg.content}
                   </div>
-                  
+
                   <div className="flex items-center gap-1 text-xs chat-footer opacity-70">
-                    {
-                      dayjs(msg.timestamp).format("hh:mm A") 
-                      }
-                    
+                    {dayjs(msg.timestamp).format("hh:mm A")}
+
                     {msg.sender === "serviceProvider" && (
                       <span className="ml-1">
                         <MessageStatus status={msg.status} />
@@ -372,7 +376,7 @@ const ChatUser = () => {
             <button className="absolute left-4 btn btn-circle btn-ghost btn-sm">
               <Paperclip size={18} />
             </button>
-            
+
             <input
               ref={inputRef}
               type="text"
@@ -382,7 +386,7 @@ const ChatUser = () => {
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSend()}
             />
-            
+
             <div className="absolute flex items-center space-x-2 right-4">
               <button
                 className="btn btn-circle btn-ghost btn-sm"
@@ -390,10 +394,12 @@ const ChatUser = () => {
               >
                 <Smile size={20} />
               </button>
-              
+
               <button
                 className={`btn btn-circle btn-sm ${
-                  newMessage.trim() ? "btn-primary text-primary-content" : "btn-ghost opacity-50"
+                  newMessage.trim()
+                    ? "btn-primary text-primary-content"
+                    : "btn-ghost opacity-50"
                 }`}
                 onClick={handleSend}
                 disabled={!newMessage.trim()}
@@ -405,7 +411,11 @@ const ChatUser = () => {
 
           {showEmojiPicker && (
             <div ref={pickerRef} className="absolute z-20 bottom-20 right-4">
-              <EmojiPicker onEmojiClick={onEmojiClick} height={350} width={320} />
+              <EmojiPicker
+                onEmojiClick={onEmojiClick}
+                height={350}
+                width={320}
+              />
             </div>
           )}
         </div>

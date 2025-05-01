@@ -52,7 +52,9 @@ export const apiEndPoint = {
   deleteAddress: "/user/addresses",
   getAddress: "/user/addresses",
   getSpecificChat :"/chat",
-  getUserChat:"/user/profile/"
+  getUserChat:"/user/profile/",
+  getChats:"/chat/chats",
+  getServiceProviderInfoChat:"/user/profile/serviceprovider-chat/"
 };
 
 export const apiEndPointServiceProvider = {

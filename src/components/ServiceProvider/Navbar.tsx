@@ -6,6 +6,15 @@ import { getRequest } from "../../utils/makeRequestInstance";
 import { addServiceProvider } from "../../redux/slices/serviceProvider";
 import { apiEndPointServiceProvider } from "../../utils/constant";
 import ThemeChange from "../admin/ThemeChange";
+import { 
+  MessageSquare, 
+  Home, 
+  LayoutGrid, 
+  Calendar, 
+  CreditCard,
+  Bell,
+  Mail
+} from "lucide-react"; // Import all needed icons
 
 interface NavbarProps {
   profile: string;
@@ -46,7 +55,7 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
           {/* Mobile menu button */}
           <div className="lg:hidden">
             <button
-              className="btn btn-ghost text-primary-content"
+              className="btn btn-ghost btn-circle text-primary-content hover:bg-primary-focus"
               onClick={toggleMenu}
             >
               <svg
@@ -68,9 +77,9 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
 
           {/* Logo */}
           <Link to="/">
-            <p className="font-serif text-xl btn btn-ghost text-primary-content">
-              ServEasy
-            </p>
+            <div className="flex items-center gap-2 font-serif text-xl btn btn-ghost text-primary-content">
+              <p className="font-bold">ServEasy</p>
+            </div>
           </Link>
         </div>
 
@@ -82,31 +91,47 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                 <li>
                   <Link
                     to="/service-provider/dashboard"
-                    className="font-medium"
+                    className="flex items-center gap-2 font-medium hover:bg-primary-focus"
                   >
-                    Home
+                    <Home size={18} />
+                    <span>Home</span>
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="/service-provider/service-management"
-                    className="font-medium"
+                    className="flex items-center gap-2 font-medium hover:bg-primary-focus"
                   >
-                    Service Management
+                    <LayoutGrid size={18} />
+                    <span>Service Management</span>
                   </Link>
                 </li>
                 <li>
-                <Link to={'/service-provider/booked-services'}>
-
-                  <p className="font-medium">Booking</p>
+                  <Link 
+                    to="/service-provider/booked-services"
+                    className="flex items-center gap-2 font-medium hover:bg-primary-focus"
+                  >
+                    <Calendar size={18} />
+                    <span>Booking</span>
                   </Link>
                 </li>
                 <li>
-                <Link to={'/service-provider/payment-management'}>
-
-                  <p className="font-medium">payment management</p>
+                  <Link 
+                    to="/service-provider/payment-management"
+                    className="flex items-center gap-2 font-medium hover:bg-primary-focus"
+                  >
+                    <CreditCard size={18} />
+                    <span>Payment Management</span>
                   </Link>
-
+                </li>
+                <li>
+                  <Link 
+                    to="/service-provider/chats"
+                    className="flex items-center gap-2 font-medium hover:bg-primary-focus"
+                  >
+                    <MessageSquare size={18} />
+                    <span>Messages</span>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -116,6 +141,28 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
         {serviceProviderInfo.isVerified === "verified" &&
           serviceProviderInfo.isBlocked === false && (
             <div className="navbar-end">
+              {/* Message Button for mobile and tablet */}
+              <div className="flex items-center mr-2 lg:hidden">
+                <Link 
+                  to="/service-provider/chats"
+                  className="relative btn btn-circle btn-ghost text-primary-content hover:bg-primary-focus"
+                >
+                  <MessageSquare size={24} />
+                  <span className="absolute top-0 right-0 flex items-center justify-center w-4 h-4 text-xs text-white rounded-full bg-accent">
+                    3
+                  </span>
+                </Link>
+                <Link 
+                  to="/service-provider/notifications"
+                  className="relative ml-1 btn btn-circle btn-ghost text-primary-content hover:bg-primary-focus"
+                >
+                  <Bell size={24} />
+                  <span className="absolute top-0 right-0 flex items-center justify-center w-4 h-4 text-xs text-white rounded-full bg-secondary">
+                    5
+                  </span>
+                </Link>
+              </div>
+              
               <div className="dropdown dropdown-end">
                 <button
                   tabIndex={0}
@@ -155,34 +202,64 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
         <div className="shadow-lg lg:hidden bg-primary">
           <ul className="w-full px-4 py-2 menu menu-vertical text-primary-content">
             <li>
-              <p className="py-2 font-medium">Home</p>
-            </li>
-            <li className="py-2">
-              <details>
-                <summary className="font-medium">Services</summary>
-                <ul className="p-2 mt-2 rounded bg-base-100">
-                  <li>
-                    <p className="py-2">Add New Services</p>
-                  </li>
-                  <li>
-                    <p className="py-2">Edit Services</p>
-                  </li>
-                  <li>
-                    <p className="py-2">Enable/Disable</p>
-                  </li>
-                </ul>
-              </details>
+              <Link 
+                to="/service-provider/dashboard" 
+                className="flex items-center gap-3 py-2 font-medium rounded-lg hover:bg-primary-focus"
+              >
+                <Home size={20} />
+                <span>Home</span>
+              </Link>
             </li>
             <li>
-              <p className="py-2 font-medium">Service Management</p>
+              <Link 
+                to="/service-provider/service-management" 
+                className="flex items-center gap-3 py-2 font-medium rounded-lg hover:bg-primary-focus"
+              >
+                <LayoutGrid size={20} />
+                <span>Service Management</span>
+              </Link>
             </li>
             <li>
-              
-              <p className="py-2 font-medium">Booking</p>
-
+              <Link 
+                to="/service-provider/booked-services" 
+                className="flex items-center gap-3 py-2 font-medium rounded-lg hover:bg-primary-focus"
+              >
+                <Calendar size={20} />
+                <span>Booking</span>
+              </Link>
             </li>
             <li>
-              <p className="py-2 font-medium">Contact</p>
+              <Link 
+                to="/service-provider/payment-management" 
+                className="flex items-center gap-3 py-2 font-medium rounded-lg hover:bg-primary-focus"
+              >
+                <CreditCard size={20} />
+                <span>Payment Management</span>
+              </Link>
+            </li>
+            <li>
+              <Link 
+                to="/service-provider/chats" 
+                className="flex items-center gap-3 py-2 font-medium rounded-lg hover:bg-primary-focus"
+              >
+                <MessageSquare size={20} />
+                <span>Messages</span>
+                <span className="px-2 py-1 ml-auto text-xs text-white rounded-full bg-accent">
+                  3
+                </span>
+              </Link>
+            </li>
+            <li>
+              <Link 
+                to="/service-provider/notifications" 
+                className="flex items-center gap-3 py-2 font-medium rounded-lg hover:bg-primary-focus"
+              >
+                <Bell size={20} />
+                <span>Notifications</span>
+                <span className="px-2 py-1 ml-auto text-xs text-white rounded-full bg-secondary">
+                  5
+                </span>
+              </Link>
             </li>
           </ul>
         </div>
