@@ -19,7 +19,7 @@ import { RootState } from "../../../redux/store";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { getAllchats, getProfile } from "./getAllchats";
+import { getAllchats, getServiceProviderProfile } from "./getAllchats";
 
 // Add the relativeTime plugin for better time formatting
 dayjs.extend(relativeTime);
@@ -59,7 +59,7 @@ const ChatUser = () => {
     const fetchProfile = async () => {
       if (serviceProviderId) {
         try {
-          const userRes: any = await getProfile(serviceProviderId);
+          const userRes: any = await getServiceProviderProfile(serviceProviderId);
           if (userRes.status === 200) {
             setServiceProvider(userRes.data);
           }

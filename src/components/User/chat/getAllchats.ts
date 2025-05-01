@@ -9,13 +9,23 @@ export const getAllchats =async (sender:string,reciver:string) => {
      return error
   }
 }
-
- 
-export const getProfile=async (id:string)=>{
+export const getServiceProviderProfile=async (id:string)=>{
     try {
-        return  await getRequest(apiEndPoint.getUserChat+""+id)
+        return  await getRequest(apiEndPoint.getServiceProviderInfoChat+""+id)
                   
     } catch (error) {
          return error
       }
+}
+ 
+
+
+export const fetchAllChats= async (data:{serviceProviderId?:string ,userId?:string})=>{
+try {
+    return await postRequest(apiEndPoint.getChats,data)
+
+} catch (error) {
+    console.log(error);
+    
+}
 }
