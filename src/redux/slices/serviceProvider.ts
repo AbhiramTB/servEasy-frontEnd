@@ -16,6 +16,7 @@ interface UserState {
     skills: object[]; 
     socialMedia: string;
     updatedAt: string;
+    userId:string
     __v: number;
     _id: string;
     isBlocked:boolean
@@ -31,6 +32,7 @@ const initialState: UserState = {
     profileImage: "",
     isBlocked:false,
     allServices: [],
+    userId:"",
     serviceProviderEmail: "",
     serviceProviderName: "",
     serviceProviderPhone: "",

@@ -27,6 +27,8 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
       const res = await getRequest(
         apiEndPointServiceProvider.getServiceProvider
       );
+      console.log(res);
+      
       dispatch(addServiceProvider(res.data.serviceProvider));
     } catch (error) {
       console.error("Error fetching service provider:", error);

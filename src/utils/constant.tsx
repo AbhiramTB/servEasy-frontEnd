@@ -51,6 +51,8 @@ export const apiEndPoint = {
   editAddress: "/user/addresses",
   deleteAddress: "/user/addresses",
   getAddress: "/user/addresses",
+  getSpecificChat :"/chat",
+  getUserChat:"/user/profile/"
 };
 
 export const apiEndPointServiceProvider = {
