@@ -30,5 +30,5 @@ export const useSocketNotifications = () => {
     return () => {
       socket.off("notification", handleNotification); // ✅ cleanup
     };
-  }, []); // ✅ only once on mount
+  }, []); 
 };

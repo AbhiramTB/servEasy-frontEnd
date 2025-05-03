@@ -96,6 +96,7 @@ export const serviceEndPoint = {
   getUserBookService: "/service/bookings",
   getSingleBookedService: "/services/bookings",
   getServiceProviderBookService: "/service/bookings/serviceprovider",
+  
 };
 export const routes = {
   siginSignup: "/signin",
