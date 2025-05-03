@@ -6,15 +6,14 @@ import { getRequest } from "../../utils/makeRequestInstance";
 import { addServiceProvider } from "../../redux/slices/serviceProvider";
 import { apiEndPointServiceProvider } from "../../utils/constant";
 import ThemeChange from "../admin/ThemeChange";
-import { 
-  MessageSquare, 
-  Home, 
-  LayoutGrid, 
-  Calendar, 
+import {
+  MessageSquare,
+  Home,
+  LayoutGrid,
+  Calendar,
   CreditCard,
   Bell,
-  Mail
-} from "lucide-react"; // Import all needed icons
+} from "lucide-react";
 
 interface NavbarProps {
   profile: string;
@@ -37,7 +36,7 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
         apiEndPointServiceProvider.getServiceProvider
       );
       console.log(res);
-      
+
       dispatch(addServiceProvider(res.data.serviceProvider));
     } catch (error) {
       console.error("Error fetching service provider:", error);
@@ -107,7 +106,7 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                   </Link>
                 </li>
                 <li>
-                  <Link 
+                  <Link
                     to="/service-provider/booked-services"
                     className="flex items-center gap-2 font-medium hover:bg-primary-focus"
                   >
@@ -116,7 +115,7 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                   </Link>
                 </li>
                 <li>
-                  <Link 
+                  <Link
                     to="/service-provider/payment-management"
                     className="flex items-center gap-2 font-medium hover:bg-primary-focus"
                   >
@@ -125,7 +124,7 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                   </Link>
                 </li>
                 <li>
-                  <Link 
+                  <Link
                     to="/service-provider/chats"
                     className="flex items-center gap-2 font-medium hover:bg-primary-focus"
                   >
@@ -137,13 +136,11 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
             </div>
           )}
 
-        {/* Profile Section */}
         {serviceProviderInfo.isVerified === "verified" &&
           serviceProviderInfo.isBlocked === false && (
             <div className="navbar-end">
-              {/* Message Button for mobile and tablet */}
               <div className="flex items-center mr-2 lg:hidden">
-                <Link 
+                <Link
                   to="/service-provider/chats"
                   className="relative btn btn-circle btn-ghost text-primary-content hover:bg-primary-focus"
                 >
@@ -152,7 +149,7 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                     3
                   </span>
                 </Link>
-                <Link 
+                <Link
                   to="/service-provider/notifications"
                   className="relative ml-1 btn btn-circle btn-ghost text-primary-content hover:bg-primary-focus"
                 >
@@ -162,7 +159,7 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                   </span>
                 </Link>
               </div>
-              
+
               <div className="dropdown dropdown-end">
                 <button
                   tabIndex={0}
@@ -202,8 +199,8 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
         <div className="shadow-lg lg:hidden bg-primary">
           <ul className="w-full px-4 py-2 menu menu-vertical text-primary-content">
             <li>
-              <Link 
-                to="/service-provider/dashboard" 
+              <Link
+                to="/service-provider/dashboard"
                 className="flex items-center gap-3 py-2 font-medium rounded-lg hover:bg-primary-focus"
               >
                 <Home size={20} />
@@ -211,8 +208,8 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/service-provider/service-management" 
+              <Link
+                to="/service-provider/service-management"
                 className="flex items-center gap-3 py-2 font-medium rounded-lg hover:bg-primary-focus"
               >
                 <LayoutGrid size={20} />
@@ -220,8 +217,8 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/service-provider/booked-services" 
+              <Link
+                to="/service-provider/booked-services"
                 className="flex items-center gap-3 py-2 font-medium rounded-lg hover:bg-primary-focus"
               >
                 <Calendar size={20} />
@@ -229,8 +226,8 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/service-provider/payment-management" 
+              <Link
+                to="/service-provider/payment-management"
                 className="flex items-center gap-3 py-2 font-medium rounded-lg hover:bg-primary-focus"
               >
                 <CreditCard size={20} />
@@ -238,8 +235,8 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/service-provider/chats" 
+              <Link
+                to="/service-provider/chats"
                 className="flex items-center gap-3 py-2 font-medium rounded-lg hover:bg-primary-focus"
               >
                 <MessageSquare size={20} />
@@ -250,8 +247,8 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/service-provider/notifications" 
+              <Link
+                to="/service-provider/notifications"
                 className="flex items-center gap-3 py-2 font-medium rounded-lg hover:bg-primary-focus"
               >
                 <Bell size={20} />

@@ -210,7 +210,7 @@ const ChatUser = () => {
       ...prev,
       {
         ...message,
-        timestamp: dayjs(message.timestamp).format("hh:mm A"),
+        timestamp:message.timestamp,
       },
     ]);
 

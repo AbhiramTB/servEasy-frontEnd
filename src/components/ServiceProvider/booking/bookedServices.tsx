@@ -23,30 +23,32 @@ interface Booking {
   serviceName: string;
   serviceType: string;
   serviceImage: string;
+  isOnlineService?: boolean;
 }
 
 const BookedServiceServiceProvider = () => {
-  const dataLimit=4
+  const dataLimit = 4;
   const [bookedServices, setBookedServices] = useState<Booking[]>([]);
-  const [crrPage,setCrrPage]=useState<number>(0)
-  const [totaldata,setTotaldata]=useState<number>(0)
+  const [crrPage, setCrrPage] = useState<number>(0);
+  const [totaldata, setTotaldata] = useState<number>(0);
 
   useEffect(() => {
     getBookedService(crrPage);
   }, []);
 
-  const getBookedService = async (page:number) => {
+  const getBookedService = async (page: number) => {
     try {
       const res = await getRequest(
-        
         `${serviceEndPoint.getServiceProviderBookService}?page=${page}&limit=${dataLimit}`
       );
-      setCrrPage(page)
+      setCrrPage(page);
       console.log(res);
 
       if (res.status === 200) {
+        console.log(res.data.service);
+        
         setBookedServices(res.data.service);
-        setTotaldata(res.data.count)
+        setTotaldata(res.data.count);
       }
     } catch (error) {
       console.error("Error fetching booked services", error);
@@ -59,7 +61,14 @@ const BookedServiceServiceProvider = () => {
       {bookedServices.length > 0 ? (
         <div className="grid gap-4 ">
           {bookedServices.map((service) => (
-            <Link to={"/service-provider/booked-services/" + service._id}>
+            <Link
+              to={
+                service.serviceType==="Online"
+                  ? `/service-provider/booked-services-online/${service._id}`
+                  : `/service-provider/booked-services/${service._id}`
+              }
+            >
+              {" "}
               <ServiceBookingCard booking={service} key={service._id} />
             </Link>
           ))}
@@ -68,7 +77,12 @@ const BookedServiceServiceProvider = () => {
         <p className="text-gray-600">No booked services found.</p>
       )}
 
-      <Pagination crrPage={crrPage} dataLimit={dataLimit} totaldata={totaldata} fetchData={(p)=>getBookedService(p)}/>
+      <Pagination
+        crrPage={crrPage}
+        dataLimit={dataLimit}
+        totaldata={totaldata}
+        fetchData={(p) => getBookedService(p)}
+      />
     </div>
   );
 };

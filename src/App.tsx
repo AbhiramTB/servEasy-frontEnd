@@ -30,12 +30,19 @@ import Chat from "./components/User/chat/ChatUser.tsx";
 import ChatServiceProvider from "./components/User/chat/ChatServiceProvider.tsx";
 import ChatUI from "./components/User/chat/AllChatsServiceProvider.tsx";
 import ChatsUser from "./components/User/chat/AllchatsUser.tsx";
+import BookOnlineService from "./components/User/bookService/BookOnlineService.tsx";
+import ServiceBookingDetailsOnline from "./components/User/bookService/BookedOnlineService.tsx";
+import OnlineBookingManagement from "./components/ServiceProvider/booking/OnlineServiceBookingManagement.tsx";
+import { Toaster } from "react-hot-toast";
 function App() {
   const token = localStorage.getItem("accessToken");
   const adminToken = localStorage.getItem("adminToken");
   console.log(adminToken);
 
   return (
+<>   
+ <Toaster position="top-center" reverseOrder={false} />
+
     <BrowserRouter basename="/">
       <Routes>
         <Route path="/payment/verify" element={<PaymentVerify />} />
@@ -51,13 +58,23 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/service-details/:id" element={<SingleServiceCard />} />
           <Route path="/bookService/:id" element={<BookService />} />
+          <Route
+            path="/bookService-online/:id"
+            element={<BookOnlineService />}
+          />
+
           <Route path="/booked-services/" element={<BookedService />} />
           <Route
             path="/booked-service/:id"
             element={<ViewSIngleBookedService />}
           />
+
+          <Route
+            path="/booked-service-online/:id"
+            element={<ServiceBookingDetailsOnline />}
+          />
           <Route path="chat/:serviceProviderId" element={<Chat />} />
-          <Route path="chats"element={<ChatsUser/>}></Route>
+          <Route path="chats" element={<ChatsUser />}></Route>
         </Route>
 
         <Route element={<ProtectedRoute />}>
@@ -75,6 +92,12 @@ function App() {
               path="booked-services/:id"
               element={<ServiceBookingManage />}
             />
+
+            <Route
+              path="booked-services-online/:id"
+              element={<OnlineBookingManagement />}
+            />
+
             <Route path="service-management" element={<ServiceManagement />} />
             <Route path="payment-management" element={<PaymentManagement />} />
           </Route>
@@ -113,6 +136,7 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+    </>
   );
 }
 

@@ -78,16 +78,18 @@ const SingleServiceCard = () => {
     try {
       const res = await getRequest(`${apiEndPoint.getSingleService}/${id}`);
       setService(res.data.service[0]);
+      
     } catch (error) {
       console.error("Error fetching service:", error);
     }
   };
   const navigate=useNavigate()
   const bookService = async(id:string) =>{
-    navigate("/bookService/"+id)
+    navigate( service?.serviceType==="Online" ? "/bookService-online/"+id :"/bookService/"+id)
      postRequest(serviceEndPoint.bookservice,{serviceId:id})
   }
 
+  console.log(service);
 
   
 
@@ -138,7 +140,7 @@ const SingleServiceCard = () => {
           
           <div className="md:col-span-1">
           
-          <Card bookService={()=>bookService(service._id)} title={service.serviceName} category={service.category} description={service.description} image={service.serviceProviderDetails.profileImage} price={service.estimatedPrice+""} location={service.location.address}  reviewsCount={24} handleChat={()=>navigate('/chat/'+service.serviceProviderDetails.userId)} />
+          <Card bookService={()=>bookService(service._id)} title={service.serviceProviderDetails.serviceProviderName} category={service.category} description={service.description} image={service.serviceProviderDetails.profileImage} price={service.estimatedPrice+""} location={service.location.address}  reviewsCount={24} handleChat={()=>navigate('/chat/'+service.serviceProviderDetails.userId)} />
 
             
           <ServiceProviderDetailsCard email={service.serviceProviderDetails.serviceProviderEmail} phone={service.serviceProviderDetails.serviceProviderPhone} experience={service.serviceProviderDetails.experience} location={service.serviceProviderDetails.location.address}  />
