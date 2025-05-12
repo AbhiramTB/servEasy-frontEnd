@@ -11,9 +11,9 @@ interface UserState {
   serviceProvider?: string;
   isAdmin?: boolean;
   profileImage?: string;
-  serviceProviders: ServiceProvider[]; 
-  users: User[]; 
-  allServices:IService[];
+  serviceProviders: ServiceProvider[];
+  users: User[];
+  allServices: IService[];
 }
 
 interface User {
@@ -25,13 +25,12 @@ interface User {
   isVerified: boolean;
   isBlocked?: boolean;
   profileImage?: string;
-  isAdmin?:boolean;
-
+  isAdmin?: boolean;
 }
 
 export interface Location {
   address: string;
-  latitude: number;  
+  latitude: number;
   longitude: number;
 }
 
@@ -52,7 +51,6 @@ export interface ServiceProvider {
   updatedAt: string;
   __v: number;
   _id: string;
-  
 }
 
 const initialState: UserState = {
@@ -60,36 +58,35 @@ const initialState: UserState = {
   password: "",
   isVerified: false,
   serviceProviders: [],
-  users: [], 
-  allServices:[]
+  users: [],
+  allServices: [],
 };
 
 export interface IService {
-    _id:string,
-    serviceName: string;
-    description: string;
-    serviceType: string;
-    category: string;
-    location: Location;
-    estimatedPrice: number;
-    serviceProviderId:string;
-    isActive?: boolean;
-    // review?: Review[];
-    serviceImage: string;
-    serviceProviderDetails:ServiceProvider[]
-  }
-
-
+  _id: string;
+  serviceName: string;
+  description: string;
+  serviceType: string;
+  category: string;
+  location: Location;
+  estimatedPrice: number;
+  serviceProviderId: string;
+  isActive?: boolean;
+  // review?: Review[];
+  serviceImage: string;
+  serviceProviderDetails: ServiceProvider[];
+}
 
 const adminSlice = createSlice({
   name: "admin",
   initialState,
   reducers: {
     addServiceProviders: (state, action: PayloadAction<ServiceProvider[]>) => {
-      state.serviceProviders = action.payload; 
+      state.serviceProviders = action.payload;
     },
     addProfile: (state, action: PayloadAction<User>) => {
-      const { userName, email, phone, password, isVerified, isBlocked } = action.payload;
+      const { userName, email, phone, password, isVerified, isBlocked } =
+        action.payload;
       state.userName = userName;
       state.email = email;
       state.phone = phone;
@@ -98,25 +95,27 @@ const adminSlice = createSlice({
       state.isBlocked = isBlocked;
     },
     addUsers: (state, action: PayloadAction<User[]>) => {
-        state.users = action.payload;
+      state.users = action.payload;
     },
-   
-  
+
     verifyServiceProvider: (state, action: PayloadAction<string>) => {
-      const provider = state.serviceProviders.find((sp) => sp._id === action.payload);
+      const provider = state.serviceProviders.find(
+        (sp) => sp._id === action.payload
+      );
       if (provider) {
         provider.isVerified = "verified";
       }
     },
     rejectServiceProvider: (state, action: PayloadAction<string>) => {
-      const provider = state.serviceProviders.find((sp) => sp._id === action.payload);
+      const provider = state.serviceProviders.find(
+        (sp) => sp._id === action.payload
+      );
       if (provider) {
         provider.isVerified = "rejected";
       }
-      
     },
     addServices: (state, action: PayloadAction<IService[]>) => {
-      state.allServices= action.payload; 
+      state.allServices = action.payload;
     },
   },
 });

@@ -43,13 +43,22 @@ const HomePageCard: React.FC<HomePageCardProps> = ({ service }) => {
               {service.isActive ? "Active" : "Inactive"}
             </div> */}
           </div>
-          <div className="flex items-center text-sm">
+          {/* <div className="flex items-center text-sm">
             <span className="mr-2 font-medium text-base-content/80">Category:</span>
             <span className="text-base-content/70">{service.category}</span>
-          </div>
-          <div className="mt-1 mb-1 text-lg font-bold text-primary">
-            ₹{service.estimatedPrice.toLocaleString("en-IN")}
-          </div>
+          </div> */}
+
+          {service.serviceType === "Online" ? (
+            <div className="mt-1 mb-1 text-lg font-bold text-primary">
+              ₹{service.estimatedPrice.toLocaleString("en-IN")}
+            </div>
+          ) : (
+            <div className="mt-1 mb-1 text-lg font-bold text-primary">
+              <span className="mr-1 text-sm text-gray-600">Est. Price:</span>₹
+              {service.estimatedPrice.toLocaleString("en-IN")}
+            </div>
+          )}
+
           <p className="text-sm text-base-content/60 line-clamp-2">
             {service.description}
           </p>
@@ -79,7 +88,9 @@ const HomePageCard: React.FC<HomePageCardProps> = ({ service }) => {
             </span>
           </div>
           <div className="justify-end mt-3 card-actions">
-            <button className="w-full btn btn-primary btn-sm">Book Service</button>
+            <button className="w-full btn btn-primary btn-sm">
+              Book Service
+            </button>
           </div>
         </div>
       </div>
