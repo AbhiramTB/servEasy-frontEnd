@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { getRequest } from "../../../utils/makeRequestInstance";
 import RazorpayButton from "../../ui/PaymentButton";
 import ShowBills from "../../ui/ShowBills";
+import ReviewCard from "./ReviewCard";
+import { IReview } from "../../../utils/types/Ireview";
 
 interface Address {
   name: string;
@@ -42,6 +44,8 @@ interface Service {
   updatedAt: string;
 }
 
+
+
 interface ServiceProvider {
   _id: string;
   serviceProviderName: string;
@@ -79,14 +83,16 @@ interface BookingData {
   bookedService: BookedService;
   service: Service;
   serviceProvider: ServiceProvider;
+  review?:IReview
 }
 
 const ServiceBookingDetails = () => {
   const { id } = useParams();
   const [bookingData, setBookingData] = useState<BookingData | null>(null);
+  const [review,setReview]=useState<IReview |null>(null)
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [showBills,setShowBills]=useState(false)
+  const [showBills, setShowBills] = useState(false);
   useEffect(() => {
     if (id) {
       getBookedService(id);
@@ -97,12 +103,12 @@ const ServiceBookingDetails = () => {
     try {
       setLoading(true);
       const res = await getRequest(`service/bookings${id}`);
-
+     
       if (res.status === 200) {
+         
         setBookingData(res.data.service);
+        setReview(res.data.service.review)
       }
-        console.log(bookingData);
-      
     } catch (err) {
       setError("Failed to load booking details");
       console.error(err);
@@ -110,6 +116,9 @@ const ServiceBookingDetails = () => {
       setLoading(false);
     }
   };
+
+  console.log(bookingData);
+  console.log(review);
 
   if (loading) {
     return (
@@ -549,8 +558,13 @@ const ServiceBookingDetails = () => {
                 {bookedService.serviceStatus === "pending" && (
                   <button className="btn btn-error">Cancel Booking</button>
                 )}
-                {bookingData.bookedService.serviceBills  && (
-                  <button onClick={()=>setShowBills(true)} className="btn btn-primary">show bills</button>
+                {bookingData.bookedService.serviceBills && (
+                  <button
+                    onClick={() => setShowBills(true)}
+                    className="btn btn-primary"
+                  >
+                    show bills
+                  </button>
                 )}
                 {!isCancelled && (
                   <button className="btn btn-primary">
@@ -710,45 +724,11 @@ const ServiceBookingDetails = () => {
           {/* Feedback Section */}
           {isCompleted && (
             <div className="mt-6 shadow-xl card bg-base-100">
-              <div className="card-body">
-                <h3 className="mb-4 font-semibold text-primary">
-                  Rate your experience
-                </h3>
-                <div className="flex justify-center mb-4 rating rating-lg">
-                  <input
-                    type="radio"
-                    name="rating-2"
-                    className="bg-orange-400 mask mask-star-2"
-                  />
-                  <input
-                    type="radio"
-                    name="rating-2"
-                    className="bg-orange-400 mask mask-star-2"
-                  />
-                  <input
-                    type="radio"
-                    name="rating-2"
-                    className="bg-orange-400 mask mask-star-2"
-                  />
-                  <input
-                    type="radio"
-                    name="rating-2"
-                    className="bg-orange-400 mask mask-star-2"
-                  />
-                  <input
-                    type="radio"
-                    name="rating-2"
-                    className="bg-orange-400 mask mask-star-2"
-                  />
-                </div>
-                <textarea
-                  className="w-full mb-2 textarea textarea-bordered"
-                  placeholder="Share your experience (optional)"
-                ></textarea>
-                <button className="btn btn-primary btn-block">
-                  Submit Review
-                </button>
-              </div>
+              <ReviewCard
+                bookedServiceId={bookedService._id}
+                serviceId={bookedService.serviceId}
+                review={review }
+              />
             </div>
           )}
 
@@ -793,28 +773,18 @@ const ServiceBookingDetails = () => {
                   Send Order Details
                 </button> */}
 
-
-
-
-                {showBills&& bookingData.bookedService.serviceBills &&
-                  <ShowBills close={()=>setShowBills(false)} serviceName={bookingData.service.serviceName} bills={bookingData.bookedService.serviceBills}></ShowBills>
-                  }
-
-                
+                {showBills && bookingData.bookedService.serviceBills && (
+                  <ShowBills
+                    close={() => setShowBills(false)}
+                    serviceName={bookingData.service.serviceName}
+                    bills={bookingData.bookedService.serviceBills}
+                  ></ShowBills>
+                )}
               </div>
             </div>
           )}
         </div>
       </div>
-
-
-        
-
-
-
-
-
-
     </div>
   );
 };
