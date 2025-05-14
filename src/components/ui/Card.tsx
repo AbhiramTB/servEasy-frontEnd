@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 interface CardProps {
   image?: string;
@@ -16,9 +17,11 @@ interface CardProps {
   estimatedPrice?: number;
   bookService?: () => void;
   handleChat?:()=>void
+  serviceProviderUserId:string
 }
 
 const Card: React.FC<CardProps> = ({
+  serviceProviderUserId,
   image,
   profileImage,
   title,
@@ -117,9 +120,11 @@ const Card: React.FC<CardProps> = ({
 
         {/* Action Buttons */}
         <div className="grid grid-cols-2 gap-3 mt-2">
+          <Link to={"/video-call/"+serviceProviderUserId} >
           <button className="flex items-center justify-center py-3 font-medium text-white transition duration-200 rounded-lg bg-primary hover:bg-primary/90">
             Call
           </button>
+          </Link>
           <button onClick={handleChat} className="flex items-center justify-center py-3 font-medium text-white transition duration-200 bg-green-600 rounded-lg hover:bg-green-700">
             Chat
           </button>

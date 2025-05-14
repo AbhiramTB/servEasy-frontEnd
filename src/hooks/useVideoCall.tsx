@@ -8,6 +8,8 @@ export const useVideoCall = (roomId: string) => {
   const socket = getSocket();
 
   useEffect(() => {
+    if (!roomId) return; 
+    
     const init = async () => {
       // 1. Get User Media
       const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });

@@ -52,13 +52,6 @@ interface Service {
   serviceProviderDetails: ServiceProviderDetails;
 }
 
-interface Review {
-  id: string;
-  username: string;
-  rating: number;
-  comment: string;
-  date: string;
-}
 
 interface RecommendedService {
   id: string;
@@ -202,6 +195,7 @@ const SingleServiceCard = () => {
               price={service.estimatedPrice + ""}
               location={service.location.address}
               reviewsCount={24}
+              serviceProviderUserId={service.serviceProviderDetails.userId}
               handleChat={() =>
                 navigate("/chat/" + service.serviceProviderDetails.userId)
               }

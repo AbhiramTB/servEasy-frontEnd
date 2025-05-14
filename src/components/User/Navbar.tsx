@@ -354,14 +354,12 @@ const Navbar = () => {
     setNotificationCount((prev) => prev + 1);
   };
 
-  // Call the hook directly in the component
   useSocketNotifications(user._id + "", handleNotification);
 
   useEffect(() => {
     getUserProfile();
     simulateUnreadMessages();
 
-    // Add scroll effect
     const handleScroll = () => {
       if (window.scrollY > 20) {
         setScrolled(true);
@@ -376,7 +374,6 @@ const Navbar = () => {
     };
   }, []);
 
-  // Add mock notifications for demo
   useEffect(() => {
     const mockNotifications = [
       {
@@ -469,6 +466,8 @@ const Navbar = () => {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-base-100 bg-opacity-95 shadow-lg backdrop-blur-sm" : "bg-base-100"} border-b navbar border-primary`}
       >
         <div className="flex-1">
+        <h1>{user._id}</h1>
+
           <p className="font-serif text-2xl font-bold tracking-tight btn btn-ghost text-primary hover:text-primary-focus">
             <Link to={"/"} className="flex items-center">
               <span className="relative">
