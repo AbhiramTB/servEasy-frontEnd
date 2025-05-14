@@ -34,6 +34,7 @@ import BookOnlineService from "./components/User/bookService/BookOnlineService.t
 import ServiceBookingDetailsOnline from "./components/User/bookService/BookedOnlineService.tsx";
 import OnlineBookingManagement from "./components/ServiceProvider/booking/OnlineServiceBookingManagement.tsx";
 import { Toaster } from "react-hot-toast";
+import VideoCall from "./components/VideoCall/VideoCall.tsx";
 function App() {
   const token = localStorage.getItem("accessToken");
   const adminToken = localStorage.getItem("adminToken");
@@ -46,6 +47,8 @@ function App() {
     <BrowserRouter basename="/">
       <Routes>
         <Route path="/payment/verify" element={<PaymentVerify />} />
+   
+    <Route path="/video-call/:userId" element={<VideoCall/>}></Route>
 
         <Route
           path="/signIn"

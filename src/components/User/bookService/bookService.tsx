@@ -49,6 +49,8 @@ const BookService = () => {
   const fetchAddresses = async () => {
     try {
       const res = await getRequest(apiEndPoint.getAddress);
+      
+      
       setAddresses(res.data.allAddress || []);
       if (res.data.allAddress.length > 0) {
         setSelectedAddress(res.data.allAddress[0]);
@@ -61,7 +63,9 @@ const BookService = () => {
   const fetchService = async () => {
     try {
       const res = await getRequest(`${apiEndPoint.getSingleService}/${id}`);
-      setService(res.data.service[0]);
+      console.log(res);
+      
+      setService(res.data.services[0]);
     } catch (error) {
       handleRequestError(error);
     }
@@ -76,20 +80,7 @@ const BookService = () => {
     }
   };
 
-  const handleSetDefaultAddress = async (id: string) => {
-    try {
-      await patchRequest(apiEndPoint.deleteAddress, { addressId: id });
 
-      setAddresses(
-        addresses.map((address) => ({
-          ...address,
-          isDefault: address._id === id,
-        }))
-      );
-    } catch (error) {
-      handleRequestError(error);
-    }
-  };
 
   const handleSaveAddress = async (address: IAddress) => {
     try {
@@ -153,27 +144,27 @@ const BookService = () => {
       )}
 
       {!conformCard && (
-        <div className="container bg-base-100 min-h-screen p-6">
+        <div className="container min-h-screen p-6 bg-base-100">
           <Toaster></Toaster>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {/* Addresses Column */}
-            <div className="md:col-span-1 space-y-4">
-              <div className="bg-base-200 rounded-lg p-4 flex justify-between items-center shadow-sm">
-                <h1 className="text-lg font-bold text-primary flex items-center">
-                  <MapPin className="mr-2 w-5 h-5" /> Addresses
+            <div className="space-y-4 md:col-span-1">
+              <div className="flex items-center justify-between p-4 rounded-lg shadow-sm bg-base-200">
+                <h1 className="flex items-center text-lg font-bold text-primary">
+                  <MapPin className="w-5 h-5 mr-2" /> Addresses
                 </h1>
                 <button
                   className="btn btn-primary btn-sm"
                   onClick={() => openAddressModal()}
                 >
-                  <PlusCircle className="mr-1 w-4 h-4" /> Add
+                  <PlusCircle className="w-4 h-4 mr-1" /> Add
                 </button>
               </div>
 
               <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
                 {addresses.length === 0 ? (
-                  <div className="alert bg-base-200 text-base-content text-sm flex items-center">
-                    <PlusCircle className="mr-2 w-5 h-5 text-primary" />
+                  <div className="flex items-center text-sm alert bg-base-200 text-base-content">
+                    <PlusCircle className="w-5 h-5 mr-2 text-primary" />
                     <span>No addresses. Click 'Add' to create one.</span>
                   </div>
                 ) : (
@@ -192,10 +183,10 @@ const BookService = () => {
             </div>
 
             {/* Service and Booking Details Column */}
-            <div className="md:col-span-2 space-y-6">
+            <div className="space-y-6 md:col-span-2">
               {/* Service Provider Details */}
               {service?.serviceProviderDetails && (
-                <div className="card bg-base-200 shadow-md p-6 rounded-xl">
+                <div className="p-6 shadow-md card bg-base-200 rounded-xl">
                   <div className="flex items-center space-x-5">
                     <div className="avatar">
                       <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
@@ -210,28 +201,28 @@ const BookService = () => {
                       </div>
                     </div>
                     <div className="flex-grow">
-                      <h2 className="card-title text-primary text-xl mb-2">
+                      <h2 className="mb-2 text-xl card-title text-primary">
                         {service.serviceProviderDetails.serviceProviderName}
                       </h2>
-                      <div className="text-base-content opacity-80 space-y-2 text-sm">
+                      <div className="space-y-2 text-sm text-base-content opacity-80">
                         <p className="flex items-center">
-                          <Phone className="mr-2 text-primary w-4 h-4" />
+                          <Phone className="w-4 h-4 mr-2 text-primary" />
                           {service.serviceProviderDetails.serviceProviderPhone}
                         </p>
                         <p className="flex items-center">
-                          <Calendar className="mr-2 text-primary w-4 h-4" />
+                          <Calendar className="w-4 h-4 mr-2 text-primary" />
                           {service.serviceProviderDetails.experience} Years
                           Experience
                         </p>
                         <p className="flex items-center">
-                          <MapPinned className="mr-2 text-primary w-4 h-4" />
+                          <MapPinned className="w-4 h-4 mr-2 text-primary" />
                           {service.serviceProviderDetails.location.address}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center text-primary">
-                      <Star fill="currentColor" className="mr-1 w-6 h-6" />
-                      <span className="font-bold text-lg">4.5</span>
+                      <Star fill="currentColor" className="w-6 h-6 mr-1" />
+                      <span className="text-lg font-bold">4.5</span>
                     </div>
                   </div>
                 </div>
@@ -240,18 +231,18 @@ const BookService = () => {
               <div className="flex space-x-5">
                 {/* Service Details */}
                 {service && (
-                  <div className="card w-2/3 ">
+                  <div className="w-2/3 card ">
                     <ServiceDetailsCard service={service} />
                   </div>
                 )}
 
                 {/* Selected Address Confirmation */}
                 {selectedAddress && (
-                  <div className="card bg-base-200 w-1/3 shadow-md p-5 rounded-xl">
+                  <div className="w-1/3 p-5 shadow-md card bg-base-200 rounded-xl">
                     <div className="space-y-4">
-                      <div className="bg-base-100 p-4 rounded-lg">
-                        <h3 className="text-sm font-semibold text-primary flex items-center mb-3">
-                          <CheckCircle className="mr-2 w-5 h-5 text-success" />
+                      <div className="p-4 rounded-lg bg-base-100">
+                        <h3 className="flex items-center mb-3 text-sm font-semibold text-primary">
+                          <CheckCircle className="w-5 h-5 mr-2 text-success" />
                           Selected Address
                         </h3>
                         <div className="text-sm">
@@ -261,14 +252,14 @@ const BookService = () => {
                           <p className="text-base-content opacity-70">
                             {selectedAddress.houseName}
                           </p>
-                          <p className="text-base-content opacity-70 text-xs">
+                          <p className="text-xs text-base-content opacity-70">
                             {selectedAddress.pincode}, {selectedAddress.state}
                           </p>
                         </div>
                       </div>
 
                       {service?.serviceProviderDetails && (
-                        <div className="bg-base-100 p-4 rounded-lg text-sm space-y-2">
+                        <div className="p-4 space-y-2 text-sm rounded-lg bg-base-100">
                           <p className="font-semibold text-primary">Summary</p>
                           <div className="space-y-1">
                             <p>
@@ -301,7 +292,7 @@ const BookService = () => {
                                 </p>
                               )}
                           </div>
-                          <p className="text-xs text-warning mt-2">
+                          <p className="mt-2 text-xs text-warning">
                             Note: The service provider must confirm the service
                             before it proceeds.
                           </p>
@@ -309,7 +300,7 @@ const BookService = () => {
                       )}
 
                       <button
-                        className="btn btn-primary btn-sm w-full mt-3"
+                        className="w-full mt-3 btn btn-primary btn-sm"
                         onClick={handleBooking}
                         disabled={!selectedAddress}
                       >
