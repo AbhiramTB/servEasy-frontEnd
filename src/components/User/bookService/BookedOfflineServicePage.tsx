@@ -4,7 +4,7 @@ import { getRequest } from "../../../utils/makeRequestInstance";
 import RazorpayButton from "../../ui/PaymentButton";
 import ShowBills from "../../ui/ShowBills";
 import ReviewCard from "./ReviewCard";
-import { IReview } from "../../../utils/types/Ireview";
+import { IReview } from "../../../utils/types/IReview";
 
 interface Address {
   name: string;

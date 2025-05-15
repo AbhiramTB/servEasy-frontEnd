@@ -5,7 +5,8 @@ import { apiEndPoint, serviceEndPoint } from "../../../utils/constant";
 import Card from "../../ui/Card";
 import ServiceProviderDetailsCard from "../../ui/ServiceProviderDetailsCard";
 import ServiceDetailsCard from "../../ui/ServiceDetailsCard";
-import { IReview } from "../../../utils/types/Ireview";
+import { IReview } from "../../../utils/types/IReview";
+
 
 interface Location {
   _id: string;
@@ -116,7 +117,7 @@ const SingleServiceCard = () => {
                 {reviews?.map((review) => (
                   <div
                     key={review._id}
-                    className="p-4 bg-white rounded-lg shadow-md hover:shadow-lg"
+                    className="p-4 rounded-lg shadow-md bg-base hover:shadow-lg"
                   >
                     <div className="flex items-center gap-2">
                       {/* <div className="flex items-center justify-center w-10 h-10 font-bold text-blue-800 bg-blue-100 rounded-full">
@@ -214,4 +215,4 @@ const SingleServiceCard = () => {
   );
 };
 
-export default SingleServiceCard;
+export default SingleServiceCard;  
