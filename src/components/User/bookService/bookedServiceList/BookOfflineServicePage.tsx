@@ -8,7 +8,7 @@ import {
   Calendar,
   PlusCircle,
 } from "lucide-react";
-import { AddressCard } from "../../Address/AddressCard";
+import { AddressCard } from "../../../Address/AddressCard";
   
 import {
   deleteRequest,
@@ -16,15 +16,15 @@ import {
   patchRequest,
   postRequest,
   putRequest,
-} from "../../../utils/makeRequestInstance";
-import { apiEndPoint, serviceEndPoint } from "../../../utils/constant";
+} from "../../../../utils/makeRequestInstance";
+import { apiEndPoint, serviceEndPoint } from "../../../../utils/constant";
 import { useParams } from "react-router-dom";
-import ServiceDetailsCard from "../../ui/ServiceDetailsCard";
-import { IAddress } from "../../Address/IAddress";
-import { HotToastError, HotToastSuccess } from "../../../utils/HotToasitify";
+import ServiceDetailsCard from "../../../ui/ServiceDetailsCard";
+import { IAddress } from "../../../Address/IAddress";
+import { HotToastError, HotToastSuccess } from "../../../../utils/HotToasitify";
 import { Toaster } from "react-hot-toast";
-import BookingSuccess from "../../ui/bookingSuccessCard";
-import { AddressEditModal } from "../../Address/AddressEdit";
+import BookingSuccess from "../../../ui/bookingSuccessCard";
+import { AddressEditModal } from "../../../Address/AddressEdit";
 
 const BookService = () => {
   const [addresses, setAddresses] = useState<IAddress[]>([]);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { getRequest } from "../../../utils/makeRequestInstance";
-import { serviceEndPoint } from "../../../utils/constant";
-import ServiceBookingCard from "./ServiceBookingCard";
+import { getRequest } from "../../../../utils/makeRequestInstance";
+import { serviceEndPoint } from "../../../../utils/constant";
+import ServiceBookingCard from "./BookedServiceCard";
 import { Link, useParams } from "react-router-dom";
 
 interface Address {
