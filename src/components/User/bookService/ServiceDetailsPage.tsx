@@ -109,7 +109,7 @@ const SingleServiceCard = () => {
             <ServiceDetailsCard service={service} />
 
             <div className="w-full max-w-4xl mx-auto">
-              <h2 className="pb-2 mb-6 text-2xl font-bold text-gray-800 border-b">
+              <h2 className="pb-2 mb-6 text-2xl font-bold border-b text-inherit">
                 Customer Reviews
               </h2>
 
