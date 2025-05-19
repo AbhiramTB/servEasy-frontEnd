@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { validateEmail, validatePhone } from "../../utils/validate";
 import { Toaster } from "react-hot-toast";
-import { HotToastError, HotToastSuccess } from "../../utils/HotToasitify";
+import { HotToastError, HotToastSuccess } from "../../utils/notificationToast";
 import { apiEndPoint, apiEndPointServiceProvider, serviceEndPoint } from "../../utils/constant";
 import { getRequest, postRequest } from "../../utils/makeRequestInstance";
 import { useDispatch } from "react-redux";

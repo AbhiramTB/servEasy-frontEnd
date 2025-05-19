@@ -3,7 +3,7 @@ import { getRequest } from "../../../utils/makeRequestInstance";
 import { serviceEndPoint } from "../../../utils/constant";
 
 import { Link } from "react-router-dom";
-import ServiceBookingCard from "../../User/bookService/ServiceBookingCard";
+import ServiceBookingCard from "../../User/bookService/bookedServiceList/BookedServiceCard";
 import Pagination from "../../ui/Pagination";
 
 interface Address {

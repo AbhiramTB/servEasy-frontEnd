@@ -173,6 +173,8 @@ const ChatUser = () => {
       senderId: serviceProvider.userId,
       receiverId: userid,
       message: message,
+      senderInfo:{senderName:serviceProvider.serviceProviderName,senderProfile:serviceProvider.profileImage}
+
     });
 
     setMessages((prev) => [...prev, message]);

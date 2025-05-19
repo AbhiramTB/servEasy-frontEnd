@@ -4,7 +4,7 @@ import { addServiceProviders } from "../../redux/slices/adminSlice";
 import { adminGetRequest, adminPatchRequest } from "../../utils/AxiosAdmin";
 import { apiEndPointAdmin } from "../../utils/constant";
 import { RootState } from "../../redux/store";
-import { HotToastSuccess } from "../../utils/HotToasitify";
+import { HotToastSuccess } from "../../utils/notificationToast";
 import { Toaster } from "react-hot-toast";
 
 export interface Location {

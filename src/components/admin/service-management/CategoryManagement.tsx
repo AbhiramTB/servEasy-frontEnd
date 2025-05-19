@@ -1,7 +1,7 @@
 import React, { useState, useEffect, FormEvent } from "react";
 import { apiEndPointAdmin } from "../../../utils/constant";
 import { adminGetRequest, adminPostRequest, adminDeleteRequest, adminPutRequest, adminPatchRequest } from "../../../utils/AxiosAdmin";
-import { HotToastSuccess } from "../../../utils/HotToasitify";
+import { HotToastSuccess } from "../../../utils/notificationToast";
 import { Edit, Eye, EyeOff, Trash2, Plus, Save, X, AlertTriangle } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 

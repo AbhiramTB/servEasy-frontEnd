@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { UserState } from "../../redux/slices/userSlice";
 import { validateEmail, validatePhone } from "../../utils/validate";
-import { HotToastError, HotToastSuccess } from "../../utils/HotToasitify";
+import { HotToastError, HotToastSuccess } from "../../utils/notificationToast";
 import { postRequest, putRequest } from "../../utils/makeRequestInstance";
 import { apiEndPoint } from "../../utils/constant";
 import { Toaster } from "react-hot-toast";

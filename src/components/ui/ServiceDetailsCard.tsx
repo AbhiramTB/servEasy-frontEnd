@@ -36,11 +36,11 @@ const ServiceDetailsCard: React.FC<ServiceDetailsCardProps> = ({ service, review
           {service.serviceName}
         </h1>
         
-        <p className="mb-6 text-gray-700">
+        <p className="mb-6">
           {service.description}
         </p>
         
-     { reviews && <div className="pt-6 border-t border-gray-200">
+     { reviews && <div className="pt-6 border-t ">
         <h3 className="mb-4 text-lg font-semibold text-primary">
         What do people love about this service?
         </h3> 

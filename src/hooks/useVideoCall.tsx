@@ -1,63 +1,65 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getSocket } from "../utils/socket";
 
-export const useVideoCall = (roomId: string) => {
-  const localVideoRef = useRef<HTMLVideoElement>(null);
-  const remoteVideoRef = useRef<HTMLVideoElement>(null);
+export const useVideoCall = (
+  user1: string,
+  user2: string,
+  localVideoRef: React.RefObject<HTMLVideoElement | null>,
+  remoteVideoRef: React.RefObject<HTMLVideoElement | null>
+) => {
   const peerConnection = useRef<RTCPeerConnection | null>(null);
-  const socket = getSocket();
+  const [localStream, setLocalStream] = useState<MediaStream | null>(null);
+  const socketRef = useRef(getSocket());
 
   useEffect(() => {
-    if (!roomId) return; 
-    
+    if (!user1 || !user2) return;
+    const socket = socketRef.current;
+
     const init = async () => {
-      // 1. Get User Media
       const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      setLocalStream(stream);
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = stream;
       }
 
-      // 2. Create WebRTC Connection
       peerConnection.current = new RTCPeerConnection({
         iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
       });
 
-      // 3. Add tracks
       stream.getTracks().forEach((track) => {
         peerConnection.current?.addTrack(track, stream);
       });
 
-      // 4. Set remote stream
       peerConnection.current.ontrack = (event) => {
         if (remoteVideoRef.current) {
           remoteVideoRef.current.srcObject = event.streams[0];
         }
       };
 
-      // 5. ICE candidate
       peerConnection.current.onicecandidate = (event) => {
         if (event.candidate) {
-          socket.emit("signal", { roomId, data: { candidate: event.candidate } });
+          socket.emit("signal", { user1, user2, data: { candidate: event.candidate } });
         }
       };
 
-      // 6. Join room
-      socket.emit("join", roomId);
+      socket.emit("join_video_call", { user1, user2 }, () => {
+        console.log("join video call connected");
 
-      // 7. Handle user joined
-      socket.on("user-joined", async () => {
-        const offer = await peerConnection.current!.createOffer();
-        await peerConnection.current!.setLocalDescription(offer);
-        socket.emit("signal", { roomId, data: { offer } });
+        socket.on("user-joined", async () => {
+          console.log("user joined");
+
+          const offer = await peerConnection.current!.createOffer();
+          await peerConnection.current!.setLocalDescription(offer);
+          socket.emit("signal", { user1, user2, data: { offer } });
+        });
       });
 
-      // 8. Handle signaling
       socket.on("signal", async ({ data }) => {
         if (data.offer) {
           await peerConnection.current!.setRemoteDescription(new RTCSessionDescription(data.offer));
           const answer = await peerConnection.current!.createAnswer();
           await peerConnection.current!.setLocalDescription(answer);
-          socket.emit("signal", { roomId, data: { answer } });
+          socket.emit("signal", { user1, user2, data: { answer } });
         } else if (data.answer) {
           await peerConnection.current!.setRemoteDescription(new RTCSessionDescription(data.answer));
         } else if (data.candidate) {
@@ -65,20 +67,39 @@ export const useVideoCall = (roomId: string) => {
         }
       });
 
-      // 9. Handle user leave
       socket.on("user-left", () => {
-        remoteVideoRef.current!.srcObject = null;
+        if (remoteVideoRef.current) {
+          remoteVideoRef.current.srcObject = null;
+        }
+        endCall(); 
       });
     };
 
     init();
 
-    // 10. Cleanup
     return () => {
-      socket.disconnect();
-      peerConnection.current?.close();
+      endCall();
     };
-  }, [roomId]);
+  }, [user1, user2, localVideoRef, remoteVideoRef]);
 
-  return { localVideoRef, remoteVideoRef };
+  const endCall = () => {
+    const socket = socketRef.current;
+
+    socket.emit("leave_video_call", { user1, user2 });
+    socket.disconnect();
+
+    if (remoteVideoRef.current) {
+      remoteVideoRef.current.srcObject = null;
+    }
+
+    if (localVideoRef.current) {
+      localVideoRef.current.srcObject = null;
+    }
+
+    localStream?.getTracks().forEach((track) => track.stop());
+    peerConnection.current?.close();
+    peerConnection.current = null;
+  };
+
+  return { localStream, endCall };
 };

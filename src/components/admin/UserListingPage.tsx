@@ -5,7 +5,7 @@ import { adminGetRequest, adminPatchRequest } from "../../utils/AxiosAdmin";
 import { apiEndPointAdmin } from "../../utils/constant";
 import { RootState } from "../../redux/store";
 import UserProfileView from "./showProfile";
-import { HotToastSuccess } from "../../utils/HotToasitify";
+import { HotToastSuccess } from "../../utils/notificationToast";
 import { Toaster } from "react-hot-toast";
 import Pagination from "../../utils/ui/pagination";
 

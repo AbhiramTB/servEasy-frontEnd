@@ -1,5 +1,5 @@
 import { Toaster } from "react-hot-toast";
-import { HotToastError } from "../../utils/HotToasitify";
+import { HotToastError } from "../../utils/notificationToast";
 import { postRequest } from "../../utils/makeRequestInstance";
 
 interface PaymentProps {

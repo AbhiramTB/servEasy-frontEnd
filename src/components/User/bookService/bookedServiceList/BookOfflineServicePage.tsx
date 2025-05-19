@@ -21,7 +21,7 @@ import { apiEndPoint, serviceEndPoint } from "../../../../utils/constant";
 import { useParams } from "react-router-dom";
 import ServiceDetailsCard from "../../../ui/ServiceDetailsCard";
 import { IAddress } from "../../../Address/IAddress";
-import { HotToastError, HotToastSuccess } from "../../../../utils/HotToasitify";
+import { HotToastError, HotToastSuccess } from "../../../../utils/notificationToast";
 import { Toaster } from "react-hot-toast";
 import BookingSuccess from "../../../ui/bookingSuccessCard";
 import { AddressEditModal } from "../../../Address/AddressEdit";

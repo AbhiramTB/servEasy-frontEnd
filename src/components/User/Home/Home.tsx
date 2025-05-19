@@ -97,7 +97,6 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-base-100">
-     <Link to={"video-call/68111138f85f2aaf44c69a5f"}> <button >video Call</button> </Link> 
       <div className="relative w-full overflow-hidden rounded-lg bg-base h-96">
         <video 
           src="https://fiverr-res.cloudinary.com/video/upload/v1/video-attachments/generic_asset/asset/706649adfb4e6c2cd5774a6b139d8943-1739467084656/Grad%20LIHP%20narrow"

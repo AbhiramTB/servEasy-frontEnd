@@ -301,14 +301,29 @@ import { getRequest } from "../../utils/makeRequestInstance";
 import { apiEndPoint, apiEndPointServiceProvider } from "../../utils/constant";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import UserProfileModal from "./UpdateProfile";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../redux/slices/userSlice";
-import { HotToastSuccess } from "../../utils/HotToasitify";
-import { MessageCircle, Bell, Menu, X, Trash2 } from "lucide-react";
+import {
+  HotToastChatNotification,
+  HotToastSuccess,
+  HotToastSystemNotification,
+} from "../../utils/notificationToast";
+import {
+  MessageCircle,
+  Bell,
+  Menu,
+  X,
+  Trash2,
+  CheckCircle,
+} from "lucide-react";
 import { useSocketNotifications } from "../../hooks/useNotifications";
 import toast from "react-hot-toast";
+import { ISavedNotification } from "../../utils/types/INotification";
+import Notifications from "../ui/Notifictions";
+
+const ringtune = new Audio("/Ringtone Video call.mp3");
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -316,50 +331,47 @@ const Navbar = () => {
   const user = useSelector((state: RootState) => state.user);
 
   const [editProfile, setEditProfile] = useState<boolean>(false);
-  const [unreadMessages, setUnreadMessages] = useState<number>(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
-
-  // Add notification states
-  const [notifications, setNotifications] = useState<
-    Array<{ id: string; message: string; timestamp: string }>
-  >([]);
+  const location = useLocation();
+  const [notifications, setNotifications] = useState<ISavedNotification[] | []>(
+    []
+  );
   const [notificationCount, setNotificationCount] = useState<number>(0);
   const [showNotifications, setShowNotifications] = useState<boolean>(false);
 
   const handleNotification = (notification: any) => {
-    console.log("Received Notification:", notification);
+    console.log(notification);
 
-    // Dismiss previous toasts
-    toast.dismiss();
+    if (notification.Type === "videocall") {
+      toast.dismiss();
+      ringtune.play();
 
-    // Show new toast
-    toast(notification.message, {
-      icon: "🔔",
-      style: {
-        borderRadius: "10px",
-        background: "#333",
-        color: "#fff",
-      },
-    });
+      // setNotifications([ notification.videoCall]);
+      // setNotificationCount((prev) => prev + 1);
 
-    // Add to notifications
-    const newNotification = {
-      id: Date.now().toString(),
-      message: notification.message,
-      timestamp: new Date().toLocaleString(),
-    };
+      return;
+    } else if (notification.type === "notfication") {
+      HotToastSystemNotification(notification);
+      getNotfication();
 
-    setNotifications((prev) => [newNotification, ...prev]);
-    setNotificationCount((prev) => prev + 1);
+      toast.dismiss();
+    } else if (notification.type === "chat") {
+        HotToastChatNotification(notification, () => {
+          navigate("/chat/" + notification.senderId);
+        });
+        toast.dismiss();
+
+        getNotfication();
+      }
+    
   };
 
   useSocketNotifications(user._id + "", handleNotification);
 
   useEffect(() => {
     getUserProfile();
-    simulateUnreadMessages();
-
+    getNotfication();
     const handleScroll = () => {
       if (window.scrollY > 20) {
         setScrolled(true);
@@ -374,33 +386,16 @@ const Navbar = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const mockNotifications = [
-      {
-        id: "1",
-        message: "Your service booking was confirmed",
-        timestamp: new Date(Date.now() - 3600000).toLocaleString(),
-      },
-      {
-        id: "2",
-        message: "New message from service provider",
-        timestamp: new Date(Date.now() - 7200000).toLocaleString(),
-      },
-      {
-        id: "3",
-        message: "Reminder: Service scheduled tomorrow",
-        timestamp: new Date(Date.now() - 86400000).toLocaleString(),
-      },
-    ];
+  const getNotfication = async () => {
+    try {
+      const res = await getRequest("/notification");
+      console.log();
 
-    setNotifications(mockNotifications);
-    setNotificationCount(mockNotifications.length);
-  }, []);
-
-  const simulateUnreadMessages = () => {
-    setTimeout(() => {
-      setUnreadMessages(3); // Simulate unread messages
-    }, 2000);
+      setNotifications(res.data.notifications);
+      setNotificationCount(res.data.unreadedNotification);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleLogOut = async () => {
@@ -419,7 +414,7 @@ const Navbar = () => {
 
   const getUserProfile = async () => {
     try {
-      const res: any = await getRequest(apiEndPoint.getUserProfile);
+      const res = await getRequest(apiEndPoint.getUserProfile);
       if (res.data.user) {
         dispatch(addUser(res.data.user));
       }
@@ -442,22 +437,8 @@ const Navbar = () => {
     }
   };
 
-  const clearAllNotifications = () => {
-    setNotifications([]);
-    setNotificationCount(0);
-    setShowNotifications(false);
-    HotToastSuccess("All notifications cleared");
-  };
-
   const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
-  };
-
-  const removeNotification = (id: string) => {
-    setNotifications((prev) =>
-      prev.filter((notification) => notification.id !== id)
-    );
-    setNotificationCount((prev) => prev - 1);
   };
 
   return (
@@ -466,8 +447,6 @@ const Navbar = () => {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-base-100 bg-opacity-95 shadow-lg backdrop-blur-sm" : "bg-base-100"} border-b navbar border-primary`}
       >
         <div className="flex-1">
-        <h1>{user._id}</h1>
-
           <p className="font-serif text-2xl font-bold tracking-tight btn btn-ghost text-primary hover:text-primary-focus">
             <Link to={"/"} className="flex items-center">
               <span className="relative">
@@ -500,8 +479,8 @@ const Navbar = () => {
           <Link to={"/chats"}>
             <div className="relative">
               <button
-              className="flex items-center justify-center p-3 text-white transition-all duration-300 transform rounded-full shadow-md bg-primary hover:bg-base-100 hover:shadow-lg hover:scale-105"
-              aria-label="Open Chat"
+                className="flex items-center justify-center p-3 text-white transition-all duration-300 transform rounded-full shadow-md bg-primary hover:bg-base-100 hover:shadow-lg hover:scale-105"
+                aria-label="Open Chat"
               >
                 <MessageCircle className="w-6 h-6" />
               </button>
@@ -524,52 +503,9 @@ const Navbar = () => {
             </button>
             {/* Notification Dropdown */}
             {showNotifications && (
-              <div className="absolute right-0 z-50 mt-2 overflow-hidden transition-all duration-300 origin-top-right transform border rounded-lg shadow-xl w-80 bg-base-100 border-primary border-opacity-20">
-                <div className="p-3 border-b border-base-300">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-medium">Notifications</h3>
-                    {notifications.length > 0 && (
-                      <button
-                        onClick={clearAllNotifications}
-                        className="flex items-center text-sm text-error hover:text-error-focus"
-                      >
-                        <Trash2 className="w-4 h-4 mr-1" />
-                        Clear all
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                <div className="overflow-y-auto max-h-80">
-                  {notifications.length > 0 ? (
-                    notifications.map((notification) => (
-                      <div
-                        key={notification.id}
-                        className="p-3 border-b border-base-200 hover:bg-base-200"
-                      >
-                        <div className="flex justify-between">
-                          <div className="flex-1">
-                            <p className="mb-1">{notification.message}</p>
-                            <p className="text-xs text-base-content text-opacity-60">
-                              {notification.timestamp}
-                            </p>
-                          </div>
-                          <button
-                            onClick={() => removeNotification(notification.id)}
-                            className="ml-2 text-base-content text-opacity-60 hover:text-error"
-                          >
-                            <X className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="p-6 text-center text-base-content text-opacity-60">
-                      <p>No notifications yet</p>
-                    </div>
-                  )}
-                </div>
-              </div>
+              <Notifications notifications={notifications} 
+              decrementUnreadCount={()=>setNotificationCount(notificationCount-1)}
+              />
             )}
           </div>
 
@@ -660,11 +596,6 @@ const Navbar = () => {
               >
                 <MessageCircle className="w-5 h-5 mr-2 text-primary" />
                 <span>Messages</span>
-                {unreadMessages > 0 && (
-                  <span className="flex items-center justify-center w-5 h-5 ml-auto text-xs font-bold text-white bg-red-500 rounded-full">
-                    {unreadMessages}
-                  </span>
-                )}
               </Link>
 
               {/* Mobile Notifications */}

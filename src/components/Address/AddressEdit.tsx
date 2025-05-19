@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { IAddress } from "./IAddress";
-import { HotToastError } from "../../utils/HotToasitify";
+import { HotToastError } from "../../utils/notificationToast";
 
 interface AddressEditModalProps {
   address: Partial<IAddress>;
