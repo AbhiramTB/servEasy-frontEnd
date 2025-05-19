@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getRequest, putRequest } from "../../../utils/makeRequestInstance";
-import { HotToastError, HotToastSuccess } from "../../../utils/HotToasitify";
+import { HotToastError, HotToastSuccess } from "../../../utils/notificationToast";
 import { Toaster } from "react-hot-toast";
 
 interface BookingData {

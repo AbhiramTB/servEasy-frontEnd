@@ -5,7 +5,7 @@ import {
   postRequest,
   putRequest,
 } from "../../../utils/makeRequestInstance";
-import { HotToastError, HotToastSuccess } from "../../../utils/HotToasitify";
+import { HotToastError, HotToastSuccess } from "../../../utils/notificationToast";
 import { Toaster } from "react-hot-toast";
 import PaymentModal from "./paymentModal";
 import { Ipayment } from "../../../utils/types/Ipayment";

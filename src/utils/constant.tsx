@@ -28,7 +28,7 @@ export const darkThemes = {
 };
 
 export const lightTheme = lightThems.theme1;
-export const darkTheme = darkThemes.theme12;
+export const darkTheme = darkThemes.theme1;
 
 export const apiEndPoint = {
   refreshToken: "/refresh-token",

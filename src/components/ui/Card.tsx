@@ -18,6 +18,7 @@ interface CardProps {
   bookService?: () => void;
   handleChat?:()=>void
   serviceProviderUserId:string
+  
 }
 
 const Card: React.FC<CardProps> = ({
@@ -37,6 +38,7 @@ const Card: React.FC<CardProps> = ({
   reviewsCount = 0,
   handleChat,
   bookService,
+  
 }) => {
   return (
     <div className="p-6 mb-6 rounded-lg shadow-md bg-base-200">
@@ -121,8 +123,8 @@ const Card: React.FC<CardProps> = ({
         {/* Action Buttons */}
         <div className="grid grid-cols-2 gap-3 mt-2">
           <Link to={"/video-call/"+serviceProviderUserId} >
-          <button className="flex items-center justify-center py-3 font-medium text-white transition duration-200 rounded-lg bg-primary hover:bg-primary/90">
-            Call
+          <button data-tip="Initiate a video call with this provider" className="flex items-center justify-center w-full py-4 font-medium text-white transition duration-200 bg-red-600 rounded-lg tooltip hover:bg-red-700">
+          Video Call
           </button>
           </Link>
           <button onClick={handleChat} className="flex items-center justify-center py-3 font-medium text-white transition duration-200 bg-green-600 rounded-lg hover:bg-green-700">

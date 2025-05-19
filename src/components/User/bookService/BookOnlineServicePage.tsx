@@ -14,7 +14,7 @@ import BookingSuccess from "../../ui/bookingSuccessCard";
 import { getRequest, postRequest } from "../../../utils/makeRequestInstance";
 import { apiEndPoint, serviceEndPoint } from "../../../utils/constant";
 import { IAddress } from "../../Address/IAddress";
-import { HotToastSuccess } from "../../../utils/HotToasitify";
+import { HotToastSuccess } from "../../../utils/notificationToast";
 
 const BookOnlineService = () => {
   const [selectedAddress, setSelectedAddress] = useState<IAddress | null>(null);

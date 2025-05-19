@@ -9,7 +9,7 @@ import { makeRequest } from "../../../../utils/makeRequest";
 import { apiEndPoint } from "../../../../utils/constant";
 import axios from "axios";
 import { URL } from "../../../../utils/constant";
-import { HotToastSuccess } from "../../../../utils/HotToasitify";
+import { HotToastSuccess } from "../../../../utils/notificationToast";
 
 interface FormData {
   email?: string;

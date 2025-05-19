@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addServices } from "../../../redux/slices/adminSlice";
 import { RootState } from "../../../redux/store";
 import ServiceDetails from "./ServiceDetails";
-import { HotToastError, HotToastSuccess } from "../../../utils/HotToasitify";
+import { HotToastError, HotToastSuccess } from "../../../utils/notificationToast";
 import { Toaster } from "react-hot-toast";
 import Pagination from "../../../utils/ui/pagination";
 

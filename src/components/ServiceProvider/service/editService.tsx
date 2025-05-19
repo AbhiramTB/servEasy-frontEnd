@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Camera, X } from "lucide-react";
 import LocationSearch, { Location } from "../../User/Home/location";
-import { HotToastError, HotToastSuccess } from "../../../utils/HotToasitify";
+import { HotToastError, HotToastSuccess } from "../../../utils/notificationToast";
 import { getRequest, putRequest } from "../../../utils/makeRequestInstance";
 import {
   apiEndPointServiceProvider,

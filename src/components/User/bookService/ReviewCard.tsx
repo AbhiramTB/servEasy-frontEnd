@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { postRequest } from "../../../utils/makeRequestInstance";
-import { HotToastSuccess, HotToastError } from "../../../utils/HotToasitify";
+import { HotToastSuccess, HotToastError } from "../../../utils/notificationToast";
 import { Toaster } from "react-hot-toast";
 
 interface IReview {
