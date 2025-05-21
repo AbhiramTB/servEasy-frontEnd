@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { fetchAllChats } from "./getAllchats";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Video } from "lucide-react";
 
 interface ChatItem {
   _id: string;
@@ -19,6 +20,7 @@ interface ChatItem {
   userId:string
   presence: any[];
 }
+
 
 const ChatsUser: React.FC = () => {
   const [chats, setChats] = useState<ChatItem[] | null>(null);
@@ -101,6 +103,7 @@ const ChatsUser: React.FC = () => {
                     })}
                   </div>
                 </div>
+
               </div>
            
                     </Link>

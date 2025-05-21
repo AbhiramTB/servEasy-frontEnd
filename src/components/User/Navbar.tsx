@@ -309,6 +309,7 @@ import {
   HotToastChatNotification,
   HotToastSuccess,
   HotToastSystemNotification,
+  HotTostVideoCall,
 } from "../../utils/notificationToast";
 import {
   MessageCircle,
@@ -320,8 +321,12 @@ import {
 } from "lucide-react";
 import { useSocketNotifications } from "../../hooks/useNotifications";
 import toast from "react-hot-toast";
-import { ISavedNotification } from "../../utils/types/INotification";
+import {
+  ISavedNotification,
+  IVideoCallNotification,
+} from "../../utils/types/INotification";
 import Notifications from "../ui/Notifictions";
+import { connectSocket } from "../../utils/socket";
 
 const ringtune = new Audio("/Ringtone Video call.mp3");
 
@@ -333,38 +338,48 @@ const Navbar = () => {
   const [editProfile, setEditProfile] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
-  const location = useLocation();
   const [notifications, setNotifications] = useState<ISavedNotification[] | []>(
     []
   );
   const [notificationCount, setNotificationCount] = useState<number>(0);
   const [showNotifications, setShowNotifications] = useState<boolean>(false);
-
   const handleNotification = (notification: any) => {
-    console.log(notification);
-
-    if (notification.Type === "videocall") {
-      toast.dismiss();
+    console.log("Received Notification:", notification);
+  
+    if (notification.type === "video_call") {
+      ringtune.currentTime = 0;
       ringtune.play();
 
-      // setNotifications([ notification.videoCall]);
-      // setNotificationCount((prev) => prev + 1);
+      const socket = connectSocket();
+
+      toast.dismiss();
+     
+      const handleReject = () => {
+        ringtune.currentTime = 0;
+        ringtune.pause();
+        socket.emit("reject_videoCall", {
+          callRoomId: notification.callerId,
+          user2: notification.callerId,
+        });
+      };
+
+      HotTostVideoCall(notification, () => {}, handleReject);
 
       return;
     } else if (notification.type === "notfication") {
+      alert(notification.content);
+
       HotToastSystemNotification(notification);
       getNotfication();
-
       toast.dismiss();
     } else if (notification.type === "chat") {
-        HotToastChatNotification(notification, () => {
-          navigate("/chat/" + notification.senderId);
-        });
-        toast.dismiss();
+      HotToastChatNotification(notification, () => {
+        navigate("/chat/" + notification.senderId);
+      });
+      toast.dismiss();
 
-        getNotfication();
-      }
-    
+      getNotfication();
+    }
   };
 
   useSocketNotifications(user._id + "", handleNotification);
@@ -457,6 +472,18 @@ const Navbar = () => {
           </p>
         </div>
 
+        {/* <VideoCallNotification  ></VideoCallNotification> */}
+
+        <Link
+          to={"/service-provider/video-call/68111138f85f2aaf44c69a5f"}
+          className="flex items-center"
+        >
+          <span className="relative">
+            Serv<span className="text-secondary">Easy</span>
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-secondary transition-all group-hover:w-full"></span>
+          </span>
+        </Link>
+
         <div className="flex md:hidden">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -503,8 +530,11 @@ const Navbar = () => {
             </button>
             {/* Notification Dropdown */}
             {showNotifications && (
-              <Notifications notifications={notifications} 
-              decrementUnreadCount={()=>setNotificationCount(notificationCount-1)}
+              <Notifications
+                notifications={notifications}
+                decrementUnreadCount={() =>
+                  setNotificationCount(notificationCount - 1)
+                }
               />
             )}
           </div>

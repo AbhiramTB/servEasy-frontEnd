@@ -47,4 +47,5 @@ export const useSocketNotifications = (userId: string, onNotify: (notification: 
       socket.off("receive_notification", onNotify);
     };
   }, [userId, onNotify]); // Re-run the effect when userId or onNotify changes
+  
 };

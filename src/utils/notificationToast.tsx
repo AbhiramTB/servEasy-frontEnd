@@ -147,7 +147,7 @@ export function HotTostVideoCall(
         </button>
       </div>
     </div>
-  ));
+  ),{duration:20000});
 }
 
 

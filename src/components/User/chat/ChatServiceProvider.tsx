@@ -8,7 +8,7 @@ import {
   Paperclip,
   Phone,
 } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import {
   connectSocket,
   getSocket,
@@ -265,6 +265,8 @@ const ChatUser = () => {
 
   // Exit early if not authenticated
   if (!serviceProvider.userId) return null;
+ 
+ const navigate=useNavigate()
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -297,15 +299,16 @@ const ChatUser = () => {
           </div>
 
           <div className="flex space-x-3">
-            <button className="btn btn-circle btn-ghost">
+            {/* <button className="btn btn-circle btn-ghost">
               <Phone size={18} />
-            </button>
-            <button className="btn btn-circle btn-ghost">
+            </button> */}
+            
+            <button onClick={()=>navigate(`/service-provider/video-call/${userid}`)} className="btn btn-circle btn-ghost">
               <Video size={18} />
             </button>
-            <button className="btn btn-circle btn-ghost">
+            {/* <button className="btn btn-circle btn-ghost">
               <MoreVertical size={18} />
-            </button>
+            </button> */}
           </div>
         </div>
 

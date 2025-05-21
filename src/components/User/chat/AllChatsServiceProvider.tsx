@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { fetchAllChats } from "./getAllchats";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Video } from "lucide-react";
 
 interface ChatItem {
   _id: string;
@@ -24,6 +25,7 @@ const ChatUI: React.FC = () => {
   const [chats, setChats] = useState<ChatItem[] | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const serviceProviderId = useSelector((state: RootState) => state.serviceProvider.userId);
+  const navigate =useNavigate()
 
   useEffect(() => {
     async function fetchData() {
@@ -72,11 +74,12 @@ const ChatUI: React.FC = () => {
             <div className="p-4 text-sm text-center opacity-50">No chats found</div>
           ) : (
             filteredChats?.map((chat) => (
-             <Link to={"/service-provider/chat/"+chat.userID}>
               <div
                 key={chat._id}
                 className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-base-200"
               >
+                                            <Link to={"/service-provider/chat/"+chat.userID}>
+                   
                 <img
                   src={
                     chat.userAvatar ||
@@ -100,9 +103,18 @@ const ChatUI: React.FC = () => {
                       minute: "2-digit",
                     })}
                   </div>
+
+                 
+
+                  
+                  
+
                 </div>
+                 </Link>
+                <button onClick={()=>navigate(`/service-provider/video-call/${chat.userID}`)} className="btn btn-circle btn-ghost">
+                  <Video size={18} />
+                  </button>
               </div>
-              </Link>
             ))
           )}
         </div>
