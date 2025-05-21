@@ -14,12 +14,16 @@ import {
   CreditCard,
   Bell,
 } from "lucide-react";
+import { useSocketNotifications } from "../../hooks/useNotifications";
+import { HotToastChatNotification, HotToastError, HotToastSystemNotification, HotTostVideoCall } from "../../utils/notificationToast";
+import toast from "react-hot-toast";
+import { connectSocket } from "../../utils/socket";
 
 interface NavbarProps {
   profile: string;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ profile }) => {
+const Navbar: React.FC<NavbarProps> = ({profile}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const serviceProviderInfo = useSelector(
     (state: RootState) => state.serviceProvider
@@ -46,6 +50,44 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const handleNotification = (notification: any) => {
+    console.log(notification);
+    
+
+    if (notification.type === "video_call") {
+      // ringtune.currentTime = 0;
+      // ringtune.play();
+      // // type:"video_call",callerId:user2,callerName,callerProfile:callerProfile,content
+      // // callerName
+       const socket = connectSocket(); 
+
+      toast.dismiss();
+      const handleReject = () => {
+        socket.emit("reject_videoCall", { callRoomId:notification.callRoomId,user2: notification.callerId });
+      };
+      HotTostVideoCall(notification,()=>{},handleReject)
+
+      // setNotifications([ notification.videoCall]);
+      // setNotificationCount((prev) => prev + 1);
+
+      return;
+    } else if (notification.type === "notfication") {
+      HotToastSystemNotification(notification);
+      
+
+      toast.dismiss();
+    } else if (notification.type === "chat") {
+        HotToastChatNotification(notification, () => {
+        });
+        toast.dismiss();
+
+      }
+    
+  };
+
+    useSocketNotifications(serviceProviderInfo.userId,handleNotification);
+  
 
   return (
     <div className="sticky top-0 z-40">

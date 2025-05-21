@@ -1,67 +1,31 @@
-import { useRef, useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useVideoCall } from "../../hooks/useVideoCall";
-import { RootState } from "../../redux/store";
+import React,{ RefObject } from "react";
 
-interface Prop {
-  firstLetter?: string;
-}
 
-const VideoCall: React.FC<Prop> = ({ firstLetter = " " }) => {
-  const { userId } = useParams();
-  const navigate = useNavigate();
-  const localVideoRef = useRef<HTMLVideoElement>(null);
-  const remoteVideoRef = useRef<HTMLVideoElement>(null);
-  const currentUserId = useSelector((state: RootState) => state.user._id);
+interface VideoCallUIProps {
+    localVideoRef: RefObject<HTMLVideoElement|null>;
+    remoteVideoRef: RefObject<HTMLVideoElement|null>;
+    isMicMuted: boolean;
+    isCameraOff: boolean;
+    isRemoteStreamAvailable: boolean;
+    toggleMic: () => void;
+    toggleCamera: () => void;
+    handleEndCall: () => void;
+    firstLetter?: string;
+  }
 
-  const [isMicMuted, setIsMicMuted] = useState(false);
-  const [isCameraOff, setIsCameraOff] = useState(false);
-  const [isRemoteStreamAvailable, setIsRemoteStreamAvailable] = useState(false);
-
-  const { localStream, endCall } = useVideoCall(
-    currentUserId + "",
-    userId!,
-    localVideoRef,
-    remoteVideoRef
-  );
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (remoteVideoRef.current?.srcObject) {
-        setIsRemoteStreamAvailable(true);
-        clearInterval(interval);
-      }
-    }, 500);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const toggleMic = () => {
-    if (localStream) {
-      localStream.getAudioTracks().forEach((track) => {
-        track.enabled = !track.enabled;
-      });
-      setIsMicMuted((prev) => !prev);
-    }
-  };
-
-  const toggleCamera = () => {
-    if (localStream) {
-      localStream.getVideoTracks().forEach((track) => {
-        track.enabled = !track.enabled;
-      });
-      setIsCameraOff((prev) => !prev);
-    }
-  };
-
-  const handleEndCall = () => {
-    endCall();
-    navigate("/");
-  };
-
+const VideoCallUI: React.FC<VideoCallUIProps> = ({
+  localVideoRef,
+  remoteVideoRef,
+  isMicMuted,
+  isCameraOff,
+  isRemoteStreamAvailable,
+  toggleMic,
+  toggleCamera,
+  handleEndCall,
+  firstLetter = "U", 
+}) => {
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-gray-900">
+    <div>
       <div className="relative w-full h-full bg-black">
         <video
           ref={remoteVideoRef}
@@ -75,8 +39,7 @@ const VideoCall: React.FC<Prop> = ({ firstLetter = " " }) => {
               {firstLetter}
             </div>
             <p className="mt-6 text-xl font-medium text-white">Connecting...</p>
-            <div className="flex ">
-
+            <div className="flex">
               <span className="loading loading-spinner loading-xl"></span>
             </div>
           </div>
@@ -119,12 +82,11 @@ const VideoCall: React.FC<Prop> = ({ firstLetter = " " }) => {
             onClick={handleEndCall}
             className="px-5 py-3 font-medium text-white transition-all transform bg-red-600 rounded-full shadow-lg hover:bg-red-700 hover:scale-105"
           >
-            End Call 
+            End Call
           </button>
         </div>
       </div>
 
-      {/* Connection status indicator */}
       <div
         className={`absolute top-4 left-4 z-20 px-3 py-1 rounded-full ${isRemoteStreamAvailable ? "bg-green-500" : "bg-yellow-500 animate-pulse"} text-white text-sm`}
       >
@@ -134,4 +96,4 @@ const VideoCall: React.FC<Prop> = ({ firstLetter = " " }) => {
   );
 };
 
-export default VideoCall;
+export default VideoCallUI;

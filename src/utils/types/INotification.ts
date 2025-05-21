@@ -5,6 +5,9 @@ export interface IVideoCallNotification {
     callerProfile: string;
     callRoomId: string;
   }
+
+
+  
   export interface IChatNotification {
     type: "chat";
     senderId: string;
