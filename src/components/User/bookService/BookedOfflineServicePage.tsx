@@ -5,6 +5,7 @@ import RazorpayButton from "../../ui/PaymentButton";
 import ShowBills from "../../ui/ShowBills";
 import ReviewCard from "./ReviewCard";
 import { IReview } from "../../../utils/types/IReview";
+import ServeasyInvoiceDownloader from "./bookedServiceList/InvoiceDownloader";
 
 interface Address {
   name: string;
@@ -79,7 +80,7 @@ interface BookedService {
   payment?: Ipayment;
 }
 
-interface BookingData {
+export interface BookingData {
   bookedService: BookedService;
   service: Service;
   serviceProvider: ServiceProvider;
@@ -93,6 +94,7 @@ const ServiceBookingDetails = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [showBills, setShowBills] = useState(false);
+  const [download, setDownload] = useState(false);
   useEffect(() => {
     if (id) {
       getBookedService(id);
@@ -573,12 +575,15 @@ const ServiceBookingDetails = () => {
                 )}
 
                 {isCompleted && (
-                  <button className="btn btn-success">Download Invoice</button>
+                  <button className="btn btn-success" onClick={() => {setDownload(true)}}>Download Invoice</button>
+
                 )}
               </div>
             </div>
           </div>
         </div>
+
+    {download && <ServeasyInvoiceDownloader bookingData={bookingData}/>}
 
         {/* Right Side - Details and Price Summary - 1/3 width */}
         <div className="md:col-span-1">
@@ -711,7 +716,7 @@ const ServiceBookingDetails = () => {
                   </div>
                 </div>
               </div>
-              {id && (
+              {id && bookedService.paymentStatus !=="completed"&& (
                 <RazorpayButton
                   serviceid={id}
                   reloadData={() => getBookedService(id)}
