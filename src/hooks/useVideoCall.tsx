@@ -113,6 +113,7 @@ import { HotToastError } from "../utils/notificationToast";
 export const useVideoCall = (
   user1: string,
   user2: string,
+  user:boolean,
   callerName:string,
   callerProfile:string,
   localVideoRef: React.RefObject<HTMLVideoElement | null>,
@@ -164,7 +165,7 @@ export const useVideoCall = (
           }
         };
 
-        socket.emit("join_video_call", { user1, user2 ,callerName,callerProfile}, () => {
+        socket.emit("join_video_call", { user1, user2 ,callerName,callerProfile,user}, () => {
           console.log("join video call connected");
 
           socket.on("user-joined", async () => {

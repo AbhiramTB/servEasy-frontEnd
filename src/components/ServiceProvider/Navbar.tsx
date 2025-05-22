@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { getRequest } from "../../utils/makeRequestInstance";
@@ -15,20 +15,42 @@ import {
   Bell,
 } from "lucide-react";
 import { useSocketNotifications } from "../../hooks/useNotifications";
-import { HotToastChatNotification, HotToastError, HotToastSystemNotification, HotTostVideoCall } from "../../utils/notificationToast";
+import {
+  HotToastChatNotification,
+  HotToastSystemNotification,
+  HotTostVideoCall,
+} from "../../utils/notificationToast";
 import toast from "react-hot-toast";
 import { connectSocket } from "../../utils/socket";
+import { IVideoCallNotification } from "../../utils/types/INotification";
+import VideoCallNotification from "../../utils/ui/VideoCallNotification";
+
+const ringtune = new Audio("/Ringtone Video call.mp3");
 
 interface NavbarProps {
   profile: string;
 }
 
-const Navbar: React.FC<NavbarProps> = ({profile}) => {
+const Navbar: React.FC<NavbarProps> = ({ profile }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const serviceProviderInfo = useSelector(
     (state: RootState) => state.serviceProvider
   );
   const dispatch = useDispatch();
+
+  const location = useLocation();
+  const [pathUrl, setPathUrl] = useState(location.pathname);
+
+  const [videoCallNotification, setVideoCallNotification] =
+    useState<IVideoCallNotification | null>(null);
+  const [rejectFn, setRejectFn] = useState<() => void>(() => () => {});
+  const [acceptFn, setAcceptFn] = useState<() => void>(() => () => {});
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setPathUrl(location.pathname);
+  }, [location.pathname]);
 
   useEffect(() => {
     getServiceProvider();
@@ -53,41 +75,71 @@ const Navbar: React.FC<NavbarProps> = ({profile}) => {
 
   const handleNotification = (notification: any) => {
     console.log(notification);
-    
+    console.log("notification", notification);
 
-    if (notification.type === "video_call") {
-      // ringtune.currentTime = 0;
-      // ringtune.play();
-      // // type:"video_call",callerId:user2,callerName,callerProfile:callerProfile,content
-      // // callerName
-       const socket = connectSocket(); 
+    if (
+      notification.type === "video_call" &&
+      pathUrl !== `/service-provider/video-call/${notification.callerId}` &&
+      pathUrl !== `/video-call/${notification.callerId}`
+    ) {
+      console.log("Current pathUrl:", pathUrl);
+      console.log(
+        "Expected video call path:",
+        `/video-call/${notification.callerId}`
+      );
+      console.log(
+        "Expected service provider path:",
+        `/service-provider/video-call/${notification.callerId}`
+      );
+      console.log("Actual receiverId:", notification.callerId);
+
+      ringtune.currentTime = 0;
+      ringtune.play();
+
+      const socket = connectSocket();
 
       toast.dismiss();
-      const handleReject = () => {
-        socket.emit("reject_videoCall", { callRoomId:notification.callRoomId,user2: notification.callerId });
-      };
-      HotTostVideoCall(notification,()=>{},handleReject)
 
-      // setNotifications([ notification.videoCall]);
-      // setNotificationCount((prev) => prev + 1);
+      const handleReject = () => {
+        ringtune.currentTime = 0;
+        ringtune.pause();
+
+        socket.emit("reject_videoCall", {
+          callRoomId: notification.callerId,
+          user2: notification.callerId,
+        });
+      };
+
+      setRejectFn(() => handleReject);
+
+      const acceptCall = () => {
+       
+
+        ringtune.pause();
+        ringtune.currentTime = 0;
+        if (notification.user) {
+          navigate("/video-call/" + notification.callerId);
+        } else {
+          navigate("/service-provider/video-call/" + +notification.callerId);
+        }
+      };
+
+      setAcceptFn(() => acceptCall);
+
+      if (!videoCallNotification) {
+        setVideoCallNotification(notification);
+      }
+
+      // HotToastVideoCall(notification, () => {}, handleReject);
 
       return;
-    } else if (notification.type === "notfication") {
-      HotToastSystemNotification(notification);
-      
-
-      toast.dismiss();
     } else if (notification.type === "chat") {
-        HotToastChatNotification(notification, () => {
-        });
-        toast.dismiss();
-
-      }
-    
+      HotToastChatNotification(notification, () => {});
+      toast.dismiss();
+    }
   };
 
-    useSocketNotifications(serviceProviderInfo.userId,handleNotification);
-  
+  useSocketNotifications(serviceProviderInfo.userId, handleNotification);
 
   return (
     <div className="sticky top-0 z-40">
@@ -177,6 +229,15 @@ const Navbar: React.FC<NavbarProps> = ({profile}) => {
               </ul>
             </div>
           )}
+
+        {videoCallNotification && (
+          <VideoCallNotification
+            onAccept={() => acceptFn()}
+            onReject={() => rejectFn()}
+            videoCallNotification={videoCallNotification}
+            onClose={() => setVideoCallNotification(null)}
+          />
+        )}
 
         {serviceProviderInfo.isVerified === "verified" &&
           serviceProviderInfo.isBlocked === false && (

@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import ThemeChange from "../ThemeChange";
 import { getRequest } from "../../utils/makeRequestInstance";
@@ -13,15 +12,8 @@ import {
   HotToastChatNotification,
   HotToastSuccess,
   HotToastSystemNotification,
-  
 } from "../../utils/notificationToast";
-import {
-  MessageCircle,
-  Bell,
-  Menu,
-  X,
-
-} from "lucide-react";
+import { MessageCircle, Bell, Menu, X } from "lucide-react";
 import { useSocketNotifications } from "../../hooks/useNotifications";
 import toast from "react-hot-toast";
 import {
@@ -48,35 +40,74 @@ const Navbar = () => {
   );
   const [notificationCount, setNotificationCount] = useState<number>(0);
   const [showNotifications, setShowNotifications] = useState<boolean>(false);
-  const [videoCallNotification, setVideoCallNotification] = useState<IVideoCallNotification | null>(null);
+  const [videoCallNotification, setVideoCallNotification] =
+    useState<IVideoCallNotification | null>(null);
   const [rejectFn, setRejectFn] = useState<() => void>(() => () => {});
+  const [acceptFn, setAcceptFn] = useState<() => void>(() => () => {});
+
+  const location = useLocation();
+  const [pathUrl, setPathUrl] = useState(location.pathname);
+
+  console.log(pathUrl);
+  console.log("pathUrl", pathUrl);
+
+  useEffect(() => {
+    setPathUrl(location.pathname);
+  }, [location.pathname]);
+
   const handleNotification = (notification: any) => {
     console.log("Received Notification:", notification);
-  
-    if (notification.type === "video_call") {
+
+    if (
+      notification.type === "video_call" &&
+      pathUrl !== `/service-provider/video-call/${notification.callerId}` &&
+      pathUrl !== `/video-call/${notification.callerId}`
+    ) {
+      console.log("Current pathUrl:", pathUrl);
+      console.log(
+        "Expected video call path:",
+        `/video-call/${notification.callerId}`
+      );
+      console.log(
+        "Expected service provider path:",
+        `/service-provider/video-call/${notification.callerId}`
+      );
+      console.log("Actual receiverId:", notification.callerId);
+
       ringtune.currentTime = 0;
       ringtune.play();
 
       const socket = connectSocket();
 
       toast.dismiss();
-     
+
       const handleReject = () => {
         ringtune.currentTime = 0;
         ringtune.pause();
-        
+
         socket.emit("reject_videoCall", {
           callRoomId: notification.callerId,
           user2: notification.callerId,
         });
       };
+
       setRejectFn(() => handleReject);
-      if(!videoCallNotification){
-      setVideoCallNotification(notification);
 
+      const acceptCall = () => {
+        ringtune.pause();
+        ringtune.currentTime = 0;
+        if (notification.user) {
+          navigate("/video-call/" + notification.callerId);
+        } else {
+          navigate("/service-provider/video-call/" + +notification.callerId);
+        }
+      };
+
+      setAcceptFn(() => acceptCall);
+
+      if (!videoCallNotification) {
+        setVideoCallNotification(notification);
       }
-
-      // HotToastVideoCall(notification, () => {}, handleReject);
 
       return;
     } else if (notification.type === "notfication") {
@@ -90,7 +121,7 @@ const Navbar = () => {
     } else if (notification.type === "chat") {
       notificatioRingtune.currentTime = 0;
       notificatioRingtune.play();
-      
+
       HotToastChatNotification(notification, () => {
         navigate("/chat/" + notification.senderId);
       });
@@ -190,18 +221,14 @@ const Navbar = () => {
           </p>
         </div>
 
-
-{videoCallNotification && (
-
-     <VideoCallNotification
-      onAccept={() => {}}
-      onReject={() => rejectFn()}
-      videoCallNotification={videoCallNotification}
-      onClose={() => setVideoCallNotification(null)}
-    />
- 
-)}
-       
+        {videoCallNotification && (
+          <VideoCallNotification
+            onAccept={() => acceptFn()}
+            onReject={() => rejectFn()}
+            videoCallNotification={videoCallNotification}
+            onClose={() => setVideoCallNotification(null)}
+          />
+        )}
 
         <div className="flex md:hidden">
           <button
@@ -247,10 +274,11 @@ const Navbar = () => {
                 </span>
               )}
             </button>
-            {/* Notification Dropdown */}
             {showNotifications && (
               <Notifications
-                notifications={notifications}
+              countMakeitZero={()=>setNotificationCount(0)}
+              localNotifications={notifications}
+              setLocalNotifications={setNotifications}
                 decrementUnreadCount={() =>
                   setNotificationCount(notificationCount - 1)
                 }
