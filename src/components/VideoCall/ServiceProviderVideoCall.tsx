@@ -39,6 +39,7 @@ const ServiceProviderVideoCall: React.FC<Prop> = ({ firstLetter = " " }) => {
   const { localStream, endCall } = useVideoCall(
     currentUser.userId + "",
     userId!,
+    true,
     currentUser.serviceProviderName,
     currentUser.profileImage,
     localVideoRef,

@@ -3,8 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useVideoCall } from "../../hooks/useVideoCall";
 import { RootState } from "../../redux/store";
-import VideoCallUI from "./VideoCallUI";
 import { Toaster } from "react-hot-toast";
+import VideoCallUI from "./VideoCallUI";
 
 interface Prop {
   firstLetter?: string;
@@ -38,6 +38,7 @@ const VideoCall: React.FC<Prop> = ({ firstLetter = " " }) => {
   const { localStream, endCall } = useVideoCall(
     currentUser._id + "",
     userId!,
+    true,
     currentUser.userName,
     currentUser.profileImage + "",
     localVideoRef,

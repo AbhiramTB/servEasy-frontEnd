@@ -49,7 +49,6 @@ function App() {
       <Routes>
         <Route path="/payment/verify" element={<PaymentVerify />} />
    
-    <Route path="/video-call/:userId" element={<VideoCall/>}></Route>
 
         <Route
           path="/signIn"
@@ -66,6 +65,7 @@ function App() {
             path="/bookService-online/:id"
             element={<BookOnlineService />}
           />
+         <Route path="/video-call/:userId" element={<VideoCall/>}></Route>
 
           <Route path="/booked-services/" element={<BookedService />} />
           <Route
