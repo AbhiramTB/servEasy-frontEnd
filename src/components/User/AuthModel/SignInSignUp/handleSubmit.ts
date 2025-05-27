@@ -10,6 +10,8 @@ import { apiEndPoint } from "../../../../utils/constant";
 import axios from "axios";
 import { URL } from "../../../../utils/constant";
 import { HotToastSuccess } from "../../../../utils/notificationToast";
+import { Dispatch, SetStateAction } from "react";
+import { NavigateFunction } from "react-router-dom";
 
 interface FormData {
   email?: string;
@@ -19,8 +21,14 @@ interface FormData {
 }
 
 
-export const handleAuth = async (formData:FormData,isSignIn:boolean,setLoading:any,setError:any,navigate:any,isEmail:boolean) => {
-   
+export const handleAuth = async (
+  formData: FormData,
+  isSignIn: boolean,
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  setError: Dispatch<SetStateAction<string | boolean>>,
+  navigate: NavigateFunction,
+  isEmail: boolean
+) => {   
   try {
     const submissionData: {
       userName?: string;

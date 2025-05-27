@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import AuthPage from "./components/User/AuthModel/SignInSignUp/SignInSingUp";
+import AuthPage from "./components/User/AuthModel/AuthPage.tsx";
 import Home from "./components/User/Home/Home.tsx";
 import Body from "./pages/Body";
 import Otp from "./components/User/AuthModel/Otp";

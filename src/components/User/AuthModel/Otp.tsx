@@ -131,62 +131,54 @@ const Otp = () => {
 
 
 
-  return (
-    <div className="flex justify-center pt-24">
+return (
+  <div className="relative w-full h-full min-h-screen bg-black">
+    <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
+    <div className="absolute left-0 right-0 top-[-10%] h-[1000px] w-[1000px] rounded-full bg-[radial-gradient(circle_400px_at_50%_300px,#fbfbfb36,#000)]"></div>
 
-      <div className="card bg-base-100 w-[500px]  border border-primary shadow-2xl">
+    {/* OTP Card */}
+    <div className="relative z-10 flex justify-center pt-24">
+      <div className="card bg-base-100 w-[500px] border border-primary shadow-2xl">
         <div className="mt-3 text-center">
-          <h2 className="font-mono text-xl font-bold ">OTP Verification!</h2>
+          <h2 className="font-mono text-xl font-bold">OTP Verification!</h2>
           <p className="mt-3 font-sans">
             An OTP has already been sent to your {emilOrPhone}.
-          </p>{" "}
+          </p>
         </div>
         <figure className="px-16 pt-5">
-          <div className="flex ">
-            <div className="flex justify-evenly">
-              {otp.map((value, index) => {
-                return (
-                  
-                  <input
-                    type="text"
-                    ref={(el) => {
-                      otpInputRef.current[index] = el;
-                    }}
-                    key={index}
-                    value={value}
-                    max={1}
-                    onChange={(e) => handleChange(e, index)}
-                    // onKeyDown={(e)=>handleKeyDown(e,index)}
-                    className="m-3 text-2xl text-center border rounded-md border-primary bg-base-200 textarea-primary w-14 h-14"
-                  />
-                );
-              })}
-            </div>
+          <div className="flex justify-evenly">
+            {otp.map((value, index) => (
+              <input
+                type="text"
+                ref={(el) => {
+                  otpInputRef.current[index] = el;
+                }}
+                key={index}
+                value={value}
+                maxLength={1}
+                onChange={(e) => handleChange(e, index)}
+                className="m-3 text-2xl text-center border rounded-md border-primary bg-base-200 textarea-primary w-14 h-14"
+              />
+            ))}
           </div>
         </figure>
+
         <div className="flex justify-end">
           {timer <= 0 ? (
-            <div className="">
-            {!resendOtpLoading&&
-            <h1
-                className="mt-3 mr-10 font-mono cursor-pointer opacity-90 hover:text-primary"
-                onClick={() => resendOtp()}
-              >
-                resend Otp
-              </h1>
-            
-            }
-              {resendOtpLoading&&
-              
-             
-                 <span className="mt-3 mr-10 font-mono cursor-pointer opacity-90 hover:text-primary loading loading-dots loading-sm"></span>
-             
-            
-              
-              }
+            <div>
+              {!resendOtpLoading ? (
+                <h1
+                  className="mt-3 mr-10 font-mono cursor-pointer opacity-90 hover:text-primary"
+                  onClick={resendOtp}
+                >
+                  resend Otp
+                </h1>
+              ) : (
+                <span className="mt-3 mr-10 font-mono cursor-pointer opacity-90 hover:text-primary loading loading-dots loading-sm"></span>
+              )}
             </div>
           ) : (
-            <div className="">
+            <div>
               <h1 className="mt-3 mr-10 font-mono opacity-90">
                 OTP expires in{" "}
                 {timer > 5 ? (
@@ -217,7 +209,12 @@ const Otp = () => {
         </div>
       </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default Otp;
+
+
+

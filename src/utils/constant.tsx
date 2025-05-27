@@ -1,4 +1,3 @@
-import { gt } from "lodash";
 
 export const URL: string = "http://localhost:5001";
 
