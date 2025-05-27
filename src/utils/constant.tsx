@@ -1,3 +1,5 @@
+import { gt } from "lodash";
+
 export const URL: string = "http://localhost:5001";
 
 export const lightThems = {
@@ -85,6 +87,7 @@ export const apiEndPointAdmin = {
   deleteService: "/admin/category/service/",
 
   adminLogout: "/admin/logout",
+  gtPaymentInfo: "/admin/dashboard/payment-info",
 };
 
 export const serviceEndPoint = {
