@@ -33,7 +33,8 @@ const GoogleAuthButton: React.FC = () => {
   };
 
   return (
-    <GoogleLogin
+   <div>
+     <GoogleLogin
       onSuccess={handleSuccess}
       onError={handleFailure}
       useOneTap={false}
@@ -42,6 +43,7 @@ const GoogleAuthButton: React.FC = () => {
       text="signin_with"
       logo_alignment="center"
     />
+   </div>
   );
 };
 
