@@ -28,7 +28,7 @@ export const useSocketNotifications = () => {
     socket.on("notification", handleNotification);
 
     return () => {
-      socket.off("notification", handleNotification); // ✅ cleanup
+      socket.off("notification", handleNotification); 
     };
   }, []); 
 };

@@ -109,6 +109,13 @@ const NavBar = () => {
             </Link>
           </li>
           
+    
+          <li>
+            <Link to="/admin/site-settings" className="text-sm font-medium">
+              Site Settings
+            </Link>
+          </li>
+
         </ul>
       </div>
 

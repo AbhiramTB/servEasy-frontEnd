@@ -5,9 +5,8 @@ import { apiEndPoint, apiEndPointServiceProvider } from "../../utils/constant";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import UserProfileModal from "./UpdateProfile";
+// import UserProfileModal from "./UpdateProfile";
 import { useDispatch } from "react-redux";
-import { addUser } from "../../redux/slices/userSlice";
 import {
   HotToastChatNotification,
   HotToastSuccess,
@@ -23,6 +22,7 @@ import {
 import Notifications from "../ui/Notifictions";
 import { connectSocket } from "../../utils/socket";
 import VideoCallNotification from "../../utils/ui/VideoCallNotification";
+import { useFetchUserProfile } from "../../hooks/useFetchUserProfile";
 
 const ringtune = new Audio("/Ringtone Video call.mp3");
 const notificatioRingtune = new Audio("/Ringtone Notification.mp3");
@@ -47,7 +47,7 @@ const Navbar = () => {
 
   const location = useLocation();
   const [pathUrl, setPathUrl] = useState(location.pathname);
-
+useFetchUserProfile()
   console.log(pathUrl);
   console.log("pathUrl", pathUrl);
 
@@ -134,7 +134,6 @@ const Navbar = () => {
   useSocketNotifications(user._id + "", handleNotification);
 
   useEffect(() => {
-    getUserProfile();
     getNotfication();
     const handleScroll = () => {
       if (window.scrollY > 20) {
@@ -176,16 +175,7 @@ const Navbar = () => {
     }
   };
 
-  const getUserProfile = async () => {
-    try {
-      const res = await getRequest(apiEndPoint.getUserProfile);
-      if (res.data.user) {
-        dispatch(addUser(res.data.user));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
 
   const verifyServiceProvider = async () => {
     try {
@@ -431,13 +421,13 @@ const Navbar = () => {
 
       <div className="h-20"></div>
 
-      {editProfile && (
+      {/* {editProfile && (
         <UserProfileModal
           user={user}
           IsCloss={() => setEditProfile(false)}
-          getUserProfile={() => getUserProfile()}
+          getUserProfile={() => useFetchUserProfile()}
         />
-      )}
+      )} */}
     </div>
   );
 };

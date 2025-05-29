@@ -55,7 +55,8 @@ export const apiEndPoint = {
   getSpecificChat :"/chat",
   getUserChat:"/user/profile/",
   getChats:"/chat/chats",
-  getServiceProviderInfoChat:"/user/profile/serviceprovider-chat/"
+  getServiceProviderInfoChat:"/user/profile/serviceprovider-chat/",
+  getThemes:"/themes"
 };
 
 export const apiEndPointServiceProvider = {
@@ -87,6 +88,12 @@ export const apiEndPointAdmin = {
 
   adminLogout: "/admin/logout",
   gtPaymentInfo: "/admin/dashboard/payment-info",
+
+ makeActiveSiteSettings:'admin/site-settings/activate',
+ deleteSiteSettings:'admin/site-settings/delete',
+ addsiteSettings:'admin/site-settings/add',
+  getSiteSettings:'admin/site-settings',
+
 };
 
 export const serviceEndPoint = {

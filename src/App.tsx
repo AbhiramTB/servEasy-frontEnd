@@ -36,111 +36,137 @@ import OnlineBookingManagement from "./components/ServiceProvider/booking/Online
 import { Toaster } from "react-hot-toast";
 import VideoCall from "./components/VideoCall/VideoCallUser.tsx";
 import ServiceProviderVideoCall from "./components/VideoCall/ServiceProviderVideoCall.tsx";
+import SiteSettingsPage from "./components/admin/siteSettings/SiteSettingsPage.tsx";
+import SidebarLayout from "./components/User/profile/SidebarLayout.tsx";
+import UserProfile from "./components/User/profile/updateProfile.tsx";
+import Appearance from "./components/User/profile/Appearance.tsx";
+import AboutUs from "./components/User/profile/AboutUs.tsx";
+// import UserProfile from "./components/User/UpdateProfile.tsx";
 function App() {
   const token = localStorage.getItem("accessToken");
   const adminToken = localStorage.getItem("adminToken");
   console.log(adminToken);
 
   return (
-<>   
- <Toaster position="top-center" reverseOrder={false} />
+    <>
+      <Toaster position="top-center" reverseOrder={false} />
 
-    <BrowserRouter basename="/">
-      <Routes>
-        <Route path="/payment/verify" element={<PaymentVerify />} />
-   
-
-        <Route
-          path="/signIn"
-          element={token ? <Navigate to="/" replace /> : <AuthPage />}
-        />
-
-        <Route path="otp" element={<Otp />} />
-
-        <Route path="/" element={<Body />}>
-          <Route index element={<Home />} />
-          <Route path="/service-details/:id" element={<SingleServiceCard />} />
-          <Route path="/bookService/:id" element={<BookService />} />
-          <Route
-            path="/bookService-online/:id"
-            element={<BookOnlineService />}
-          />
-         <Route path="/video-call/:userId" element={<VideoCall/>}></Route>
-
-          <Route path="/booked-services/" element={<BookedService />} />
-          <Route
-            path="/booked-service/:id"
-            element={<ViewSIngleBookedService />}
-          />
+      <BrowserRouter basename="/">
+        <Routes>
+          <Route path="/payment/verify" element={<PaymentVerify />} />
 
           <Route
-            path="/booked-service-online/:id"
-            element={<ServiceBookingDetailsOnline />}
+            path="/signIn"
+            element={token ? <Navigate to="/" replace /> : <AuthPage />}
           />
-          <Route path="chat/:serviceProviderId" element={<Chat />} />
-          <Route path="chats" element={<ChatsUser />}></Route>
-        </Route>
 
-        <Route element={<ProtectedRoute />}>
-          <Route path="/service-provider" element={<ServiceProviderLayout />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="register" element={<Register />} />
+          <Route path="otp" element={<Otp />} />
+
+          <Route path="/" element={<Body />}>
+            <Route index element={<Home />} />
+
+            <Route path="myprofile" element={<SidebarLayout />}>
+              <Route index element={<UserProfile />} />
+              <Route path="appearance" element={<Appearance />} />
+              <Route path="booked-services/" element={<BookedService />} />
+
+              <Route path="aboutus" element={<AboutUs />} /> 
+            </Route>
+
             <Route
-              path="booked-services"
-              element={<BookedServiceServiceProvider />}
+              path="/service-details/:id"
+              element={<SingleServiceCard />}
             />
-            <Route path="chats" element={<ChatUI />}></Route>
-            <Route path="video-call/:userId" element={<ServiceProviderVideoCall/>}></Route>
-
-            <Route path="chat/:userid" element={<ChatServiceProvider />} />
+            <Route path="/bookService/:id" element={<BookService />} />
             <Route
-              path="booked-services/:id"
-              element={<ServiceBookingManage />}
+              path="/bookService-online/:id"
+              element={<BookOnlineService />}
+            />
+            <Route path="/video-call/:userId" element={<VideoCall />} />
+
+            <Route
+              path="/booked-service/:id"
+              element={<ViewSIngleBookedService />}
             />
 
             <Route
-              path="booked-services-online/:id"
-              element={<OnlineBookingManagement />}
+              path="/booked-service-online/:id"
+              element={<ServiceBookingDetailsOnline />}
             />
-
-            <Route path="service-management" element={<ServiceManagement />} />
-            <Route path="payment-management" element={<PaymentManagement />} />
+            <Route path="chat/:serviceProviderId" element={<Chat />} />
+            <Route path="chats" element={<ChatsUser />}></Route>
           </Route>
-        </Route>
 
-        <Route
-          path="admin/sigin"
-          element={
-            adminToken ? (
-              <Navigate to={"/admin/home"} replace />
-            ) : (
-              <AdminSignIn />
-            )
-          }
-        />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/service-provider" element={<ServiceProviderLayout />}>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="register" element={<Register />} />
+              <Route
+                path="booked-services"
+                element={<BookedServiceServiceProvider />}
+              />
+              <Route path="chats" element={<ChatUI />}></Route>
+              <Route
+                path="video-call/:userId"
+                element={<ServiceProviderVideoCall />}
+              ></Route>
 
-        <Route element={<AdminProtectedRoute />}>
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route path="home" element={<AdminHome />} />
-            <Route path="users" element={<UserListingPage />} />
-            <Route
-              path="serviceProvider/verification"
-              element={<ServiceProviderVerifiction />}
-            />
-            <Route
-              path="serviceProvider"
-              element={<ServiceProviderListing />}
-            />
-            <Route path="service" element={<Allservices />} />
-            <Route
-              path="booking-management"
-              element={<BookingManagement />}
-            ></Route>
-            <Route path="category-management" element={<CategoryList />} />
+              <Route path="chat/:userid" element={<ChatServiceProvider />} />
+              <Route
+                path="booked-services/:id"
+                element={<ServiceBookingManage />}
+              />
+
+              <Route
+                path="booked-services-online/:id"
+                element={<OnlineBookingManagement />}
+              />
+
+              <Route
+                path="service-management"
+                element={<ServiceManagement />}
+              />
+              <Route
+                path="payment-management"
+                element={<PaymentManagement />}
+              />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
+
+          <Route
+            path="admin/sigin"
+            element={
+              adminToken ? (
+                <Navigate to={"/admin/home"} replace />
+              ) : (
+                <AdminSignIn />
+              )
+            }
+          />
+
+          <Route element={<AdminProtectedRoute />}>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route path="home" element={<AdminHome />} />
+              <Route path="users" element={<UserListingPage />} />
+              <Route
+                path="serviceProvider/verification"
+                element={<ServiceProviderVerifiction />}
+              />
+              <Route
+                path="serviceProvider"
+                element={<ServiceProviderListing />}
+              />
+              <Route path="service" element={<Allservices />} />
+              <Route
+                path="booking-management"
+                element={<BookingManagement />}
+              ></Route>
+              <Route path="category-management" element={<CategoryList />} />
+              <Route path="site-settings" element={<SiteSettingsPage />} />
+            </Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
