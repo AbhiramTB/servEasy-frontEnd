@@ -3,6 +3,7 @@ import { getRequest } from "../../../../utils/makeRequestInstance";
 import { serviceEndPoint } from "../../../../utils/constant";
 import ServiceBookingCard from "./BookedServiceCard";
 import { Link, useParams } from "react-router-dom";
+import Pagination from "../../../ui/Pagination";
 
 interface Address {
   name: string;
@@ -55,6 +56,7 @@ const BookedService = () => {
       ) : (
         <p className="text-gray-600">No booked services found.</p>
       )}
+      <Pagination crrPage={0} dataLimit={0} fetchData={()=>{}} totaldata={0}/>
     </div>
   );
 };
