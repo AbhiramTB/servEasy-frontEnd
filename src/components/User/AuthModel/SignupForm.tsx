@@ -1,6 +1,6 @@
 import { FormEvent, useState, ChangeEvent, Dispatch, SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
-import { handleAuth } from "./SignInSignUp/handleSubmit"; 
+import { handleAuth } from "./handleSubmit"; 
 import PasswordStrengthChecker from "./PasswordStrengthChecker";
 
 interface Props {

@@ -1,6 +1,6 @@
 import { FormEvent, useState, ChangeEvent, SetStateAction, Dispatch } from "react";
 import { useNavigate } from "react-router-dom";
-import { handleAuth } from "./SignInSignUp/handleSubmit"; 
+import { handleAuth } from "./handleSubmit"; 
 
 interface Props {
   setForgotPassword: (val: boolean) => void;

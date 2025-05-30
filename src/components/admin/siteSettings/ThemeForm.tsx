@@ -3,7 +3,7 @@ import { adminPostRequest } from '../../../utils/AxiosAdmin';
 import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
 import { apiEndPointAdmin } from '../../../utils/constant';
 
-const ThemeForm = () => {
+const ThemeForm = ({fetchData}:{fetchData:()=>void}) => {
   const [themeName, setThemeName] = useState('');
 
   const handleAddTheme = async () => {
@@ -16,6 +16,7 @@ const ThemeForm = () => {
       const res= await adminPostRequest(apiEndPointAdmin.addsiteSettings,{ type: 'addTheme', name: themeName, isActive: false });
     if(res.status === 201) {
       HotToastSuccess('Theme added successfully!'); 
+      fetchData()
       return;
     }
       setThemeName('');

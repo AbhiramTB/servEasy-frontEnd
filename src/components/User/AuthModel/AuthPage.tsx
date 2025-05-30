@@ -4,9 +4,9 @@ import SignupForm from "./SignupForm";
 import ForgotPassword from "../ForgotPassword/forgotPassword";
 import { ToastContainer } from "react-toastify";
 import ErrorAlertInfo from "./ErrorAlertInfo";
-import GoogleAuthButton from "./SignInSignUp/googleAuth";
+import GoogleAuthButton from "./googleAuth";
 import {MapPinned } from "lucide-react";
-import AboutSection from "./SignInSignUp/AboutSection";
+import AboutSection from "./AboutSection";
 const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [isForgotPassword, setForgotPassword] = useState(false);

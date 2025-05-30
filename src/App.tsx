@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AuthPage from "./components/User/AuthModel/AuthPage.tsx";
-import Home from "./components/User/Home/Home.tsx";
+import Home from "./components/User/Home1/Home.tsx";
 import Body from "./pages/Body";
 import Otp from "./components/User/AuthModel/Otp";
 import Register from "./components/ServiceProvider/Register.tsx";
@@ -41,6 +41,7 @@ import SidebarLayout from "./components/User/profile/SidebarLayout.tsx";
 import UserProfile from "./components/User/profile/updateProfile.tsx";
 import Appearance from "./components/User/profile/Appearance.tsx";
 import AboutUs from "./components/User/profile/AboutUs.tsx";
+import HomePage from "./components/User/home/HomePage.tsx";
 // import UserProfile from "./components/User/UpdateProfile.tsx";
 function App() {
   const token = localStorage.getItem("accessToken");
@@ -64,7 +65,7 @@ function App() {
 
           <Route path="/" element={<Body />}>
             <Route index element={<Home />} />
-
+             <Route path="/serveasy" element={<HomePage/>}/>
             <Route path="myprofile" element={<SidebarLayout />}>
               <Route index element={<UserProfile />} />
               <Route path="appearance" element={<Appearance />} />
@@ -72,6 +73,9 @@ function App() {
 
               <Route path="aboutus" element={<AboutUs />} /> 
             </Route>
+
+
+              <Route path="/booked-services" element={<BookedService />} />
 
             <Route
               path="/service-details/:id"
