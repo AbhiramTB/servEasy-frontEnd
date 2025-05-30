@@ -12,7 +12,7 @@ import { RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
  
 import axiosInstance from "../../utils/AxiosInstance";
-import LocationSearch, { Location } from "../User/Home/location";
+import LocationSearch, { Location } from "../User/Home1/location";
 interface RegisterFormProps {
   className?: string;
 }

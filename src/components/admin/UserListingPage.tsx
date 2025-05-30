@@ -15,7 +15,7 @@ const UserListingPage: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [crrPage, setPage] = useState<number>(0);
   const [totalData, setTotalData] = useState<number>(0);
-  const dataLimit = 5;
+  const dataLimit = 8;
   const getAllUser = useCallback(
     async (page: number) => {
       try {

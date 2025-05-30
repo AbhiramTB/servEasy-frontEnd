@@ -3,12 +3,12 @@ import { adminPostRequest } from '../../../utils/AxiosAdmin';
 import { apiEndPointAdmin } from '../../../utils/constant';
 import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
 
-const HomeBannerForm = ({ close }: { close: () => void }) => {
+const HomeBannerForm = ({ close ,fetchData}: { close: () => void,fetchData:()=>void }) => {
   const [image, setImage] = useState<File | null>(null);
   const [title, setTitle] = useState('');
   const [subtitle, setSubtitle] = useState('');
   const [errors, setErrors] = useState<{ title?: string; subtitle?: string; image?: string }>({});
-
+ const [isLoading,setLoading]= useState(false)
 
 
 const fileToBase64 = (file: File): Promise<string> => {
@@ -31,15 +31,17 @@ const fileToBase64 = (file: File): Promise<string> => {
   const validateForm = () => {
     const newErrors: typeof errors = {};
 
-    if (!image) newErrors.image = 'Image is required.';
-    if (title.trim().length < 5) newErrors.title = 'Title must be at least 5 characters.';
-    if (subtitle.trim().length < 4) newErrors.subtitle = 'Subtitle must be at least 4 characters.';
+    if (!image) newErrors.image = 'Image is required.' , setLoading(false);
+    if (title.trim().length < 5) newErrors.title = 'Title must be at least 5 characters.',  setLoading(false);
+    if (subtitle.trim().length < 4) newErrors.subtitle = 'Subtitle must be at least 4 characters.', setLoading(false);
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleAddBanner = async () => {
+
+    setLoading(true)
     if (!validateForm()) return;
 
   if( !image) {
@@ -54,7 +56,8 @@ const imageBase64 = await fileToBase64(image);
         console.log({type:"addBanner",image:imageBase64,title,subtitle,isActive:false});
         console.log(imageBase64);
       const res = await adminPostRequest(apiEndPointAdmin.addsiteSettings, {type:"addBanner",image:imageBase64,title,subtitle,isActive:false});
-        console.log(res)
+       
+      console.log(res)
       if (res.status === 201) {
         HotToastSuccess('Home banner added successfully!');
         setImage(null);
@@ -62,9 +65,13 @@ const imageBase64 = await fileToBase64(image);
         setSubtitle('');
         setErrors({});
         close();
+        fetchData()
       }
     } catch (err) {
       alert('Failed to add home banner');
+    }finally{
+            setLoading(false)
+
     }
   };
 
@@ -109,9 +116,20 @@ const imageBase64 = await fileToBase64(image);
  
        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD…JRWgguhzitBBBAC0doIIArRFyNBAIcUkuQQTBJKCCCQf/2Q==" alt="" />
 
+      {isLoading&&
+      <button className="w-full mt-4 btn btn-primary" >
+        <span className="loading loading-bars loading-xs"></span>
+
+      </button>
+      
+      }
+
+      {!isLoading&&
+      
       <button className="w-full mt-4 btn btn-primary" onClick={handleAddBanner}>
         Upload Banner
       </button>
+      }
     </div>
   );
 };

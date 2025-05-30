@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import FooterBannerForm from './FooterBannerForm'
 import HomeBannerForm from './HomeBannerForm'
-import { adminGetRequest, adminPatchRequest, adminDeleteRequest } from '../../../utils/AxiosAdmin'
+import { adminGetRequest, adminDeleteRequest, adminPutRequest } from '../../../utils/AxiosAdmin'
 import { apiEndPointAdmin } from '../../../utils/constant'
 import BannerCarousel, { IFooterBanner } from './FooterBannerList'
 import MiniDashboardPreview from './MiniDashboardPreview'
@@ -44,10 +44,10 @@ const SiteSettingsPage = () => {
     }
   }
 
-  const handleMarkDefault = async (id: string, type: 'footer' | 'home') => {
+  const handleMarkDefault = async (id: string, type: 'makeActiveHomeBanner' | 'makeActiveFooterBanner') => {
     try {
-      await adminPatchRequest(`${apiEndPointAdmin.makeActiveSiteSettings}/${id}`,{})
-      if (type === 'footer') {
+      await adminPutRequest(`${apiEndPointAdmin.makeActiveSiteSettings}`,{type,id})
+      if (type === 'makeActiveFooterBanner') {
         setFooterBanners(prev =>
           prev.map(b => ({ ...b, isActive: b._id === id }))
         )
@@ -77,12 +77,12 @@ return (
           </button>
         </div>
 
-        {addHomeBanner && <HomeBannerForm close={() => setHomeBanner(false)} />}
+        {addHomeBanner && <HomeBannerForm close={() => setHomeBanner(false)}  fetchData={()=>{getSiteSettingsData()}} />}
 
         <BannerCarousel
           banners={homeBanners}
           onDelete={(id: string) => handleDeleteBanner(id, 'home')}
-          onMarkDefault={(id: string) => handleMarkDefault(id, 'home')}
+          onMarkDefault={(id: string) => handleMarkDefault(id, 'makeActiveHomeBanner')}
         />
       </div>
 
@@ -98,12 +98,12 @@ return (
           </button>
         </div>
 
-        {addFooterBanner && <FooterBannerForm close={() => setFooterBanner(false)} />}
+        {addFooterBanner && <FooterBannerForm close={() => setFooterBanner(false)}   fetchData={()=>{getSiteSettingsData()}} />}
 
         <BannerCarousel
           banners={footerBanners}
           onDelete={(id: string) => handleDeleteBanner(id, 'footer')}
-          onMarkDefault={(id: string) => handleMarkDefault(id, 'footer')}
+          onMarkDefault={(id: string) => handleMarkDefault(id, 'makeActiveFooterBanner')}
         />
       </div>
     </div>
@@ -112,9 +112,9 @@ return (
  <button className="btn btn-sm btn-primary" onClick={() => setAddTheme(prev => !prev)}>
    {addTheme ? 'Close Form' : 'Add Theme'}
  </button>
- {addTheme && <ThemeForm />}
+ {addTheme && <ThemeForm fetchData={()=>{getSiteSettingsData()}} />}
  <ThemePicker themes={themes}  />
- <MiniDashboardPreview />
+ <MiniDashboardPreview   />
 </div>
 
   </div>

@@ -3,26 +3,29 @@ import { adminPostRequest } from '../../../utils/AxiosAdmin';
 import { apiEndPointAdmin } from '../../../utils/constant';
 import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
 
-const FooterBannerForm = ({ close }: { close?: () => void }) => {
+const FooterBannerForm = ({ close ,fetchData}: { close: () => void,fetchData:()=>void }) => {
   const [image, setImage] = useState<File | null>(null);
   const [title, setTitle] = useState('');
   const [subtitle, setSubtitle] = useState('');
-  const [isActive, setIsActive] = useState(true);
-
+  const [isActive, setIsActive] = useState(false);
+ const [isLoading,setLoading]=useState(false)
   const validateForm = () => {
     let isValid = true;
 
     if (!image) {
       HotToastError('Image is required.');
       isValid = false;
+       setLoading(false)
     }
     if (title.trim().length < 5) {
       HotToastError('Title must be at least 5 characters.');
       isValid = false;
+       setLoading(false)
     }
     if (subtitle.trim().length < 4) {
       HotToastError('Subtitle must be at least 4 characters.');
       isValid = false;
+       setLoading(false)
     }
 
     return isValid;
@@ -38,6 +41,7 @@ const FooterBannerForm = ({ close }: { close?: () => void }) => {
   };
 
   const handleAddFooterBanner = async () => {
+    setLoading(true)
     if (!validateForm()) return;
     if (!image) return;
 
@@ -59,11 +63,14 @@ const FooterBannerForm = ({ close }: { close?: () => void }) => {
         setImage(null);
         setTitle('');
         setSubtitle('');
-        if (close) close();
+        fetchData()
+        close();
       }
     } catch (err) {
       HotToastError('Failed to add footer banner');
       console.error(err);
+    }finally{
+        setLoading(false)
     }
   };
 
@@ -101,9 +108,23 @@ const FooterBannerForm = ({ close }: { close?: () => void }) => {
           />
         </label>
       </div>
+
+
+ {isLoading&&
+      <button className="w-full mt-4 btn btn-primary" >
+        <span className="loading loading-bars loading-xs"></span>
+
+      </button>
+      
+      }
+
+
+
+     {!isLoading && 
       <button className="btn btn-accent" onClick={handleAddFooterBanner}>
         Upload Footer Banner
       </button>
+     }
     </div>
   );
 };

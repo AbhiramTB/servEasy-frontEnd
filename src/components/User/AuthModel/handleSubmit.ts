@@ -3,13 +3,13 @@ import {
   validatePhone,
   validatePassword,
   validateUserName,
-} from "../../../../utils/validate";
-import { toastifySuccess, toastifyError } from "../../../../utils/Toastify";
-import { makeRequest } from "../../../../utils/makeRequest";
-import { apiEndPoint } from "../../../../utils/constant";
+} from "../../../utils/validate";
+import { toastifySuccess, toastifyError } from "../../../utils/Toastify";
+import { makeRequest } from "../../../utils/makeRequest";
+import { apiEndPoint } from "../../../utils/constant";
 import axios from "axios";
-import { URL } from "../../../../utils/constant";
-import { HotToastSuccess } from "../../../../utils/notificationToast";
+import { URL } from "../../../utils/constant";
+import { HotToastSuccess } from "../../../utils/notificationToast";
 import { Dispatch, SetStateAction } from "react";
 import { NavigateFunction } from "react-router-dom";
 

@@ -56,7 +56,8 @@ export const apiEndPoint = {
   getUserChat:"/user/profile/",
   getChats:"/chat/chats",
   getServiceProviderInfoChat:"/user/profile/serviceprovider-chat/",
-  getThemes:"/themes"
+  getThemes:"/themes",
+  getBanners:"/banners/active"
 };
 
 export const apiEndPointServiceProvider = {
