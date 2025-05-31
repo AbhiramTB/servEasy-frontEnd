@@ -21,7 +21,6 @@ const Home = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [searchFocused, setSearchFocused] = useState<boolean>(false);
-  const [locationFocused, setLocationFocused] = useState<boolean>(false);
   const [allServicesData, setAllServicesData] = useState<any[]>([]);
   const [showSearchPanel, setShowSearchPanel] = useState<boolean>(false);
 
