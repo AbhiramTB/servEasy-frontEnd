@@ -198,7 +198,7 @@ useFetchUserProfile()
   return (
     <div>
       <div
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-base-100 bg-opacity-95 shadow-lg backdrop-blur-sm" : "bg-base-100"} border-b navbar border-primary`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "shadow-lg backdrop-blur-3xl" : "bg-base-100 backdrop-blur-md"} navbar `}
       >
         <div className="flex-1">
           <p className="font-serif text-2xl font-bold tracking-tight btn btn-ghost text-primary hover:text-primary-focus">
