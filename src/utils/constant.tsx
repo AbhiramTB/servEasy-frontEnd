@@ -65,6 +65,7 @@ export const apiEndPointServiceProvider = {
   serviceProviderRegister: "/service-providers/register",
   getServiceProvider: "/service-providers/",
   getCategories: "/service-providers/categories",
+  getPaymentInfo:"/service-providers/get-paymentinfo"
 };
 
 export const apiEndPointAdmin = {

@@ -153,8 +153,8 @@ const Allservices = () => {
                   </div>
                   <div className="flex items-center">
                     <img
-                      src={service.serviceProviderDetails.profileImage}
-                      alt={service.serviceProviderDetails.serviceProviderName}
+                      src={service.serviceProviderDetails?.profileImage||""} 
+                      alt={service.serviceProviderDetails?.serviceProviderName}
                       className="object-cover w-8 h-8 mr-2 rounded-full"
                     />
                     <div>

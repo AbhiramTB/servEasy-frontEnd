@@ -64,7 +64,7 @@ function App() {
           <Route path="otp" element={<Otp />} />
 
           <Route path="/" element={<Body />}>
-            <Route index element={<Home />} />
+            <Route index element={<HomePage />} />
              <Route path="/serveasy" element={<HomePage/>}/>
             <Route path="myprofile" element={<SidebarLayout />}>
               <Route index element={<UserProfile />} />

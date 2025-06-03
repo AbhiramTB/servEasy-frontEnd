@@ -56,7 +56,7 @@ const ServiceBookingCard: React.FC<ServiceBookingCardProps> = ({ booking }) => {
   };
 
   return (
-    <div className="overflow-hidden transition-all duration-300 border shadow-xl card card-side bg-base-200 border-primary hover:shadow-2xl">
+    <div className="overflow-hidden transition-all h-60 duration-300 border shadow-xl card card-side bg-base-200 border-primary hover:shadow-2xl">
     <figure className="w-1/4 min-w-32">
       <img
         src={booking?.serviceImage || "/default-service.jpg"}
