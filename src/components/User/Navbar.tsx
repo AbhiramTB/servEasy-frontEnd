@@ -183,7 +183,7 @@ useFetchUserProfile()
         apiEndPointServiceProvider.verifyServiceProvider
       );
       if (res.status === 200) {
-        HotToastSuccess("verification successful");
+        HotToastSuccess("login successful");
         navigate("/service-provider/dashboard");
       }
     } catch (error) {
@@ -314,25 +314,25 @@ useFetchUserProfile()
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-56 p-3 shadow-xl border border-primary border-opacity-20"
             >
               <li className="mb-1">
+                <Link to="/myprofile">
                 <p
                   className="justify-between font-medium transition-colors hover:bg-primary hover:bg-opacity-10"
                   onClick={() => setEditProfile(true)}
                 >
-                  Profile
+                  My account
                 </p>
+                </Link>
               </li>
+
+              
               <li className="mb-1">
-                <Link to={"/booked-services/"}>
+                <Link to={"/myprofile/booked-services/"}>
                   <a className="font-medium transition-colors hover:bg-primary hover:bg-opacity-10">
                     Your Bookings
                   </a>
                 </Link>
               </li>
-              <li className="mb-1">
-                <p className="font-medium transition-colors hover:bg-primary hover:bg-opacity-10">
-                  <ThemeChange />
-                </p>
-              </li>
+             
               <div className="my-2 border-t border-base-300"></div>
               <li>
                 <p

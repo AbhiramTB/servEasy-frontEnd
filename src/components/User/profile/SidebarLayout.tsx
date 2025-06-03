@@ -3,6 +3,7 @@ import { FaUser, FaCalendarCheck, FaPalette, FaCreditCard } from 'react-icons/fa
 import { useSelector } from 'react-redux';
 import { NavLink, Outlet } from 'react-router-dom';
 import { RootState } from '../../../redux/store';
+import { Info } from 'lucide-react';
 
 const SidebarLayout = () => {
   const user = useSelector((state: RootState) => state.user);
@@ -17,7 +18,7 @@ const SidebarLayout = () => {
           <SidebarItem icon={<FaUser />} label="My Profile" to="/myprofile" end />
           <SidebarItem icon={<FaCalendarCheck />} label="My Bookings" to="/myprofile/booked-services/" />
           <SidebarItem icon={<FaPalette />} label="Appearance" to="/myprofile/appearance" />
-          <SidebarItem icon={<FaCreditCard />} label="My Payments" to="/myprofile/aboutus" />
+          <SidebarItem icon={<Info />} label="About ServEasy" to="/myprofile/aboutus" />
         </nav>
       </aside>
 

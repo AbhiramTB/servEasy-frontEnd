@@ -10,7 +10,10 @@ import PaymentChartSection from "../Chart/PaymentChartSection";
 import PaymentTable from "../Chart/PaymentTable";
 
 import { adminGetRequest } from "../../utils/AxiosAdmin";
-import { apiEndPointAdmin } from "../../utils/constant";
+import { apiEndPointAdmin, apiEndPointServiceProvider } from "../../utils/constant";
+import RejectedRequestPage from "./service/RejectedRequestPage";
+import BlockedUserMessage from "./service/BlockedMessage";
+import { getRequest } from "../../utils/makeRequestInstance";
 
 interface PaymentData {
   totalRevenue: number;
@@ -37,10 +40,10 @@ const ServiceProviderDashboard: React.FC = () => {
     try {
       const url =
         startDate && endDate
-          ? `${apiEndPointAdmin.gtPaymentInfo}?startDate=${startDate}&endDate=${endDate}`
-          : apiEndPointAdmin.gtPaymentInfo;
+          ? `${apiEndPointServiceProvider.getPaymentInfo}?startDate=${startDate}&endDate=${endDate}`
+          : apiEndPointServiceProvider.getPaymentInfo;
 
-      const res = await adminGetRequest(url);
+      const res = await getRequest(url);
       if (res.data?.paymentData) setPaymentData(res.data.paymentData);
     } catch (err) {
       console.error(err);
@@ -57,16 +60,43 @@ const ServiceProviderDashboard: React.FC = () => {
     netRevenue: item.totalRevenue - item.totalConvenienceFee,
   }));
 
-  if (!serviceProviderInfo.isVerified) {
+
+
+
+
+     if (serviceProviderInfo.isBlocked===true) {
     return (
       <>
-        <PendingVerificationCard email={serviceProviderInfo.serviceProviderEmail} />
+        <BlockedUserMessage  />
       </>
     );
   }
 
+
+
+
+  if (serviceProviderInfo.isVerified==="pending") {
+    return (
+      <>
+        <PendingVerificationCard  />
+      </>
+    );
+  }
+
+    if (serviceProviderInfo.isVerified==="rejected") {
+    return (
+      <>
+        <RejectedRequestPage  />
+      </>
+    );
+  }
+
+
+ 
+  
+
   return (
-    <div className="min-h-screen bg-base text-base-content">
+    <div className="min-h-screen bg-white text-base-content">
 
       <main className="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <header className="mb-6">
