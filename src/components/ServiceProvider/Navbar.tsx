@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getRequest } from "../../utils/makeRequestInstance";
 import { addServiceProvider } from "../../redux/slices/serviceProvider";
 import { apiEndPointServiceProvider } from "../../utils/constant";
-import ThemeChange from "../admin/ThemeChange";
 import {
   MessageSquare,
   Home,
@@ -38,8 +37,6 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
   );
   const dispatch = useDispatch();
 
-  const location = useLocation();
-  const [pathUrl, setPathUrl] = useState(location.pathname);
 
   const [videoCallNotification, setVideoCallNotification] =
     useState<IVideoCallNotification | null>(null);
@@ -48,9 +45,6 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setPathUrl(location.pathname);
-  }, [location.pathname]);
 
   useEffect(() => {
     getServiceProvider();
@@ -61,7 +55,6 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
       const res = await getRequest(
         apiEndPointServiceProvider.getServiceProvider
       );
-      console.log(res);
 
       dispatch(addServiceProvider(res.data.serviceProvider));
     } catch (error) {
@@ -78,11 +71,9 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
     console.log("notification", notification);
 
     if (
-      notification.type === "video_call" &&
-      pathUrl !== `/service-provider/video-call/${notification.callerId}` &&
-      pathUrl !== `/video-call/${notification.callerId}`
+      notification.type === "video_call" 
+
     ) {
-      console.log("Current pathUrl:", pathUrl);
       console.log(
         "Expected video call path:",
         `/video-call/${notification.callerId}`
@@ -278,7 +269,14 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                   className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-lg"
                 >
                   <li>
-                    <ThemeChange />
+                   <Link to="myprofile">
+                      <button
+                     
+                      className="w-full text-left"
+                    >
+                      My profile
+                    </button>
+                    </Link>
                   </li>
                   <li>
                     <button

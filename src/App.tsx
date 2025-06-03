@@ -42,6 +42,7 @@ import UserProfile from "./components/User/profile/updateProfile.tsx";
 import Appearance from "./components/User/profile/Appearance.tsx";
 import AboutUs from "./components/User/profile/AboutUs.tsx";
 import HomePage from "./components/User/home/HomePage.tsx";
+import Myprofile from "./components/ServiceProvider/service/profile/Myprofile.tsx";
 // import UserProfile from "./components/User/UpdateProfile.tsx";
 function App() {
   const token = localStorage.getItem("accessToken");
@@ -120,6 +121,8 @@ function App() {
                 path="booked-services/:id"
                 element={<ServiceBookingManage />}
               />
+                            <Route path="myprofile" element={<Myprofile />} />
+
 
               <Route
                 path="booked-services-online/:id"

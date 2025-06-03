@@ -69,7 +69,7 @@ const BookedServiceServiceProvider = () => {
               }
             >
               {" "}
-              <ServiceBookingCard booking={service} key={service._id} />
+              <ServiceBookingCard  booking={service} key={service._id} />
             </Link>
           ))}
         </div>
