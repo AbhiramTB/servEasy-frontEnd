@@ -66,7 +66,7 @@ return (
 
     <div className="flex gap-x-6">
       {/* Home Banners Section */}
-      <div className="w-1/2 border p1 ">
+      <div className="border  p1">
         <div className="flex justify-between mb-4">
           <h2 className="text-xl font-semibold">Home Banners</h2>
           <button
@@ -87,7 +87,7 @@ return (
       </div>
 
       {/* Footer Banners Section */}
-      <div className="w-1/2 border ">
+      {/* <div className="w-1/2 border ">
         <div className="flex justify-between mb-4">
           <h2 className="text-xl font-semibold">Footer Banners</h2>
           <button
@@ -105,7 +105,7 @@ return (
           onDelete={(id: string) => handleDeleteBanner(id, 'footer')}
           onMarkDefault={(id: string) => handleMarkDefault(id, 'makeActiveFooterBanner')}
         />
-      </div>
+      </div> */}
     </div>
 <div className="mt-2 light ">
  <h1 className='text-3xl font-bold text-center'>themes</h1>

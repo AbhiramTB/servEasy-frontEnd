@@ -34,11 +34,16 @@ export interface Location {
   longitude: number;
 }
 
+ interface IBankDetails {
+  accountHolderName: string;
+  accountNumber: string;
+  ifscCode: string;
+}
 export interface ServiceProvider {
   createdAt: string;
   description: string;
-  document: string;
-  experience: number;
+  document: string[];
+    experience: number;
   isVerified: string;
   location: Location;
   profileImage: string;
@@ -47,10 +52,12 @@ export interface ServiceProvider {
   serviceProviderPhone: string;
   services: string[];
   skills: object[];
+  bankDetails:IBankDetails,
   socialMedia: string;
   updatedAt: string;
   __v: number;
   _id: string;
+  
 }
 
 const initialState: UserState = {

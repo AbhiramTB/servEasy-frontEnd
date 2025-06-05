@@ -5,6 +5,20 @@ export const useTheme = (defaultTheme: string = 'light') => {
     return localStorage.getItem('theme')?.trim() || defaultTheme;
   });
 
+
+ useEffect(() => {
+    const stored = localStorage.getItem('theme')?.trim();
+    if (stored) {
+      setTheme(stored);
+      document.documentElement.setAttribute('data-theme', stored);
+    } else {
+      document.documentElement.setAttribute('data-theme', defaultTheme);
+    }
+  }, []);
+
+
+
+
   useEffect(() => {
     const trimmed = theme.trim();
     document.documentElement.setAttribute('data-theme', trimmed);

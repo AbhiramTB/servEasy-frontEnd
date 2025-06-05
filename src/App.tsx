@@ -3,7 +3,7 @@ import AuthPage from "./components/User/AuthModel/AuthPage.tsx";
 import Home from "./components/User/Home1/Home.tsx";
 import Body from "./pages/Body";
 import Otp from "./components/User/AuthModel/Otp";
-import Register from "./components/ServiceProvider/Register.tsx";
+import Register from "./components/ServiceProvider/Register/Register.tsx";
 import AdminSignIn from "../src/components/admin/auth/Sigin.tsx";
 import AdminHome from "../src/components/admin/Home.tsx";
 import ServiceProviderVerifiction from "./components/admin/ServiceProviderVerification.tsx";

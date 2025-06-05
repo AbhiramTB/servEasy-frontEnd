@@ -254,5 +254,5 @@ export function HotToastSystemNotification(notification:{content:string,timestam
         </button> 
       </div> 
     </div> 
-  ),{ duration: 10000,});
+  ),{ duration: 20000,});
 }
