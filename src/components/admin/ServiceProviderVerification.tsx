@@ -1,35 +1,20 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addServiceProviders } from "../../redux/slices/adminSlice";
+import {
+  addServiceProviders,
+  ServiceProvider,
+} from "../../redux/slices/adminSlice";
 import { adminGetRequest, adminPatchRequest } from "../../utils/AxiosAdmin";
 import { apiEndPointAdmin } from "../../utils/constant";
 import { RootState } from "../../redux/store";
 import { HotToastSuccess } from "../../utils/notificationToast";
 import { Toaster } from "react-hot-toast";
+import DocumentViewer from "./DocumentViewer";
 
 export interface Location {
   address: string;
   latitude: number;
   longitude: number;
-}
-
-interface ServiceProvider {
-  createdAt: string;
-  description: string;
-  document: string;
-  experience: number;
-  isVerified: string;
-  location: Location;
-  profileImage: string;
-  serviceProviderEmail: string;
-  serviceProviderName: string;
-  serviceProviderPhone: string;
-  services: string[];
-  skills: object[];
-  socialMedia: string;
-  updatedAt: string;
-  __v: number;
-  _id: string;
 }
 
 interface RejectModalProps {
@@ -114,9 +99,11 @@ const ServiceProviderVerification: React.FC = () => {
   useEffect(() => {
     getAllServiceProviders();
   }, [getAllServiceProviders]);
+
   const serviceProviders = useSelector(
     (state: RootState) => state.admin.serviceProviders
   );
+
   const handleVerify = async (providerId: string) => {
     try {
       const data = { serviceProviderId: providerId, action: "verify" };
@@ -153,7 +140,6 @@ const ServiceProviderVerification: React.FC = () => {
       );
       HotToastSuccess("Service provider rejected");
       getAllServiceProviders();
-      //   dispatch(addServiceProviders(res.data.data));
       setIsRejectModalOpen(false);
       setSelectedProviderId(null);
     } catch (error) {
@@ -185,7 +171,7 @@ const ServiceProviderVerification: React.FC = () => {
   return (
     <div className="min-h-screen bg-base-100 text-base-content">
       <Toaster position="top-center" reverseOrder={false} />
-  
+
       {/* Image Preview Modal */}
       {imagePreview.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
@@ -217,24 +203,22 @@ const ServiceProviderVerification: React.FC = () => {
           </div>
         </div>
       )}
-  
+
       {/* Reject Modal */}
       <RejectModal
         isOpen={isRejectModalOpen}
         onClose={() => setIsRejectModalOpen(false)}
         onSubmit={handleReject}
       />
-  
+
       <main className="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold">
-            Service Provider Verification
-          </h1>
+          <h1 className="text-3xl font-bold">Service Provider Verification</h1>
           <p className="mt-1 text-base-content/70">
             Review and verify service provider applications
           </p>
         </div>
-  
+
         {loading ? (
           <div className="flex justify-center py-12">
             <div className="w-12 h-12 border-t-2 border-b-2 rounded-full border-primary animate-spin"></div>
@@ -262,7 +246,7 @@ const ServiceProviderVerification: React.FC = () => {
                             alt={provider.serviceProviderName}
                             className="object-cover w-full h-full"
                           />
-                          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 hover:bg-opacity-20">
+                          <div className="absolute inset-0 flex items-center justify-center transition-opacity bg-black bg-opacity-0 hover:bg-opacity-20">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               className="w-6 h-6 text-white opacity-0 hover:opacity-100"
@@ -314,7 +298,7 @@ const ServiceProviderVerification: React.FC = () => {
                           </p>
                         </div>
                       </div>
-  
+
                       {/* Contact info */}
                       <div className="mt-4 md:mt-0 md:w-1/3">
                         <div className="space-y-2 text-sm">
@@ -371,7 +355,7 @@ const ServiceProviderVerification: React.FC = () => {
                           </p>
                         </div>
                       </div>
-  
+
                       {/* Actions */}
                       <div className="flex flex-col gap-2 mt-4 md:mt-0 md:w-1/3 md:items-end">
                         {provider.isVerified === "rejected" && (
@@ -408,7 +392,7 @@ const ServiceProviderVerification: React.FC = () => {
                         </button>
                       </div>
                     </div>
-  
+
                     {/* Expanded details */}
                     {expandedId === provider._id && (
                       <div className="pt-4 mt-6 border-t border-base-300">
@@ -451,7 +435,7 @@ const ServiceProviderVerification: React.FC = () => {
                               </div>
                             </div>
                           </div>
-  
+
                           {/* Description */}
                           <div>
                             <h4 className="mb-2 text-lg font-medium">
@@ -462,27 +446,16 @@ const ServiceProviderVerification: React.FC = () => {
                                 "No description provided."}
                             </p>
                           </div>
-  
-                          {/* Document */}
+
+                          {/* Documents - Using the new DocumentViewer component */}
                           <div>
                             <h4 className="mb-2 text-lg font-medium">
-                              Verification Document
+                              Verification Documents
                             </h4>
-                            <div
-                              className="w-full h-40 overflow-hidden border rounded-lg cursor-pointer border-base-300"
-                              onClick={() =>
-                                handleImagePreview(provider.document)
-                              }
-                            >
-                              <img
-                                src={provider.document}
-                                alt="Verification Document"
-                                className="object-cover w-full h-full"
-                              />
-                            </div>
-                            <p className="mt-1 text-xs text-base-content/50">
-                              Click to view full document
-                            </p>
+                            <DocumentViewer
+                              documents={provider.document}
+                              onImagePreview={handleImagePreview}
+                            />
                           </div>
                         </div>
                       </div>

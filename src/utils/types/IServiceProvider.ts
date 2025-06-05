@@ -10,7 +10,6 @@ export interface IServiceProvider {
   services: string[]; // Assuming it's an array of service names or IDs
   skills: string[]; // Assuming it's an array of skill names or IDs
   location: {
-    // Define as per your location structure, example below
     type?: string;
     coordinates?: [number, number]; // [longitude, latitude]
     address?: string;

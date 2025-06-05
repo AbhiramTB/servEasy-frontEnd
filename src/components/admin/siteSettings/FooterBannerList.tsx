@@ -59,12 +59,12 @@ const BannerCarousel: React.FC<Props> = ({ banners, onDelete, onMarkDefault }) =
                 Mark as Active
               </button>
             )}
-            <button
+            {/* <button
               onClick={() => onDelete(banner._id)}
               className="btn btn-sm btn-error"
             >
               Delete
-            </button>
+            </button> */}
           </div>
         </div>
 

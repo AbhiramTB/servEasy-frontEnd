@@ -22,6 +22,7 @@ import Notifications from "../ui/Notifictions";
 import { connectSocket } from "../../utils/socket";
 import VideoCallNotification from "../../utils/ui/VideoCallNotification";
 import { useFetchUserProfile } from "../../hooks/useFetchUserProfile";
+import { useTheme } from "../../hooks/useTheme";
 
 const ringtune = new Audio("/Ringtone Video call.mp3");
 const notificatioRingtune = new Audio("/Ringtone Notification.mp3");
@@ -42,9 +43,10 @@ const Navbar = () => {
   const [rejectFn, setRejectFn] = useState<() => void>(() => () => {});
   const [acceptFn, setAcceptFn] = useState<() => void>(() => () => {});
 
+useTheme()
+
   const location = useLocation();
   const [pathUrl, setPathUrl] = useState(location.pathname);
-  
   useFetchUserProfile();
 
   useEffect(() => {
@@ -102,18 +104,22 @@ const Navbar = () => {
       getNotfication();
       toast.dismiss();
     } else if (notification.type === "chat") {
+      console.log('called 1');
+            setChatNotificationCount(chatNotificationCount + 1);
+
+
+      
       notificatioRingtune.currentTime = 0;
       notificatioRingtune.play();
 
-      setChatNotificationCount(prev => prev + 1);
 
       HotToastChatNotification(notification, () => {
         navigate("/chat/" + notification.senderId);
         setChatNotificationCount(0); 
       });
       toast.dismiss();
-
-      getNotfication();
+  
+    
     }
   };
 

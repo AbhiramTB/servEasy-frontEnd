@@ -1,18 +1,23 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { validateEmail, validatePhone } from "../../utils/validate";
+import { validateEmail, validatePhone } from "../../../utils/validate";
 import { Toaster } from "react-hot-toast";
-import { HotToastError, HotToastSuccess } from "../../utils/notificationToast";
-import { apiEndPoint, apiEndPointServiceProvider, serviceEndPoint } from "../../utils/constant";
-import { getRequest, postRequest } from "../../utils/makeRequestInstance";
+import { HotToastError, HotToastSuccess } from "../../../utils/notificationToast";
+import { apiEndPoint, apiEndPointServiceProvider, serviceEndPoint } from "../../../utils/constant";
+import { getRequest, postRequest } from "../../../utils/makeRequestInstance";
 import { useDispatch } from "react-redux";
-import { addServiceProvider } from "../../redux/slices/serviceProvider";
+import { addServiceProvider } from "../../../redux/slices/serviceProvider";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { RootState } from "../../../redux/store";
 import { useNavigate } from "react-router-dom";
  
-import axiosInstance from "../../utils/AxiosInstance";
-import LocationSearch, { Location } from "../User/Home1/location";
+ 
+
+import axiosInstance from "../../../utils/AxiosInstance";
+import LocationSearch, { Location } from "../../User/Home1/location";
+import { BankDetails } from "../../../utils/types/IServiceProvider";
+import BankDetailsForm from "./BankDetailsForm";
+import DocumentUpload from "./DocumentUpload";
 interface RegisterFormProps {
   className?: string;
 }
@@ -38,6 +43,7 @@ interface FormData {
   services: string[];
   skills: Skill[];
   description: string;
+  documentImg2?:string
 }
 
 export interface IService {
@@ -65,7 +71,6 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
     formState: { errors },
   } = useForm<FormData>();
   const imageRef = useRef<HTMLInputElement>(null);
-  const [documentImg, setDocumentImg] = useState<string | null>(null);
   const [profileImg, setProfileImg] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [services, setServices] = useState<string[]>([]);
@@ -83,10 +88,19 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("");
 const [availableServices, setAvailableServices] = useState<IService[]>([]);
-const [selectedService, setSelectedService] = useState("");
+  const [documentImg1, setDocumentImg1] = useState<string | null>(null);
+  const [documentImg2, setDocumentImg2] = useState<string | null>(null);
 
+  const [documentError1, setDocumentError1] = useState<string | null>(null);
+  const [documentError2, setDocumentError2] = useState<string | null>(null);
 
+ const [bankDetails, setBankDetails] = useState<BankDetails>({
+    accountHolderName: "",
+    accountNumber: "",
+    ifscCode: "",
+  });
 
+  
 
 useEffect(() => {
   if (selectedCategory && category) {
@@ -140,23 +154,7 @@ useEffect(() => {
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        setDocumentError("File size exceeds 5MB limit");
-        return;
-      }
-
-      setDocumentError(null);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setDocumentImg(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
+  
   const onSubmit = async (data: FormData) => {
     setLoading(true);
 
@@ -167,7 +165,7 @@ useEffect(() => {
         return;
       }
 
-      if (!documentImg) {
+      if (!documentImg1) {
         setDocumentError("Document image is required");
         setLoading(false);
         return;
@@ -181,11 +179,14 @@ useEffect(() => {
       }
 
       data.profileImage = profileImg;
-      data.documentImg = documentImg;
+      data.documentImg = documentImg1;
       data.services = services;
       data.skills = skills;
       data.description = description;
      data.location=location
+     if(documentImg2){
+      data.documentImg2=documentImg2
+     }
       if (
         data.serviceProviderEmail &&
         !validateEmail(data.serviceProviderEmail)
@@ -204,7 +205,7 @@ useEffect(() => {
       console.log(data);
       const res = await postRequest(
         apiEndPointServiceProvider.serviceProviderRegister,
-        data
+        {data,bankDetails}
       );
       console.log(res);
 
@@ -218,7 +219,9 @@ useEffect(() => {
         setServices([]);
         setSkills([]);
         setProfileImg(null);
-        setDocumentImg(null);
+        setDocumentImg1(null);
+        setDocumentImg1(null);
+
       }
     } catch (error) {
       HotToastError("Registration failed. Please try again.");
@@ -694,6 +697,23 @@ useEffect(() => {
             )}
           </div>
 
+          <h1 className="mb-4 text-2xl font-bold text-center text-primary">
+        Enter Bank Details
+      </h1>
+<BankDetailsForm
+          bankDetails={bankDetails}
+          setBankDetails={setBankDetails}
+        />
+
+
+
+
+
+
+
+
+
+
           {/* Location */}
           <div className="w-full mb-4 form-control">
             <label className="label">
@@ -773,69 +793,38 @@ useEffect(() => {
             </div>
           </div>
 
-          {/* License/Certification Information */}
-          {!documentImg && (
-            <div className="w-full mb-4 cursor-pointer form-control">
-              <label className="label">
-                <span className="label-text">
-                  License/Certification or Aadhar Card
-                </span>
-              </label>
-              <div
-                className="p-6 text-center border-2 border-dashed rounded-lg"
-                onClick={UploadImage}
-              >
-                <div className="flex flex-col items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-12 h-12 text-primary"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                    />
-                  </svg>
-                  <input
-                    type="file"
-                    ref={imageRef}
-                    className="hidden" // Hide the input element
-                    onChange={handleFileChange} // Handle file selection
-                    accept="image/*, application/pdf" // Accept image and PDF files
-                  />
-                  <p className="mt-2 text-sm">
-                    Drag and drop your Aadhar card or license, or{" "}
-                    <span className="font-medium text-primary">
-                      browse files
-                    </span>
-                  </p>
-                  <p className="mt-1 text-xs opacity-70">
-                    PNG, JPG or PDF up to 5MB
-                  </p>
-                </div>
-              </div>
-              {documentError && (
-                <p className="mt-1 text-sm text-error">{documentError}</p>
-              )}
-            </div>
-          )}
 
-          {documentImg && (
-            <div className="w-2/3 mx-auto mt-4 mb-4">
-              <img src={documentImg} alt="Document preview" />
-              <button
-                type="button"
-                className="mt-2 btn btn-sm btn-error"
-                onClick={() => setDocumentImg(null)}
-              >
-                Remove Document
-              </button>
-            </div>
-          )}
+
+
+          
+    <div className="max-w-xl mx-auto mt-10">
+      <h2 className="mb-6 text-xl font-bold text-primary">Upload Documents</h2>
+
+      <DocumentUpload
+        label="Upload License / Certification"
+        documentImg={documentImg1}
+        setDocumentImg={setDocumentImg1}
+        documentError={documentError}
+        setDocumentError={setDocumentError1}
+      />
+
+      <DocumentUpload
+        label="Upload Aadhar Card / Additional Document"
+        documentImg={documentImg2}
+        setDocumentImg={setDocumentImg2}
+        documentError={documentError}
+        setDocumentError={setDocumentError2}
+      />
+
+    </div>
+
+
+
+
+
+
+
+
 
           {/* Submit Button */}
           {!loading && (
@@ -847,7 +836,7 @@ useEffect(() => {
                   services.length === 0 ||
                   skills.length === 0 ||
                   !profileImg ||
-                  !documentImg
+                  !documentImg1
                 }
               >
                 Register
