@@ -85,11 +85,11 @@ const VideoCall: React.FC<Prop> = ({ firstLetter = " " }) => {
             <i className="fa-solid fa-circle-xmark drop-shadow-md"></i>
           </div>
 
-          <h3 className="text-xl font-bold text-white">
-            Call Rejected by Service Provider
+          <h3 className="text-xl font-bold text-red">
+          The other user has hung up the call
           </h3>
-          <p className="text-sm text-yellow-50">
-            The service provider declined your call.
+          <p className="text-sm text-yellow-400">
+          The other user has hung up the call
           </p>
 
           <div className="pt-4">

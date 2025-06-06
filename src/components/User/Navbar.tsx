@@ -45,6 +45,11 @@ const Navbar = () => {
 
 useTheme()
 
+
+useEffect(() => {
+  setChatNotificationCount(parseInt(localStorage.getItem("chatNotificationCount") || "0"));
+}, []);
+
   const location = useLocation();
   const [pathUrl, setPathUrl] = useState(location.pathname);
   useFetchUserProfile();
@@ -57,10 +62,7 @@ useTheme()
     console.log("Received Notification:", notification);
 
     if (
-      notification.type === "video_call" &&
-      pathUrl !== `/service-provider/video-call/${notification.callerId}` &&
-      pathUrl !== `/video-call/${notification.callerId}`
-    ) {
+      notification.type === "video_call" ) {
       ringtune.currentTime = 0;
       ringtune.play();
 
@@ -104,8 +106,18 @@ useTheme()
       getNotfication();
       toast.dismiss();
     } else if (notification.type === "chat") {
-      console.log('called 1');
-            setChatNotificationCount(chatNotificationCount + 1);
+      console.log(pathUrl);
+      
+      if(pathUrl=="/chats"){
+    setChatNotificationCount(0);
+  localStorage.setItem("chatNotificationCount",chatNotificationCount + 0+"");
+      }
+
+if(pathUrl!=="/chats"){
+      setChatNotificationCount(chatNotificationCount + 1);
+  localStorage.setItem("chatNotificationCount",chatNotificationCount + 1+"");
+}
+
 
 
       

@@ -192,7 +192,6 @@ export const useVideoCall = (
 
         socket.on("user-left", () => {
 
-          HotToastError('user reject video cal')
           if (remoteVideoRef.current) {
             remoteVideoRef.current.srcObject = null;
           }

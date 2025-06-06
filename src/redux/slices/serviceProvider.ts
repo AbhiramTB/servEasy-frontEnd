@@ -33,7 +33,7 @@ const initialState: IServiceProvider = {
   experience: 0,
   profileImage: "",
   document: "",
-  isVerified: "pending",
+  isVerified: "idle",
   userId: "",
   isBlocked: false,
   createdAt: "",

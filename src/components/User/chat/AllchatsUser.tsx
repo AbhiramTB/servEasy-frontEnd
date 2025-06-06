@@ -5,9 +5,17 @@ import { RootState } from "../../../redux/store";
 import { Link, useNavigate } from "react-router-dom";
 import { Video } from "lucide-react";
 
+interface IPresence {
+    userId:string;
+    online: boolean;
+    lastSeen: string;
+  }
+
 interface ChatItem {
   _id: string;
   userName: string;
+    presence: IPresence[];
+   unread:boolean;
   lastMessage: {
     content: string;
     timestamp: string;
@@ -18,7 +26,6 @@ interface ChatItem {
   lastMessageAt: string;
   userAvatar?: string;
   userId:string
-  presence: any[];
 }
 
 
@@ -42,9 +49,16 @@ const ChatsUser: React.FC = () => {
     if (userId) fetchData();
   }, [userId]);
 
-  const filteredChats = chats?.filter(chat =>
-    chat.userName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+ const filteredChats: ChatItem[] = chats?.filter(chat =>
+  chat.userName.toLowerCase().includes(searchTerm.toLowerCase())
+) || [];
+console.log(chats);
+
+
+
+useEffect(() => {
+  localStorage.setItem("chatNotificationCount", "0");
+}, []);
 
   return (
     <div className="flex h-screen bg-base-300 text-base-content">
@@ -73,8 +87,12 @@ const ChatsUser: React.FC = () => {
           ) : filteredChats?.length === 0 ? (
             <div className="p-4 text-sm text-center opacity-50">No chats found</div>
           ) : (
-            filteredChats?.map((chat) => (
+            filteredChats?.map((chat) =>{
+
+              return (
                 <Link to={"/chat/"+chat.userId}>
+  
+                  
               <div
                 key={chat._id}
                 className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-base-200"
@@ -102,17 +120,39 @@ const ChatsUser: React.FC = () => {
                         minute: "2-digit",
                     })}
                   </div>
-                </div>
 
+                  <div>
+
+
+{chat.unread&&
+      <span className="inline-block w-2 h-2 ml-1 bg-red-500 rounded-full" />
+
+}
+                    
+                  </div>
+             
+  
+                </div>
+  
               </div>
            
                     </Link>
-            ))
+            )})
+            
+              
+
+                  
+                   
+                   
+
+                   
+
+
+          
           )}
         </div>
       </div>
 
-      {/* Chat Screen */}
       <div className="flex items-center justify-center flex-1 text-lg text-opacity-70">
         <div className="p-8 shadow-xl">
           <h2 className="card-title text-primary">Welcome to Chat</h2>
