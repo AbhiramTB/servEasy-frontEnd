@@ -7,17 +7,17 @@ export interface IServiceProvider {
   serviceProviderPhone: string;
   description: string;
   socialMedia: string;
-  services: string[]; // Assuming it's an array of service names or IDs
-  skills: string[]; // Assuming it's an array of skill names or IDs
+  services: string[]; 
+  skills: string[]; 
   location: {
     type?: string;
-    coordinates?: [number, number]; // [longitude, latitude]
+    coordinates?: [number, number]; 
     address?: string;
   };
   experience: number;
   profileImage: string;
   document: string;
-  isVerified: 'verified' | 'pending' | 'rejected'; // Adjust if there are other statuses
+  isVerified: 'verified' | 'pending' | 'rejected'|"idle"; 
   userId: string;
   isBlocked: boolean;
   createdAt: string;

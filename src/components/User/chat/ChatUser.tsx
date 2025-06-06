@@ -61,6 +61,8 @@ const ChatUser = () => {
         try {
           const userRes: any = await getServiceProviderProfile(serviceProviderId);
           if (userRes.status === 200) {
+            console.log(userRes);
+            
             setServiceProvider(userRes.data);
           }
         } catch (error) {
@@ -319,7 +321,7 @@ const ChatUser = () => {
             </div>
           </div>
 
-          <div className="flex space-x-3">
+          {/* <div className="flex space-x-3">
             <button className="btn btn-circle btn-ghost">
               <Phone size={18} />
             </button>
@@ -329,7 +331,7 @@ const ChatUser = () => {
             <button className="btn btn-circle btn-ghost">
               <MoreVertical size={18} />
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* Messages Area */}
@@ -396,9 +398,9 @@ const ChatUser = () => {
         {/* Input Section */}
         <div className="p-4 border-t border-base-300 bg-base-200">
           <div className="relative flex items-center w-full">
-            <button className="absolute left-4 btn btn-circle btn-ghost btn-sm">
+            {/* <button className="absolute left-4 btn btn-circle btn-ghost btn-sm">
               <Paperclip size={18} />
-            </button>
+            </button> */}
 
             <input
               ref={inputRef}

@@ -45,6 +45,8 @@ const getStatusColor = (status: string): string => {
 
 
 const PaymentInfoTable: React.FC<PropsServiceBooking> = ({ booking, handleViewDetails }) => {
+  console.log(booking);
+  
   return (
     <tr key={booking._id} className="rounded-sm hover bg-base-300">
       <td>
@@ -81,6 +83,8 @@ const PaymentInfoTable: React.FC<PropsServiceBooking> = ({ booking, handleViewDe
       <td>{booking.paymentType}</td>
       <td>{booking.payment.serviceCost}</td>
       <td>{booking.payment.total}</td>
+            
+
       <td>
         <div className="dropdown dropdown-end">
           <label tabIndex={0} className="btn btn-ghost btn-xs">

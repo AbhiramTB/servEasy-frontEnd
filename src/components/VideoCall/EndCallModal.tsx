@@ -2,8 +2,9 @@ import React from "react";
 interface rejectPros {
   handleEndCall: () => void;
   userName?: "string";
+  isHangUp?:boolean
 }
-const EndCallModal: React.FC<rejectPros> = ({ handleEndCall, userName }) => {
+const EndCallModal: React.FC<rejectPros> = ({ handleEndCall, userName,isHangUp=false }) => {
   return (
     <div>
     <dialog id="rejected_modal" className="modal">
@@ -17,18 +18,25 @@ const EndCallModal: React.FC<rejectPros> = ({ handleEndCall, userName }) => {
           </div>
   
           {/* Clean typography */}
-          <div className="space-y-3">
-            <h3 className="text-2xl font-bold text-white">
-              Call Rejected
-            </h3>
-            <p className="text-lg text-gray-300">
-              by {userName || "opponent"}
-            </p>
-          </div>
-  
-          <p className="leading-relaxed text-gray-400">
-            The service provider declined your call.
+        {!isHangUp && <div className="space-y-3">
+          <h3 className="text-2xl font-bold text-white">
+            Call Rejected
+          </h3>
+          <p className="text-lg text-gray-300">
+            by {userName || "opponent"}
           </p>
+        </div>}
+   
+          { isHangUp&& 
+<p className="leading-relaxed text-red-400">
+          The other user has hung up the call
+          </p>
+
+          }
+
+         { !isHangUp&& <p className="leading-relaxed text-gray-400">
+            The service provider declined your call.
+          </p>}
   
           {/* Simple enhanced button */}
           <div className="pt-4">
