@@ -43,11 +43,14 @@ import Appearance from "./components/User/profile/Appearance.tsx";
 import AboutUs from "./components/User/profile/AboutUs.tsx";
 import HomePage from "./components/User/home/HomePage.tsx";
 import Myprofile from "./components/ServiceProvider/service/profile/Myprofile.tsx";
-// import UserProfile from "./components/User/UpdateProfile.tsx";
+
+
+import { useAuth } from "./hooks/useAuth.tsx";
+import NotFound from "./components/ui/NotFound.tsx";
+
 function App() {
-  const token = localStorage.getItem("accessToken");
-  const adminToken = localStorage.getItem("adminToken");
-  console.log(adminToken);
+   const { userAccessToken, adminAccessToken } = useAuth();
+
 
   return (
     <>
@@ -59,7 +62,7 @@ function App() {
 
           <Route
             path="/signIn"
-            element={token ? <Navigate to="/" replace /> : <AuthPage />}
+            element={userAccessToken ? <Navigate to="/" replace /> : <AuthPage />}
           />
 
           <Route path="otp" element={<Otp />} />
@@ -102,6 +105,9 @@ function App() {
             <Route path="chats" element={<ChatsUser />}></Route>
           </Route>
 
+
+
+
           <Route element={<ProtectedRoute />}>
             <Route path="/service-provider" element={<ServiceProviderLayout />}>
               <Route path="dashboard" element={<Dashboard />} />
@@ -140,10 +146,13 @@ function App() {
             </Route>
           </Route>
 
+
+
+
           <Route
             path="admin/sigin"
             element={
-              adminToken ? (
+              adminAccessToken ? (
                 <Navigate to={"/admin/home"} replace />
               ) : (
                 <AdminSignIn />
@@ -172,6 +181,10 @@ function App() {
               <Route path="site-settings" element={<SiteSettingsPage />} />
             </Route>
           </Route>
+
+      <Route path="*" element={<NotFound />} />
+
+
         </Routes>
       </BrowserRouter>
     </>

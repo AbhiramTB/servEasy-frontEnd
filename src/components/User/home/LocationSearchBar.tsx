@@ -49,6 +49,12 @@ const LocationSearchBar: React.FC<Props> = ({ onLocationSelect }) => {
     }
   };
 
+
+
+
+
+
+
   const debouncedFetchLocations = useCallback(debounce(fetchLocations, 500), []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,7 +84,8 @@ const LocationSearchBar: React.FC<Props> = ({ onLocationSelect }) => {
   return (
   <div className="relative z-50 w-full">
     <div className="relative flex items-center w-full gap-2 px-4 py-2">
-      <MapPin size={18} className="text-primary" />
+        <MapPin size={18} className="text-primary" />
+
       <input
         type="text"
         placeholder="Enter location"

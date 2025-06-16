@@ -36,5 +36,13 @@ export interface ServiceAddress {
     userEmail: string;
     userName: string;
     userProfile: string;
+    
   }
   
+  export type ITimeSlot = "morning" | "afternoon" | "anyTime";
+
+
+export interface IServiceDateTime {
+  date: Date;
+  time: ITimeSlot;
+}

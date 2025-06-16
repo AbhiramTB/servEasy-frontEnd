@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import Navbar from "./Navbar";
 import PendingVerificationCard from "./pendingVerification";
 
 import FilterSection from "../Chart/FilterSection";
@@ -9,8 +8,7 @@ import StatsSection from "../Chart/StatsSection";
 import PaymentChartSection from "../Chart/PaymentChartSection";
 import PaymentTable from "../Chart/PaymentTable";
 
-import { adminGetRequest } from "../../utils/AxiosAdmin";
-import { apiEndPointAdmin, apiEndPointServiceProvider } from "../../utils/constant";
+import {  apiEndPointServiceProvider } from "../../utils/constant";
 import RejectedRequestPage from "./service/RejectedRequestPage";
 import BlockedUserMessage from "./service/BlockedMessage";
 import { getRequest } from "../../utils/makeRequestInstance";
@@ -31,6 +29,7 @@ const ServiceProviderDashboard: React.FC = () => {
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(false);
 
+  
   useEffect(() => {
     fetchPaymentInfo();
   }, []);
@@ -104,6 +103,8 @@ const ServiceProviderDashboard: React.FC = () => {
           <p className="mt-1 text-primary">Welcome back, {serviceProviderInfo.serviceProviderName || "Service Provider"}.</p>
         </header>
 
+  
+    
         <FilterSection
           startDate={startDate}
           endDate={endDate}

@@ -52,7 +52,7 @@ const BrowseCategories: React.FC<BrowseCategoriesProps> = ({
       
       
       {/* Header */}
-      <div className="text-center mb-10">
+      <div className="mb-10 text-center">
         <h1 className="text-4xl font-bold text-base-content ">
           Browse Categories
         </h1>
@@ -63,10 +63,10 @@ const BrowseCategories: React.FC<BrowseCategoriesProps> = ({
 
       {/* Clear Button */}
       {selectedCategory && (
-        <div className="text-center mb-8">
+        <div className="mb-8 text-center">
           <button
             onClick={handleClear}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-base-200  text-base-content hover:bg-accent rounded-lg border border-base-300 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 transition-colors border rounded-lg bg-base-200 text-base-content hover:bg-accent border-base-300"
           >
             <X size={16} />
             Clear Selection
@@ -75,7 +75,7 @@ const BrowseCategories: React.FC<BrowseCategoriesProps> = ({
       )}
 
       {/* Categories Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
+      <div className="grid grid-cols-2 gap-4 mb-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
         {sampleCategories.map((categoryObj) => (
           <button
             key={categoryObj.id}
@@ -86,7 +86,7 @@ const BrowseCategories: React.FC<BrowseCategoriesProps> = ({
                 : "bg-base-100 text-base-content border-base-300 hover:bg-base-200 hover:border-base-400"
             }`}
           >
-            <span className="font-medium text-sm">
+            <span className="text-sm font-medium">
               {categoryObj.category}
             </span>
           </button>
@@ -95,11 +95,11 @@ const BrowseCategories: React.FC<BrowseCategoriesProps> = ({
 
       {/* Selected Category Display */}
       {selectedCategory && (
-        <div className="text-center p-6 bg-base-100 rounded-lg border border-base-300">
-          <h2 className="text-xl font-semibold text-base-content mb-2">
+        <div className="p-6 text-center border rounded-lg bg-base-100 border-base-300">
+          <h2 className="mb-2 text-xl font-semibold text-base-content">
             Selected Category
           </h2>
-          <p className="text-lg text-primary font-medium">
+          <p className="text-lg font-medium text-primary">
             {selectedCategory}
           </p>
         </div>

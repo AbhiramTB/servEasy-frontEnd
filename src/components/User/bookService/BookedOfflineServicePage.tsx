@@ -1,11 +1,15 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getRequest } from "../../../utils/makeRequestInstance";
+import { getRequest, putRequest } from "../../../utils/makeRequestInstance";
 import RazorpayButton from "../../ui/PaymentButton";
 import ShowBills from "../../ui/ShowBills";
 import ReviewCard from "./ReviewCard";
 import { IReview } from "../../../utils/types/IReview";
 import ServeasyInvoiceDownloader from "./bookedServiceList/InvoiceDownloader";
+import { IServiceDateTime } from "../../../utils/types/booking";
+import ServiceDateTime from "./ServiceTimeInfo";
+import { HotToastError, HotToastSuccess } from "../../../utils/notificationToast";
+import { Toaster } from "react-hot-toast";
 
 interface Address {
   name: string;
@@ -75,6 +79,7 @@ interface BookedService {
   createdAt: string;
   updatedAt: string;
   serviceBills?: [string];
+  preferredSlot:IServiceDateTime
 
   cancelReason?: string;
   payment?: Ipayment;
@@ -95,6 +100,38 @@ const ServiceBookingDetails = () => {
   const [error, setError] = useState<string | null>(null);
   const [showBills, setShowBills] = useState(false);
   const [download, setDownload] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState<boolean>(false);
+  const [cancelReason, setCancelReason] = useState<string>("");
+    
+  
+  const handleCancelBooking = async () => {
+     try {
+       if (!cancelReason) {
+         HotToastError("Please provide a cancellation reason");
+         return;
+       }
+ 
+       const res = await putRequest(
+         `service/bookings/${id}/cancel`,
+         {
+           serviceStatus: "cancelled",
+           cancellationReason: cancelReason,
+         }
+       );
+ 
+       if (res.status === 200) {
+         HotToastSuccess("Booking cancelled successfully");
+         setShowCancelModal(false);
+         getBookedService(id as string);
+       }
+     } catch (err) {
+       HotToastError("Failed to cancel booking");
+       console.error(err);
+     }
+   };
+
+
+
   useEffect(() => {
     if (id) {
       getBookedService(id);
@@ -107,6 +144,7 @@ const ServiceBookingDetails = () => {
       const res = await getRequest(`service/bookings${id}`);
      
       if (res.status === 200) {
+         console.log(res.data.service.preferredSlot);
          
         setBookingData(res.data.service);
         setReview(res.data.service.review)
@@ -168,6 +206,8 @@ const ServiceBookingDetails = () => {
     month: "short",
     day: "numeric",
   });
+
+
   const formattedEstimatedTime = new Date(
     bookedService.estimatedServiceTime
   ).toLocaleTimeString("en-US", {
@@ -197,9 +237,10 @@ const ServiceBookingDetails = () => {
   const statusStep = getStatusStep(bookedService.serviceStatus);
   const isCancelled = bookedService.serviceStatus === "cancelled";
   const isCompleted = bookedService.serviceStatus === "completed";
-
+  const isConfirmed = bookedService.serviceStatus ==="confirmed"
   return (
     <div className="container min-h-screen px-4 py-4 mx-auto bg-base-200">
+      <Toaster></Toaster>
       {/* Breadcrumb */}
       <div className="mb-4 text-sm breadcrumbs text-base-content">
         <ul>
@@ -466,7 +507,8 @@ const ServiceBookingDetails = () => {
                     </svg>
                     <span>Booked on: {formattedBookedDate}</span>
                   </div>
-                  <div className="flex items-center text-sm">
+                {bookedService.estimatedServiceTime &&
+                 <div className="flex items-center text-sm">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="w-4 h-4 mr-2 text-primary"
@@ -490,7 +532,20 @@ const ServiceBookingDetails = () => {
                         `Service on: ${formattedEstimatedDate} at ${formattedEstimatedTime}`
                       )}
                     </span>
-                  </div>
+
+
+                  </div>}
+
+
+
+                      
+                       <ServiceDateTime 
+            serviceDateTime={bookedService.preferredSlot}
+            userType="user"
+            isCancelled={isCancelled?true:false}
+          />
+
+                  
                   {isCompleted && (
                     <div className="flex items-center mt-2 text-sm text-success">
                       <svg
@@ -557,8 +612,8 @@ const ServiceBookingDetails = () => {
 
               {/* Action Buttons */}
               <div className="justify-end mt-8 card-actions">
-                {bookedService.serviceStatus === "pending" && (
-                  <button className="btn btn-error">Cancel Booking</button>
+                {bookedService.serviceStatus === "pending" ||isConfirmed && (
+                  <button className="btn btn-error" onClick={()=>setShowCancelModal(true)} >Cancel Booking</button>
                 )}
                 {bookingData.bookedService.serviceBills && (
                   <button
@@ -574,7 +629,7 @@ const ServiceBookingDetails = () => {
                   </button>
                 )}
 
-                {isCompleted && (
+                {isCompleted  && (
                   <button className="btn btn-success" onClick={() => {setDownload(true)}}>Download Invoice</button>
 
                 )}
@@ -582,6 +637,39 @@ const ServiceBookingDetails = () => {
             </div>
           </div>
         </div>
+
+
+
+          {showCancelModal && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="text-lg font-bold">Cancel Booking</h3>
+            <p className="py-4">Please provide a reason for cancellation:</p>
+
+            <div className="mb-4 form-control">
+              <label className="label">
+                <span className="label-text">Cancellation Reason</span>
+              </label>
+              <textarea
+                className="textarea textarea-bordered"
+                rows={3}
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+              ></textarea>
+            </div>
+
+            <div className="modal-action">
+              <button className="btn" onClick={() => setShowCancelModal(false)}>
+                Back
+              </button>
+              <button className="btn btn-error" onClick={handleCancelBooking}>
+                Cancel Booking
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
 
     {download && <ServeasyInvoiceDownloader bookingData={bookingData}/>}
 
@@ -620,73 +708,7 @@ const ServiceBookingDetails = () => {
               </div>
             </div>
           </div>
-          {/* 
-           <div className="shadow-xl card bg-base-100">
-            <div className="card-body">
-              <h3 className="mb-4 font-semibold text-primary">Price Details</h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>List price</span>
-                  {/* <span>₹{(service.booked * 1.25).toFixed(0)}</span> */}
-          {/* </div>
-                <div className="flex justify-between">
-                  <span>Selling price</span>
-                  <span>₹{service.payment.convenienceFee}</span>
-                </div>
-                <div className="flex justify-between text-success">
-                  <span>Discount</span>
-                  <span>- ₹{(service.estimatedPrice * 0.25).toFixed(0)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Service Fee</span>
-                  <span>₹{Math.floor(service.estimatedPrice * 0.03)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Handling Fee</span>
-                  <span>₹7</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Delivery Charge</span>
-                  <span className="text-success">Free</span>
-                </div>
-                {isCancelled && (
-                  <div className="flex justify-between text-error">
-                    <span>Cancellation Fee</span>
-                    <span>- ₹0</span>
-                  </div>
-                )}
-                <div className="my-2 divider"></div>
-                <div className="flex justify-between font-bold">
-                  <span>Total Amount</span>
-                  {isCancelled ? (
-                    <span className="line-through">₹{service.estimatedPrice}</span>
-                  ) : (
-                    <span>₹{service.estimatedPrice}</span>
-                  )}
-                </div>
-                {isCompleted && (
-                  <div className="flex justify-between font-medium text-success">
-                    <span>Payment Received</span>
-                    <span>₹{service.estimatedPrice}</span>
-                  </div>
-                )}
-                {isCancelled && (
-                  <div className="flex justify-between font-medium text-error">
-                    <span>Refund Amount</span>
-                    <span>₹{service.estimatedPrice}</span>
-                  </div>
-                )}
-                {!isCancelled && !isCompleted && (
-                  <div className="mt-2">
-                    <div className="flex items-center">
-                      <span className="text-sm">• Cash On Delivery: ₹{service.estimatedPrice}</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div> */}
-
+          
           {bookedService.payment && (
             <div className="shadow card bg-base-100">
               <div className="p-4 card-body">
@@ -743,40 +765,7 @@ const ServiceBookingDetails = () => {
                 <h3 className="mb-2 font-semibold text-primary">
                   More options
                 </h3>
-                {/* <button className="w-full btn btn-outline btn-sm">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-5 h-5 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
-                    />
-                  </svg>
-                  Did you find this page helpful?
-                </button> */}
-                {/* <button className="w-full mt-2 btn btn-outline btn-sm">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-5 h-5 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-                    />
-                  </svg>
-                  Send Order Details
-                </button> */}
+               
 
                 {showBills && bookingData.bookedService.serviceBills && (
                   <ShowBills

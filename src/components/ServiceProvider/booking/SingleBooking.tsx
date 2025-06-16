@@ -9,6 +9,16 @@ import { HotToastError, HotToastSuccess } from "../../../utils/notificationToast
 import { Toaster } from "react-hot-toast";
 import PaymentModal from "./paymentModal";
 import { Ipayment } from "../../../utils/types/Ipayment";
+import { getMinMaxDateTime } from "../../../utils/getMinMaxDateTime";
+import ServiceDateTime from "../../User/bookService/ServiceTimeInfo";
+import { IServiceDateTime } from "../../../utils/types/booking";
+
+
+interface IliveLocation {
+    lat: number;
+    lng: number;
+  };
+
 
 interface BookingData {
   bookedService: {
@@ -30,6 +40,8 @@ interface BookingData {
     };
     payment?: Ipayment;
     cancellationReason?: string;
+      preferredSlot:IServiceDateTime
+    liveLocation:IliveLocation
   };
   service: {
     serviceName: string;
@@ -69,6 +81,9 @@ const ServiceProviderBookingManage = () => {
     convenienceFee: 0,
   });
   
+const { min, max } = getMinMaxDateTime(2);
+
+  
   const [paymentForm, setPaymentForm] = useState<boolean>(false);
   useEffect(() => {
     if (id) {
@@ -100,6 +115,12 @@ const ServiceProviderBookingManage = () => {
 
   const handleAcceptBooking = async () => {
     try {
+      console.log(estimatedTime);
+      const estimatedTimeDate=new Date(estimatedTime)
+      const now=new Date()
+      if(estimatedTimeDate <= now){
+        HotToastError("Please select a future date and time.")
+      }
       if (!estimatedTime) {
         HotToastError("Please provide an estimated service time");
         return;
@@ -523,19 +544,52 @@ const ServiceProviderBookingManage = () => {
 
         <div className="md:col-span-1">
           <div className="mb-4 shadow card bg-base-100">
+             <ServiceDateTime 
+            serviceDateTime={bookedService.preferredSlot}
+            userType="serviceProvider"
+            isCancelled={isCancelled?true:false}
+          />
+          </div>
+          <div className="mb-4 shadow card bg-base-100">
+
+          
+
+
             <div className="p-4 card-body">
               <h3 className="text-base card-title">Service Address</h3>
+  
+             
+
               <div className="text-sm">
                 <p className="font-medium">{bookedService.address.name}</p>
                 <p>{bookedService.address.houseName}</p>
                 <p>
-                  {bookedService.address.state} -{" "}
+                  {bookedService.address.state} - {" "}
                   {bookedService.address.pincode}
                 </p>
                 <p className="mt-1">📞 {bookedService.address.phone}</p>
               </div>
             </div>
+           <div className="bg-base-300">
+                          <h3 className="font-sans text-base text-center "> user location in map</h3>
+
+              {bookedService.liveLocation && bookedService.liveLocation.lat && bookedService.liveLocation.lng && (
+                <div className="mb-2">
+                  <iframe
+                    title="Service Location"
+                    width="100%"
+                    height="180"
+                    frameBorder="0"
+                    style={{ border: 0, borderRadius: "8px" }}
+                    src={`https://www.google.com/maps?q=${bookedService.liveLocation.lat},${bookedService.liveLocation.lng}&hl=es;z=16&output=embed`}
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              )}
+           </div>
           </div>
+
+         
 
           {/* Price Details */}
           {bookedService.payment && (
@@ -601,6 +655,8 @@ const ServiceProviderBookingManage = () => {
               <input
                 type="datetime-local"
                 className="input input-bordered"
+                 min={min}
+                 max={max}
                 value={estimatedTime}
                 onChange={(e) => setEstimatedTime(e.target.value)}
               />
