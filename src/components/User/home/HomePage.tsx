@@ -12,6 +12,7 @@ import CustomerTestimonials from "./CustomerTestimonials";
 import WhyCooseServEasy from "./WhyCooseServEasy";
 import HowItWorks from "./HowItWorks";
 import HomePageShimmer from "../../../Skeleton/HomeSkelteon";
+import FilterSortComponent, { FilterSortState } from "./FilterCard";
 
 interface Location {
   address: string;
@@ -38,19 +39,59 @@ const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [services, setServices] = useState<IServiceHome[]>([]);
   const [allServices, setAllServices] = useState<IServiceHome[]>([]);
-  const [categories, setCategories] = useState<{ id: string; category: string }[] | null>(null);
+  const [categories, setCategories] = useState<{ id: string; category: string }[] |[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const getAllServices = async () => {
+ const [filterState, setFilterState] = useState<FilterSortState>({ 
+    priceSort: 'none', 
+    category: '', 
+    experienceSort: 'none', 
+    ratingFilter:null 
+  });
+
+  
+
+useEffect(() => {
+  if (!location) {
+    getAllServices(apiEndPoint.getServices);
+    return;
+  }
+
+  // If no filters are applied
+  const noFiltersApplied =
+    !searchQuery &&
+    !filterState.category &&
+    filterState.experienceSort === "none" &&
+    filterState.priceSort === "none" &&
+    filterState.ratingFilter === null;
+
+  let api = `${apiEndPoint.getServices}?userLongitude=${location.longitude}&userLatitude=${location.latitude}`;
+
+  if (noFiltersApplied) {
+    getAllServices(api);
+  } else {
+    // Add filters dynamically
+    const params = new URLSearchParams();
+
+    if (filterState.category) params.append("category", filterState.category);
+    if (filterState.experienceSort !== "none") params.append("experienceSort", filterState.experienceSort);
+    if (filterState.priceSort !== "none") params.append("priceSort", filterState.priceSort);
+    if (filterState.ratingFilter !== null) params.append("ratingFilter", filterState.ratingFilter.toString());
+    if (searchQuery) params.append("searchQuery", searchQuery);
+
+    // Combine API with filters
+    const filteredApi = `${api}&${params.toString()}`;
+    getAllServices(filteredApi);
+  }
+}, [filterState, searchQuery, location]);
+
+  const getAllServices = async (api:string) => {
     try {
-      let res;
-      if (location) {
-        res = await axiosInstance.get(
-          `${apiEndPoint.getServices}?userLongitude=${location.longitude}&userLatitude=${location.latitude}`
+      let res = await axiosInstance.get(
+          api
         );
-      } else {
-        res = await axiosInstance.get(apiEndPoint.getServices);
-      }
+      console.log(res.data.allServices);
+      
       if (res.data.allServices) {
         setAllServices(res.data.allServices);
         setServices(res.data.allServices);
@@ -77,21 +118,16 @@ const HomePage = () => {
     fetchBanners();
   }, []);
 
-  useEffect(() => {
-    setLoading(true);
-    getAllServices();
-  }, [location]);
 
-  useEffect(() => {
-    if (!searchQuery) {
-      setServices(allServices);
-    } else {
-      const filtered = allServices.filter(service =>
-        service.serviceName.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setServices(filtered);
-    }
-  }, [searchQuery, allServices]);
+
+
+
+
+
+
+
+
+
 
   const onClickCategory = (name: string) => {
     const filtered = allServices.filter(service => service.category === name);
@@ -139,27 +175,38 @@ const HomePage = () => {
         </div>
       )}
 
-      <section className="bg-base bg-opacity-80 backdrop-blur-md relative overflow-hidden">
+      <section className="relative overflow-hidden bg-base bg-opacity-80 backdrop-blur-md">
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-10 w-72 h-72 bg-secondary/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
+          <div className="absolute rounded-full top-20 left-10 w-72 h-72 bg-primary/10 blur-3xl animate-pulse"></div>
+          <div className="absolute rounded-full bottom-20 right-10 w-72 h-72 bg-secondary/10 blur-3xl animate-pulse"></div>
+          <div className="absolute transform -translate-x-1/2 -translate-y-1/2 rounded-full top-1/2 left-1/2 w-96 h-96 bg-accent/5 blur-3xl"></div>
         </div>
 
-        <section className="container px-4 py-16 mx-auto">
-          <h2 className="text-3xl font-bold mb-4 text-center">Services Near You</h2>
-          {services.length === 0 ? (
-            <p className="text-center text-gray-500">No services found.</p>
-          ) : (
-            <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-2 lg:grid-cols-3">
-              {services.map(service => (
-                <Link to={`/service-details/${service._id}`} key={service._id}>
-                  <ServiceListingCards service={service} />
-                </Link>
-              ))}
-            </div>
-          )}
-        </section>
+
+<div className="container px-4 py-10 mx-auto">
+  <h2 className="mb-6 text-3xl font-bold text-center">Services Near You</h2>
+
+  {allServices.length === 0 ? (
+    <p className="text-center text-gray-500">No services found.</p>
+  ) : (
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+      
+      {/* Filter component as first grid item */}
+      <div className="w-80 h-[500px]">
+        <FilterSortComponent setState={setFilterState} categories={categories} />
+      </div>
+
+      {/* Map through services normally */}
+      {allServices.map(service => (
+        <Link to={`/service-details/${service._id}`} key={service._id}>
+          <ServiceListingCards service={service} />
+        </Link>
+      ))}
+
+    </div>
+  )}
+</div>
+
       </section>
 
       <CustomerTestimonials />

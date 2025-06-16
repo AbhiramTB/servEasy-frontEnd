@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { getRequest } from "../../utils/makeRequestInstance";
+import { getRequest, putRequest } from "../../utils/makeRequestInstance";
 import { addServiceProvider } from "../../redux/slices/serviceProvider";
 import { apiEndPointServiceProvider } from "../../utils/constant";
 import {
@@ -16,6 +16,7 @@ import {
 import { useSocketNotifications } from "../../hooks/useNotifications";
 import {
   HotToastChatNotification,
+  HotToastSuccess,
   HotToastSystemNotification,
   HotTostVideoCall,
 } from "../../utils/notificationToast";
@@ -24,6 +25,7 @@ import { connectSocket } from "../../utils/socket";
 import { IVideoCallNotification } from "../../utils/types/INotification";
 import VideoCallNotification from "../../utils/ui/VideoCallNotification";
 
+  
 const ringtune = new Audio("/Ringtone Video call.mp3");
 
 interface NavbarProps {
@@ -36,14 +38,50 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
     (state: RootState) => state.serviceProvider
   );
   const dispatch = useDispatch();
+ const [isOnDuty, setIsOnDuty] = useState(true);
 
+  const toggleStatus = () => {
+    setIsOnDuty((prev) => !prev);
+  };
 
   const [videoCallNotification, setVideoCallNotification] =
     useState<IVideoCallNotification | null>(null);
   const [rejectFn, setRejectFn] = useState<() => void>(() => () => {});
   const [acceptFn, setAcceptFn] = useState<() => void>(() => () => {});
 
+
   const navigate = useNavigate();
+
+ 
+  const handleOnDutty= async()=>{
+
+try {
+  const res=    await putRequest(apiEndPointServiceProvider.makeActiveAllservice+serviceProviderInfo._id,{})
+
+if(res.status===200){
+  toggleStatus()
+HotToastSuccess("Service Provider is now On Duty");
+}
+} catch (error) {
+  console.log(error);
+  
+}
+  }
+
+    const handleOffDutty= async()=>{
+
+try {
+  const res=    await putRequest(apiEndPointServiceProvider.makeInactiveAllService+serviceProviderInfo._id,{})
+
+if(res.status===200){
+  toggleStatus()
+HotToastSuccess("Service Provider is now Off Duty");
+}
+} catch (error) {
+ console.log(error);
+  
+}
+  }
 
 
   useEffect(() => {
@@ -218,7 +256,31 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                   </Link>
                 </li>
               </ul>
+<div className="flex items-center gap-3 ml-4">
+  <span className="font-semibold text-white">
+    {isOnDuty ? "On Duty" : "On Leave"}
+  </span>
+
+  {isOnDuty ? (
+    <button
+      onClick={handleOffDutty}
+      className="btn btn-sm btn-error"
+    >
+      Go on Leave
+    </button>
+  ) : (
+    <button
+      onClick={handleOnDutty}
+      className="btn btn-sm btn-success"
+    >
+      Go On Duty
+    </button>
+  )}
+</div>
+    
             </div>
+
+            
           )}
 
         {videoCallNotification && (

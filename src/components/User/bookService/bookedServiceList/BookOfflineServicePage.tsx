@@ -25,15 +25,21 @@ import { HotToastError, HotToastSuccess } from "../../../../utils/notificationTo
 import { Toaster } from "react-hot-toast";
 import BookingSuccess from "../../../ui/bookingSuccessCard";
 import { AddressEditModal } from "../../../Address/AddressEdit";
+import CurrentLocationFetcher from "../CurrentLocationFetcher";
+import ServiceDateTimePicker from "../ServiceDateTimePicker";
+import { IServiceDateTime } from "../../../../utils/types/booking";
 
 const BookService = () => {
   const [addresses, setAddresses] = useState<IAddress[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<IAddress | null>(null);
   const [isAddNewAddressModalOpen, setIsAddNewAddressModalOpen] =
     useState(false);
-
+ const [currentLocation,setCurrentLocation]= useState<{ lat: number; lng: number } | null>(null);
   const [conformCard, setConformCard] = useState<boolean>(false);
-
+const [serviceDateTime, setServiceDateTime] = useState<IServiceDateTime>({
+  date: new Date(),
+  time: "anyTime",
+});
   const [service, setService] = useState<any>(null);
   const { id } = useParams();
 
@@ -114,10 +120,27 @@ const BookService = () => {
         HotToastError("Address Required");
         return;
       }
-      const res = await postRequest(serviceEndPoint.bookservice, {
-        serviceId: id,
-        address: selectedAddress,
-      });
+
+      console.log({serviceDateTime,currentLocation});
+      
+
+      
+ const data: {
+  serviceId: string;
+  address: IAddress;
+  preferredServiceTime:IServiceDateTime;
+  liveLocation?: {
+    lat: number;
+    lng: number;
+  };
+} = {
+  serviceId: id+"",
+  address: selectedAddress,
+  preferredServiceTime: serviceDateTime,
+  ...(currentLocation && { liveLocation: currentLocation }),
+};
+
+      const res = await postRequest(serviceEndPoint.bookservice,data);
       if (res.status === 201) {
        
         HotToastSuccess("Service booking successfully confirmed!")
@@ -144,9 +167,9 @@ const BookService = () => {
       )}
 
       {!conformCard && (
-        <div className="container min-h-screen p-6 bg-base-100">
+        <div className="container min-h-screen p-6 ">
           <Toaster></Toaster>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 bg-base-100 md:grid-cols-3">
             {/* Addresses Column */}
             <div className="space-y-4 md:col-span-1">
               <div className="flex items-center justify-between p-4 rounded-lg shadow-sm bg-base-200">
@@ -161,7 +184,7 @@ const BookService = () => {
                 </button>
               </div>
 
-              <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
+              <div className="space-y-3 max-h-[500px] p-3 overflow-y-auto pr-2">
                 {addresses.length === 0 ? (
                   <div className="flex items-center text-sm alert bg-base-200 text-base-content">
                     <PlusCircle className="w-5 h-5 mr-2 text-primary" />
@@ -179,137 +202,160 @@ const BookService = () => {
                     />
                   ))
                 )}
+
+                <CurrentLocationFetcher setLocation={setCurrentLocation} />
+
+      
               </div>
             </div>
 
             {/* Service and Booking Details Column */}
             <div className="space-y-6 md:col-span-2">
               {/* Service Provider Details */}
-              {service?.serviceProviderDetails && (
-                <div className="p-6 shadow-md card bg-base-200 rounded-xl">
-                  <div className="flex items-center space-x-5">
-                    <div className="avatar">
-                      <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                        <img
-                          src={
-                            service.serviceProviderDetails.profileImage ||
-                            "/default-avatar.png"
-                          }
-                          alt="Service Provider"
-                          className="object-cover"
-                        />
-                      </div>
-                    </div>
-                    <div className="flex-grow">
-                      <h2 className="mb-2 text-xl card-title text-primary">
-                        {service.serviceProviderDetails.serviceProviderName}
-                      </h2>
-                      <div className="space-y-2 text-sm text-base-content opacity-80">
-                        <p className="flex items-center">
-                          <Phone className="w-4 h-4 mr-2 text-primary" />
-                          {service.serviceProviderDetails.serviceProviderPhone}
-                        </p>
-                        <p className="flex items-center">
-                          <Calendar className="w-4 h-4 mr-2 text-primary" />
-                          {service.serviceProviderDetails.experience} Years
-                          Experience
-                        </p>
-                        <p className="flex items-center">
-                          <MapPinned className="w-4 h-4 mr-2 text-primary" />
-                          {service.serviceProviderDetails.location.address}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center text-primary">
-                      <Star fill="currentColor" className="w-6 h-6 mr-1" />
-                      <span className="text-lg font-bold">4.5</span>
-                    </div>
-                  </div>
-                </div>
+ 
+
+                  <div className="p-6 shadow-md card bg-base-200 rounded-xl">
+  <div className="flex flex-col gap-6 lg:flex-row">
+    {/* Service Provider Details - Left Half */}
+    {service?.serviceProviderDetails && (
+      <div className="flex-1">
+        <div className="flex items-center space-x-5">
+          <div className="avatar">
+            <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+              <img
+                src={
+                  service.serviceProviderDetails.profileImage ||
+                  "/default-avatar.png"
+                }
+                alt="Service Provider"
+                className="object-cover"
+              />
+            </div>
+          </div>
+          <div className="flex-grow">
+            <h2 className="mb-2 text-xl card-title text-primary">
+              {service.serviceProviderDetails.serviceProviderName}
+            </h2>
+            <div className="space-y-2 text-sm text-base-content opacity-80">
+              <p className="flex items-center">
+                <Phone className="w-4 h-4 mr-2 text-primary" />
+                {service.serviceProviderDetails.serviceProviderPhone}
+              </p>
+              <p className="flex items-center">
+                <Calendar className="w-4 h-4 mr-2 text-primary" />
+                {service.serviceProviderDetails.experience} Years Experience
+              </p>
+              <p className="flex items-center">
+                <MapPinned className="w-4 h-4 mr-2 text-primary" />
+                {service.serviceProviderDetails.location.address}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* Service Details - Right Half */}
+    {service && (
+      <div className="flex-1">
+        <div className="flex items-start space-x-5">
+          <div className="avatar">
+            <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+              <img
+                src={service.serviceImage || "/default-avatar.png"}
+                alt="Service"
+                className="object-cover"
+              />
+            </div>
+          </div>
+          <div className="flex-grow">
+            <h2 className="mb-2 text-xl card-title text-primary">
+              {service.serviceName}
+            </h2>
+            <div className="mt-3">
+              <p className="text-sm text-base-content opacity-80">
+                {service.description}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
+</div>       
+
+
+ <div className="flex space-x-5 rounded-lg shadow-lg bg-base-200">
+  {/* Service Details */}
+  <div className="w-2/3 mt-4">
+    <ServiceDateTimePicker value={serviceDateTime} setValue={setServiceDateTime} />
+  </div>
+  
+  {/* Selected Address Confirmation */}
+  {selectedAddress && (
+    <div className="w-1/3 p-5 card rounded-xl">
+      <div className="space-y-4">
+        <div className="p-4 rounded-lg bg-base-100">
+          <h3 className="flex items-center mb-3 text-sm font-semibold text-primary">
+            <CheckCircle className="w-5 h-5 mr-2 text-success" />
+            Selected Address
+          </h3>
+          <div className="text-sm">
+            <p className="font-medium text-base-content">
+              {selectedAddress.name}
+            </p>
+            <p className="text-base-content opacity-70">
+              {selectedAddress.houseName}
+            </p>
+            <p className="text-xs text-base-content opacity-70">
+              {selectedAddress.pincode}, {selectedAddress.state}
+            </p>
+          </div>
+        </div>
+
+        {service?.serviceProviderDetails && (
+          <div className="p-4 space-y-2 text-sm rounded-lg ">
+            <p className="font-semibold text-primary">Summary</p>
+            <div className="space-y-1">
+              <p>
+                <span className="font-medium">Provider:</span>{" "}
+                {service.serviceProviderDetails.serviceProviderName}
+              </p>
+              <p>
+                <span className="font-medium">Estimated Price:</span>{" "}
+                ₹{service?.estimatedPrice}
+              </p>
+              <p>
+                <span className="font-medium">Service Type:</span>{" "}
+                {service?.serviceType == "Online" ? "Online" : "Offline"}
+              </p>
+              {service.serviceType == "Offline" && selectedAddress && (
+                <p>
+                  <span className="font-medium">Service Location:</span>{" "}
+                  {selectedAddress.houseName}, {selectedAddress.pincode}
+                </p>
               )}
+            </div>
+            <p className="mt-2 text-xs text-warning">
+              Note: The service provider must confirm the service before it proceeds.
+            </p>
+          </div>
+        )}
 
-              <div className="flex space-x-5">
-                {/* Service Details */}
-                {service && (
-                  <div className="w-2/3 card ">
-                    <ServiceDetailsCard service={service} />
-                  </div>
-                )}
+        <button
+          className="w-full mt-3 btn btn-primary btn-sm"
+          onClick={handleBooking}
+          disabled={!selectedAddress}
+        >
+          Confirm Booking
+        </button>
+      </div>
+    </div>
+  )}
+</div>
 
-                {/* Selected Address Confirmation */}
-                {selectedAddress && (
-                  <div className="w-1/3 p-5 shadow-md card bg-base-200 rounded-xl">
-                    <div className="space-y-4">
-                      <div className="p-4 rounded-lg bg-base-100">
-                        <h3 className="flex items-center mb-3 text-sm font-semibold text-primary">
-                          <CheckCircle className="w-5 h-5 mr-2 text-success" />
-                          Selected Address
-                        </h3>
-                        <div className="text-sm">
-                          <p className="font-medium text-base-content">
-                            {selectedAddress.name}
-                          </p>
-                          <p className="text-base-content opacity-70">
-                            {selectedAddress.houseName}
-                          </p>
-                          <p className="text-xs text-base-content opacity-70">
-                            {selectedAddress.pincode}, {selectedAddress.state}
-                          </p>
-                        </div>
-                      </div>
 
-                      {service?.serviceProviderDetails && (
-                        <div className="p-4 space-y-2 text-sm rounded-lg bg-base-100">
-                          <p className="font-semibold text-primary">Summary</p>
-                          <div className="space-y-1">
-                            <p>
-                              <span className="font-medium">Provider:</span>{" "}
-                              {
-                                service.serviceProviderDetails
-                                  .serviceProviderName
-                              }
-                            </p>
-                            <p>
-                              <span className="font-medium">
-                                Estimated Price:
-                              </span>{" "}
-                              ₹{service?.estimatedPrice}
-                            </p>
-                            <p>
-                              <span className="font-medium">Service Type:</span>{" "}
-                              {service?.serviceType == "Online"
-                                ? "Online"
-                                : "Offline"}
-                            </p>
-                            {service.serviceType == "Offline" &&
-                              selectedAddress && (
-                                <p>
-                                  <span className="font-medium">
-                                    Service Location:
-                                  </span>{" "}
-                                  {selectedAddress.houseName},{" "}
-                                  {selectedAddress.pincode}
-                                </p>
-                              )}
-                          </div>
-                          <p className="mt-2 text-xs text-warning">
-                            Note: The service provider must confirm the service
-                            before it proceeds.
-                          </p>
-                        </div>
-                      )}
 
-                      <button
-                        className="w-full mt-3 btn btn-primary btn-sm"
-                        onClick={handleBooking}
-                        disabled={!selectedAddress}
-                      >
-                        Confirm Booking
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
 

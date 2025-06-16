@@ -97,7 +97,7 @@ export const handleAuth = async (
           );
           if (res?.status === 200) {
             HotToastSuccess("login successful");
-            navigate("/");
+            navigate("/", { replace: true });
           }
         } else if (submissionData.email) {
           localStorage.setItem("registerEmailorPhone", submissionData.email);
@@ -113,7 +113,7 @@ export const handleAuth = async (
 
         if (res?.status === 200) {
           HotToastSuccess("login successful");
-          navigate("/");
+         navigate("/", { replace: true });
         } else {
           setError(res.data.message || "An error occurred. Please try again.");
         }

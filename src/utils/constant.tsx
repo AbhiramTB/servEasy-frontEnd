@@ -65,7 +65,9 @@ export const apiEndPointServiceProvider = {
   serviceProviderRegister: "/service-providers/register",
   getServiceProvider: "/service-providers/",
   getCategories: "/service-providers/categories",
-  getPaymentInfo:"/service-providers/get-paymentinfo"
+  getPaymentInfo:"/service-providers/get-paymentinfo",
+  makeActiveAllservice:"/service-providers/services/activate-all/",
+  makeInactiveAllService:"/service-providers/services/deactivate-all/"
 };
 
 export const apiEndPointAdmin = {
