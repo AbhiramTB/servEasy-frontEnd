@@ -218,15 +218,18 @@ if(pathUrl!=="/chats"){
               </Link>
             </div>
 
+
+
             {/* Desktop Navigation */}
             <div className="hidden md:flex md:items-center md:space-x-4">
-              {!user.serviceProvider && (
+         {!user.serviceProvider && (
                 <Link to="service-provider/register">
                   <button className="btn btn-outline btn-primary btn-sm">
                     Become a Service Provider
                   </button>
                 </Link>
               )}
+
 
               {/* Chat Button with Red Dot */}
               <div className="relative">
@@ -327,6 +330,7 @@ if(pathUrl!=="/chats"){
                       Your Bookings
                     </Link>
                   </li>
+                  
                   <li className="pt-2 mt-2 border-t border-base-300">
                     <button
                       onClick={handleLogOut}

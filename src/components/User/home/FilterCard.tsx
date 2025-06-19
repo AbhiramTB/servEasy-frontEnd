@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ChevronDown, X, Star } from 'lucide-react';
 
 export interface FilterSortState {
-  priceSort: 'none' | 'low-to-high' | 'high-to-low';
+  priceSort: 'none' |"gtToLow" | "lowTogt";
   category: string;
   experienceSort: 'none' | '1+' | '3+' | '5+' | '10+';
   ratingFilter: number | null;
@@ -14,24 +14,19 @@ interface Category {
 }
 
 interface Props {
-  setState: (state: FilterSortState) => void;
+  filters:FilterSortState
+  setFilters: (state: FilterSortState) => void;
   categories: Category[];
 }
 
-const FilterSortComponent: React.FC<Props> = ({ setState, categories }) => {
-  const [filters, setFilters] = useState<FilterSortState>({
-    priceSort: 'none',
-    category: '',
-    experienceSort: 'none',
-    ratingFilter: null,
-  });
+const FilterSortComponent: React.FC<Props> = ({ filters,setFilters, categories }) => {
+ 
 
   const [isOpen, setIsOpen] = useState(false);
 
   const updateFilters = (updated: Partial<FilterSortState>) => {
     const newFilters = { ...filters, ...updated };
     setFilters(newFilters);
-    setState(newFilters);
   };
 
   const handleRatingToggle = (rating: number) => {
@@ -47,7 +42,6 @@ const FilterSortComponent: React.FC<Props> = ({ setState, categories }) => {
       ratingFilter: null,
     };
     setFilters(cleared);
-    setState(cleared);
   };
 
   return (
@@ -90,13 +84,15 @@ const FilterSortComponent: React.FC<Props> = ({ setState, categories }) => {
             <select
               value={filters.priceSort}
               onChange={(e) =>
+
                 updateFilters({ priceSort: e.target.value as FilterSortState['priceSort'] })
               }
               className="w-full p-1 border rounded"
             >
               <option value="none">None</option>
-              <option value="low-to-high">Low to High</option>
-              <option value="high-to-low">High to Low</option>
+              <option value="lowTogt">Low to High</option>
+              <option value="gtToLow">High to Low</option>
+              
             </select>
           </div>
 
