@@ -3,6 +3,7 @@ export interface IServiceHome {
   serviceName: string;
   description: string;
   serviceType: 'Online' | 'Offline' | string;
+  experience?:number
   location: {
     type: 'Point';
     coordinates: [number, number]; 

@@ -115,7 +115,7 @@ const FilterSortComponent: React.FC<Props> = ({ filters,setFilters, categories }
             </select>
           </div>
 
-          <div className="mb-3">
+          {/* <div className="mb-3">
             <label className="block mb-1 text-sm">Rating</label>
             <div className="flex flex-wrap gap-2">
               {[5, 4, 3, 2, 1].map((rating) => (
@@ -133,7 +133,7 @@ const FilterSortComponent: React.FC<Props> = ({ filters,setFilters, categories }
                 </button>
               ))}
             </div>
-          </div>
+          </div> */}
 
           <div className="flex justify-between mt-4">
             <button

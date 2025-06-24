@@ -66,6 +66,12 @@ const ServiceListingCards: React.FC<HomePageCardProps> = ({ service }) => {
             <p className="text-sm font-medium">{service.serviceProviderName}</p>
             <p className="text-xs text-base-content/60">Verified Provider</p>
           </div>
+          {service.experience && (
+            <div className="ml-auto text-xs badge bg-base-100">
+              <User className="inline-block w-4 h-4 mr-1" />
+              {service.experience} years experience
+              </div>
+           ) }
         </div>
       </div>
     </div>
