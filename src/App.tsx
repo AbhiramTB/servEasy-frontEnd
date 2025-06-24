@@ -20,8 +20,8 @@ import SingleServiceCard from "./components/User/bookService/ServiceDetailsPage.
 import BookService from "./components/User/bookService/bookedServiceList/BookOfflineServicePage.tsx";
 import BookedService from "./components/User/bookService/bookedServiceList/BookedServiceListPage.tsx";
 import ViewSIngleBookedService from "./components/User/bookService/BookedOfflineServicePage.tsx";
-import BookedServiceServiceProvider from "./components/ServiceProvider/booking/bookedServices.tsx";
-import ServiceBookingManage from "./components/ServiceProvider/booking/SingleBooking.tsx";
+import BookedServiceServiceProvider from "./components/ServiceProvider/booking/bookedServicesList.tsx";
+import ServiceBookingManage from "./components/ServiceProvider/booking/offlineService/SingleBooking.tsx";
 import PaymentVerify from "./components/ui/PaymentVerify.tsx";
 import PaymentManagement from "./components/ServiceProvider/paymentManagement/paymentManagement.tsx";
 import BookingManagement from "./components/admin/bookingManagement/booking-management.tsx";
@@ -32,7 +32,7 @@ import ChatUI from "./components/User/chat/AllChatsServiceProvider.tsx";
 import ChatsUser from "./components/User/chat/AllchatsUser.tsx";
 import BookOnlineService from "./components/User/bookService/BookOnlineServicePage.tsx";
 import ServiceBookingDetailsOnline from "./components/User/bookService/bookedOnlineServicePage.tsx";
-import OnlineBookingManagement from "./components/ServiceProvider/booking/OnlineServiceBookingManagement.tsx";
+import OnlineBookingManagement from "./components/ServiceProvider/booking/onlineService/OnlineServiceBookingManagement.tsx";
 import { Toaster } from "react-hot-toast";
 import VideoCall from "./components/VideoCall/VideoCallUser.tsx";
 import ServiceProviderVideoCall from "./components/VideoCall/ServiceProviderVideoCall.tsx";
@@ -47,6 +47,7 @@ import Myprofile from "./components/ServiceProvider/service/profile/Myprofile.ts
 
 import { useAuth } from "./hooks/useAuth.tsx";
 import NotFound from "./components/ui/NotFound.tsx";
+import Sample from "./sample.tsx";
 
 function App() {
    const { userAccessToken, adminAccessToken } = useAuth();
@@ -103,6 +104,7 @@ function App() {
             />
             <Route path="chat/:serviceProviderId" element={<Chat />} />
             <Route path="chats" element={<ChatsUser />}></Route>
+            <Route path="sample/op" element={<Sample/>} />
           </Route>
 
 

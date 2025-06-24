@@ -12,6 +12,7 @@ import {  apiEndPointServiceProvider } from "../../utils/constant";
 import RejectedRequestPage from "./service/RejectedRequestPage";
 import BlockedUserMessage from "./service/BlockedMessage";
 import { getRequest } from "../../utils/makeRequestInstance";
+import PaymentSummaryDownloader from "../ui/PaymentSummaryDownloader";
 
 interface PaymentData {
   totalRevenue: number;
@@ -28,7 +29,7 @@ const ServiceProviderDashboard: React.FC = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [SummaryDownloader,setSummaryDownloader]=useState<boolean>(false)
   
   useEffect(() => {
     fetchPaymentInfo();
@@ -119,6 +120,13 @@ const ServiceProviderDashboard: React.FC = () => {
         <PaymentChartSection chartData={chartData} loading={loading} />
 
         <PaymentTable chartData={chartData} />
+        <button className="p-2 m-5 rounded-md bg-primary text-base-100" onClick={()=>setSummaryDownloader(true)}> download</button>
+
+ { SummaryDownloader&&    <PaymentSummaryDownloader
+startDate={startDate}
+endDate={endDate}
+paymentData={paymentData}
+/>}
       </main>
     </div>
   );

@@ -30,7 +30,9 @@ const BookOnlineService = () => {
   const fetchService = async () => {
     try {
       const res = await getRequest(`${apiEndPoint.getSingleService}/${id}`);
-      setService(res.data.service[0]);
+      console.log(res.data.services);
+      
+      setService(res.data.services[0]);
     } catch (error) {
       console.error("Failed to fetch service:", error);
     }

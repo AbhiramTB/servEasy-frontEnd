@@ -407,7 +407,6 @@ import { Link } from "react-router-dom";
 import CustomerTestimonials from "./CustomerTestimonials";
 import WhyCooseServEasy from "./WhyCooseServEasy";
 import HowItWorks from "./HowItWorks";
-import HomePageShimmer from "../../../Skeleton/HomeSkelteon";
 import FilterSortComponent, { FilterSortState } from "./FilterCard";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SkeletonHomeCard from "../../../Skeleton/SkeletonHome";
@@ -501,7 +500,7 @@ const LIMIT =3;
         params,
       });
       console.log(res.data)
-console.log(res.data.allFilterServices);
+console.log(res.data.allFilterServices[0]);
 setActiveServiceNames(res.data.
 activeServiceNames
 )
@@ -510,7 +509,6 @@ activeServiceNames
 
      
           setCursor(nextCursor);
-                console.log("seted cursor"+cursor);
                 
       setAllServices((prev) => [...prev, ...data]);
       setHasMore(data.length === LIMIT); 
