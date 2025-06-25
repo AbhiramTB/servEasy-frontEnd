@@ -48,6 +48,7 @@ import Myprofile from "./components/ServiceProvider/service/profile/Myprofile.ts
 import { useAuth } from "./hooks/useAuth.tsx";
 import NotFound from "./components/ui/NotFound.tsx";
 import Sample from "./sample.tsx";
+import SlotPage from "./components/ServiceProvider/SlotManagement/SlotPage.tsx";
 
 function App() {
    const { userAccessToken, adminAccessToken } = useAuth();
@@ -145,6 +146,9 @@ function App() {
                 path="payment-management"
                 element={<PaymentManagement />}
               />
+              <Route path="slot-management" element={<SlotPage />} />
+
+              
             </Route>
           </Route>
 
