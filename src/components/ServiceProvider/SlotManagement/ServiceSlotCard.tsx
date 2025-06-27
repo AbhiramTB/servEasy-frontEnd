@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { X, Clock, Plus, AlertCircle } from "lucide-react";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import { ISlot } from "../../../utils/types/ISlot";
 
-
+dayjs.extend(customParseFormat);
 
 interface IService {
   _id: string;
@@ -13,7 +15,7 @@ interface IService {
 }
 
 interface ServiceSlotCardProps {
-  service: any;
+  service: IService;
   onCreateSlot: (serviceId: string, startTime: string, endTime: string) => void;
   onDeleteSlot: (serviceId: string, slotId: string) => void;
 }
@@ -25,33 +27,24 @@ const TimePickerDropdown: React.FC<{
   minTime?: string;
 }> = ({ value, onChange, placeholder, minTime }) => {
   const [isOpen, setIsOpen] = useState(false);
-  
-  // Generate time options in 30-minute intervals
+
   const generateTimeOptions = () => {
     const options = [];
-    for (let hour = 6; hour <= 22; hour++) {
-      for (let minute = 0; minute < 60; minute += 30) {
-        const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-        const displayTime = formatTime12Hour(timeString);
-        
-        // Skip times that are before minTime
-        if (minTime && timeString <= minTime) continue;
-        
-        options.push({
-          value: timeString,
-          display: displayTime
-        });
-      }
-    }
-    return options;
-  };
+    let start = dayjs().hour(6).minute(0);
 
-  const formatTime12Hour = (time24: string) => {
-    if (!time24) return '';
-    const [hours, minutes] = time24.split(':').map(Number);
-    const period = hours >= 12 ? 'PM' : 'AM';
-    const displayHours = hours % 12 || 12;
-    return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
+    const end = dayjs().hour(22).minute(0);
+
+    while (start.isBefore(end) || start.isSame(end)) {
+      const formatted = start.format("hh:mm A");
+
+      if (!minTime || start.isAfter(dayjs(minTime, "hh:mm A"))) {
+        options.push({ value: formatted });
+      }
+
+      start = start.add(30, "minute");
+    }
+
+    return options;
   };
 
   const timeOptions = generateTimeOptions();
@@ -61,15 +54,20 @@ const TimePickerDropdown: React.FC<{
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full px-3 py-2 text-left bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 flex items-center justify-between ${
-          !value ? 'text-gray-400' : 'text-gray-900'
+        className={`w-full px-3 py-2 text-left bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-between ${
+          !value ? "text-gray-400" : "text-gray-900"
         }`}
       >
         <div className="flex items-center gap-2">
           <Clock size={16} className="text-gray-400" />
-          <span>{value ? formatTime12Hour(value) : placeholder}</span>
+          <span>{value || placeholder}</span>
         </div>
-        <svg className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
@@ -87,10 +85,10 @@ const TimePickerDropdown: React.FC<{
                   setIsOpen(false);
                 }}
                 className={`w-full px-3 py-2 text-left hover:bg-blue-50 focus:bg-blue-50 focus:outline-none ${
-                  value === option.value ? 'bg-blue-100 text-blue-600' : 'text-gray-900'
+                  value === option.value ? "bg-blue-100 text-blue-600" : "text-gray-900"
                 }`}
               >
-                {option.display}
+                {option.value}
               </button>
             ))}
           </div>
@@ -109,31 +107,19 @@ const ServiceSlotCard: React.FC<ServiceSlotCardProps> = ({
   const [endTime, setEndTime] = useState("");
   const [error, setError] = useState("");
 
-  const formatTime12Hour = (time24: string) => {
-    if (!time24) return '';
-    const [hours, minutes] = time24.split(':').map(Number);
-    const period = hours >= 12 ? 'PM' : 'AM';
-    const displayHours = hours % 12 || 12;
-    return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
-  };
-
   const validateTimeSlot = (start: string, end: string) => {
-    if (!start || !end) {
-      return "Please select both start and end times";
-    }
-    
-    if (start >= end) {
-      return "End time must be after start time";
-    }
+    if (!start || !end) return "Please select both start and end times";
 
-    // Check for overlapping slots
-    const hasOverlap = service.slots.some((slot:any) => {
-      return (start < slot.endTime && end > slot.startTime);
+    const startTime24 = dayjs(start, "hh:mm A").format("HH:mm");
+    const endTime24 = dayjs(end, "hh:mm A").format("HH:mm");
+
+    if (startTime24 >= endTime24) return "End time must be after start time";
+
+    const hasOverlap = service.slots.some((slot: ISlot) => {
+      return startTime24 < slot.endTime && endTime24 > slot.startTime;
     });
 
-    if (hasOverlap) {
-      return "This time slot overlaps with an existing slot";
-    }
+    if (hasOverlap) return "This time slot overlaps with an existing slot";
 
     return "";
   };
@@ -154,30 +140,20 @@ const ServiceSlotCard: React.FC<ServiceSlotCardProps> = ({
   const handleStartTimeChange = (time: string) => {
     setStartTime(time);
     setError("");
-    
-    // Auto-set end time to 1 hour after start time if not set
-    if (time && !endTime) {
-      const [hours, minutes] = time.split(':').map(Number);
-      const endHour = hours + 1;
-      if (endHour <= 22) {
-        setEndTime(`${endHour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`);
-      }
+
+    if (!endTime) {
+      const newEnd = dayjs(time, "hh:mm A").add(1, "hour").format("hh:mm A");
+      setEndTime(newEnd);
     }
   };
 
-  const handleEndTimeChange = (time: string) => {
-    setEndTime(time);
-    setError("");
-  };
-
   return (
-    <div className="bg-white shadow-lg  rounded-xl">
-      {/* Service Header */}
+    <div className="bg-white shadow-lg rounded-xl">
       <div className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50">
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 overflow-hidden rounded-lg shadow-md">
-            <img 
-              src={service.serviceImage} 
+            <img
+              src={service.serviceImage}
               alt={service.serviceName}
               className="object-cover w-full h-full"
             />
@@ -190,26 +166,30 @@ const ServiceSlotCard: React.FC<ServiceSlotCardProps> = ({
       </div>
 
       <div className="p-6">
-        {/* Available Slots */}
+        {/* Existing Slots */}
         <div className="mb-6">
           <h3 className="mb-3 text-sm font-semibold text-gray-700">Available Time Slots</h3>
           <div className="grid grid-cols-1 gap-2">
             {service.slots.length === 0 ? (
               <p className="text-sm italic text-gray-500">No slots available</p>
             ) : (
-              service.slots.map((slot:any) => (
+              service.slots.map((slot: ISlot) => (
                 <div
                   key={slot._id}
                   className={`p-3 rounded-lg flex items-center justify-between ${
-                    slot.booked 
-                      ? "bg-red-100 border border-red-200" 
+                    slot.booked
+                      ? "bg-red-100 border border-red-200"
                       : "bg-green-100 border border-green-200"
                   }`}
                 >
                   <div className="flex items-center gap-2">
                     <Clock size={16} className={slot.booked ? "text-red-600" : "text-green-600"} />
-                    <span className={`font-medium ${slot.booked ? "text-red-700" : "text-green-700"}`}>
-                      {formatTime12Hour(slot.startTime)} - {formatTime12Hour(slot.endTime)}
+                    <span
+                      className={`font-medium ${
+                        slot.booked ? "text-red-700" : "text-green-700"
+                      }`}
+                    >
+                      {slot.startTime} - {slot.endTime}
                     </span>
                     {slot.booked && (
                       <span className="px-2 py-1 text-xs text-red-800 bg-red-200 rounded-full">
@@ -230,10 +210,10 @@ const ServiceSlotCard: React.FC<ServiceSlotCardProps> = ({
           </div>
         </div>
 
-        {/* Add New Slot */}
+        {/* Add Slot */}
         <div className="pt-6 border-t">
           <h3 className="mb-3 text-sm font-semibold text-gray-700">Add New Time Slot</h3>
-          
+
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div>
@@ -248,7 +228,10 @@ const ServiceSlotCard: React.FC<ServiceSlotCardProps> = ({
                 <label className="block mb-1 text-xs font-medium text-gray-600">End Time</label>
                 <TimePickerDropdown
                   value={endTime}
-                  onChange={handleEndTimeChange}
+                  onChange={(time) => {
+                    setEndTime(time);
+                    setError("");
+                  }}
                   placeholder="Select end time"
                   minTime={startTime}
                 />
@@ -262,8 +245,8 @@ const ServiceSlotCard: React.FC<ServiceSlotCardProps> = ({
               </div>
             )}
 
-            <button 
-              onClick={handleAddSlot} 
+            <button
+              onClick={handleAddSlot}
               disabled={!startTime || !endTime}
               className={`w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg font-medium transition-all ${
                 startTime && endTime
@@ -275,11 +258,11 @@ const ServiceSlotCard: React.FC<ServiceSlotCardProps> = ({
               Add Time Slot
             </button>
           </div>
-          
+
           {startTime && endTime && !error && (
             <div className="p-3 mt-3 border border-blue-200 rounded-lg bg-blue-50">
               <p className="text-sm text-blue-700">
-                <strong>Preview:</strong> {formatTime12Hour(startTime)} - {formatTime12Hour(endTime)}
+                <strong>Preview:</strong> {startTime} - {endTime}
               </p>
             </div>
           )}

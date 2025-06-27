@@ -12,6 +12,7 @@ import UserInfoCompact from "../UserInfoCompact";
 import ScheduleAndPaymentInfo from "../ScheduleAndPaymentInfo";
 import BookingStepper from "../BookingStepper";
 import StatusAlert from "../StatusAlert";
+import dayjs from "dayjs";
 
 interface BookingData {
   bookedService: {
@@ -25,6 +26,7 @@ interface BookingData {
     paymentStatus: string;
     paymentType: string;
     isOnlineService: boolean;
+    serviceSlot:IServiceSlot
   };
   service: {
     serviceName: string;
@@ -42,6 +44,11 @@ interface BookingData {
   };
 }
 
+export interface IServiceSlot {
+  date: Date;
+  startTime: string;
+  endTime: string;
+}
 const OnlineBookingManagement = () => {
   const { id } = useParams();
   const [bookingData, setBookingData] = useState<BookingData | null>(null);
@@ -53,7 +60,6 @@ const OnlineBookingManagement = () => {
   const [estimatedTime, setEstimatedTime] = useState<string>("");
   const [cancelReason, setCancelReason] = useState<string>("");
   const [newStatus, setNewStatus] = useState<string>("");
-const { min, max } = getMinMaxDateTime(2);
 
   useEffect(() => {
     if (id) {
@@ -81,31 +87,7 @@ const { min, max } = getMinMaxDateTime(2);
     }
   };
 
-  const handleAcceptBooking = async () => {
-    try {
-      if (!estimatedTime) {
-        HotToastError("Please provide an estimated service time");
-        return;
-      }
 
-      const res = await putRequest(
-        `service/service-provider/bookings/${id}/accept`,
-        {
-          estimatedServiceTime: estimatedTime,
-          serviceStatus: "confirmed",
-        }
-      );
-
-      if (res.status === 200) {
-        HotToastSuccess("Booking accepted successfully");
-        setShowAcceptModal(false);
-        getBookedService(id as string);
-      }
-    } catch (err) {
-      HotToastError("Failed to accept booking");
-      console.error(err);
-    }
-  };
 
   const handleCancelBooking = async () => {
     try {
@@ -156,24 +138,7 @@ const { min, max } = getMinMaxDateTime(2);
   const handleStartVideoCall = () => {
   };
 
-  const getStatusClass = () => {
-    if (!bookingData) return "alert-info";
-    
-    switch (bookingData.bookedService.serviceStatus) {
-      case "pending":
-        return "alert-info";
-      case "confirmed":
-        return "alert-success";
-      case "in-progress":
-        return "alert-warning";
-      case "completed":
-        return "alert-success";
-      case "cancelled":
-        return "alert-error";
-      default:
-        return "alert-info";
-    }
-  };
+
 
   const isPending = bookingData?.bookedService.serviceStatus === "pending";
   const isInProgress = bookingData?.bookedService.serviceStatus === "in-progress";
@@ -199,18 +164,7 @@ const { min, max } = getMinMaxDateTime(2);
 
   const { bookedService, service, user } = bookingData;
 
-  const formattedBookedDate = new Date(
-    bookedService.bookedTime
-  ).toLocaleDateString();
-  const formattedServiceDate = bookedService.estimatedServiceTime
-    ? new Date(bookedService.estimatedServiceTime).toLocaleDateString()
-    : "Not set";
-  const formattedServiceTime = bookedService.estimatedServiceTime
-    ? new Date(bookedService.estimatedServiceTime).toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      })
-    : "";
+
     
   const statusStep = (() => {
     switch (bookedService.serviceStatus) {
@@ -276,9 +230,9 @@ const { min, max } = getMinMaxDateTime(2);
         
 
     <ScheduleAndPaymentInfo
-  bookedDate={formattedBookedDate}
-  serviceDate={formattedServiceDate}
-  serviceTime={formattedServiceTime}
+  bookedDate={dayjs(bookedService.bookedTime).format('DD MMM YYYY, hh:mm A')}
+  serviceDate={dayjs(bookedService.serviceSlot.date).format('DD MMM YYYY, hh:mm A')}
+  serviceTime={`${bookedService.serviceSlot.startTime} to ${bookedService.serviceSlot.endTime}`}
   isPending={isPending}
   estimatedServiceTime={bookedService.estimatedServiceTime}
   paymentStatus={bookedService.paymentStatus}
@@ -288,22 +242,7 @@ const { min, max } = getMinMaxDateTime(2);
 
 
           <div className="flex flex-wrap justify-end gap-2 mt-4">
-            {isPending && (
-              <>
-                <button
-                  className="btn btn-success btn-sm"
-                  onClick={() => setShowAcceptModal(true)}
-                >
-                  Accept Booking
-                </button>
-                <button
-                  className="btn btn-error btn-sm"
-                  onClick={() => setShowCancelModal(true)}
-                >
-                  Cancel Booking
-                </button>
-              </>
-            )}
+          
 
             {!isCancelled && !isPending && (
               <>
@@ -385,15 +324,14 @@ const { min, max } = getMinMaxDateTime(2);
       </div>
 
 
-      <AcceptServiceModal estimatedTime={estimatedTime} max={max} min={min} handleAcceptBooking={handleAcceptBooking} setEstimatedTime={ setEstimatedTime} setShow={setShowAcceptModal} show={showAcceptModal} />
 
-<CancelBookingModal
+{bookedService.paymentStatus!=="completed" && <CancelBookingModal
         show={showCancelModal}
         setShow={setShowCancelModal}
         cancelReason={cancelReason}
         setCancelReason={setCancelReason}
         handleCancelBooking={handleCancelBooking}
-      />
+      />}
 
 
 

@@ -47,7 +47,7 @@ const CurrentLocationFetcher: React.FC<CurrentLocationFetcherProps> = ({ setLoca
   };
 
   return (
-    <div className="w-full max-w-md p-4 mx-auto text-center border rounded shadow">
+    <div className="w-full max-w-md p-4 mx-auto text-center rounded shadow">
       <button
         onClick={fetchLocation}
         className="flex items-center justify-center gap-2 mx-auto mb-4 btn btn-primary"
@@ -59,9 +59,7 @@ const CurrentLocationFetcher: React.FC<CurrentLocationFetcherProps> = ({ setLoca
 
       {coords && (
         <div className="font-medium text-green-600">
-          <p>
-            Latitude: {coords.lat.toFixed(6)}, Longitude: {coords.lng.toFixed(6)}
-          </p>
+        
           <button
             onClick={removeLocation}
             className="inline-flex items-center gap-1 mt-2 text-sm text-red-500 hover:underline"

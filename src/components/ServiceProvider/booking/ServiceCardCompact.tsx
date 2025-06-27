@@ -1,18 +1,17 @@
-
-import React from "react";
+import React from 'react';
 
 interface ServiceCardCompactProps {
   serviceImage: string;
   serviceName: string;
-  serviceType: string;
-  description: string;
-  estimatedPrice: number;
+  serviceType?: string;
+  description?: string;
+  estimatedPrice?: number;
 }
 
 const ServiceCardCompact: React.FC<ServiceCardCompactProps> = ({
   serviceImage,
   serviceName,
-  
+
   serviceType,
   description,
   estimatedPrice,
@@ -26,13 +25,17 @@ const ServiceCardCompact: React.FC<ServiceCardCompactProps> = ({
       </div>
       <div>
         <h2 className="text-xl font-bold">{serviceName}</h2>
-        <div className="my-1 space-x-2">
-          <span className="badge badge-secondary">{serviceType}</span>
-        </div>
-        <p className="my-1 text-sm opacity-75">{description}</p>
-        <div className="mt-2">
-          <strong className="text-xl text-primary">₹{estimatedPrice}</strong>
-        </div>
+        {serviceType && (
+          <div className="my-1 space-x-2">
+            <span className="badge badge-secondary">{serviceType}</span>
+          </div>
+        )}
+        {description && <p className="my-1 text-sm opacity-75">{description}</p>}{' '}
+        {estimatedPrice && (
+          <div className="mt-2">
+            <strong className="text-xl text-primary">₹{estimatedPrice}</strong>
+          </div>
+        )}
       </div>
     </div>
   );

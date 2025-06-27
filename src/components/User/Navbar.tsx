@@ -203,8 +203,8 @@ if(pathUrl!=="/chats"){
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled 
-            ? "bg-base-100 shadow-lg border-b border-base-300" 
-            : "bg-base-100 border-b border-base-200"
+            ? "bg-base-100  shadow-lg border-b border-base-300" 
+            : "bg-primary/5 border-b border-base-200"
         }`}
       >
         <div className="mx-auto max-w-7xl ">

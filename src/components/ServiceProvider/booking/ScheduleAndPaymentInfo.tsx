@@ -7,7 +7,7 @@ interface ScheduleAndPaymentInfoProps {
   serviceTime?: string;
   isPending: boolean;
   estimatedServiceTime?: string;
-  paymentStatus: "paid" | "requested" | "refunded" | string;
+  paymentStatus: "paid" | "requested"  | string;
   paymentType: string;
 }
 
@@ -42,11 +42,14 @@ const ScheduleAndPaymentInfo: React.FC<ScheduleAndPaymentInfoProps> = ({
       <div className="p-3 bg-base-200 rounded-box">
         <h3 className="mb-2 font-medium">Schedule</h3>
         <div className="text-sm">
-          <p>Booked: {bookedDate}</p>
+          <p>Booked on : {bookedDate}</p>
+            <div className="divider"></div>
+
           <p>
-            Service: {serviceDate}
+            Service slot: {serviceDate}
             {serviceTime && ` at ${serviceTime}`}
           </p>
+
           {!estimatedServiceTime && isPending && (
             <p className="text-warning">
               *Accept booking to set service time
