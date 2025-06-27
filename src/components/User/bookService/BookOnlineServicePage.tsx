@@ -1,20 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { useParams } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
+import { useParams } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 
-import ServiceDetailsCard from "../../ui/ServiceDetailsCard";
-import BookingSuccess from "../../ui/bookingSuccessCard";
+import ServiceDetailsCard from '../../ui/ServiceDetailsCard';
+import BookingSuccess from '../../ui/bookingSuccessCard';
 
-import { getRequest, postRequest } from "../../../utils/makeRequestInstance";
-import { apiEndPoint, serviceEndPoint } from "../../../utils/constant";
-import {
-  HotToastError,
-  HotToastSuccess,
-} from "../../../utils/notificationToast";
-import { ISlot } from "../../../utils/types/ISlot";
-import SlotSelector from "../../ui/SlotSelector";
-import ServiceProviderCard from "../../ui/ServiceProviderCard";
+import { getRequest, postRequest } from '../../../utils/makeRequestInstance';
+import { apiEndPoint, serviceEndPoint } from '../../../utils/constant';
+import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
+import { ISlot } from '../../../utils/types/ISlot';
+import SlotSelector from '../../ui/SlotSelector';
+import ServiceProviderCard from '../../ui/ServiceProviderCard';
 
 const BookOnlineService = () => {
   const [conformCard, setConformCard] = useState(false);
@@ -31,7 +28,7 @@ const BookOnlineService = () => {
 
   const handleSlotSelect = (slotId: string) => {
     setSelectedSlotId(slotId);
-    console.log("Selected slot:", slotId);
+    console.log('Selected slot:', slotId);
   };
 
   const fetchService = async () => {
@@ -41,7 +38,7 @@ const BookOnlineService = () => {
 
       setService(res.data.services[0]);
     } catch (error) {
-      console.error("Failed to fetch service:", error);
+      console.error('Failed to fetch service:', error);
     }
   };
 
@@ -50,7 +47,7 @@ const BookOnlineService = () => {
       const response = await getRequest(`service/online-services/slots/${id}`);
       setSlots(response.data);
     } catch (error) {
-      console.error("Failed to fetch slots:", error);
+      console.error('Failed to fetch slots:', error);
       throw error;
     }
   };
@@ -58,18 +55,19 @@ const BookOnlineService = () => {
   const handleBooking = async () => {
     try {
       if (!selectedSlotId) {
-        return HotToastError("Please select a slot before confirming.");
+        return HotToastError('Please select a slot before confirming.');
       }
       const res = await postRequest(serviceEndPoint.bookservice, {
         serviceId: id,
+        slotId:selectedSlotId,
         isOnline: true,
       });
       if (res.status === 201) {
-        HotToastSuccess("Service booking successfully confirmed!");
+        HotToastSuccess('Service booking successfully confirmed!');
         setConformCard(true);
       }
     } catch (error) {
-      console.error("Booking failed:", error);
+      console.error('Booking failed:', error);
     }
   };
 
@@ -89,7 +87,6 @@ const BookOnlineService = () => {
     <div className="container min-h-screen px-4 py-8 mx-auto bg-base-100">
       <Toaster />
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-        {/* Left Side: Service and Provider Details */}
         <div className="space-y-6 md:col-span-2">
           {service?.serviceProviderDetails && (
             <div className="p-6 shadow-md rounded-xl bg-base-200">
@@ -107,22 +104,14 @@ const BookOnlineService = () => {
         <div className="p-6 space-y-4 shadow-md bg-base-200 rounded-xl">
           {slots.length > 0 ? (
             <div>
-              
-              <h3 className="text-lg font-semibold text-primary">
-                {" "}
-                Today’s Available Slots{" "}
-              </h3>
+              <h3 className="text-lg font-semibold text-primary"> Today’s Available Slots </h3>
               <SlotSelector slots={slots} onSelect={handleSlotSelect} />
             </div>
           ) : (
             <div>
-              
-              <h3 className="text-lg font-semibold text-primary">
-                No slots available for today.
-              </h3>
+              <h3 className="text-lg font-semibold text-primary">No slots available for today.</h3>
             </div>
           )}
-          {selectedSlotId}
           <button
             className="w-full btn btn-primary"
             onClick={handleBooking}

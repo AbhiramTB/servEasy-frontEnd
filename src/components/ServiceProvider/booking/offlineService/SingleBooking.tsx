@@ -127,16 +127,19 @@ const { min, max } = getMinMaxDateTime(2);
 
   const handleAcceptBooking = async () => {
     try {
-      console.log(estimatedTime);
+
+       if (!estimatedTime) {
+        HotToastError("Please provide an estimated service time");
+        return;
+      }
+
       const estimatedTimeDate=new Date(estimatedTime)
       const now=new Date()
       if(estimatedTimeDate <= now){
         HotToastError("Please select a future date and time.")
+        return
       }
-      if (!estimatedTime) {
-        HotToastError("Please provide an estimated service time");
-        return;
-      }
+     
 
       const res = await putRequest(
         `service/service-provider/bookings/${id}/accept`,
@@ -151,9 +154,18 @@ const { min, max } = getMinMaxDateTime(2);
         setShowAcceptModal(false);
         getBookedService(id as string);
       }
-    } catch (err) {
+
+      console.log(res)
+    } catch (err:any) {
+      
+      console.log(err.response.data.error)
+      if(err.response.data.error){
+              HotToastError(err.response.data.error);
+
+      }else{
       HotToastError("Failed to accept booking");
-      console.error(err);
+
+      }
     }
   };
 

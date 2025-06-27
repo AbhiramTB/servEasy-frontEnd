@@ -3,6 +3,7 @@ import { Trash2, CheckCircle, X } from 'lucide-react';
 import { ISavedNotification } from '../../utils/types/INotification';
 import { HotToastSuccess } from '../../utils/notificationToast';
 import { deleteRequest, patchRequest } from '../../utils/makeRequestInstance';
+import dayjs from 'dayjs';
 
 interface Props {
   localNotifications: ISavedNotification[];
@@ -61,7 +62,7 @@ const Notifications: React.FC<Props> = ({
             localNotifications.map((notification) => (
               <div
                 key={notification._id}
-                className={`p-4 border-b border-base-200 hover:bg-base-100 rounded-lg shadow-sm mb-2 ${
+                className={`p-4 border-b border-primary bg-primary/10 hover:bg-primary/5 rounded-lg shadow-sm mb-2 ${
                   notification.read
                     ? 'bg-opacity-50'
                     : 'border-l-4 border-l-primary'
@@ -79,7 +80,8 @@ const Notifications: React.FC<Props> = ({
                       {notification.content}
                     </p>
                     <p className="text-xs text-base-content text-opacity-60">
-                      {notification.notificationTime}
+                      {dayjs(notification.notificationTime).format('DD MMM YYYY, hh:mm A')}
+                     
                     </p>
                   </div>
                   <div className="flex items-center ml-3 space-x-2">
@@ -104,7 +106,7 @@ const Notifications: React.FC<Props> = ({
               </div>
             ))
           ) : (
-            <div className="p-4 text-center text-base-content text-opacity-70">
+            <div className="p-4 text-center text-accent text-opacity-70">
               No notifications
             </div>
           )}

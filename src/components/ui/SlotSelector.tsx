@@ -29,7 +29,7 @@ const SlotSelector: React.FC<SlotSelectorProps> = ({ slots, onSelect }) => {
             className={`px-4 py-2 rounded-lg border transition-all
               ${
                 slot.booked
-                  ? "bg-base text-muted-foreground cursor-not-allowed border-border"
+                  ? "bg-accent/45 text-accent-content  cursor-not-allowed border-border"
                   : isSelected
                   ? "bg-primary text-primary-content border-2 border-primary"
                   : "bg-base-300 text-base-content hover:bg-primary/15 hover:text-accent-foreground border-border"

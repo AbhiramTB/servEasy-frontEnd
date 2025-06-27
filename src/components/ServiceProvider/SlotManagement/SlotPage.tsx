@@ -5,7 +5,7 @@ import { HotToastSuccess } from "../../../utils/notificationToast";
 import { Toaster } from "react-hot-toast";
 
 export interface IService {
-    _id?:string
+    _id:string
   serviceName: string;
   description: string;
   serviceType: string;
@@ -16,7 +16,7 @@ export interface IService {
   isActive?: boolean;
   serviceImage: string;
   slots:{
-  _id?: string;
+  _id: string;
   serviceId:string
   startTime: string;
   endTime: string;
