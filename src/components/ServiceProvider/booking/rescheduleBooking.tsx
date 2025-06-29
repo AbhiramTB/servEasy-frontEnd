@@ -8,6 +8,7 @@ interface RescheduleBookingModalProps {
   handleAcceptBooking: () => void;
   reason: string;
   setReason: (value: string) => void;
+  show:boolean,
 }
 
 const suggestedReasons = [
@@ -24,10 +25,14 @@ const RescheduleBookingModal: React.FC<RescheduleBookingModalProps> = ({
   setShowAcceptModal,
   handleAcceptBooking,
   reason,
-  setReason
+  setReason,
+  show,
 }) => {
   const { min, max } = getMinMaxDateTime(2);
 
+  if(!show){
+    return
+  }
   return (
     <div className="modal modal-open">
       <div className="modal-box">
@@ -80,10 +85,11 @@ const RescheduleBookingModal: React.FC<RescheduleBookingModalProps> = ({
 
         {/* Action Buttons */}
         <div className="modal-action">
-          <button className="btn" onClick={() => setShowAcceptModal(false)}>
+          <button className="btn" onClick={() => setShowAcceptModal(false)} >
             Cancel
           </button>
-          <button className="btn btn-success" onClick={handleAcceptBooking}>
+          <button className="btn btn-success" onClick={handleAcceptBooking}   disabled={!estimatedTime || !reason}
+>
             Confirm
           </button>
         </div>

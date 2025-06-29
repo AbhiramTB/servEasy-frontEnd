@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from "react";
+import  { useEffect, useCallback, useState } from "react";
 import { apiEndPointAdmin } from "../../../utils/constant";
 import { adminGetRequest, adminPatchRequest } from "../../../utils/AxiosAdmin";
 import { useDispatch, useSelector } from "react-redux";
@@ -44,10 +44,7 @@ const Allservices = () => {
     getServices(crrPage);
   }, [getServices]);
 
-  const handleEdit = (serviceId: string) => {
-    console.log("Edit service with ID:", serviceId);
-    // Add your edit logic here
-  };
+  
 
   const handleToggleBlock = async (serviceId: string, isBlocked: boolean) => {
     try {

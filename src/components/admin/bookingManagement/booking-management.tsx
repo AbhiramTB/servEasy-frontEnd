@@ -10,7 +10,7 @@ const BookingManagement: React.FC = () => {
   const [bookings, setBookings] = useState<BookingData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<ActiveTabType>("bookings");
+  const [activeTab] = useState<ActiveTabType>("bookings");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [crrPage, setCrrPage] = useState<number>(0);
@@ -29,6 +29,7 @@ const BookingManagement: React.FC = () => {
       );
 
       if (response.status === 200 && response.data) {
+        console.log(response)
         setTotalData(response.data.count);
         setBookings(response.data.data);
         setCrrPage(page);

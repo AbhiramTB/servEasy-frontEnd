@@ -1,6 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import AuthPage from './components/User/AuthModel/AuthPage.tsx';
-import Home from './components/User/Home1/Home.tsx';
 import Body from './pages/Body';
 import Otp from './components/User/AuthModel/Otp';
 import Register from './components/ServiceProvider/Register/Register.tsx';
@@ -45,7 +44,6 @@ import HomePage from './components/User/home/HomePage.tsx';
 import Myprofile from './components/ServiceProvider/service/profile/Myprofile.tsx';
 import { useAuth } from './hooks/useAuth.tsx';
 import NotFound from './components/ui/NotFound.tsx';
-import Sample from './sample.tsx';
 import SlotPage from './components/ServiceProvider/SlotManagement/SlotPage.tsx';
 
 function App() {
@@ -79,7 +77,6 @@ function App() {
             <Route path="/booked-service-online/:id" element={<ServiceBookingDetailsOnline />} />
             <Route path="chat/:serviceProviderId" element={<Chat />} />
             <Route path="chats" element={<ChatsUser />}></Route>
-            <Route path="sample/op" element={<Sample />} />
 
       </Route>
 
