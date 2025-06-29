@@ -46,3 +46,12 @@ export interface IServiceDateTime {
   date: Date;
   time: ITimeSlot;
 }
+
+
+
+export interface IBookingHistory {
+  _id: string;
+  action: string;
+  message: string;
+  timestamp: string;
+}

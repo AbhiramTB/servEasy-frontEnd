@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PaymentInfoModal from "./paymentInfoModal";
 import { BookingData } from "../../utils/types/booking";
+import dayjs from "dayjs";
 
 interface BookingsProps {
   bookings: BookingData[];
@@ -9,17 +10,14 @@ interface BookingsProps {
 const Bookings: React.FC<BookingsProps> = ({ bookings }) => {
   const [selectedBookingId, setSelectedBookingId] = useState<string | null>(null);
   
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-IN', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    }).format(date);
-  };
+  const formatDate = (dateString: string | undefined | null): string => {
+  if (!dateString) return "N/A";
+
+  const date = dayjs(dateString);
+  if (!date.isValid()) return "Invalid Date";
+
+  return date.format("DD MMM YYYY, hh:mm A");
+};
 
   const handleViewDetails = (bookingId: string) => {
     setSelectedBookingId(bookingId);

@@ -6,7 +6,6 @@ import {
 } from "../../../utils/validate";
 import React, { useState, FormEvent } from "react";
 import { apiEndPointAdmin } from "../../../utils/constant";
-import { HotToastSuccess } from "../../../utils/notificationToast";
 import { useNavigate } from "react-router-dom";
 interface SignInCredentials {
   identifier: string;

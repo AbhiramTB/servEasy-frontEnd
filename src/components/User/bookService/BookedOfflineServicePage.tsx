@@ -1,15 +1,21 @@
-import { useParams, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { getRequest, putRequest } from "../../../utils/makeRequestInstance";
-import RazorpayButton from "../../ui/PaymentButton";
-import ShowBills from "../../ui/ShowBills";
-import ReviewCard from "./ReviewCard";
-import { IReview } from "../../../utils/types/IReview";
-import ServeasyInvoiceDownloader from "./bookedServiceList/InvoiceDownloader";
-import { IServiceDateTime } from "../../../utils/types/booking";
-import ServiceDateTime from "./ServiceTimeInfo";
-import { HotToastError, HotToastSuccess } from "../../../utils/notificationToast";
-import { Toaster } from "react-hot-toast";
+import { useParams, Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { getRequest, putRequest } from '../../../utils/makeRequestInstance';
+import RazorpayButton from '../../ui/PaymentButton';
+import ShowBills from '../../ui/ShowBills';
+import ReviewCard from './ReviewCard';
+import { IReview } from '../../../utils/types/IReview';
+import ServeasyInvoiceDownloader from './bookedServiceList/InvoiceDownloader';
+import { IBookingHistory, IServiceDateTime } from '../../../utils/types/booking';
+import ServiceDateTime from './ServiceTimeInfo';
+import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
+import { Toaster } from 'react-hot-toast';
+import BookingHistoryList from '../../ui/BookingHistoryList';
+import ServiceAddressCard from '../../ServiceProvider/booking/ServiceAddressCard';
+import BookingStepper from '../../ServiceProvider/booking/BookingStepper';
+import UserInfoCompact from '../../ServiceProvider/booking/UserInfoCompact';
+import ServiceCardCompact from '../../ServiceProvider/booking/ServiceCardCompact';
+import CancelBookingModal from '../../ServiceProvider/booking/CancelBookingModal';
 
 interface Address {
   name: string;
@@ -49,8 +55,6 @@ interface Service {
   updatedAt: string;
 }
 
-
-
 interface ServiceProvider {
   _id: string;
   serviceProviderName: string;
@@ -79,7 +83,8 @@ interface BookedService {
   createdAt: string;
   updatedAt: string;
   serviceBills?: [string];
-  preferredSlot:IServiceDateTime
+  preferredSlot: IServiceDateTime;
+  bookingHistory?: IBookingHistory[];
 
   cancelReason?: string;
   payment?: Ipayment;
@@ -89,48 +94,42 @@ export interface BookingData {
   bookedService: BookedService;
   service: Service;
   serviceProvider: ServiceProvider;
-  review?:IReview
+  review?: IReview;
 }
 
 const ServiceBookingDetails = () => {
   const { id } = useParams();
   const [bookingData, setBookingData] = useState<BookingData | null>(null);
-  const [review,setReview]=useState<IReview |null>(null)
+  const [review, setReview] = useState<IReview | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [showBills, setShowBills] = useState(false);
   const [download, setDownload] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState<boolean>(false);
-  const [cancelReason, setCancelReason] = useState<string>("");
-    
-  
+  const [cancelReason, setCancelReason] = useState<string>('');
+
   const handleCancelBooking = async () => {
-     try {
-       if (!cancelReason) {
-         HotToastError("Please provide a cancellation reason");
-         return;
-       }
- 
-       const res = await putRequest(
-         `service/bookings/${id}/cancel`,
-         {
-           serviceStatus: "cancelled",
-           cancellationReason: cancelReason,
-         }
-       );
- 
-       if (res.status === 200) {
-         HotToastSuccess("Booking cancelled successfully");
-         setShowCancelModal(false);
-         getBookedService(id as string);
-       }
-     } catch (err) {
-       HotToastError("Failed to cancel booking");
-       console.error(err);
-     }
-   };
+    try {
+      if (!cancelReason) {
+        HotToastError('Please provide a cancellation reason');
+        return;
+      }
 
+      const res = await putRequest(`service/bookings/${id}/cancel`, {
+        serviceStatus: 'cancelled',
+        cancellationReason: cancelReason,
+      });
 
+      if (res.status === 200) {
+        HotToastSuccess('Booking cancelled successfully');
+        setShowCancelModal(false);
+        getBookedService(id as string);
+      }
+    } catch (err) {
+      HotToastError('Failed to cancel booking');
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     if (id) {
@@ -142,15 +141,15 @@ const ServiceBookingDetails = () => {
     try {
       setLoading(true);
       const res = await getRequest(`service/bookings${id}`);
-     
+
       if (res.status === 200) {
-         console.log(res.data.service.preferredSlot);
-         
+        console.log(res.data.service.bookedService.bookingHistory);
+
         setBookingData(res.data.service);
-        setReview(res.data.service.review)
+        setReview(res.data.service.review);
       }
     } catch (err) {
-      setError("Failed to load booking details");
+      setError('Failed to load booking details');
       console.error(err);
     } finally {
       setLoading(false);
@@ -185,59 +184,34 @@ const ServiceBookingDetails = () => {
               d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <span>{error || "Booking data not found"}</span>
+          <span>{error || 'Booking data not found'}</span>
         </div>
       </div>
     );
   }
 
   const { bookedService, service, serviceProvider } = bookingData;
-  const formattedBookedDate = new Date(
-    bookedService.bookedTime
-  ).toLocaleDateString("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
+  const formattedBookedDate = new Date(bookedService.bookedTime).toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
   });
-  const formattedEstimatedDate = new Date(
-    bookedService.estimatedServiceTime
-  ).toLocaleDateString("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
+  const formattedEstimatedDate = new Date(bookedService.estimatedServiceTime).toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
   });
 
-
-  const formattedEstimatedTime = new Date(
-    bookedService.estimatedServiceTime
-  ).toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
+  const formattedEstimatedTime = new Date(bookedService.estimatedServiceTime).toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
   });
 
-  const getStatusStep = (status: string) => {
-    switch (status) {
-      case "pending":
-        return 1;
-      case "confirmed":
-        return 2;
-      case "inProgress":
-        return 3;
-      case "requested":
-        return 3;
-      case "completed":
-        return 4;
-      case "cancelled":
-        return -1;
-      default:
-        return 1;
-    }
-  };
 
-  const statusStep = getStatusStep(bookedService.serviceStatus);
-  const isCancelled = bookedService.serviceStatus === "cancelled";
-  const isCompleted = bookedService.serviceStatus === "completed";
-  const isConfirmed = bookedService.serviceStatus ==="confirmed"
+
+  const isCancelled = bookedService.serviceStatus === 'cancelled';
+  const isCompleted = bookedService.serviceStatus === 'completed';
+  const isConfirmed = bookedService.serviceStatus === 'confirmed';
   return (
     <div className="container min-h-screen px-4 py-4 mx-auto bg-base-200">
       <Toaster></Toaster>
@@ -260,9 +234,7 @@ const ServiceBookingDetails = () => {
 
       {/* Status Banner for Completed or Cancelled */}
       {(isCompleted || isCancelled) && (
-        <div
-          className={`alert ${isCompleted ? "alert-success" : "alert-error"} mb-6`}
-        >
+        <div className={`alert ${isCompleted ? 'alert-success' : 'alert-error'} mb-6`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="w-6 h-6 stroke-current shrink-0"
@@ -286,13 +258,11 @@ const ServiceBookingDetails = () => {
             )}
           </svg>
           <div>
-            <h3 className="font-bold">
-              {isCompleted ? "Service Completed" : "Service Cancelled"}
-            </h3>
+            <h3 className="font-bold">{isCompleted ? 'Service Completed' : 'Service Cancelled'}</h3>
             <div className="text-xs">
               {isCompleted
-                ? "The service has been successfully completed. Thank you for using our service!"
-                : "This service has been cancelled. For any queries, please contact customer support."}
+                ? 'The service has been successfully completed. Thank you for using our service!'
+                : 'This service has been cancelled. For any queries, please contact customer support.'}
             </div>
           </div>
         </div>
@@ -304,94 +274,31 @@ const ServiceBookingDetails = () => {
         <div className="md:col-span-2">
           {/* Service Details Card */}
           <div
-            className={`card bg-base-100 shadow-xl ${isCancelled ? "border-error border" : isCompleted ? "border-success border" : ""}`}
+            className={`card bg-base-100 shadow-xl ${isCancelled ? 'border-error border' : isCompleted ? 'border-success border' : ''}`}
           >
             <div className="card-body">
-              <div className="flex flex-col gap-4 mb-4 md:flex-row md:items-center">
-                <div className="relative flex-shrink-0">
-                  <img
-                    src={service.serviceImage}
-                    alt={service.serviceName}
-                    className={`w-28 h-28 object-cover rounded-lg ${isCancelled ? "opacity-60" : ""}`}
-                  />
-                  {isCancelled && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="badge badge-error badge-lg">
-                        CANCELLED
-                      </span>
-                    </div>
-                  )}
-                  {isCompleted && (
-                    <div className="absolute top-2 right-2">
-                      <span className="badge badge-success">✓</span>
-                    </div>
-                  )}
-                </div>
-                <div className="flex-grow">
-                  <h2 className="card-title text-primary">
-                    {service.serviceName}
-                  </h2>
-                  <div className="flex items-center">
-                    <span className="mr-2 badge badge-outline badge-sm">
-                      {service.category}
-                    </span>
-                    <span className="badge badge-outline badge-sm">
-                      {service.serviceType}
-                    </span>
-                    {isCancelled && (
-                      <span className="ml-2 badge badge-error badge-sm">
-                        Cancelled
-                      </span>
-                    )}
-                    {isCompleted && (
-                      <span className="ml-2 badge badge-success badge-sm">
-                        Completed
-                      </span>
-                    )}
-                  </div>
-                  <p className="mt-2 text-sm text-base-content/70">
-                    {service.description}
-                  </p>
-                  <div className="mt-3">
-                    <span className="text-xl font-bold text-primary">
-                      ₹{service.estimatedPrice}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
+              <ServiceCardCompact
+                serviceImage={service.serviceImage}
+                serviceName={service.serviceName}
+                serviceType={service.serviceType}
+                description={service.description}
+                estimatedPrice={service.estimatedPrice}
+              />
               <div className="divider"></div>
 
-              {/* Service Provider Info */}
-              <div className="flex items-center mb-6">
-                <div className="mr-4 avatar">
-                  <div className="w-12 h-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                    <img
-                      src={serviceProvider.profileImage}
-                      alt={serviceProvider.serviceProviderName}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="font-medium">
-                    {serviceProvider.serviceProviderName}
-                  </div>
-                  <div className="text-sm text-base-content/70">
-                    <span
-                      className={`badge ${serviceProvider.isVerified === "verified" ? "badge-success" : "badge-warning"} badge-sm mr-2`}
-                    >
-                      {serviceProvider.isVerified}
-                    </span>
-                    <span>{serviceProvider.experience} years experience</span>
-                  </div>
-                </div>
+              <div className="">
+                <UserInfoCompact
+                  profileImage={serviceProvider.profileImage}
+                  userName={serviceProvider.serviceProviderName}
+                  email={serviceProvider.serviceProviderEmail}
+                  phone={serviceProvider.serviceProviderPhone ?? ' '}
+                />
+
+                <span>{serviceProvider.experience} years experience</span>
               </div>
 
               {/* Status Timeline */}
               <div className="mt-6 mb-6">
-                <h3 className="mb-4 font-semibold text-primary">
-                  Booking Status
-                </h3>
                 {isCancelled ? (
                   <div className="alert alert-error">
                     <svg
@@ -410,43 +317,21 @@ const ServiceBookingDetails = () => {
                     <span>Service has been cancelled</span>
                   </div>
                 ) : (
-                  <ul className="w-full steps steps-horizontal">
-                    <li
-                      className={`step ${statusStep >= 1 ? "step-primary" : ""}`}
-                    >
-                      Pending
-                    </li>
-                    <li
-                      className={`step ${statusStep >= 2 ? "step-primary" : ""}`}
-                    >
-                      Confirmed
-                    </li>
-                    <li
-                      className={`step ${statusStep >= 3 ? "step-primary" : ""}`}
-                    >
-                      In Progress
-                    </li>
-                    <li
-                      className={`step ${statusStep >= 4 ? "step-primary" : ""}`}
-                    >
-                      Completed
-                    </li>
-                  </ul>
+                 
+                  <BookingStepper status={bookedService.serviceStatus} />
                 )}
               </div>
 
               {/* Cancelled Reason - Only shown if cancelled */}
               {isCancelled && (
                 <div className="p-4 mb-6 rounded-lg bg-error/10">
-                  <h3 className="mb-2 font-semibold text-error">
-                    Cancellation Details
-                  </h3>
+                  <h3 className="mb-2 font-semibold text-error">Cancellation Details</h3>
                   <p className="text-sm">
-                    This service was cancelled on{" "}
-                    {new Date().toLocaleDateString("en-US", {
-                      weekday: "short",
-                      month: "short",
-                      day: "numeric",
+                    This service was cancelled on{' '}
+                    {new Date().toLocaleDateString('en-US', {
+                      weekday: 'short',
+                      month: 'short',
+                      day: 'numeric',
                     })}
                     .
                   </p>
@@ -460,25 +345,20 @@ const ServiceBookingDetails = () => {
               {/* Completion Details - Only shown if completed */}
               {isCompleted && (
                 <div className="p-4 mb-6 rounded-lg bg-success/10">
-                  <h3 className="mb-2 font-semibold text-success">
-                    Service Completion Details
-                  </h3>
+                  <h3 className="mb-2 font-semibold text-success">Service Completion Details</h3>
                   <p className="text-sm">
-                    This service was completed on{" "}
-                    {new Date().toLocaleDateString("en-US", {
-                      weekday: "short",
-                      month: "short",
-                      day: "numeric",
+                    This service was completed on{' '}
+                    {new Date().toLocaleDateString('en-US', {
+                      weekday: 'short',
+                      month: 'short',
+                      day: 'numeric',
                     })}
                     .
                   </p>
                   <div className="mt-4">
-                    <h4 className="mb-2 text-sm font-medium">
-                      Service Provider Notes:
-                    </h4>
+                    <h4 className="mb-2 text-sm font-medium">Service Provider Notes:</h4>
                     <p className="p-2 text-sm italic rounded bg-base-200">
-                      "Service completed successfully. Thank you for choosing
-                      our service!"
+                      "Service completed successfully. Thank you for choosing our service!"
                     </p>
                   </div>
                 </div>
@@ -487,9 +367,7 @@ const ServiceBookingDetails = () => {
               <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-2">
                 {/* Booking Time */}
                 <div className="p-4 rounded-lg bg-base-200">
-                  <h3 className="mb-2 font-semibold text-primary">
-                    Booking Schedule
-                  </h3>
+                  <h3 className="mb-2 font-semibold text-primary">Booking Schedule</h3>
                   <div className="flex items-center mb-2 text-sm">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -507,45 +385,40 @@ const ServiceBookingDetails = () => {
                     </svg>
                     <span>Booked on: {formattedBookedDate}</span>
                   </div>
-                {bookedService.estimatedServiceTime &&
-                 <div className="flex items-center text-sm">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-4 h-4 mr-2 text-primary"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    <span>
-                      {isCancelled ? (
-                        <span className="line-through">
-                          {formattedEstimatedDate} at {formattedEstimatedTime}
-                        </span>
-                      ) : (
-                        `Service on: ${formattedEstimatedDate} at ${formattedEstimatedTime}`
-                      )}
-                    </span>
+                  {bookedService.estimatedServiceTime && (
+                    <div className="flex items-center text-sm">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4 mr-2 text-primary"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                      <span>
+                        {isCancelled ? (
+                          <span className="line-through">
+                            {formattedEstimatedDate} at {formattedEstimatedTime}
+                          </span>
+                        ) : (
+                          `Service on: ${formattedEstimatedDate} at ${formattedEstimatedTime}`
+                        )}
+                      </span>
+                    </div>
+                  )}
 
+                  <ServiceDateTime
+                    serviceDateTime={bookedService.preferredSlot}
+                    userType="user"
+                    isCancelled={isCancelled ? true : false}
+                  />
 
-                  </div>}
-
-
-
-                      
-                       <ServiceDateTime 
-            serviceDateTime={bookedService.preferredSlot}
-            userType="user"
-            isCancelled={isCancelled?true:false}
-          />
-
-                  
                   {isCompleted && (
                     <div className="flex items-center mt-2 text-sm text-success">
                       <svg
@@ -555,12 +428,7 @@ const ServiceBookingDetails = () => {
                         viewBox="0 0 24 24"
                         stroke="currentColor"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span>Completed on: {formattedEstimatedDate}</span>
                     </div>
@@ -568,10 +436,11 @@ const ServiceBookingDetails = () => {
                 </div>
 
                 {/* Payment Info */}
+
                 <div className="p-4 rounded-lg bg-base-200">
-                  <h3 className="mb-2 font-semibold text-primary">
-                    Payment Details
-                  </h3>
+                  <h3 className="mb-2 font-semibold text-primary">Payment Details</h3>
+
+                  {/* Payment Method */}
                   <div className="flex items-center mb-2 text-sm">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -587,128 +456,82 @@ const ServiceBookingDetails = () => {
                         d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
                       />
                     </svg>
-                    <p>payment is not received yet</p>
-                  </div>
-                  <div className="flex items-center text-sm">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-4 h-4 mr-2 text-primary"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                      />
-                    </svg>
                     <span>Method: {bookedService.paymentType}</span>
                   </div>
-                  {isCancelled && <></>}
+
+                  {/* Payment Status (only if not pending) */}
+                  {bookedService.paymentStatus !== 'pending' && (
+                    <div className="flex items-center text-sm">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4 mr-2 text-primary"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                        />
+                      </svg>
+                      <span>Payment Status: {bookedService.paymentStatus}</span>
+                    </div>
+                  )}
+
+                  {/* Cancellation Info (optional block) */}
+                  {isCancelled && <div className="mt-2 text-sm text-error">This booking has been cancelled.</div>}
                 </div>
               </div>
 
+              
               {/* Action Buttons */}
               <div className="justify-end mt-8 card-actions">
-                {bookedService.serviceStatus === "pending" ||isConfirmed && (
-                  <button className="btn btn-error" onClick={()=>setShowCancelModal(true)} >Cancel Booking</button>
-                )}
+                {bookedService.serviceStatus === 'pending' ||
+                  (isConfirmed && (
+                    <button className="btn btn-error" onClick={() => setShowCancelModal(true)}>
+                      Cancel Booking
+                    </button>
+                  ))}
                 {bookingData.bookedService.serviceBills && (
-                  <button
-                    onClick={() => setShowBills(true)}
-                    className="btn btn-primary"
-                  >
+                  <button onClick={() => setShowBills(true)} className="btn btn-primary">
                     show bills
                   </button>
                 )}
-                {!isCancelled && (
-                  <button className="btn btn-primary">
-                    Contact Service Provider
+                {!isCancelled && <button className="btn btn-primary">Contact Service Provider</button>}
+
+                {isCompleted && (
+                  <button
+                    className="btn btn-success"
+                    onClick={() => {
+                      setDownload(true);
+                    }}
+                  >
+                    Download Invoice
                   </button>
-                )}
-
-                {isCompleted  && (
-                  <button className="btn btn-success" onClick={() => {setDownload(true)}}>Download Invoice</button>
-
                 )}
               </div>
             </div>
           </div>
         </div>
 
+     
 
+      <CancelBookingModal
+        show={showCancelModal}
+        setShow={setShowCancelModal}
+        cancelReason={cancelReason}
+        setCancelReason={setCancelReason}
+        handleCancelBooking={handleCancelBooking}
+      />
 
-          {showCancelModal && (
-        <div className="modal modal-open">
-          <div className="modal-box">
-            <h3 className="text-lg font-bold">Cancel Booking</h3>
-            <p className="py-4">Please provide a reason for cancellation:</p>
-
-            <div className="mb-4 form-control">
-              <label className="label">
-                <span className="label-text">Cancellation Reason</span>
-              </label>
-              <textarea
-                className="textarea textarea-bordered"
-                rows={3}
-                value={cancelReason}
-                onChange={(e) => setCancelReason(e.target.value)}
-              ></textarea>
-            </div>
-
-            <div className="modal-action">
-              <button className="btn" onClick={() => setShowCancelModal(false)}>
-                Back
-              </button>
-              <button className="btn btn-error" onClick={handleCancelBooking}>
-                Cancel Booking
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-
-    {download && <ServeasyInvoiceDownloader bookingData={bookingData}/>}
+        {download && <ServeasyInvoiceDownloader bookingData={bookingData} />}
 
         {/* Right Side - Details and Price Summary - 1/3 width */}
         <div className="md:col-span-1">
-          {/* Address Card */}
-          <div className="mb-6 shadow-xl card bg-base-100">
-            <div className="card-body">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-primary">Service Address</h3>
-              </div>
-              <div className="text-sm">
-                <p className="font-medium">{bookedService.address.name}</p>
-                <p>{bookedService.address.houseName}</p>
-                <p>
-                  {bookedService.address.state} -{" "}
-                  {bookedService.address.pincode}
-                </p>
-                <div className="flex items-center mt-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4 mr-2 text-primary"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                    />
-                  </svg>
-                  <span>{bookedService.address.phone}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
+          <ServiceAddressCard address={bookedService.address} />
+
           {bookedService.payment && (
             <div className="shadow card bg-base-100">
               <div className="p-4 card-body">
@@ -732,13 +555,15 @@ const ServiceBookingDetails = () => {
                     <span>Total</span>
                     <span>₹{bookedService.payment.total}</span>
                   </div>
+                  {bookedService.payment.convenienceFee&&bookedService.payment.convenienceFee>0&&
                   <div className="flex justify-between mt-1 text-xs opacity-75">
                     <span>convenience Fee (10%)</span>
                     <span>₹{bookedService.payment?.convenienceFee} </span>
-                  </div>
+                  </div>}
                 </div>
               </div>
-              {id && bookedService.paymentStatus !=="completed"&& (
+              
+              {id && bookedService.paymentStatus !== 'completed' && (
                 <RazorpayButton
                   serviceid={id}
                   reloadData={() => getBookedService(id)}
@@ -751,21 +576,18 @@ const ServiceBookingDetails = () => {
           {/* Feedback Section */}
           {isCompleted && (
             <div className="mt-6 shadow-xl card bg-base-100">
-              <ReviewCard
-                bookedServiceId={bookedService._id}
-                serviceId={bookedService.serviceId}
-                review={review }
-              />
+              <ReviewCard bookedServiceId={bookedService._id} serviceId={bookedService.serviceId} review={review} />
             </div>
           )}
+
+          <div className="mt-5 bg-base-200"  >
+            <BookingHistoryList history={bookedService.bookingHistory ?? []} />
+          </div>
 
           {!isCompleted && (
             <div className="mt-6 shadow-xl card bg-base-100">
               <div className="card-body">
-                <h3 className="mb-2 font-semibold text-primary">
-                  More options
-                </h3>
-               
+                <h3 className="mb-2 font-semibold text-primary">More options</h3>
 
                 {showBills && bookingData.bookedService.serviceBills && (
                   <ShowBills
