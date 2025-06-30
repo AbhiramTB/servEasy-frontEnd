@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaUser, FaCalendarCheck, FaPalette, FaCreditCard } from 'react-icons/fa';
+import { FaUser, FaCalendarCheck, FaPalette } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { NavLink, Outlet } from 'react-router-dom';
 import { RootState } from '../../../redux/store';

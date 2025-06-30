@@ -5,7 +5,6 @@ import { apiEndPoint, apiEndPointServiceProvider } from "../../utils/constant";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import {
   HotToastChatNotification,
   HotToastSuccess,
@@ -28,11 +27,9 @@ const ringtune = new Audio("/Ringtone Video call.mp3");
 const notificatioRingtune = new Audio("/Ringtone Notification.mp3");
 
 const Navbar = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.user);
 
-  const [editProfile, setEditProfile] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [notifications, setNotifications] = useState<ISavedNotification[] | []>([]);

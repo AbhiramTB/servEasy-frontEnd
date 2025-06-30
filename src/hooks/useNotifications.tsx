@@ -15,7 +15,6 @@
 // };
 
 import { useEffect } from "react";
-import { toast } from "react-toastify";
 import { connectSocket, isSocketConnected } from "../utils/socket"; // Assuming socket utilities are defined here
 
 interface NotificationPayload {

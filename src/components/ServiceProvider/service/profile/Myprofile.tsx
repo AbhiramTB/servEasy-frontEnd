@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { RootState } from '../../../../redux/store';
 import { IServiceProvider } from '../../../../utils/types/IServiceProvider';
-import { postRequest, putRequest } from '../../../../utils/makeRequestInstance';
+import {putRequest } from '../../../../utils/makeRequestInstance';
 import { apiEndPointServiceProvider } from '../../../../utils/constant';
 
 const Myprofile = () => {

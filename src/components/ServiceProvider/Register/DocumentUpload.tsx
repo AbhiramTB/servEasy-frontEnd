@@ -5,7 +5,6 @@ interface DocumentUploadProps {
   documentImg: string | null;
   setDocumentImg: (img: string | null) => void;
   documentError: string | null;
-  setDocumentError: (err: string | null) => void;
 }
 
 const DocumentUpload: React.FC<DocumentUploadProps> = ({
@@ -13,7 +12,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({
   documentImg,
   setDocumentImg,
   documentError,
-  setDocumentError,
+  
 }) => {
   const imageRef = useRef<HTMLInputElement>(null);
 
@@ -21,11 +20,9 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({
     const file = event.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        setDocumentError("File size exceeds 5MB limit");
         return;
       }
 
-      setDocumentError(null);
       const reader = new FileReader();
       reader.onloadend = () => {
         setDocumentImg(reader.result as string); // base64

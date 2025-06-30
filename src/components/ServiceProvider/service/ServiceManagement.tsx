@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getRequest, patchRequest } from "../../../utils/makeRequestInstance";
 import { addServices } from "../../../redux/slices/serviceProvider";
 import { RootState } from "../../../redux/store";
-import { MapPin, Edit, Trash2, Eye } from "lucide-react";
+import { MapPin, Edit,  Eye } from "lucide-react";
 import ServiceDetailsView from "./ServiceDetailsView";
 import { HotToastSuccess } from "../../../utils/notificationToast";
 import { Toaster } from "react-hot-toast";

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useVideoCall } from "../../hooks/useVideoCall";
 import { RootState } from "../../redux/store";
 import { Toaster } from "react-hot-toast";
-import VideoCallUI from "./VideoCallUI";
+import VideoCallUI from "./VideoCallUi";
 
 interface Prop {
   firstLetter?: string;

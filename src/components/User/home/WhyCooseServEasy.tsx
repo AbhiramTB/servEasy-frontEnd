@@ -1,4 +1,3 @@
-import React from 'react';
 import { Shield, Clock, Star, CreditCard } from 'lucide-react';
 
 const WhyChooseServEasy = () => {
@@ -26,24 +25,24 @@ const WhyChooseServEasy = () => {
   ];
 
   return (
-    <div className="bg-base-100 py-16 px-4">
+    <div className="px-4 py-16 bg-base-100">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-primary mb-4">
+        <div className="mb-12 text-center">
+          <h2 className="mb-4 text-4xl font-bold text-primary">
             Why Choose ServEase?
           </h2>
-          <div className="w-20 h-1 bg-primary mx-auto"></div>
+          <div className="w-20 h-1 mx-auto bg-primary"></div>
         </div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, idx) => {
             const IconComponent = feature.icon;
             return (
               <div 
                 key={idx}
-                className="bg-base-200 p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow duration-300 border-l-4 border-primary"
+                className="p-6 text-center transition-shadow duration-300 border-l-4 rounded-lg shadow-md bg-base-200 hover:shadow-lg border-primary"
               >
                 <div className={`w-12 h-12 ${feature.color} rounded-full flex items-center justify-center mx-auto mb-4`}>
                   <IconComponent className="w-6 h-6 text-base-100" />

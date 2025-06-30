@@ -1,64 +1,61 @@
-import { Star } from 'lucide-react'
-import React from 'react'
+import { Star } from 'lucide-react';
 
 const CustomerTestimonials = () => {
   const testimonials = [
     {
-      name: "Sarah Johnson",
-      service: "Home Cleaning",
+      name: 'Sarah Johnson',
+      service: 'Home Cleaning',
       rating: 5,
-      comment: "Exceptional service! My home has never been cleaner. Highly recommended!",
-      avatar: "SJ"
+      comment: 'Exceptional service! My home has never been cleaner. Highly recommended!',
+      avatar: 'SJ',
     },
     {
-      name: "Mike Chen",
-      service: "Plumbing Repair",
+      name: 'Mike Chen',
+      service: 'Plumbing Repair',
       rating: 5,
-      comment: "Quick response and professional work. Fixed my issue in no time.",
-      avatar: "MC"
+      comment: 'Quick response and professional work. Fixed my issue in no time.',
+      avatar: 'MC',
     },
     {
-      name: "Emily Davis",
-      service: "Interior Design",
+      name: 'Emily Davis',
+      service: 'Interior Design',
       rating: 5,
-      comment: "Transformed my space beautifully. Amazing attention to detail!",
-      avatar: "ED"
-    }
+      comment: 'Transformed my space beautifully. Amazing attention to detail!',
+      avatar: 'ED',
+    },
   ];
 
   const avatarColors = ['bg-primary', 'bg-secondary', 'bg-accent'];
 
   return (
     <div>
-      <section className="py-20 bg-base-300 bg-opacity-80 backdrop-blur-sm relative overflow-hidden">
+      <section className="relative py-20 overflow-hidden bg-base-300 bg-opacity-80 backdrop-blur-sm">
         {/* Background decorative elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-10 w-72 h-72 bg-secondary/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
+          <div className="absolute rounded-full top-20 left-10 w-72 h-72 bg-primary/10 blur-3xl animate-pulse"></div>
+          <div className="absolute rounded-full bottom-20 right-10 w-72 h-72 bg-secondary/10 blur-3xl animate-pulse"></div>
+          <div className="absolute transform -translate-x-1/2 -translate-y-1/2 rounded-full top-1/2 left-1/2 w-96 h-96 bg-accent/5 blur-3xl"></div>
         </div>
 
-        <div className="max-w-screen-xl px-5 mx-auto relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-base-content mb-6">
-              What Our Customers Say
-            </h2>
-            <div className="w-32 h-1 bg-primary mx-auto rounded-full mb-6"></div>
-            <p className="text-base-content/70 text-lg md:text-xl max-w-3xl mx-auto">
+        <div className="relative z-10 max-w-screen-xl px-5 mx-auto">
+          <div className="mb-16 text-center">
+            <h2 className="mb-6 text-4xl font-bold md:text-5xl text-base-content">What Our Customers Say</h2>
+            <div className="w-32 h-1 mx-auto mb-6 rounded-full bg-primary"></div>
+            <p className="max-w-3xl mx-auto text-lg text-base-content/70 md:text-xl">
               Don't just take our word for it - see what our satisfied customers have to say
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {testimonials.map((testimonial, index) => (
-              <div 
-                key={index} 
-                className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-105 border border-base-300"
-                style={{ 
-                  animation: `fadeInUp 0.6s ease-out ${index * 200}ms both`
+              <div
+                key={index}
+                className="transition-all duration-500 border shadow-xl card bg-base-100 hover:shadow-2xl hover:scale-105 border-base-300"
+                style={{
+                  animation: `fadeInUp 0.6s ease-out ${index * 200}ms both`,
                 }}
               >
-                <div className="card-body p-8">
+                <div className="p-8 card-body">
                   <div className="flex items-center mb-6">
                     <div className={`avatar placeholder mr-4`}>
                       <div className={`w-12 h-12 ${avatarColors[index]} rounded-full text-base-100`}>
@@ -70,18 +67,16 @@ const CustomerTestimonials = () => {
                       <p className="text-sm text-base-content/60">{testimonial.service}</p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center mb-4">
                     <div className="rating rating-sm">
                       {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star key={i} className="w-5 h-5 text-warning fill-current" />
+                        <Star key={i} className="w-5 h-5 fill-current text-warning" />
                       ))}
                     </div>
                   </div>
-                  
-                  <p className="text-base-content/80 leading-relaxed italic">
-                    "{testimonial.comment}"
-                  </p>
+
+                  <p className="italic leading-relaxed text-base-content/80">"{testimonial.comment}"</p>
                 </div>
               </div>
             ))}
@@ -103,7 +98,7 @@ const CustomerTestimonials = () => {
         `}</style>
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default CustomerTestimonials
+export default CustomerTestimonials;

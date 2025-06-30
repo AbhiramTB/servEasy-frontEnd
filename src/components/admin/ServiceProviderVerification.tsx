@@ -134,7 +134,7 @@ const ServiceProviderVerification: React.FC = () => {
         action: "reject",
         reason: reason,
       };
-      const res = await adminPatchRequest(
+       await adminPatchRequest(
         apiEndPointAdmin.serviceProviderReject,
         data
       );

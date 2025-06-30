@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { MapPin, CheckCircle, Phone, MapPinned, Star, Calendar, PlusCircle } from 'lucide-react';
+import { MapPin, CheckCircle, PlusCircle } from 'lucide-react';
 import { AddressCard } from '../../../Address/AddressCard';
 
 import {
   deleteRequest,
   getRequest,
-  patchRequest,
   postRequest,
   putRequest,
 } from '../../../../utils/makeRequestInstance';
@@ -79,11 +78,11 @@ const BookService = () => {
 
   const handleSaveAddress = async (address: IAddress) => {
     try {
-      let res;
+      
       if (address?._id) {
-        res = await putRequest(apiEndPoint.addNewAddress, { address });
+         await putRequest(apiEndPoint.addNewAddress, { address });
       } else {
-        res = await postRequest(apiEndPoint.addNewAddress, { address });
+        await postRequest(apiEndPoint.addNewAddress, { address });
       }
 
       fetchAddresses();

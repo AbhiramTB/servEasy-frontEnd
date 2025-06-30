@@ -8,7 +8,7 @@ import {
   Camera
 } from "lucide-react";
 import { HotToastError, HotToastSuccess } from "../../../utils/notificationToast";
-import { getRequest, postRequest, putRequest } from "../../../utils/makeRequestInstance";
+import { getRequest, putRequest } from "../../../utils/makeRequestInstance";
 import { apiEndPoint } from "../../../utils/constant";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
@@ -26,7 +26,6 @@ const UserProfile = () => {
   const [newPhone, setNewPhone] = useState(user.phone || "");
   const [profileImage, setProfileImage] = useState(user.profileImage || null);
   const [newImage, setNewImage] = useState("");
-  const [imageFile, setImageFile] = useState(null);
   const [contactType, setContactType] = useState(user.email ? "email" : "phone");
   const [isOtpVerify, setOtpVerify] = useState<string | null>(null);
   const dispatch=useDispatch()
@@ -60,7 +59,6 @@ const UserProfile = () => {
 
   const resetForm = () => {
     setProfileImage(user.profileImage || null);
-    setImageFile(null);
     setNewEmail(user.email || "");
     setNewUserName(user.userName || "");
     setNewPhone(user.phone || "");
@@ -145,7 +143,6 @@ const UserProfile = () => {
   const handleImageUpload = (e:any) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setImageFile(file);
 
       const reader = new FileReader();
       reader.onload = (event) => {

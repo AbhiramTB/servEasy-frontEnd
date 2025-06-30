@@ -181,10 +181,10 @@ const ServiceBookingDetailsOnline = () => {
     setShowPaymentConfirm(true);
   };
 
-  const confirmPayment = () => {
-    setShowPaymentConfirm(false);
-    // Continue with payment process
-  };
+  // const confirmPayment = () => {
+  //   setShowPaymentConfirm(false);
+  //   // Continue with payment process
+  // };
 
   return (
     <div className="container px-4 py-4 mx-auto bg-base-200">

@@ -3,9 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useVideoCall } from "../../hooks/useVideoCall";
 import { RootState } from "../../redux/store";
-import VideoCallUI from "./VideoCallUI";
 import EndCallModal from "./EndCallModal";
-
+import VideoCallUI from "./VideoCallUi";
 interface Prop {
   firstLetter?: string;
 }

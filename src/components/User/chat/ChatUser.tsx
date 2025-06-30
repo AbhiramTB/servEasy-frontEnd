@@ -1,37 +1,23 @@
-import { useEffect, useState, useRef } from "react";
-import {
-  Send,
-  Video,
-  MoreVertical,
-  Smile,
-  Check,
-  Paperclip,
-  Phone,
-} from "lucide-react";
-import { useParams } from "react-router-dom";
-import {
-  connectSocket,
-  getSocket,
-  disconnectSocket,
-} from "../../../utils/socket";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
-import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import { getAllchats, getServiceProviderProfile } from "./getAllchats";
+import { useEffect, useState, useRef } from 'react';
+import { Send, Smile, Check } from 'lucide-react';
+import { useParams } from 'react-router-dom';
+import { connectSocket, getSocket, disconnectSocket } from '../../../utils/socket';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
+import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { getAllchats, getServiceProviderProfile } from './getAllchats';
 
-// Add the relativeTime plugin for better time formatting
 dayjs.extend(relativeTime);
 
-// Types
-type MessageStatus = "sent" | "delivered" | "read";
+type MessageStatus = 'sent' | 'delivered' | 'read';
 
 interface Message {
   id: string;
   messageType: string;
   content: string;
-  sender: "user" | "serviceProvider";
+  sender: 'user' | 'serviceProvider';
   timestamp: number | string;
   status?: MessageStatus;
 }
@@ -45,7 +31,7 @@ const ChatUser = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const { serviceProviderId } = useParams();
   const user = useSelector((store: RootState) => store.user);
-  const [newMessage, setNewMessage] = useState("");
+  const [newMessage, setNewMessage] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const pickerRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -62,11 +48,11 @@ const ChatUser = () => {
           const userRes: any = await getServiceProviderProfile(serviceProviderId);
           if (userRes.status === 200) {
             console.log(userRes);
-            
+
             setServiceProvider(userRes.data);
           }
         } catch (error) {
-          console.error("Error fetching service provider profile:", error);
+          console.error('Error fetching service provider profile:', error);
         }
       }
     };
@@ -79,10 +65,7 @@ const ChatUser = () => {
 
     const fetchData = async (): Promise<void> => {
       try {
-        const res: any = await getAllchats(
-          user._id + "",
-          serviceProviderId + ""
-        );
+        const res: any = await getAllchats(user._id + '', serviceProviderId + '');
         if (res.status === 200) {
           const chatData = res.data.data.data;
           setMessages(chatData.messages);
@@ -90,9 +73,7 @@ const ChatUser = () => {
           // Handle presence data
           const presence = chatData.presence;
           if (presence && presence.length > 0) {
-            const providerPresence = presence.find(
-              (i: any) => i.userId !== user._id
-            );
+            const providerPresence = presence.find((i: any) => i.userId !== user._id);
 
             if (providerPresence) {
               setIsOnline(providerPresence.online);
@@ -103,7 +84,7 @@ const ChatUser = () => {
           }
         }
       } catch (error) {
-        console.error("Error fetching chat data:", error);
+        console.error('Error fetching chat data:', error);
       }
     };
 
@@ -116,13 +97,13 @@ const ChatUser = () => {
 
     const socket = connectSocket();
 
-    socket.emit("join_chat", {
+    socket.emit('join_chat', {
       senderId: user._id,
       serviceProviderId,
     });
 
-    socket.on("serviceProvider_online", () => {
-      socket.emit("makeItOnline", {
+    socket.on('serviceProvider_online', () => {
+      socket.emit('makeItOnline', {
         onlineId: user._id,
         receiverId: serviceProviderId,
       });
@@ -130,15 +111,15 @@ const ChatUser = () => {
       setLastSeen(null);
     });
 
-    socket.on("serviceProvider_offline", (data: { lastSeen: string }) => {
+    socket.on('serviceProvider_offline', (data: { lastSeen: string }) => {
       setIsOnline(false);
       setLastSeen(data.lastSeen);
     });
 
-    socket.on("receive_message", (data: { message: Message }) => {
+    socket.on('receive_message', (data: { message: Message }) => {
       const { message } = data;
 
-      setMessages((prev) => [
+      setMessages(prev => [
         ...prev,
         {
           sender: message.sender,
@@ -151,8 +132,8 @@ const ChatUser = () => {
       ]);
 
       // Mark messages from service provider as seen
-      if (message.sender === "serviceProvider") {
-        socket.emit("message_seen", {
+      if (message.sender === 'serviceProvider') {
+        socket.emit('message_seen', {
           chatId: message.id,
           messageId: message.id,
           seenBy: user._id,
@@ -160,24 +141,16 @@ const ChatUser = () => {
       }
     });
 
-    socket.on("message_delivered", ({ messageId }: { messageId: string }) => {
-      setMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === messageId ? { ...msg, status: "delivered" } : msg
-        )
-      );
+    socket.on('message_delivered', ({ messageId }: { messageId: string }) => {
+      setMessages(prev => prev.map(msg => (msg.id === messageId ? { ...msg, status: 'delivered' } : msg)));
     });
 
-    socket.on("message_read", ({ messageId }: { messageId: string }) => {
-      setMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === messageId ? { ...msg, status: "read" } : msg
-        )
-      );
+    socket.on('message_read', ({ messageId }: { messageId: string }) => {
+      setMessages(prev => prev.map(msg => (msg.id === messageId ? { ...msg, status: 'read' } : msg)));
     });
 
     return () => {
-      socket.emit("leave_chat", {
+      socket.emit('leave_chat', {
         senderId: user._id,
         receiverId: serviceProviderId,
         offlineId: user._id,
@@ -195,50 +168,44 @@ const ChatUser = () => {
 
     const message: Message = {
       id,
-      messageType: "text",
+      messageType: 'text',
       content: newMessage,
-      sender: "user",
+      sender: 'user',
       timestamp: Date.now(),
-      status: "sent",
+      status: 'sent',
     };
 
-    socket.emit("send_message", {
+    socket.emit('send_message', {
       senderId: user._id,
       receiverId: serviceProviderId,
       message,
-      senderInfo:{senderName:user.userName,senderProfile:user.profileImage}
+      senderInfo: { senderName: user.userName, senderProfile: user.profileImage },
     });
 
-    setMessages((prev) => [
+    setMessages(prev => [
       ...prev,
       {
         ...message,
-        timestamp:message.timestamp,
+        timestamp: message.timestamp,
       },
     ]);
 
-    setNewMessage("");
+    setNewMessage('');
     inputRef.current?.focus();
 
     // Simulate delivery and read status (for demo purposes)
     setTimeout(() => {
-      setMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === id ? { ...msg, status: "delivered" } : msg
-        )
-      );
+      setMessages(prev => prev.map(msg => (msg.id === id ? { ...msg, status: 'delivered' } : msg)));
     }, 1000);
 
     setTimeout(() => {
-      setMessages((prev) =>
-        prev.map((msg) => (msg.id === id ? { ...msg, status: "read" } : msg))
-      );
+      setMessages(prev => prev.map(msg => (msg.id === id ? { ...msg, status: 'read' } : msg)));
     }, 2000);
   };
 
   // Handle emoji selection
   const onEmojiClick = (emojiData: EmojiClickData) => {
-    setNewMessage((prev) => prev + emojiData.emoji);
+    setNewMessage(prev => prev + emojiData.emoji);
     setShowEmojiPicker(false);
     inputRef.current?.focus();
   };
@@ -250,26 +217,26 @@ const ChatUser = () => {
         setShowEmojiPicker(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   // Auto-scroll to latest message
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   // Format last seen time nicely
   const formatLastSeen = (timestamp: string | null) => {
-    if (!timestamp) return "";
+    if (!timestamp) return '';
 
     const date = dayjs(timestamp);
     const now = dayjs();
 
-    if (now.diff(date, "day") <= 1) {
+    if (now.diff(date, 'day') <= 1) {
       return `Last seen ${date.fromNow()}`;
     } else {
-      return `Last seen on ${date.format("DD MMM, hh:mm A")}`;
+      return `Last seen on ${date.format('DD MMM, hh:mm A')}`;
     }
   };
 
@@ -277,8 +244,7 @@ const ChatUser = () => {
   const MessageStatus = ({ status }: { status?: MessageStatus }) => {
     if (!status) return null;
 
-    const checkClass =
-      status === "read" ? "text-primary" : "text-base-content/70";
+    const checkClass = status === 'read' ? 'text-primary' : 'text-base-content/70';
 
     return (
       <div className="relative">
@@ -297,22 +263,17 @@ const ChatUser = () => {
         {/* Chat Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b bg-base-200">
           <div className="flex items-center space-x-4">
-            <div className={`avatar ${isOnline ? "online" : ""}`}>
+            <div className={`avatar ${isOnline ? 'online' : ''}`}>
               <div className="w-12 rounded-full ring ring-primary ring-offset-2 ring-offset-base-100">
                 <img
-                  src={
-                    serviceProvider?.userAvatar ||
-                    import.meta.env.VITE_IMAGE_PLACEHOLDER
-                  }
-                  alt={serviceProvider?.userName || "Service Provider"}
+                  src={serviceProvider?.userAvatar || import.meta.env.VITE_IMAGE_PLACEHOLDER}
+                  alt={serviceProvider?.userName || 'Service Provider'}
                 />
               </div>
             </div>
 
             <div>
-              <h3 className="text-lg font-bold">
-                {serviceProvider?.userName || "Service Provider"}
-              </h3>
+              <h3 className="text-lg font-bold">{serviceProvider?.userName || 'Service Provider'}</h3>
               {isOnline ? (
                 <p className="text-xs text-success">Online</p>
               ) : (
@@ -339,30 +300,21 @@ const ChatUser = () => {
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-base-content/70">
               <div className="max-w-xs p-6 text-center border shadow-md card bg-base-100 border-base-300">
-                <h3 className="mb-2 text-lg font-medium">
-                  Start your conversation
-                </h3>
+                <h3 className="mb-2 text-lg font-medium">Start your conversation</h3>
                 <p className="text-sm">
-                  Send a message to begin chatting with{" "}
-                  {serviceProvider?.userName || "Service Provider"}
+                  Send a message to begin chatting with {serviceProvider?.userName || 'Service Provider'}
                 </p>
               </div>
             </div>
           ) : (
             <div className="space-y-4">
-              {messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`chat ${msg.sender === "user" ? "chat-end" : "chat-start"}`}
-                >
-                  {msg.sender === "serviceProvider" && (
+              {messages.map(msg => (
+                <div key={msg.id} className={`chat ${msg.sender === 'user' ? 'chat-end' : 'chat-start'}`}>
+                  {msg.sender === 'serviceProvider' && (
                     <div className="chat-image avatar">
                       <div className="w-10 rounded-full">
                         <img
-                          src={
-                            serviceProvider?.userAvatar ||
-                            import.meta.env.VITE_IMAGE_PLACEHOLDER
-                          }
+                          src={serviceProvider?.userAvatar || import.meta.env.VITE_IMAGE_PLACEHOLDER}
                           alt="Service Provider"
                         />
                       </div>
@@ -371,18 +323,18 @@ const ChatUser = () => {
 
                   <div
                     className={`chat-bubble ${
-                      msg.sender === "user"
-                        ? "chat-bubble-primary text-primary-content"
-                        : "bg-base-200 text-base-content"
+                      msg.sender === 'user'
+                        ? 'chat-bubble-primary text-primary-content'
+                        : 'bg-base-200 text-base-content'
                     } shadow-sm`}
                   >
                     {msg.content}
                   </div>
 
                   <div className="flex items-center gap-1 text-xs chat-footer opacity-70">
-                    {dayjs(msg.timestamp).format("hh:mm A")}
+                    {dayjs(msg.timestamp).format('hh:mm A')}
 
-                    {msg.sender === "user" && (
+                    {msg.sender === 'user' && (
                       <span className="ml-1">
                         <MessageStatus status={msg.status} />
                       </span>
@@ -408,23 +360,18 @@ const ChatUser = () => {
               className="w-full py-3 rounded-full px-14 input input-bordered focus:border-primary"
               placeholder="Type a message..."
               value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              onChange={e => setNewMessage(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleSend()}
             />
 
             <div className="absolute flex items-center space-x-2 right-4">
-              <button
-                className="btn btn-circle btn-ghost btn-sm"
-                onClick={() => setShowEmojiPicker((prev) => !prev)}
-              >
+              <button className="btn btn-circle btn-ghost btn-sm" onClick={() => setShowEmojiPicker(prev => !prev)}>
                 <Smile size={20} />
               </button>
 
               <button
                 className={`btn btn-circle btn-sm ${
-                  newMessage.trim()
-                    ? "btn-primary text-primary-content"
-                    : "btn-ghost opacity-50"
+                  newMessage.trim() ? 'btn-primary text-primary-content' : 'btn-ghost opacity-50'
                 }`}
                 onClick={handleSend}
                 disabled={!newMessage.trim()}
@@ -436,11 +383,7 @@ const ChatUser = () => {
 
           {showEmojiPicker && (
             <div ref={pickerRef} className="absolute z-20 bottom-20 right-4">
-              <EmojiPicker
-                onEmojiClick={onEmojiClick}
-                height={350}
-                width={320}
-              />
+              <EmojiPicker onEmojiClick={onEmojiClick} height={350} width={320} />
             </div>
           )}
         </div>

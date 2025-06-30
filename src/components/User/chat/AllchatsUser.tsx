@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchAllChats } from "./getAllchats";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { Link, useNavigate } from "react-router-dom";
-import { Video } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface IPresence {
     userId:string;

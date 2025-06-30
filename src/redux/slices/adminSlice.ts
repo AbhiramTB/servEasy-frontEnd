@@ -55,6 +55,7 @@ export interface ServiceProvider {
   bankDetails:IBankDetails,
   socialMedia: string;
   updatedAt: string;
+  isBlocked?: boolean;
   __v: number;
   _id: string;
   

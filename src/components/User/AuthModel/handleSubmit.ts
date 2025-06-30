@@ -4,7 +4,7 @@ import {
   validatePassword,
   validateUserName,
 } from "../../../utils/validate";
-import { toastifySuccess, toastifyError } from "../../../utils/Toastify";
+import { toastifyError } from "../../../utils/Toastify";
 import { makeRequest } from "../../../utils/makeRequest";
 import { apiEndPoint } from "../../../utils/constant";
 import axios from "axios";

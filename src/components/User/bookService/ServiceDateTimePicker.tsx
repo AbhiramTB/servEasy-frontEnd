@@ -103,7 +103,6 @@ const ServiceDateTimePicker: React.FC<ServiceDateTimePickerProps> = ({
   const validateAndSetDateTime = (dateTime: ServiceDateTime) => {
     // If "anyTime" is selected, skip datetime validation for time but still check date
     if (dateTime.time === "anyTime") {
-      const now = new Date();
       const minDate = new Date(min);
       const maxDate = new Date(max);
 

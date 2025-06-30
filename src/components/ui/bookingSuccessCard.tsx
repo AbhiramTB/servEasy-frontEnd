@@ -12,8 +12,7 @@ interface BookingSuccessProps {
 export default function BookingSuccess({
   successTitle,
   successSubTitle,
-  service,
-  ButtonFn,
+  
   buttonText,
 }: BookingSuccessProps) {
   return (

@@ -28,7 +28,6 @@ const UserProfileModal: React.FC<UserProfileProps> = ({
 }) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [isEmailUser, setEmailUser] = useState<boolean>(!!user.email);
-  const [editData, setEditData] = useState<UserState>({ ...user });
   const [isOtpVerify, setOtpVerify] = useState<string | null>(null);
   const [newEmail, setNewEmail] = useState<string>(user.email || "");
   const [newUserName, setNewUserName] = useState<string>(user.userName || "");
@@ -37,7 +36,7 @@ const UserProfileModal: React.FC<UserProfileProps> = ({
     user.profileImage || null
   );
   const [newImage, setNewImage] = useState<string>("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  // const [imageFile, setImageFile] = useState<File | null>(null);
 
   const toggleModal = (): void => {
     IsCloss();
@@ -52,9 +51,7 @@ const UserProfileModal: React.FC<UserProfileProps> = ({
   };
 
   const resetForm = (): void => {
-    setEditData({ ...user });
     setProfileImage(user.profileImage || null);
-    setImageFile(null);
     setNewEmail(user.email || "");
     setNewUserName(user.userName || "");
     setNewPhone(user.phone || "");
@@ -140,7 +137,7 @@ const UserProfileModal: React.FC<UserProfileProps> = ({
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setImageFile(file);
+      // setImageFile(file);
 
       const reader = new FileReader();
       reader.onload = (event) => {

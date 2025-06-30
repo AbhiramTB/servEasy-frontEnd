@@ -1,10 +1,10 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, {  useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { validateEmail, validatePhone } from "../../../utils/validate";
 import { Toaster } from "react-hot-toast";
 import { HotToastError, HotToastSuccess } from "../../../utils/notificationToast";
-import { apiEndPoint, apiEndPointServiceProvider, serviceEndPoint } from "../../../utils/constant";
-import { getRequest, postRequest } from "../../../utils/makeRequestInstance";
+import { apiEndPoint, apiEndPointServiceProvider,  } from "../../../utils/constant";
+import {  postRequest } from "../../../utils/makeRequestInstance";
 import { useDispatch } from "react-redux";
 import { addServiceProvider } from "../../../redux/slices/serviceProvider";
 import { useSelector } from "react-redux";
@@ -70,7 +70,6 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
     reset,
     formState: { errors },
   } = useForm<FormData>();
-  const imageRef = useRef<HTMLInputElement>(null);
   const [profileImg, setProfileImg] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [services, setServices] = useState<string[]>([]);
@@ -83,16 +82,13 @@ const RegisterForm: React.FC<RegisterFormProps> = () => {
   const [description, setDescription] = useState<string>("");
   const [location, setLocation] = useState<Location | null>(null);
   const [locationError, setLocationError] = useState<string>("");
-  const [category,setCategory]=useState<ICategory[]>()
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState("");
-const [availableServices, setAvailableServices] = useState<IService[]>([]);
+
   const [documentImg1, setDocumentImg1] = useState<string | null>(null);
   const [documentImg2, setDocumentImg2] = useState<string | null>(null);
 
-  const [documentError1, setDocumentError1] = useState<string | null>(null);
-  const [documentError2, setDocumentError2] = useState<string | null>(null);
+
 
  const [bankDetails, setBankDetails] = useState<BankDetails>({
     accountHolderName: "",
@@ -102,40 +98,19 @@ const [availableServices, setAvailableServices] = useState<IService[]>([]);
 
   
 
-useEffect(() => {
-  if (selectedCategory && category) {
-    const categoryData = category.find(cat => cat._id === selectedCategory);
-    if (categoryData) {
-      setAvailableServices(categoryData.typeService);
-    } else {
-      setAvailableServices([]);
-    }
-  } else {
-    setAvailableServices([]);
-  }
-}, [selectedCategory, category]);
 
 
 
 
-  const UploadImage = () => {
-    imageRef.current?.click();
-  };
+
+
   const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     getUserProfile();
-    getServices()
   }, []);
 
-  const getServices = async ()=>{
-   const res=await getRequest(apiEndPointServiceProvider.getCategories) 
-   console.log(res.data);
-   if(res.status==200){
-    setCategory(res.data)
 
-   }
-  }
 
   if (user.serviceProvider) {
     navigate("/service-provider/dashboard");
@@ -805,7 +780,6 @@ useEffect(() => {
         documentImg={documentImg1}
         setDocumentImg={setDocumentImg1}
         documentError={documentError}
-        setDocumentError={setDocumentError1}
       />
 
       <DocumentUpload
@@ -813,7 +787,6 @@ useEffect(() => {
         documentImg={documentImg2}
         setDocumentImg={setDocumentImg2}
         documentError={documentError}
-        setDocumentError={setDocumentError2}
       />
 
     </div>
