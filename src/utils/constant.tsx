@@ -1,5 +1,5 @@
 
-export const URL: string = import.meta.env.VITE_BACKEND_URL||"http://localhost:5001";
+export const URL: string = import.meta.env.VITE_BACKEND_URL;
 
 
 
