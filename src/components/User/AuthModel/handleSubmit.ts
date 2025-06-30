@@ -99,7 +99,7 @@ export const handleAuth = async (
             HotToastSuccess("login successful");
              localStorage.setItem("accessToken", res.data.accessToken);
 
-            navigate("/", { replace: true });
+            // navigate("/", { replace: true });
           }
         } else if (submissionData.email) {
           localStorage.setItem("registerEmailorPhone", submissionData.email);
@@ -115,10 +115,12 @@ export const handleAuth = async (
 
         if (res?.status === 200) {
           console.log(res)
-          HotToastSuccess("login successful");
+          // HotToastSuccess("login successful");
+                    HotToastSuccess("login 000");
+
                   localStorage.setItem("accessToken", res.data.accessToken);
 
-         navigate("/", { replace: true });
+        //  navigate("/", { replace: true });
         } else {
           setError(res.data.message || "An error occurred. Please try again.");
         }
