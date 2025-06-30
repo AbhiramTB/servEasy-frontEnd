@@ -56,8 +56,10 @@ function App() {
       <BrowserRouter basename="/">
         <Routes>
           <Route path="/payment/verify" element={<PaymentVerify />} />
-          <Route path="/signIn" element={userAccessToken ? <Navigate to="/" replace /> : <AuthPage />} />
+          {/* <Route path="/signIn" element={userAccessToken ? <Navigate to="/" replace /> : <AuthPage />} /> */}
+          <Route  path="/signIn"  element={<AuthPage/>}/>
           <Route path="otp" element={<Otp />} />
+
       <Route path="/" element={<Body />}>
             <Route index element={<HomePage />} />
             <Route path="/serveasy" element={<HomePage />} />
