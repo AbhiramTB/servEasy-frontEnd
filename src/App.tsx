@@ -47,7 +47,7 @@ import NotFound from './components/ui/NotFound.tsx';
 import SlotPage from './components/ServiceProvider/SlotManagement/SlotPage.tsx';
 
 function App() {
-  const { userAccessToken, adminAccessToken } = useAuth();
+  const { userAccessToken=true, adminAccessToken } = useAuth();
 
   return (
     <>
