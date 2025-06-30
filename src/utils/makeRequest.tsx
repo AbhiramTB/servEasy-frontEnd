@@ -1,5 +1,4 @@
 import axios, { AxiosError } from "axios";
-import { URL } from "./constant";
 
 export const makeRequest = async (
   endPoint: string,
@@ -9,7 +8,7 @@ export const makeRequest = async (
   try {
     const config = {
       method,
-      url: `${URL}${endPoint}`,
+      url: `${import.meta.env.VITE_BACKEND_URL}${endPoint}`,
       withCredentials: true, 
     } as any; 
 

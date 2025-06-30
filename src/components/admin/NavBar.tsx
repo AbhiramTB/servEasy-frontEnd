@@ -3,7 +3,6 @@ import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import { adminGetRequest } from "../../utils/AxiosAdmin";
 import { apiEndPointAdmin } from "../../utils/constant";
-import ThemeChange from "./ThemeChange";
 const NavBar = () => {
   const admin = useSelector((state: RootState) => ({
     userName: state.admin.userName,
@@ -143,9 +142,7 @@ const NavBar = () => {
             <li className="pb-2 -mt-2 text-xs text-center text-base-content/70">
               {admin.email || admin.phone || ""}
             </li>
-             <li>
-              <ThemeChange></ThemeChange>
-             </li>
+            
             <li>
               <a onClick={handleLogOut}>Logout</a>
             </li>

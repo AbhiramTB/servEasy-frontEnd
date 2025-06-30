@@ -1,14 +1,11 @@
 import { toast } from "react-hot-toast";
-import { darkTheme } from "./constant";
 import { IChatNotification, IVideoCallNotification } from "./types/INotification";
 import InitialAvatar from "./ui/InitialAvatar";
 import { Bell } from "lucide-react";
 import dayjs from "dayjs";
 
 export function HotToastError(message: string) {
-  const theme = localStorage.getItem("theme");
 
-  if (theme == darkTheme) {
     toast(message || "error", {
       icon: "❌",
       style: {
@@ -17,22 +14,11 @@ export function HotToastError(message: string) {
         color: "#fff",
       },
     });
-  } else {
-    toast(message || "error", {
-      icon: "❌",
-      style: {
-        borderRadius: "10px",
-        background: "#fff",
-        color: "#333 ",
-      },
-    });
-  }
+  
 }
 
 export function HotToastSuccess(message: string) {
-  const theme = localStorage.getItem("theme");
 
-  if (theme == darkTheme) {
     toast(message || "Success", {
       icon: "✅",
       style: {
@@ -41,16 +27,7 @@ export function HotToastSuccess(message: string) {
         color: "#fff",
       },
     });
-  } else {
-    toast(message || "Success", {
-      icon: "✅",
-      style: {
-        borderRadius: "10px",
-        background: "#fff",
-        color: "#333 ",
-      },
-    });
-  }
+ 
 }
 
 

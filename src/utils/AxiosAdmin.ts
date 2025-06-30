@@ -1,10 +1,11 @@
 import axios from "axios";
-import { URL, adminRoutes, apiEndPointAdmin } from "./constant";
+import { adminRoutes, apiEndPointAdmin } from "./constant";
 
 const axiosInstance = axios.create({
-  baseURL: URL,
+  baseURL: import.meta.env.VITE_BACKEND_URL ,
   withCredentials: true,
 });
+
 
 axiosInstance.interceptors.request.use((config) => {
   const adminToken = localStorage.getItem("adminToken");
@@ -33,7 +34,7 @@ axiosInstance.interceptors.response.use(
         console.warn("Access token expired, attempting refresh...");
 
         const response = await axios.post(
-          `${URL}${apiEndPointAdmin.adminRefreshToken}`, // admin/refresh-token
+          `${import.meta.env.VITE_BACKEND_URL}${apiEndPointAdmin.adminRefreshToken}`, // admin/refresh-token
           {},
           { withCredentials: true }
         );

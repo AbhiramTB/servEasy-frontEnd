@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import ThemeChange from "../ThemeChange";
 import { getRequest } from "../../utils/makeRequestInstance";
 import { apiEndPoint, apiEndPointServiceProvider } from "../../utils/constant";
 import { useSelector } from "react-redux";
@@ -420,9 +419,7 @@ if(pathUrl!=="/chats"){
                 Profile
               </Link>
 
-              <div className="p-3">
-                <ThemeChange />
-              </div>
+             
 
               <button
                 onClick={handleLogOut}

@@ -1,7 +1,5 @@
 import { toast,Bounce, Flip } from "react-toastify";
-import { darkTheme } from "./constant";
 export const toastifySuccess=(message:string):void=>{
-  const theme=localStorage.getItem("theme")
    
   
 
@@ -14,7 +12,7 @@ export const toastifySuccess=(message:string):void=>{
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: theme == darkTheme ? "dark":"light",
+        theme:"dark",
         transition: Flip,
         });
      
@@ -23,7 +21,6 @@ export const toastifySuccess=(message:string):void=>{
 
 
 export const toastifyWarn=(message:string):void=>{
-    const theme=localStorage.getItem("theme")
 
     toast.warn(`${message} !`, {
         position: "top-right",
@@ -33,14 +30,13 @@ export const toastifyWarn=(message:string):void=>{
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: theme == darkTheme ? "dark":"light",
+        theme:"dark",
         transition: Bounce,
         });
      
 
 }
 export const toastifyError=(message:string):void=>{
-    const theme=localStorage.getItem("theme")
     toast.error(`${message} !`, {
         position: "top-right",
         autoClose: 5000,
@@ -49,7 +45,7 @@ export const toastifyError=(message:string):void=>{
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: theme == darkTheme ? "dark":"light",
+        theme:"dark",
         transition:Flip,
         });
      
