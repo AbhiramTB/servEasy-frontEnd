@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, X, Star } from 'lucide-react';
+import { ChevronDown, X } from 'lucide-react';
 
 export interface FilterSortState {
   priceSort: 'none' |"gtToLow" | "lowTogt";
@@ -29,10 +29,10 @@ const FilterSortComponent: React.FC<Props> = ({ filters,setFilters, categories }
     setFilters(newFilters);
   };
 
-  const handleRatingToggle = (rating: number) => {
-    const newRating = filters.ratingFilter === rating ? null : rating;
-    updateFilters({ ratingFilter: newRating });
-  };
+  // const handleRatingToggle = (rating: number) => {
+  //   const newRating = filters.ratingFilter === rating ? null : rating;
+  //   updateFilters({ ratingFilter: newRating });
+  // };
 
   const clearFilters = () => {
     const cleared: FilterSortState = {

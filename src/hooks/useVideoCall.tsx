@@ -108,7 +108,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { getSocket } from "../utils/socket";
-import { HotToastError } from "../utils/notificationToast";
 
 export const useVideoCall = (
   user1: string,

@@ -36,7 +36,6 @@ interface ServiceDetailsProps {
 const ServiceDetails: React.FC<ServiceDetailsProps> = ({
   service,
   onClose,
-  onEdit,
   onBlock,
   onUnblock,
 }) => {

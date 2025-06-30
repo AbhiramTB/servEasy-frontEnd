@@ -27,7 +27,6 @@ const Card: React.FC<CardProps> = ({
   profileImage,
   title,
   serviceProviderName,
-  subtitle,
   description,
   price,
   estimatedPrice,

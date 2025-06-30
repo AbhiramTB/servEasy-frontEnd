@@ -70,20 +70,7 @@ const PaymentManagement = () => {
     }).format(amount);
   };
 
-  const getStatusColor = (status: string): string => {
-    switch (status.toLowerCase()) {
-      case 'completed':
-        return 'badge-success';
-      case 'pending':
-        return 'badge-warning';
-      case 'cancelled':
-        return 'badge-error';
-      case 'in progress':
-        return 'badge-info';
-      default:
-        return 'badge-ghost';
-    }
-  };
+
 
   const handleViewDetails = (booking: ServiceBooking) => {
     setSelectedBooking(booking);

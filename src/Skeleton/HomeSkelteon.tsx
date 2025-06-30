@@ -1,4 +1,3 @@
-import React from 'react';
 
 const ShimmerBox = ({ className = "", delay = 0 }) => (
   <div 
@@ -47,19 +46,7 @@ const ServiceCardSkeleton = ({ delay = 0 }) => (
   </div>
 );
 
-const CategorySkeleton = ({ delay = 0 }) => (
-  <div className="flex flex-col items-center p-6 transition-all duration-300 border shadow-lg cursor-pointer bg-base-100 rounded-2xl border-base-300 hover:shadow-xl group animate-fadeIn"
-       style={{ animationDelay: `${delay}ms` }}>
-    <div className="relative mb-4">
-      <ShimmerBox className="w-16 h-16 rounded-2xl" delay={delay} />
-      <div className="absolute -top-1 -right-1">
-        <ShimmerBox className="w-6 h-6 rounded-full" delay={delay + 200} />
-      </div>
-    </div>
-    <ShimmerBox className="w-20 h-5" delay={delay + 300} />
-    <ShimmerBox className="w-16 h-3 mt-2" delay={delay + 400} />
-  </div>
-);
+
 
 const HomePageShimmer = () => {
   return (

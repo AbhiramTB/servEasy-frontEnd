@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/store";
-import { addServiceProviders } from "../../redux/slices/adminSlice"; // Assuming this action exists
+import { addServiceProviders, ServiceProvider } from "../../redux/slices/adminSlice"; // Assuming this action exists
 import { adminGetRequest, adminPatchRequest } from "../../utils/AxiosAdmin"; // Assuming this utility exists
 import { apiEndPointAdmin } from "../../utils/constant"; // Assuming this config exists
 import { HotToastSuccess } from "../../utils/notificationToast";
@@ -13,25 +13,7 @@ export interface Location {
   longitude: number;
 }
 
-interface ServiceProvider {
-  createdAt: string;
-  description: string;
-  document: string;
-  experience: number;
-  isVerified: string;
-  location: Location;
-  profileImage: string;
-  serviceProviderEmail: string;
-  serviceProviderName: string;
-  serviceProviderPhone: string;
-  services: string[];
-  skills: object[];
-  socialMedia: string;
-  updatedAt: string;
-  isBlocked?: boolean;
-  __v: number;
-  _id: string;
-}
+
 
 const ServiceProviderListing = () => {
   const dispatch = useDispatch();
@@ -75,22 +57,20 @@ const ServiceProviderListing = () => {
   }, [getAllServiceProviders]);
 
   // Filter service providers based on active tab
-  const filteredServiceProviders = serviceProviders.filter(
-    (provider: ServiceProvider) => {
+  const filteredServiceProviders = serviceProviders.filter((provider) => {
       switch (activeTab) {
         case "verified":
           return provider.isVerified === "verified";
         case "rejected":
           return provider.isVerified === "rejected";
         case "blocked":
-          return provider.isBlocked === true; // Check explicitly for true
+          return provider.isBlocked === true; 
         case "nonBlocked":
-          return provider.isBlocked !== true; // Check if false or undefined
+          return provider.isBlocked !== true; 
         default:
           return true; // 'all' tab
       }
-    }
-  );
+    });
 
   const handleTabChange = (tabName: string) => {
     setActiveTab(tabName);
@@ -280,7 +260,7 @@ const ServiceProviderListing = () => {
                     <div className="mb-2">
                       <h3 className="mb-1 text-sm font-medium">Services:</h3>
                       <div className="flex flex-wrap gap-1">
-                        {provider.services.slice(0, 3).map((service, index) => (
+                        {provider.services.slice(0, 3).map((service, index:number) => (
                           <span
                             key={index}
                             className="badge badge-primary badge-outline"
@@ -432,42 +412,7 @@ const ServiceProviderListing = () => {
                           </button>
                         )}
                       </li>
-                      {/* <div className="dropdown dropdown-end">
-                        <div
-                          tabIndex={0}
-                          role="button"
-                          className="btn btn-ghost btn-sm btn-square"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            className="inline-block w-5 h-5 stroke-current"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-                            ></path>
-                          </svg>
-                        </div>
-                        <ul
-                          tabIndex={0}
-                          className="z-10 p-2 shadow dropdown-content menu bg-base-100 rounded-box w-52"
-                        >
-                          <li>
-                            <a>Edit Profile</a>
-                          </li> 
-                         <li>
-                            {provider.isVerified !== "verified" ? (
-                              <a className="text-success">Verify Provider</a>
-                            ) : (
-                              <a className="text-error">Revoke Verification</a>
-                            )}
-                          </li> 
-                         </ul> 
-                      </div> */}
+                     
                     </div>
                   </div>
                 </div>

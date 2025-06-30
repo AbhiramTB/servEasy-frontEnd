@@ -1,5 +1,5 @@
 import axios from "axios";
-import { URL, adminRoutes, apiEndPointAdmin, routes } from "./constant";
+import { URL, adminRoutes, apiEndPointAdmin } from "./constant";
 
 const axiosInstance = axios.create({
   baseURL: URL,

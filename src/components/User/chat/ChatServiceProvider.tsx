@@ -2,13 +2,11 @@ import { useEffect, useState, useRef } from "react";
 import {
   Send,
   Video,
-  MoreVertical,
   Smile,
   Check,
   Paperclip,
-  Phone,
 } from "lucide-react";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import {
   connectSocket,
   getSocket,

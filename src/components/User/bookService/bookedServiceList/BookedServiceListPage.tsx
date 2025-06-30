@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { getRequest } from "../../../../utils/makeRequestInstance";
 import { serviceEndPoint } from "../../../../utils/constant";
 import ServiceBookingCard from "./BookedServiceCard";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Pagination from "../../../ui/Pagination";
 import BookingCardSkeleton from "../../../../Skeleton/BookingListingCardSkeleton";
 

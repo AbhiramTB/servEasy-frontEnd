@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getRequest } from '../../../utils/makeRequestInstance'
 import { apiEndPoint } from '../../../utils/constant'
 import ThemePicker from '../../admin/siteSettings/themePicker'

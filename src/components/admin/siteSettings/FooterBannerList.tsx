@@ -14,7 +14,7 @@ interface Props {
   onMarkDefault: (id: string) => void;
 }
 
-const BannerCarousel: React.FC<Props> = ({ banners, onDelete, onMarkDefault }) => {
+const BannerCarousel: React.FC<Props> = ({ banners, onMarkDefault }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const goPrev = () => {

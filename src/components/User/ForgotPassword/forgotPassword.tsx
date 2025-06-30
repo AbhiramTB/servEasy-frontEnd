@@ -1,5 +1,5 @@
 import React, { useState} from "react";
-import { validateEmail, validatePassword, validatePhone } from "../../../utils/validate";
+import { validateEmail, validatePassword } from "../../../utils/validate";
 import { makeRequest } from "../../../utils/makeRequest";
 import { apiEndPoint } from "../../../utils/constant";
 type Props = {

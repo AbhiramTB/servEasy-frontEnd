@@ -54,13 +54,7 @@ interface Service {
 }
 
 
-interface RecommendedService {
-  id: string;
-  name: string;
-  provider: string;
-  image: string;
-  rating: number;
-}
+
 
 const SingleServiceCard = () => {
   const [service, setService] = useState<Service>();

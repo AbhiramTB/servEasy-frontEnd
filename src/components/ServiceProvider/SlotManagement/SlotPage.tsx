@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ServiceSlotCard from "./ServiceSlotCard";
-import { deleteRequest, getRequest, postRequest, putRequest } from "../../../utils/makeRequestInstance";
+import { deleteRequest, getRequest, postRequest } from "../../../utils/makeRequestInstance";
 import { HotToastSuccess } from "../../../utils/notificationToast";
 import { Toaster } from "react-hot-toast";
 

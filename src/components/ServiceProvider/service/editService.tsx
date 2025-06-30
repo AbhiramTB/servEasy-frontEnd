@@ -51,7 +51,6 @@ const EditService: React.FC<EditServiceProps> = ({
   const [availableServices, setAvailableServices] = useState<IService[]>([]);
   const [location, setLocation] = useState<Location | null>(null);
   const [estimatedPrice, setEstimatedPrice] = useState<number | "">("");
-  const [serviceImage, setServiceImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -145,7 +144,6 @@ const EditService: React.FC<EditServiceProps> = ({
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setServiceImage(file);
 
       const reader = new FileReader();
       reader.onload = () => {
@@ -277,7 +275,6 @@ const EditService: React.FC<EditServiceProps> = ({
                     onClick={(e) => {
                       e.stopPropagation();
                       setPreviewUrl(null);
-                      setServiceImage(null);
                     }}
                     className="absolute p-1 text-white transition rounded-full bg-error top-2 right-2 hover:bg-error-content"
                   >
