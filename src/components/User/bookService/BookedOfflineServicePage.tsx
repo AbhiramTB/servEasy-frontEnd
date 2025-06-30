@@ -67,6 +67,8 @@ interface ServiceProvider {
   location: Location;
   isVerified: string;
   isBlocked: boolean;
+  userId:string
+
 }
 
 interface BookedService {
@@ -143,7 +145,7 @@ const ServiceBookingDetails = () => {
       const res = await getRequest(`service/bookings${id}`);
 
       if (res.status === 200) {
-        console.log(res.data.service.bookedService.bookingHistory);
+        console.log(res.data.service);
 
         setBookingData(res.data.service);
         setReview(res.data.service.review);
@@ -287,6 +289,7 @@ const ServiceBookingDetails = () => {
               <div className="divider"></div>
 
               <div className="">
+                {serviceProvider.userId}
                 <UserInfoCompact
                   profileImage={serviceProvider.profileImage}
                   userName={serviceProvider.serviceProviderName}
@@ -494,12 +497,12 @@ const ServiceBookingDetails = () => {
                       Cancel Booking
                     </button>
                   ))}
-                {bookingData.bookedService.serviceBills && (
+                {bookingData.bookedService.serviceBills && bookingData.bookedService.serviceBills?.length>1&&(
                   <button onClick={() => setShowBills(true)} className="btn btn-primary">
                     show bills
                   </button>
                 )}
-                {!isCancelled && <button className="btn btn-primary">Contact Service Provider</button>}
+                {!isCancelled &&  <Link to={"/chat/"+serviceProvider.userId}><button className="btn btn-primary">Contact Service Provider</button> </Link>}
 
                 {isCompleted && (
                   <button
