@@ -94,8 +94,11 @@ export const handleAuth = async (
             "POST",
             submissionData
           );
+          console.log(res)
           if (res?.status === 200) {
             HotToastSuccess("login successful");
+             localStorage.setItem("accessToken", res.data.accessToken);
+
             navigate("/", { replace: true });
           }
         } else if (submissionData.email) {
@@ -111,7 +114,10 @@ export const handleAuth = async (
         }
 
         if (res?.status === 200) {
+          console.log(res)
           HotToastSuccess("login successful");
+                  localStorage.setItem("accessToken", res.data.accessToken);
+
          navigate("/", { replace: true });
         } else {
           setError(res.data.message || "An error occurred. Please try again.");
