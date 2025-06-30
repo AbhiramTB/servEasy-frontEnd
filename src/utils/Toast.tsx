@@ -22,10 +22,9 @@ const CustomToast: React.FC<CustomToastProps> = ({
   buttonText = "Show Toast"
 }) => {
   const showToast = () => {
-    const theme=localStorage.getItem("theme")
     toast(
       <div className="p-5 rounded-lg shadow-lg ">
-        <p className="mb-2 text-sm  text-base-content">{message}</p>
+        <p className="mb-2 text-sm text-base-content">{message}</p>
         {subMessage && (
           <p className="mb-4 text-sm text-base-content opacity-80">{subMessage}</p>
         )}
