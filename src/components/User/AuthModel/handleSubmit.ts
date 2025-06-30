@@ -8,7 +8,6 @@ import { toastifyError } from "../../../utils/Toastify";
 import { makeRequest } from "../../../utils/makeRequest";
 import { apiEndPoint } from "../../../utils/constant";
 import axios from "axios";
-import { URL } from "../../../utils/constant";
 import { HotToastSuccess } from "../../../utils/notificationToast";
 import { Dispatch, SetStateAction } from "react";
 import { NavigateFunction } from "react-router-dom";
@@ -103,7 +102,7 @@ export const handleAuth = async (
           localStorage.setItem("registerEmailorPhone", submissionData.email);
 
           res = await axios.post(
-            `${URL}${apiEndPoint.SignInEmail}`,
+            `${import.meta.env.VITE_BACKEND_URL}${apiEndPoint.SignInEmail}`,
             submissionData,
             {
               withCredentials: true,

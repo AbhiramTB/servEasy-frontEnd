@@ -1,8 +1,8 @@
 import axios from "axios";
-import { URL, apiEndPoint, routes } from "./constant";
+import { apiEndPoint, routes } from "./constant";
 
 const axiosInstance = axios.create({
-  baseURL: URL,
+  baseURL: import.meta.env.VITE_BACKEND_URL,
   withCredentials: true, 
 });
 
@@ -31,10 +31,9 @@ axiosInstance.interceptors.response.use(
 
       try {    console.error("Network error or server is unreachable", error);
 
-        console.error("--------called refresh  route",);
 
         const response = await axios.post(
-          `${URL}${apiEndPoint.refreshToken}`,
+          `${import.meta.env.VITE_BACKEND_URL}${apiEndPoint.refreshToken}`,
           {},
           { withCredentials: true }
         );
