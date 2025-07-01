@@ -1,13 +1,12 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { getRequest, postRequest } from "../../../utils/makeRequestInstance";
-import { apiEndPoint, serviceEndPoint } from "../../../utils/constant";
-import Card from "../../ui/Card";
-import ServiceProviderDetailsCard from "../../ui/ServiceProviderDetailsCard";
-import ServiceDetailsCard from "../../ui/ServiceDetailsCard";
-import { IReview } from "../../../utils/types/IReview";
-import ServiceProviderAvailability from "../../ui/ServiceProviderAvailability";
-
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { getRequest, postRequest } from '../../../utils/makeRequestInstance';
+import { apiEndPoint, serviceEndPoint } from '../../../utils/constant';
+import Card from '../../ui/Card';
+import ServiceProviderDetailsCard from '../../ui/ServiceProviderDetailsCard';
+import ServiceDetailsCard from '../../ui/ServiceDetailsCard';
+import { IReview, IReviewDetails } from '../../../utils/types/IReview';
+import ReviewList from '../../ui/ReviewList';
 
 interface Location {
   _id: string;
@@ -52,15 +51,12 @@ interface Service {
   updatedAt: Date;
   __v: number;
   serviceProviderDetails: ServiceProviderDetails;
+  reviewDetails:IReviewDetails
 }
-
-
-
 
 const SingleServiceCard = () => {
   const [service, setService] = useState<Service>();
-  const [reviews, setReviews] = useState<[IReview] | []>();
-
+  const [reviews, setReviews] = useState<[IReview] | []>([]);
   const { id } = useParams();
 
   useEffect(() => {
@@ -71,20 +67,17 @@ const SingleServiceCard = () => {
       const res = await getRequest(`${apiEndPoint.getSingleService}/${id}`);
 
       console.log(res.data);
-
-      setService(res.data.services[0] || null);
-      setReviews(res.data.review || null);
+      if (res.status == 200) {
+        setService(res.data.services[0] || null);
+        setReviews(res.data.review || []);
+      }
     } catch (error) {
-      console.error("Error fetching service:", error);
+      console.error('Error fetching service:', error);
     }
   };
   const navigate = useNavigate();
   const bookService = async (id: string) => {
-    navigate(
-      service?.serviceType === "Online"
-        ? "/bookService-online/" + id
-        : "/bookService/" + id
-    );
+    navigate(service?.serviceType === 'Online' ? '/bookService-online/' + id : '/bookService/' + id);
     postRequest(serviceEndPoint.bookservice, { serviceId: id });
   };
 
@@ -104,54 +97,9 @@ const SingleServiceCard = () => {
             <ServiceDetailsCard service={service} />
 
             <div className="w-full max-w-4xl mx-auto">
-              <h2 className="pb-2 mb-6 text-2xl font-bold border-b text-inherit">
-                Customer Reviews
-              </h2>
+              <h2 className="pb-2 mb-6 text-2xl font-bold border-b text-inherit">Customer Reviews</h2>
 
-              <div className="space-y-4">
-                {reviews?.map((review) => (
-                  <div
-                    key={review._id}
-                    className="p-4 rounded-lg shadow-md bg-base hover:shadow-lg"
-                  >
-                    <div className="flex items-center gap-2">
-                      {/* <div className="flex items-center justify-center w-10 h-10 font-bold text-blue-800 bg-blue-100 rounded-full">
-          {review.rating}
-        </div> */}
-
-                      <div className="flex">
-                        {[...Array(Math.floor(review.rating))].map((_, i) => (
-                          <svg
-                            key={i}
-                            className="w-5 h-5 text-yellow-500"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                        ))}
-
-                        {[...Array(5 - Math.ceil(review.rating))].map(
-                          (_, i) => (
-                            <svg
-                              key={i}
-                              className="w-5 h-5 text-gray-300"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                          )
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="mt-3">
-                      <p className="text-gray-700">{review.comment}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <div className="space-y-4">{reviews && <ReviewList reviews={reviews} />}</div>
             </div>
 
             {/* <div className="p-6 rounded-lg shadow-md bg-base-200">
@@ -187,14 +135,13 @@ const SingleServiceCard = () => {
               title={service.serviceProviderDetails.serviceProviderName}
               description={service.description}
               image={service.serviceProviderDetails.profileImage}
-              price={service.estimatedPrice + ""}
+              price={service.estimatedPrice + ''}
               location={service.location.address}
               reviewsCount={24}
               serviceProviderUserId={service.serviceProviderDetails.userId}
-              handleChat={() =>
-                navigate("/chat/" + service.serviceProviderDetails.userId)
-              }
+              handleChat={() => navigate('/chat/' + service.serviceProviderDetails.userId)}
               checkAvliblity={service.serviceProviderDetails._id}
+              reviewDetails={service.reviewDetails}
             />
 
             <ServiceProviderDetailsCard
@@ -210,4 +157,4 @@ const SingleServiceCard = () => {
   );
 };
 
-export default SingleServiceCard;  
+export default SingleServiceCard;

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Send, Smile, Check } from 'lucide-react';
+import { Send, Smile, Check, Paperclip } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { connectSocket, getSocket, disconnectSocket } from '../../../utils/socket';
 import { useSelector } from 'react-redux';
@@ -221,12 +221,10 @@ const ChatUser = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Auto-scroll to latest message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Format last seen time nicely
   const formatLastSeen = (timestamp: string | null) => {
     if (!timestamp) return '';
 
@@ -240,7 +238,6 @@ const ChatUser = () => {
     }
   };
 
-  // Message status indicator component
   const MessageStatus = ({ status }: { status?: MessageStatus }) => {
     if (!status) return null;
 
@@ -254,7 +251,6 @@ const ChatUser = () => {
     );
   };
 
-  // Exit early if not authenticated
   if (!user?._id) return null;
 
   return (
@@ -350,9 +346,9 @@ const ChatUser = () => {
         {/* Input Section */}
         <div className="p-4 border-t border-base-300 bg-base-200">
           <div className="relative flex items-center w-full">
-            {/* <button className="absolute left-4 btn btn-circle btn-ghost btn-sm">
+            <button className="absolute left-4 btn btn-circle btn-ghost btn-sm">
               <Paperclip size={18} />
-            </button> */}
+            </button>
 
             <input
               ref={inputRef}
