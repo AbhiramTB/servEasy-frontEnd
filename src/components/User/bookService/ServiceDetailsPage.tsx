@@ -6,6 +6,7 @@ import Card from "../../ui/Card";
 import ServiceProviderDetailsCard from "../../ui/ServiceProviderDetailsCard";
 import ServiceDetailsCard from "../../ui/ServiceDetailsCard";
 import { IReview } from "../../../utils/types/IReview";
+import ServiceProviderAvailability from "../../ui/ServiceProviderAvailability";
 
 
 interface Location {
@@ -184,7 +185,6 @@ const SingleServiceCard = () => {
             <Card
               bookService={() => bookService(service._id)}
               title={service.serviceProviderDetails.serviceProviderName}
-              category={service.category}
               description={service.description}
               image={service.serviceProviderDetails.profileImage}
               price={service.estimatedPrice + ""}
@@ -194,6 +194,7 @@ const SingleServiceCard = () => {
               handleChat={() =>
                 navigate("/chat/" + service.serviceProviderDetails.userId)
               }
+              checkAvliblity={service.serviceProviderDetails._id}
             />
 
             <ServiceProviderDetailsCard
