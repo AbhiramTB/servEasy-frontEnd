@@ -1,36 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { fetchAllChats } from "./getAllchats";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
-import { Link } from "react-router-dom";
-
-interface IPresence {
-    userId:string;
-    online: boolean;
-    lastSeen: string;
-  }
+import React, { useEffect, useState } from 'react';
+import { fetchAllChats } from './getAllchats';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
+import { Link } from 'react-router-dom';
+import { Image } from 'lucide-react';
+import { IMessage } from '../../../utils/types/IChat';
 
 interface ChatItem {
   _id: string;
   userName: string;
-    presence: IPresence[];
-   unread:boolean;
-  lastMessage: {
-    content: string;
-    timestamp: string;
-    sender: string;
-    messageType: string;
-    _id: string;
-  };
+  unread: boolean;
+  lastMessage: IMessage;
   lastMessageAt: string;
   userAvatar?: string;
-  userId:string
+  userId: string;
 }
-
 
 const ChatsUser: React.FC = () => {
   const [chats, setChats] = useState<ChatItem[] | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const userId = useSelector((state: RootState) => state.user._id);
 
   useEffect(() => {
@@ -48,16 +36,13 @@ const ChatsUser: React.FC = () => {
     if (userId) fetchData();
   }, [userId]);
 
- const filteredChats: ChatItem[] = chats?.filter(chat =>
-  chat.userName.toLowerCase().includes(searchTerm.toLowerCase())
-) || [];
-console.log(chats);
+  const filteredChats: ChatItem[] =
+    chats?.filter(chat => chat.userName.toLowerCase().includes(searchTerm.toLowerCase())) || [];
+  console.log(chats);
 
-
-
-useEffect(() => {
-  localStorage.setItem("chatNotificationCount", "0");
-}, []);
+  useEffect(() => {
+    localStorage.setItem('chatNotificationCount', '0');
+  }, []);
 
   return (
     <div className="flex h-screen bg-base-300 text-base-content">
@@ -73,7 +58,7 @@ useEffect(() => {
             type="text"
             placeholder="Search..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={e => setSearchTerm(e.target.value)}
             className="w-full input input-sm input-bordered"
           />
         </div>
@@ -86,68 +71,47 @@ useEffect(() => {
           ) : filteredChats?.length === 0 ? (
             <div className="p-4 text-sm text-center opacity-50">No chats found</div>
           ) : (
-            filteredChats?.map((chat) =>{
-
+            filteredChats?.map(chat => {
               return (
-                <Link to={"/chat/"+chat.userId}>
-  
-                  
-              <div
-                key={chat._id}
-                className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-base-200"
-                >
-                <img
-                  src={
-                      chat.userAvatar ||
-                      "https://ui-avatars.com/api/?name=" +
-                      encodeURIComponent(chat.userName) +
-                      "&background=random"
-                    }
-                    alt={chat.userName}
-                    className="object-cover w-10 h-10 rounded-full"
+                <Link to={'/chat/' + chat.userId}>
+                  <div key={chat._id} className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-base-200">
+                    <img
+                      src={
+                        chat.userAvatar ||
+                        'https://ui-avatars.com/api/?name=' + encodeURIComponent(chat.userName) + '&background=random'
+                      }
+                      alt={chat.userName}
+                      className="object-cover w-10 h-10 rounded-full"
                     />
-                <div className="flex-1">
-                  <div className="text-sm font-semibold">{chat.userName}</div>
-                  <div className="w-48 text-xs truncate opacity-70">
-                    {chat.lastMessage?.content || "No message yet"}
+                    <div className="flex-1">
+                      <div className="text-sm font-semibold">{chat.userName}</div>
+                      <div className="w-48 text-xs truncate opacity-70">
+                        <div className="w-48 text-xs truncate opacity-70">
+                          {chat.lastMessage.messageType === 'image' ? (
+                            <div className="flex pl-2">
+                              <Image />
+                              <span className="pl-2">image</span>
+                            </div>
+                          ) : (
+                            <span className="pl-2">{chat.lastMessage.content}</span>
+                          )}
+                        </div>{' '}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xs opacity-70">
+                        {new Date(chat.lastMessageAt).toLocaleTimeString([], {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </div>
+
+                      <div>{chat.unread && <span className="inline-block w-2 h-2 ml-1 bg-red-500 rounded-full" />}</div>
+                    </div>
                   </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-xs opacity-70">
-                    {new Date(chat.lastMessageAt).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                    })}
-                  </div>
-
-                  <div>
-
-
-{chat.unread&&
-      <span className="inline-block w-2 h-2 ml-1 bg-red-500 rounded-full" />
-
-}
-                    
-                  </div>
-             
-  
-                </div>
-  
-              </div>
-           
-                    </Link>
-            )})
-            
-              
-
-                  
-                   
-                   
-
-                   
-
-
-          
+                </Link>
+              );
+            })
           )}
         </div>
       </div>

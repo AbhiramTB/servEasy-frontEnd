@@ -1,31 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { fetchAllChats } from "./getAllchats";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
-import { Link, useNavigate } from "react-router-dom";
-import { Video } from "lucide-react";
+import React, { useEffect, useState } from 'react';
+import { fetchAllChats } from './getAllchats';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
+import { Link, useNavigate } from 'react-router-dom';
+import { Image, Video } from 'lucide-react';
+import { IMessage } from '../../../utils/types/IChat';
 
 interface ChatItem {
   _id: string;
   userName: string;
-  lastMessage: {
-    content: string;
-    timestamp: string;
-    sender: string;
-    messageType: string;
-    _id: string;
-  };
+  lastMessage: IMessage;
   lastMessageAt: string;
   userAvatar?: string;
-  userID:String;
-  presence: any[];
+  userID: String;
 }
 
 const ChatUI: React.FC = () => {
   const [chats, setChats] = useState<ChatItem[] | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const serviceProviderId = useSelector((state: RootState) => state.serviceProvider.userId);
-  const navigate =useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
@@ -42,9 +36,7 @@ const ChatUI: React.FC = () => {
     if (serviceProviderId) fetchData();
   }, [serviceProviderId]);
 
-  const filteredChats = chats?.filter(chat =>
-    chat.userName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredChats = chats?.filter(chat => chat.userName.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
     <div className="flex h-screen bg-base-300 text-base-content">
@@ -60,7 +52,7 @@ const ChatUI: React.FC = () => {
             type="text"
             placeholder="Search..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={e => setSearchTerm(e.target.value)}
             className="w-full input input-sm input-bordered"
           />
         </div>
@@ -73,47 +65,45 @@ const ChatUI: React.FC = () => {
           ) : filteredChats?.length === 0 ? (
             <div className="p-4 text-sm text-center opacity-50">No chats found</div>
           ) : (
-            filteredChats?.map((chat) => (
-              <div
-                key={chat._id}
-                className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-base-200"
-              >
-                                            <Link to={"/service-provider/chat/"+chat.userID}>
-                   
-                <img
-                  src={
-                    chat.userAvatar ||
-                    "https://ui-avatars.com/api/?name=" +
-                      encodeURIComponent(chat.userName) +
-                      "&background=random"
-                  }
-                  alt={chat.userName}
-                  className="object-cover w-10 h-10 rounded-full"
-                />
-                <div className="flex-1">
-                  <div className="text-sm font-semibold">{chat.userName}</div>
-                  <div className="w-48 text-xs truncate opacity-70">
-                    {chat.lastMessage?.content || "No message yet"}
+            filteredChats?.map(chat => (
+              <div key={chat._id} className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-base-200">
+                <Link to={'/service-provider/chat/' + chat.userID}>
+                  <img
+                    src={
+                      chat.userAvatar ||
+                      'https://ui-avatars.com/api/?name=' + encodeURIComponent(chat.userName) + '&background=random'
+                    }
+                    alt={chat.userName}
+                    className="object-cover w-10 h-10 rounded-full"
+                  />
+                  <div className="flex-1">
+                    <div className="text-sm font-semibold">{chat.userName}</div>
+                    <div className="w-48 text-xs truncate opacity-70">
+                      {chat.lastMessage.messageType === 'image' ? (
+                        <div className="flex pl-2">
+                          <Image />
+                          <span className="pl-2">image</span>
+                        </div>
+                      ) : (
+                        <span className="pl-2">{chat.lastMessage.content}</span>
+                      )}
+                    </div>
                   </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-xs opacity-70">
-                    {new Date(chat.lastMessageAt).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
+                  <div className="text-right">
+                    <div className="text-xs opacity-70">
+                      {new Date(chat.lastMessageAt).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </div>
                   </div>
-
-                 
-
-                  
-                  
-
-                </div>
-                 </Link>
-                <button onClick={()=>navigate(`/service-provider/video-call/${chat.userID}`)} className="btn btn-circle btn-ghost">
+                </Link>
+                <button
+                  onClick={() => navigate(`/service-provider/video-call/${chat.userID}`)}
+                  className="btn btn-circle btn-ghost"
+                >
                   <Video size={18} />
-                  </button>
+                </button>
               </div>
             ))
           )}
