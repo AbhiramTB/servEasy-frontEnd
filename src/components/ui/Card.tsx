@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import ServiceProviderAvailability from "./ServiceProviderAvailability";
 
 interface CardProps {
   image?: string;
@@ -7,7 +8,6 @@ interface CardProps {
   subtitle?: string;
   description?: string;
   price?: string;
-  category?: string;
   location?: string;
   serviceType?: string;
   rating?: number;
@@ -18,6 +18,7 @@ interface CardProps {
   bookService?: () => void;
   handleChat?:()=>void
   serviceProviderUserId:string
+  checkAvliblity?:string
   
 }
 
@@ -30,13 +31,14 @@ const Card: React.FC<CardProps> = ({
   description,
   price,
   estimatedPrice,
-  category,
   location,
   serviceType,
   rating = 5,
   reviewsCount = 0,
   handleChat,
   bookService,
+  checkAvliblity
+
   
 }) => {
   return (
@@ -90,16 +92,15 @@ const Card: React.FC<CardProps> = ({
           <div>
             <p className="text-sm text-gray-500">Price</p>
             <p className="font-semibold text-primary">
-              ${estimatedPrice || price} / hour
+              ₹{estimatedPrice || price} / hour
             </p>
           </div>
         )}
 
         {/* Category */}
-        {category && (
+        {checkAvliblity && (
           <div>
-            <p className="text-sm text-gray-500">Category</p>
-            <p>{category}</p>
+           <ServiceProviderAvailability serviceProviderId={checkAvliblity}/>
           </div>
         )}
 
