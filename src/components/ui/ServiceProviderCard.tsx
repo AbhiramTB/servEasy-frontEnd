@@ -1,5 +1,5 @@
 import React from "react";
-import { Phone, Calendar, MapPinned, Star } from "lucide-react";
+import { Phone, Calendar, MapPinned } from "lucide-react";
 
 interface Location {
   address: string;
@@ -20,7 +20,7 @@ interface ServiceProviderCardProps {
 
 const ServiceProviderCard: React.FC<ServiceProviderCardProps> = ({ details }) => {
   return (
-    <div className="p-6 shadow-md rounded-xl bg-base-200">
+    <div className="p-6 ">
       <div className="flex items-center gap-6">
         <div className="avatar">
           <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
@@ -48,10 +48,7 @@ const ServiceProviderCard: React.FC<ServiceProviderCardProps> = ({ details }) =>
             {details.location.address}
           </p>
         </div>
-        <div className="flex items-center text-primary">
-          <Star fill="currentColor" className="w-6 h-6 mr-1" />
-          <span className="text-lg font-bold">{details.rating ?? "4.5"}</span>
-        </div>
+       
       </div>
     </div>
   );

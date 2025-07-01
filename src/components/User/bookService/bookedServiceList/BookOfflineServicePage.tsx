@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react';
 import { MapPin, CheckCircle, PlusCircle } from 'lucide-react';
 import { AddressCard } from '../../../Address/AddressCard';
 
-import {
-  deleteRequest,
-  getRequest,
-  postRequest,
-  putRequest,
-} from '../../../../utils/makeRequestInstance';
+import { deleteRequest, getRequest, postRequest, putRequest } from '../../../../utils/makeRequestInstance';
 import { apiEndPoint, serviceEndPoint } from '../../../../utils/constant';
 import { useParams } from 'react-router-dom';
 import { IAddress } from '../../../Address/IAddress';
@@ -78,9 +73,8 @@ const BookService = () => {
 
   const handleSaveAddress = async (address: IAddress) => {
     try {
-      
       if (address?._id) {
-         await putRequest(apiEndPoint.addNewAddress, { address });
+        await putRequest(apiEndPoint.addNewAddress, { address });
       } else {
         await postRequest(apiEndPoint.addNewAddress, { address });
       }
@@ -136,7 +130,7 @@ const BookService = () => {
   };
 
   return (
-    <div className='bg-primary/5'>
+    <div className="bg-primary/5">
       <Toaster></Toaster>
 
       {conformCard && (
@@ -188,13 +182,9 @@ const BookService = () => {
               </div>
             </div>
 
-            {/* Service and Booking Details Column */}
             <div className="space-y-6 md:col-span-2 bg-primary/5">
-              {/* Service Provider Details */}
-
               <div className="p-6 shadow-md card bg-base-200 rounded-xl">
                 <div className="flex flex-col gap-6 lg:flex-row">
-                  {/* Service Provider Details - Left Half */}
                   {service?.serviceProviderDetails && (
                     <div className="flex-1">
                       <div className="flex items-center space-x-5">
@@ -206,9 +196,11 @@ const BookService = () => {
                   {service && (
                     <div className="flex-1">
                       <div className="flex items-start space-x-5">
-                      
-              <ServiceCardCompact serviceImage={service.serviceImage} description={service.description} serviceName={service.serviceName}  />
-
+                        <ServiceCardCompact
+                          serviceImage={service.serviceImage}
+                          description={service.description}
+                          serviceName={service.serviceName}
+                        />
                       </div>
                     </div>
                   )}
@@ -216,12 +208,10 @@ const BookService = () => {
               </div>
 
               <div className="flex space-x-5 rounded-lg shadow-lg bg-base-200">
-                {/* Service Details */}
                 <div className="w-2/3 mt-4">
                   <ServiceDateTimePicker value={serviceDateTime} setValue={setServiceDateTime} />
                 </div>
 
-                {/* Selected Address Confirmation */}
                 {selectedAddress && (
                   <div className="w-1/3 p-5 card rounded-xl">
                     <div className="space-y-4">
@@ -281,7 +271,6 @@ const BookService = () => {
             </div>
           </div>
 
-          {/* Address Edit Modal */}
           {isAddNewAddressModalOpen && (
             <AddressEditModal
               address={selectedAddress || {}}
