@@ -139,8 +139,10 @@ const BookingManagement: React.FC = () => {
 
    
 
-      {activeTab === "bookings" && <Bookings bookings={filteredBookings} />}
+<div className="container mx-auto">
+        {activeTab === "bookings" && <Bookings bookings={filteredBookings} />}
 
+</div>
       {activeTab === "payments" && (
         <div className="mt-4">
           <p>Payment management view will be implemented here.</p>
