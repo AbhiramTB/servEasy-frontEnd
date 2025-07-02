@@ -39,14 +39,13 @@ interface AddNewServiceProps {
 const AddNewService: React.FC<AddNewServiceProps> = ({ setNewService }) => {
   const [serviceName, setServiceName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [serviceType, setServiceType] = useState<"Online" | "Offline">("Online");
+  const [serviceType, setServiceType] = useState<"Online" | "Offline">("Offline");
   const [location, setLocation] = useState<Location | null>(null);
   const [estimatedPrice, setEstimatedPrice] = useState<number | "">("");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Category and service selection states
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [availableServices, setAvailableServices] = useState<IService[]>([]);
   const [category, setCategory] = useState<ICategory[]>();
@@ -57,7 +56,6 @@ const AddNewService: React.FC<AddNewServiceProps> = ({ setNewService }) => {
     (state: RootState) => state.serviceProvider
   );
 
-  // Update available services when category changes
   useEffect(() => {
     if (selectedCategory && category) {
       const categoryData = category.find(cat => cat._id === selectedCategory);
@@ -105,7 +103,14 @@ const AddNewService: React.FC<AddNewServiceProps> = ({ setNewService }) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      if (file) {
+  const maxSizeInBytes = 2 * 1024 * 1024; 
 
+  if (file.size > maxSizeInBytes) {
+    HotToastError('File size should be less than 5 MB');
+    return;
+  }
+}
       const reader = new FileReader();
       reader.onload = () => {
         setPreviewUrl(reader.result as string);
@@ -333,13 +338,15 @@ const AddNewService: React.FC<AddNewServiceProps> = ({ setNewService }) => {
             </div>
           </div>
 
-          <div>
-            <label className="block mb-2 font-medium text-base-content">
+          <div >
+            <label    className= "block mb-2 font-medium text-start text-base-content " >
+             
+             <span className="tooltip" data-tip="For reference only. Final price will be decided at the time of service completion">*</span>
               Estimated Price
             </label>
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-base-content opacity-70">
-                $
+                ₹
               </span>
               <input
                 type="number"

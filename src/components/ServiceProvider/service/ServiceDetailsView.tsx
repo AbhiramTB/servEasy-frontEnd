@@ -85,13 +85,8 @@ const ServiceDetailsView: React.FC<ServiceDetailsProps> = ({ serviceId, onClose 
             <Edit size={16} /> Edit
           </button>
           <div className="flex gap-2">
-            <button className="flex items-center gap-2 btn btn-warning btn-sm">
-              {service.isActive ? <EyeOff size={16} /> : <Eye size={16} />}
-              {service.isActive ? 'Hide' : 'Show'}
-            </button>
-            <button className="flex items-center gap-2 btn btn-error btn-sm">
-              <Trash2 size={16} /> Delete
-            </button>
+           
+           
           </div>
         </div>
       </div>
