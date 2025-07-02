@@ -4,12 +4,8 @@ import { useSelector } from "react-redux";
 import { adminGetRequest } from "../../utils/AxiosAdmin";
 import { apiEndPointAdmin } from "../../utils/constant";
 const NavBar = () => {
-  const admin = useSelector((state: RootState) => ({
-    userName: state.admin.userName,
-    email: state.admin.email,
-    phone: state.admin.phone,
-    isVerified: state.admin.isVerified,
-  }));
+ const admin = useSelector((state: RootState) => state.admin);
+
   const handleLogOut = async () => {
     try {
       const res = await adminGetRequest(apiEndPointAdmin.adminLogout);

@@ -71,9 +71,12 @@ export const adminPostRequest = async (url: string, data: any) => {
 };
 
 // GET request
-export const adminGetRequest = async (url: string) => {
+export const adminGetRequest = async (
+  url: string,
+  options?: { params?: Record<string, any> }
+) => {
   try {
-    const response = await axiosInstance.get(url);
+    const response = await axiosInstance.get(url, { params: options?.params });
     return response;
   } catch (error) {
     throw error;
