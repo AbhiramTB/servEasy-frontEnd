@@ -10,8 +10,8 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ setSearch, searchVal 
   const [debounce, setDebounce] = useState('');
   useEffect(() => {
     if (!debounce.trim()) {
-      setSearch(""); 
-      
+      setSearch('');
+
       return;
     }
     const handler = setTimeout(() => {

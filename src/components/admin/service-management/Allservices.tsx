@@ -1,60 +1,64 @@
-import  { useEffect, useCallback, useState } from "react";
-import { apiEndPointAdmin } from "../../../utils/constant";
-import { adminGetRequest, adminPatchRequest } from "../../../utils/AxiosAdmin";
-import { useDispatch, useSelector } from "react-redux";
-import { addServices } from "../../../redux/slices/adminSlice";
-import { RootState } from "../../../redux/store";
-import ServiceDetails from "./ServiceDetails";
-import { HotToastError, HotToastSuccess } from "../../../utils/notificationToast";
-import { Toaster } from "react-hot-toast";
-import Pagination from "../../../utils/ui/pagination";
-
-
+import { useEffect, useCallback, useState } from 'react';
+import { apiEndPointAdmin } from '../../../utils/constant';
+import { adminGetRequest, adminPatchRequest } from '../../../utils/AxiosAdmin';
+import { useDispatch, useSelector } from 'react-redux';
+import { addServices } from '../../../redux/slices/adminSlice';
+import { RootState } from '../../../redux/store';
+import ServiceDetails from './ServiceDetails';
+import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
+import { Toaster } from 'react-hot-toast';
+import Pagination from '../../../utils/ui/pagination';
+import SearchComponent from '../../ui/SearchComponent';
 
 const Allservices = () => {
   const dispatch = useDispatch();
   const services = useSelector((state: RootState) => state.admin.allServices);
   const [crrPage, setCrrPage] = useState<number>(0);
   const [totalData, setTotalData] = useState<number>(0);
-  
-  const dataLimit = 6;
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  const dataLimit = 4;
   const [details, setDetails] = useState<null | object>();
   const getServices = useCallback(
-    async (page: number) => {
+    async (page: number,searchVal?:string) => {
       try {
-        const res = await adminGetRequest(
-          `${apiEndPointAdmin.getAllservices}?page=${page}&limit=${dataLimit}`
-        );
+          const param: Record<string, any> = { page, limit: dataLimit };
+        if (searchVal) {
+          param.search = searchVal;
+        }
+        const res = await adminGetRequest(apiEndPointAdmin.getAllservices,{params:param});
 
         setCrrPage(page);
         if (res.status === 200) {
-          console.log(res.data);
-          
+
           dispatch(addServices(res.data.allServices));
           setTotalData(res.data.count);
         }
       } catch (error) {
-        console.error("Error fetching services:", error);
+        console.error('Error fetching services:', error);
       }
     },
     [dispatch]
   );
 
   useEffect(() => {
-    getServices(crrPage);
+    getServices(crrPage,searchQuery);
   }, [getServices]);
 
-  
+  useEffect(() => {
+    getServices(0,searchQuery);
+  }, [searchQuery]);
+
 
   const handleToggleBlock = async (serviceId: string, isBlocked: boolean) => {
     try {
-      const res = await adminPatchRequest(
-        apiEndPointAdmin.blockUnblokServices,
-        { serviceId, action: isBlocked ? "Unblock" : "Block" }
-      );
+      const res = await adminPatchRequest(apiEndPointAdmin.blockUnblokServices, {
+        serviceId,
+        action: isBlocked ? 'Unblock' : 'Block',
+      });
       console.log(res);
       if (res.status === 200) {
-        getServices(crrPage);
+        blockUnblock(serviceId);
         HotToastSuccess(res.data.message);
       } else if (res.status === 400) {
         HotToastError(res.data.message);
@@ -64,17 +68,24 @@ const Allservices = () => {
 
   const block = (serviceId: string) => {
     handleToggleBlock(serviceId.toString(), false);
-    handleToggleBlock(serviceId.toString(), false);
   };
   const unBlock = (serviceId: string) => {
     handleToggleBlock(serviceId.toString(), true);
-    handleToggleBlock(serviceId.toString(), true);
+  };
+
+  const blockUnblock = (serviceId: string) => {
+    dispatch(addServices(services.map(i => (i._id == serviceId ? { ...i, isActive: !i.isActive } : i))));
   };
   return (
     <div>
       <Toaster />
+              <h1 className='mt-4 text-xl font-bold ml-14 text-start'>Service Managment</h1>
 
-
+      <div className="flex justify-end mr-7 align-end">
+        <div >
+          <SearchComponent setSearch={setSearchQuery} searchVal={searchQuery} />
+        </div>
+      </div>
       {services && (
         <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service: any) => (
@@ -84,27 +95,19 @@ const Allservices = () => {
             >
               {/* Service Image */}
               <div className="h-48 overflow-hidden">
-                <img
-                  src={service.serviceImage}
-                  alt={service.description}
-                  className="object-cover w-full h-full"
-                />
+                <img src={service.serviceImage} alt={service.description} className="object-cover w-full h-full" />
               </div>
 
               {/* Service Details */}
               <div className="p-4">
                 <div className="flex items-start justify-between mb-2">
-                  <h3 className="text-lg font-bold text-base-content">
-                    {service.serviceName}
-                  </h3>
+                  <h3 className="text-lg font-bold text-base-content">{service.serviceName}</h3>
                   <span className="bg-primary/10 text-primary text-xs font-medium px-2.5 py-0.5 rounded">
                     {service.serviceType}
                   </span>
                 </div>
 
-                <p className="mb-2 text-sm text-base-content/70">
-                  {service.description}
-                </p>
+                <p className="mb-2 text-sm text-base-content/70">{service.description}</p>
 
                 <div className="flex items-center mb-2">
                   <svg
@@ -127,30 +130,22 @@ const Allservices = () => {
                       d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                     />
                   </svg>
-                  <span className="text-sm truncate text-base-content/70">
-                    {service.location.address}
-                  </span>
+                  <span className="text-sm truncate text-base-content/70">{service.location.address}</span>
                 </div>
 
                 <div className="mb-4">
-                  <span className="text-sm text-base-content/70">
-                    Category:{" "}
-                  </span>
-                  <span className="text-sm font-medium text-base-content">
-                    {service.category}
-                  </span>
+                  <span className="text-sm text-base-content/70">Category: </span>
+                  <span className="text-sm font-medium text-base-content">{service.category}</span>
                 </div>
 
                 {/* Price and Provider Info */}
                 <div className="flex items-center justify-between pt-2 border-t border-base-300">
                   <div>
-                    <p className="text-xl font-bold text-primary">
-                      ₹{service.estimatedPrice}
-                    </p>
+                    <p className="text-xl font-bold text-primary">₹{service.estimatedPrice}</p>
                   </div>
                   <div className="flex items-center">
                     <img
-                      src={service.serviceProviderDetails?.profileImage||""} 
+                      src={service.serviceProviderDetails?.profileImage || ''}
                       alt={service.serviceProviderDetails?.serviceProviderName}
                       className="object-cover w-8 h-8 mr-2 rounded-full"
                     />
@@ -190,9 +185,7 @@ const Allservices = () => {
 
                   {service.isActive ? (
                     <button
-                      onClick={() =>
-                        handleToggleBlock(service._id.toString(), false)
-                      }
+                      onClick={() => handleToggleBlock(service._id.toString(), false)}
                       className="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded bg-error hover:bg-error-focus"
                     >
                       <svg
@@ -213,9 +206,7 @@ const Allservices = () => {
                     </button>
                   ) : (
                     <button
-                      onClick={() =>
-                        handleToggleBlock(service._id.toString(), true)
-                      }
+                      onClick={() => handleToggleBlock(service._id.toString(), true)}
                       className="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded bg-success hover:bg-success-focus"
                     >
                       <svg
@@ -272,7 +263,7 @@ const Allservices = () => {
       {details && (
         <ServiceDetails
           service={details}
-          onEdit={() => alert("clicked the ")}
+          onEdit={() => alert('clicked the ')}
           onBlock={block}
           onUnblock={unBlock}
           onClose={() => setDetails(null)}
@@ -290,6 +281,3 @@ const Allservices = () => {
 };
 
 export default Allservices;
-
-
-
