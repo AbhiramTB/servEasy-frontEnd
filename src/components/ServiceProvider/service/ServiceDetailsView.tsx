@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { MapPin, Tag, X, Edit, Trash2, Eye, EyeOff } from "lucide-react";
+import { MapPin, Tag, X, Edit} from "lucide-react";
 
 interface ServiceDetailsProps {
   serviceId: string;
