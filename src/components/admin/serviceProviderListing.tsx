@@ -1,108 +1,112 @@
-import { useEffect, useState, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../redux/store";
-import { addServiceProviders, ServiceProvider } from "../../redux/slices/adminSlice"; // Assuming this action exists
-import { adminGetRequest, adminPatchRequest } from "../../utils/AxiosAdmin"; // Assuming this utility exists
-import { apiEndPointAdmin } from "../../utils/constant"; // Assuming this config exists
-import { HotToastSuccess } from "../../utils/notificationToast";
-import { Toaster } from "react-hot-toast";
-import Pagination from "../../utils/ui/pagination";
+import { useEffect, useState, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { addServiceProviders, ServiceProvider } from '../../redux/slices/adminSlice'; // Assuming this action exists
+import { adminGetRequest, adminPatchRequest } from '../../utils/AxiosAdmin'; // Assuming this utility exists
+import { apiEndPointAdmin } from '../../utils/constant'; // Assuming this config exists
+import { HotToastSuccess } from '../../utils/notificationToast';
+import { Toaster } from 'react-hot-toast';
+import Pagination from '../../utils/ui/pagination';
+import SearchComponent from '../ui/SearchComponent';
 export interface Location {
   address: string;
   latitude: number;
   longitude: number;
 }
 
-
-
 const ServiceProviderListing = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState('all');
 
   const [crrPage, setCrrPage] = useState<number>(0);
   const [totalData, setTotalData] = useState<number>(0);
-  
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const dataLimit = 3;
-  
 
-        
+  const serviceProviders = useSelector((state: RootState) => state.admin.serviceProviders);
 
-
-
-  const serviceProviders = useSelector(
-    (state: RootState) => state.admin.serviceProviders
+  const getAllServiceProviders = useCallback(
+    async (page: number, searchVal?: string) => {
+      try {
+        setLoading(true);
+        const param: Record<string, any> = { page, limit: dataLimit };
+        if (searchVal) {
+          param.search = searchVal;
+        }
+        const res = await adminGetRequest(`${apiEndPointAdmin.serviceProvider}`, { params: param });
+        setCrrPage(page);
+        if (res.data && res.data.data) {
+          dispatch(addServiceProviders(res.data.data));
+          setTotalData(res.data.count);
+        }
+      } catch (error) {
+        console.error('Error fetching service providers:', error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [dispatch]
   );
 
-  const getAllServiceProviders = useCallback(async (page:number) => {
-    try {
-      setLoading(true);
-      const res = await adminGetRequest(`${apiEndPointAdmin.serviceProvider}?page=${page}&limit=${dataLimit}`);
-      setCrrPage(page)
-      if (res.data && res.data.data) {
-        console.log(res.data);
-        
-        dispatch(addServiceProviders(res.data.data));
-        setTotalData(res.data.count)
-      }
-    } catch (error) {
-      console.error("Error fetching service providers:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [dispatch]);
+  useEffect(() => {
+    getAllServiceProviders(crrPage,searchQuery);
+  }, [getAllServiceProviders, searchQuery]);
 
   useEffect(() => {
-    getAllServiceProviders(crrPage);
-  }, [getAllServiceProviders]);
+    getAllServiceProviders(0, searchQuery);
+  }, [searchQuery]);
 
-  // Filter service providers based on active tab
-  const filteredServiceProviders = serviceProviders.filter((provider) => {
-      switch (activeTab) {
-        case "verified":
-          return provider.isVerified === "verified";
-        case "rejected":
-          return provider.isVerified === "rejected";
-        case "blocked":
-          return provider.isBlocked === true; 
-        case "nonBlocked":
-          return provider.isBlocked !== true; 
-        default:
-          return true; // 'all' tab
-      }
-    });
+  const filteredServiceProviders = serviceProviders.filter(provider => {
+    switch (activeTab) {
+      case 'verified':
+        return provider.isVerified === 'verified';
+      case 'rejected':
+        return provider.isVerified === 'rejected';
+      case 'blocked':
+        return provider.isBlocked === true;
+      case 'nonBlocked':
+        return provider.isBlocked !== true;
+      default:
+        return true;
+    }
+  });
 
   const handleTabChange = (tabName: string) => {
     setActiveTab(tabName);
   };
 
-  const handleBlockProvider = async (providerId: String) => {
+
+ const blockProvidder=(providerId:string)=>{
+  
+             dispatch(addServiceProviders( serviceProviders.map((sp)=>sp._id==providerId?{...sp,isBlocked:!sp.isBlocked}:sp)));
+
+  }
+  const handleBlockProvider = async (providerId: string) => {
     try {
-      const res = await adminPatchRequest(
-        apiEndPointAdmin.blockUnblockServiceProvider,
-        { providerId, action: "Block" }
-      );
-      console.log(res);
+      const res = await adminPatchRequest(apiEndPointAdmin.blockUnblockServiceProvider, {
+        providerId,
+        action: 'Block',
+      });
 
       if (res.status == 200) {
         HotToastSuccess(res.data.message);
-        getAllServiceProviders(crrPage);
+       blockProvidder(providerId)
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleUnblockProvider = async (providerId: String) => {
+  const handleUnblockProvider = async (providerId: string) => {
     try {
-      const res = await adminPatchRequest(
-        apiEndPointAdmin.blockUnblockServiceProvider,
-        { providerId, action: "Unblock" }
-      );
-      console.log(res);
+      const res = await adminPatchRequest(apiEndPointAdmin.blockUnblockServiceProvider, {
+        providerId,
+        action: 'Unblock',
+      });
       if (res.status == 200) {
         HotToastSuccess(res.data.message);
-        getAllServiceProviders(crrPage);
+       blockProvidder(providerId)
       }
     } catch (error) {
       console.log(error);
@@ -111,43 +115,43 @@ const ServiceProviderListing = () => {
 
   return (
     <div className="container px-4 py-8 mx-auto">
-      <h1 className="mb-6 text-3xl font-bold">Service Providers</h1>
+      <div className="flex justify-end mt-3">
+        <SearchComponent setSearch={setSearchQuery} searchVal={searchQuery} />
+      </div>
+      <h1 className="mb-6 text-3xl font-bold">Service Providers{searchQuery}</h1>
+
       <Toaster />
-      {/* Tab navigation - Using Daisy UI tabs */}
+
       <div className="mb-6 tabs tabs-boxed">
-        <button
-          className={`tab ${activeTab === "all" ? "tab-active" : ""}`}
-          onClick={() => handleTabChange("all")}
-        >
+        <button className={`tab ${activeTab === 'all' ? 'tab-active' : ''}`} onClick={() => handleTabChange('all')}>
           All Providers
         </button>
         <button
-          className={`tab ${activeTab === "verified" ? "tab-active" : ""}`}
-          onClick={() => handleTabChange("verified")}
+          className={`tab ${activeTab === 'verified' ? 'tab-active' : ''}`}
+          onClick={() => handleTabChange('verified')}
         >
           Verified
         </button>
         <button
-          className={`tab ${activeTab === "rejected" ? "tab-active" : ""}`}
-          onClick={() => handleTabChange("rejected")}
+          className={`tab ${activeTab === 'rejected' ? 'tab-active' : ''}`}
+          onClick={() => handleTabChange('rejected')}
         >
           Rejected
         </button>
         <button
-          className={`tab ${activeTab === "blocked" ? "tab-active" : ""}`}
-          onClick={() => handleTabChange("blocked")}
+          className={`tab ${activeTab === 'blocked' ? 'tab-active' : ''}`}
+          onClick={() => handleTabChange('blocked')}
         >
           Blocked
         </button>
         <button
-          className={`tab ${activeTab === "nonBlocked" ? "tab-active" : ""}`}
-          onClick={() => handleTabChange("nonBlocked")}
+          className={`tab ${activeTab === 'nonBlocked' ? 'tab-active' : ''}`}
+          onClick={() => handleTabChange('nonBlocked')}
         >
           Non-Blocked
         </button>
       </div>
 
-      {/* Loading state - Using Daisy UI skeleton */}
       {loading ? (
         <div className="flex flex-col items-center justify-center py-10">
           <div className="flex flex-col w-full gap-4">
@@ -158,7 +162,6 @@ const ServiceProviderListing = () => {
         </div>
       ) : (
         <>
-          {/* Service providers listing */}
           {filteredServiceProviders.length === 0 ? (
             <div className="alert alert-info">
               <svg
@@ -182,12 +185,12 @@ const ServiceProviderListing = () => {
                 <div key={provider._id} className="shadow-xl card bg-base-100">
                   <figure className="relative">
                     <img
-                      src={provider.profileImage || "/default-profile.png"}
+                      src={provider.profileImage || '/default-profile.png'}
                       alt={provider.serviceProviderName}
                       className="object-cover w-full h-48"
                     />
                     <div className="absolute flex flex-col gap-1 top-2 right-2">
-                      {provider.isVerified === "verified" && (
+                      {provider.isVerified === 'verified' && (
                         <div className="gap-1 badge badge-success">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -206,7 +209,7 @@ const ServiceProviderListing = () => {
                           Verified
                         </div>
                       )}
-                      {provider.isVerified === "rejected" && (
+                      {provider.isVerified === 'rejected' && (
                         <div className="gap-1 badge badge-error">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -216,11 +219,7 @@ const ServiceProviderListing = () => {
                             stroke="currentColor"
                             className="w-4 h-4"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M6 18 18 6M6 6l12 12"
-                            />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                           </svg>
                           Rejected
                         </div>
@@ -248,30 +247,21 @@ const ServiceProviderListing = () => {
                   </figure>
 
                   <div className="card-body">
-                    <h2 className="card-title">
-                      {provider.serviceProviderName}
-                    </h2>
-                    <p className="text-sm text-base-content/70 line-clamp-2">
-                      {provider.description}
-                    </p>
+                    <h2 className="card-title">{provider.serviceProviderName}</h2>
+                    <p className="text-sm text-base-content/70 line-clamp-2">{provider.description}</p>
 
                     <div className="my-1 divider"></div>
 
                     <div className="mb-2">
                       <h3 className="mb-1 text-sm font-medium">Services:</h3>
                       <div className="flex flex-wrap gap-1">
-                        {provider.services.slice(0, 3).map((service, index:number) => (
-                          <span
-                            key={index}
-                            className="badge badge-primary badge-outline"
-                          >
+                        {provider.services.slice(0, 3).map((service, index: number) => (
+                          <span key={index} className="badge badge-primary badge-outline">
                             {service}
                           </span>
                         ))}
                         {provider.services.length > 3 && (
-                          <span className="badge badge-ghost">
-                            +{provider.services.length - 3} more
-                          </span>
+                          <span className="badge badge-ghost">+{provider.services.length - 3} more</span>
                         )}
                       </div>
                     </div>
@@ -292,9 +282,7 @@ const ServiceProviderListing = () => {
                             d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                           ></path>
                         </svg>
-                        <span className="truncate">
-                          {provider.serviceProviderEmail}
-                        </span>
+                        <span className="truncate">{provider.serviceProviderEmail}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <svg
@@ -334,9 +322,7 @@ const ServiceProviderListing = () => {
                             d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                           ></path>
                         </svg>
-                        <span className="truncate">
-                          {provider.location.address}
-                        </span>
+                        <span className="truncate">{provider.location.address}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <svg
@@ -375,16 +361,9 @@ const ServiceProviderListing = () => {
                               viewBox="0 0 24 24"
                               stroke="currentColor"
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 13l4 4L19 7"
-                              />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
-                            <span className="font-medium">
-                              Unblock Provider
-                            </span>
+                            <span className="font-medium">Unblock Provider</span>
                           </button>
                         )}
 
@@ -412,26 +391,21 @@ const ServiceProviderListing = () => {
                           </button>
                         )}
                       </li>
-                     
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           )}
-
-          
         </>
       )}
 
-
-
       <Pagination
-      crrPage={crrPage}
-      dataLimit={dataLimit}
-      totaldata={totalData}
-      fetchData={(p: number) => getAllServiceProviders(p)}
-    />
+        crrPage={crrPage}
+        dataLimit={dataLimit}
+        totaldata={totalData}
+        fetchData={(p: number) => getAllServiceProviders(p)}
+      />
     </div>
   );
 };
