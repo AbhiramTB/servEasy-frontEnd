@@ -17,7 +17,7 @@ const Allservices = () => {
   const [totalData, setTotalData] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const dataLimit = 4;
+  const dataLimit = 6;
   const [details, setDetails] = useState<null | object>();
   const getServices = useCallback(
     async (page: number,searchVal?:string) => {
@@ -274,7 +274,7 @@ const Allservices = () => {
         crrPage={crrPage}
         dataLimit={dataLimit}
         totaldata={totalData}
-        fetchData={(p: number) => getServices(p)}
+        fetchData={(p: number) => getServices(p,searchQuery)}
       />
     </div>
   );

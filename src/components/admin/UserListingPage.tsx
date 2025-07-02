@@ -158,7 +158,7 @@ const UserListingPage: React.FC = () => {
         crrPage={crrPage}
         dataLimit={dataLimit}
         totaldata={totalData}
-        fetchData={(p: number) => getAllUser(p)}
+        fetchData={(p: number) => getAllUser(p,searchQuery)}
       />
     </div>
   );

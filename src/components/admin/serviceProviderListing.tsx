@@ -404,7 +404,7 @@ const ServiceProviderListing = () => {
         crrPage={crrPage}
         dataLimit={dataLimit}
         totaldata={totalData}
-        fetchData={(p: number) => getAllServiceProviders(p)}
+        fetchData={(p: number) => getAllServiceProviders(p,searchQuery)}
       />
     </div>
   );
