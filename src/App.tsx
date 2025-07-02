@@ -47,7 +47,7 @@ import NotFound from './components/ui/NotFound.tsx';
 import SlotPage from './components/ServiceProvider/SlotManagement/SlotPage.tsx';
 
 function App() {
-  const { userAccessToken=true, adminAccessToken } = useAuth();
+  const { userAccessToken = true, adminAccessToken } = useAuth();
 
   return (
     <>
@@ -59,15 +59,15 @@ function App() {
           <Route path="/signIn" element={userAccessToken ? <Navigate to="/" replace /> : <AuthPage />} />
           <Route path="otp" element={<Otp />} />
 
-      <Route path="/" element={<Body />}>
+          <Route path="/" element={<Body />}>
             <Route index element={<HomePage />} />
             <Route path="/serveasy" element={<HomePage />} />
-         <Route path="myprofile" element={<SidebarLayout />}>
-                <Route index element={<UserProfile />} />
-                <Route path="appearance" element={<Appearance />} />
-                <Route path="booked-services/" element={<BookedService />} />
-         <Route path="aboutus" element={<AboutUs />} />
-           </Route>
+            <Route path="myprofile" element={<SidebarLayout />}>
+              <Route index element={<UserProfile />} />
+              <Route path="appearance" element={<Appearance />} />
+              <Route path="booked-services/" element={<BookedService />} />
+              <Route path="aboutus" element={<AboutUs />} />
+            </Route>
 
             <Route path="/booked-services" element={<BookedService />} />
             <Route path="/service-details/:id" element={<SingleServiceCard />} />
@@ -78,35 +78,30 @@ function App() {
             <Route path="/booked-service-online/:id" element={<ServiceBookingDetailsOnline />} />
             <Route path="chat/:serviceProviderId" element={<Chat />} />
             <Route path="chats" element={<ChatsUser />}></Route>
+          </Route>
 
-      </Route>
-
-      <Route element={<ProtectedRoute />}>
+          <Route element={<ProtectedRoute />}>
             <Route path="/service-provider" element={<ServiceProviderLayout />}>
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="register" element={<Register />} />
               <Route path="booked-services" element={<BookedServiceServiceProvider />} />
               <Route path="chats" element={<ChatUI />}></Route>
               <Route path="video-call/:userId" element={<ServiceProviderVideoCall />}></Route>
-
               <Route path="chat/:userid" element={<ChatServiceProvider />} />
               <Route path="booked-services/:id" element={<ServiceBookingManage />} />
               <Route path="myprofile" element={<Myprofile />} />
-
               <Route path="booked-services-online/:id" element={<OnlineBookingManagement />} />
-
               <Route path="service-management" element={<ServiceManagement />} />
               <Route path="payment-management" element={<PaymentManagement />} />
               <Route path="slot-management" element={<SlotPage />} />
             </Route>
-      </Route>
+          </Route>
 
           <Route
             path="admin/sigin"
             element={adminAccessToken ? <Navigate to={'/admin/home'} replace /> : <AdminSignIn />}
           />
-
-      <Route element={<AdminProtectedRoute />}>
+          <Route element={<AdminProtectedRoute />}>
             <Route path="/admin" element={<AdminLayout />}>
               <Route path="home" element={<AdminHome />} />
               <Route path="users" element={<UserListingPage />} />
@@ -117,7 +112,7 @@ function App() {
               <Route path="category-management" element={<CategoryList />} />
               <Route path="site-settings" element={<SiteSettingsPage />} />
             </Route>
-      </Route>
+          </Route>
 
           <Route path="*" element={<NotFound />} />
         </Routes>
