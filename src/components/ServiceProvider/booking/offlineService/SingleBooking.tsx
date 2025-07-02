@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getRequest, postRequest, putRequest } from '../../../../utils/makeRequestInstance';
 import { HotToastError, HotToastSuccess } from '../../../../utils/notificationToast';
 import { Toaster } from 'react-hot-toast';
@@ -59,6 +59,7 @@ interface BookingData {
     serviceType: string;
   };
   user: {
+    _id: string;
     userName: string;
     profileImage: string;
     email: string;
@@ -81,7 +82,7 @@ const ServiceProviderBookingManage = () => {
   const [cancelReason, setCancelReason] = useState<string>('');
   const [newStatus, setNewStatus] = useState<string>('');
   const [invoiceFiles, setInvoiceFiles] = useState<File[]>([]);
-    const [reason, setReason] = useState('');
+  const [reason, setReason] = useState('');
   const [payment, setPayment] = useState<Ipayment>({
     serviceCost: 0,
     materialCost: 0,
@@ -122,7 +123,7 @@ const ServiceProviderBookingManage = () => {
     }
   };
 
-  const handleAcceptBooking = async (action:"accept"|"reschedule") => {
+  const handleAcceptBooking = async (action: 'accept' | 'reschedule') => {
     try {
       if (!estimatedTime) {
         HotToastError('Please provide an estimated service time');
@@ -135,26 +136,24 @@ const ServiceProviderBookingManage = () => {
         HotToastError('Please select a future date and time.');
         return;
       }
-   let res
-      if(action=='reschedule'){
-         res = await putRequest(`service/service-provider/bookings/${id}/accept`, {
-        estimatedServiceTime: estimatedTime,
-        serviceStatus: bookedService.serviceStatus,
-        reschedule:true,
-        reschedReason:reason,
-      });
-      }else{
-           res = await putRequest(`service/service-provider/bookings/${id}/accept`, {
-        estimatedServiceTime: estimatedTime,
-        serviceStatus: 'confirmed',
-      });
-
+      let res;
+      if (action == 'reschedule') {
+        res = await putRequest(`service/service-provider/bookings/${id}/accept`, {
+          estimatedServiceTime: estimatedTime,
+          serviceStatus: bookedService.serviceStatus,
+          reschedule: true,
+          reschedReason: reason,
+        });
+      } else {
+        res = await putRequest(`service/service-provider/bookings/${id}/accept`, {
+          estimatedServiceTime: estimatedTime,
+          serviceStatus: 'confirmed',
+          reschedule:false
+        });
       }
 
-    
-
       if (res.status === 200) {
-        const message= action=='accept'?'Booking accepted successfully':"booking reschedule  successfully"
+        const message = action == 'accept' ? 'Booking accepted successfully' : 'booking reschedule  successfully';
         HotToastSuccess(message);
         setShowAcceptModal(false);
         getBookedService(id as string);
@@ -269,9 +268,6 @@ const ServiceProviderBookingManage = () => {
     }
   };
 
-
-
-  
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-base-200">
@@ -307,7 +303,7 @@ const ServiceProviderBookingManage = () => {
   );
 
   return (
-    <div className="container max-w-4xl min-h-screen p-4 mx-auto bg-base-200">
+    <div className="container min-h-screen p-2 mx-auto border border-primary/20 bg-primary/5">
       <Toaster></Toaster>
 
       <StatusAlert status={bookedService.serviceStatus} cancellationReason={bookedService.cancellationReason} />
@@ -346,7 +342,6 @@ const ServiceProviderBookingManage = () => {
           />
 
           <div className="flex flex-wrap justify-center gap-2 mt-4">
-            {/* Pending Actions */}
             {isPending && (
               <>
                 <button className="btn btn-success" onClick={() => setShowAcceptModal(true)}>
@@ -358,17 +353,19 @@ const ServiceProviderBookingManage = () => {
               </>
             )}
 
-            {/* Active Booking Actions */}
-            {!isCancelled && !isPending && (
+            {isConfirmed && (
               <>
                 <button className="btn btn-primary" onClick={() => setShowStatusModal(true)}>
                   Update Status
                 </button>
-                <button className="btn btn-secondary">Contact Customer</button>
               </>
             )}
 
-            {!isCancelled && !isPending && (
+            <Link to={'/service-provider/chat/' + user._id}>
+              <button className="btn btn-secondary">Contact Customer</button>
+            </Link>
+
+            {isConfirmed && (
               <>
                 <button className="btn btn-success" onClick={() => setRescheduleModal(true)}>
                   reschedule your booking
@@ -382,14 +379,12 @@ const ServiceProviderBookingManage = () => {
               </button>
             )}
 
-            {/* Request Payment - when confirmed or in progress */}
-            {(isConfirmed || isInProgress) && (
+            {isInProgress && (
               <button className="w-full mt-4 btn btn-warning" onClick={() => setPaymentForm(true)}>
                 Request Payment
               </button>
             )}
 
-            {/* Payment Modal */}
             {paymentForm && (
               <PaymentModal
                 payment={payment}
@@ -409,7 +404,7 @@ const ServiceProviderBookingManage = () => {
               isCancelled={isCancelled ? true : false}
             />
           </div>
-          <div className="mb-4 shadow card bg-base-100">
+          <div className="mb-4 ">
             <ServiceAddressCard address={bookedService.address} liveLocation={bookedService.liveLocation} />
           </div>
 
@@ -422,22 +417,21 @@ const ServiceProviderBookingManage = () => {
         estimatedTime={estimatedTime}
         max={max}
         min={min}
-        handleAcceptBooking={()=>handleAcceptBooking("accept")}
+        handleAcceptBooking={() => handleAcceptBooking('accept')}
         setEstimatedTime={setEstimatedTime}
         setShow={setShowAcceptModal}
         show={showAcceptModal}
       />
 
-
-       <RescheduleBookingModal
-          estimatedTime={estimatedTime}
-          setEstimatedTime={setEstimatedTime}
-          setShowAcceptModal={setRescheduleModal}
-          handleAcceptBooking={()=>handleAcceptBooking("reschedule")}
-          reason={reason}
-          setReason={setReason}
-          show={rescheduleModal}
-        />
+      <RescheduleBookingModal
+        estimatedTime={estimatedTime}
+        setEstimatedTime={setEstimatedTime}
+        setShowAcceptModal={setRescheduleModal}
+        handleAcceptBooking={() => handleAcceptBooking('reschedule')}
+        reason={reason}
+        setReason={setReason}
+        show={rescheduleModal}
+      />
 
       <CancelBookingModal
         show={showCancelModal}
