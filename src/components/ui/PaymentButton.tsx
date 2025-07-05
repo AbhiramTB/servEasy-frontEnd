@@ -64,11 +64,13 @@ const RazorpayButton = ({ serviceid, reloadData}: PaymentProps) => {
 
       const rzp = new (window as any).Razorpay(options);
       rzp.open();
-    } catch (error) {
-      //   console.error("Error during payment:", error);
-      console.log(error);
+    } catch (error:any) {
+  
+      
+      if(error.response.data.message){
+        HotToastError(error.response.data.message)
+      }
 
-      alert(error);
     }
   };
 
