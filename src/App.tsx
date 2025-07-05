@@ -45,6 +45,7 @@ import Myprofile from './components/ServiceProvider/service/profile/Myprofile.ts
 import { useAuth } from './hooks/useAuth.tsx';
 import NotFound from './components/ui/NotFound.tsx';
 import SlotPage from './components/ServiceProvider/SlotManagement/SlotPage.tsx';
+import AdminLogs from './components/admin/AdminLogs.tsx';
 
 function App() {
   const { userAccessToken = true, adminAccessToken } = useAuth();
@@ -111,6 +112,7 @@ function App() {
               <Route path="booking-management" element={<BookingManagement />}></Route>
               <Route path="category-management" element={<CategoryList />} />
               <Route path="site-settings" element={<SiteSettingsPage />} />
+               <Route path='logs' element={<AdminLogs/>}/>
             </Route>
           </Route>
 

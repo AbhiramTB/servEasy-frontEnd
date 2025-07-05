@@ -67,8 +67,7 @@ interface ServiceProvider {
   location: Location;
   isVerified: string;
   isBlocked: boolean;
-  userId:string
-
+  userId: string;
 }
 
 interface BookedService {
@@ -158,8 +157,6 @@ const ServiceBookingDetails = () => {
     }
   };
 
-  console.log(bookingData);
-  console.log(review);
 
   if (loading) {
     return (
@@ -208,8 +205,6 @@ const ServiceBookingDetails = () => {
     hour: '2-digit',
     minute: '2-digit',
   });
-
-
 
   const isCancelled = bookedService.serviceStatus === 'cancelled';
   const isCompleted = bookedService.serviceStatus === 'completed';
@@ -320,7 +315,6 @@ const ServiceBookingDetails = () => {
                     <span>Service has been cancelled</span>
                   </div>
                 ) : (
-                 
                   <BookingStepper status={bookedService.serviceStatus} />
                 )}
               </div>
@@ -488,7 +482,6 @@ const ServiceBookingDetails = () => {
                 </div>
               </div>
 
-              
               {/* Action Buttons */}
               <div className="justify-end mt-8 card-actions">
                 {bookedService.serviceStatus === 'pending' ||
@@ -497,12 +490,16 @@ const ServiceBookingDetails = () => {
                       Cancel Booking
                     </button>
                   ))}
-                {bookingData.bookedService.serviceBills && bookingData.bookedService.serviceBills?.length>1&&(
+                {bookingData.bookedService.serviceBills && bookingData.bookedService.serviceBills?.length > 1 && (
                   <button onClick={() => setShowBills(true)} className="btn btn-primary">
                     show bills
                   </button>
                 )}
-                {!isCancelled &&  <Link to={"/chat/"+serviceProvider.userId}><button className="btn btn-primary">Contact Service Provider</button> </Link>}
+                {!isCancelled && (
+                  <Link to={'/chat/' + serviceProvider.userId}>
+                    <button className="btn btn-primary">Contact Service Provider</button>{' '}
+                  </Link>
+                )}
 
                 {isCompleted && (
                   <button
@@ -519,15 +516,13 @@ const ServiceBookingDetails = () => {
           </div>
         </div>
 
-     
-
-      <CancelBookingModal
-        show={showCancelModal}
-        setShow={setShowCancelModal}
-        cancelReason={cancelReason}
-        setCancelReason={setCancelReason}
-        handleCancelBooking={handleCancelBooking}
-      />
+        <CancelBookingModal
+          show={showCancelModal}
+          setShow={setShowCancelModal}
+          cancelReason={cancelReason}
+          setCancelReason={setCancelReason}
+          handleCancelBooking={handleCancelBooking}
+        />
 
         {download && <ServeasyInvoiceDownloader bookingData={bookingData} />}
 
@@ -558,14 +553,15 @@ const ServiceBookingDetails = () => {
                     <span>Total</span>
                     <span>₹{bookedService.payment.total}</span>
                   </div>
-                  {bookedService.payment.convenienceFee&&bookedService.payment.convenienceFee>0&&
-                  <div className="flex justify-between mt-1 text-xs opacity-75">
-                    <span>convenience Fee (10%)</span>
-                    <span>₹{bookedService.payment?.convenienceFee} </span>
-                  </div>}
+                  {bookedService.payment.convenienceFee && bookedService.payment.convenienceFee > 0 && (
+                    <div className="flex justify-between mt-1 text-xs opacity-75">
+                      <span>convenience Fee (10%)</span>
+                      <span>₹{bookedService.payment?.convenienceFee} </span>
+                    </div>
+                  )}
                 </div>
               </div>
-              
+
               {id && bookedService.paymentStatus !== 'completed' && (
                 <RazorpayButton
                   serviceid={id}
@@ -583,7 +579,7 @@ const ServiceBookingDetails = () => {
             </div>
           )}
 
-          <div className="mt-5 bg-base-200"  >
+          <div className="mt-5 bg-base-200">
             <BookingHistoryList history={bookedService.bookingHistory ?? []} />
           </div>
 

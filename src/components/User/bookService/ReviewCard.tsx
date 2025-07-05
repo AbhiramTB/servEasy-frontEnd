@@ -4,15 +4,9 @@ import { HotToastSuccess, HotToastError } from '../../../utils/notificationToast
 import { Toaster } from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
+import { IReview } from '../../../utils/types/IReview';
 
-interface IReview {
-  _id: string;
-  serviceId: string;
-  bookingId: string;
-  rating: number;
-  comment: string;
-  createdAt?: string;
-}
+
 
 interface IReviewCardProp {
   bookedServiceId: string;
@@ -53,16 +47,6 @@ const ReviewCard: React.FC<IReviewCardProp> = ({ bookedServiceId, serviceId, rev
     }
   };
 
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
-
   return (
     <div className="mt-6 shadow-xl card bg-base-100">
       <Toaster />
@@ -89,9 +73,6 @@ const ReviewCard: React.FC<IReviewCardProp> = ({ bookedServiceId, serviceId, rev
                   ))}
                 </div>
                 <p className="text-gray-700">{review?.comment || comment}</p>
-                {review?.createdAt && (
-                  <p className="mt-2 text-xs text-gray-500">Submitted on {formatDate(review.createdAt)}</p>
-                )}
               </div>
             )}
           </div>
