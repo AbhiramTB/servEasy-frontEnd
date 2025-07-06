@@ -64,6 +64,7 @@ export interface ServiceProvider {
 const initialState: UserState = {
   userName: "",
   password: "",
+  profileImage:"",
   isVerified: false,
   serviceProviders: [],
   users: [],
@@ -93,7 +94,7 @@ const adminSlice = createSlice({
       state.serviceProviders = action.payload;
     },
     addProfile: (state, action: PayloadAction<User>) => {
-      const { userName, email, phone, password, isVerified, isBlocked } =
+      const { userName, email, phone, password, isVerified, isBlocked,profileImage } =
         action.payload;
       state.userName = userName;
       state.email = email;
@@ -101,6 +102,7 @@ const adminSlice = createSlice({
       state.password = password;
       state.isVerified = isVerified;
       state.isBlocked = isBlocked;
+      state.profileImage=profileImage
     },
     addUsers: (state, action: PayloadAction<User[]>) => {
       state.users = action.payload;

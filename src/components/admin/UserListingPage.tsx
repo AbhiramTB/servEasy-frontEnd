@@ -42,7 +42,7 @@ const UserListingPage: React.FC = () => {
         setLoading(false);
       }
     },
-    [dispatch,dataLimit]
+    [dispatch, dataLimit]
   );
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const UserListingPage: React.FC = () => {
   }, [getAllUser]);
 
   useEffect(() => {
-    getAllUser(0,searchQuery);
+    getAllUser(0, searchQuery);
   }, [searchQuery]);
 
   const users = useSelector((state: RootState) => state.admin.users);
@@ -59,8 +59,10 @@ const UserListingPage: React.FC = () => {
     console.log(`Blocking user with ID: ${userId} ${action}`);
     const data = { userId: userId, action: action };
     const res = await adminPatchRequest(apiEndPointAdmin.blockUnblockUser, data);
-    HotToastSuccess(action + 'user successfuly');
-    dispatch(addUsers(res.data.data));
+    if (res.status === 200) {
+      HotToastSuccess(action + 'user successfuly');
+      dispatch(addUsers(users.map(i => (i._id == userId ? { ...i, isBlocked: !i.isBlocked } : i))));
+    }
   };
 
   const handleViewProfile = (userId: string) => {
@@ -85,7 +87,7 @@ const UserListingPage: React.FC = () => {
           </div>
 
           <div className="flex justify-end mt-3">
-            <SearchComponent setSearch={setSearchQuery}  searchVal={searchQuery}/>
+            <SearchComponent setSearch={setSearchQuery} searchVal={searchQuery} />
           </div>
         </div>
 
@@ -110,13 +112,6 @@ const UserListingPage: React.FC = () => {
                       <div className="ml-4">
                         <h3 className="text-lg font-semibold">{user.userName || 'Unknown'}</h3>
                         <div className="flex flex-wrap gap-1 mt-1">
-                          <span
-                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                              user.isVerified ? 'bg-success/20 text-success' : 'bg-error/20 text-error'
-                            }`}
-                          >
-                            {user.isVerified ? 'Verified' : 'Unverified'}
-                          </span>
                           {user.isAdmin === true && (
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-warning/20 text-warning">
                               admin
@@ -127,7 +122,7 @@ const UserListingPage: React.FC = () => {
                     </div>
                     <div className="space-y-3 text-sm text-base-content/80">
                       <p>Email: {user.email}</p>
-                      <p>Phone: {user.phone}</p>
+                      {user.phone && <p>Phone: {user.phone}</p>}
                     </div>
                   </div>
                   <div className="flex border-t border-base-300">
@@ -158,7 +153,7 @@ const UserListingPage: React.FC = () => {
         crrPage={crrPage}
         dataLimit={dataLimit}
         totaldata={totalData}
-        fetchData={(p: number) => getAllUser(p,searchQuery)}
+        fetchData={(p: number) => getAllUser(p, searchQuery)}
       />
     </div>
   );

@@ -1,15 +1,11 @@
-import React, { useEffect, useCallback, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  addServiceProviders,
-  ServiceProvider,
-} from "../../redux/slices/adminSlice";
-import { adminGetRequest, adminPatchRequest } from "../../utils/AxiosAdmin";
-import { apiEndPointAdmin } from "../../utils/constant";
-import { RootState } from "../../redux/store";
-import { HotToastSuccess } from "../../utils/notificationToast";
-import { Toaster } from "react-hot-toast";
-import DocumentViewer from "./DocumentViewer";
+import React, { useEffect, useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { ServiceProvider } from '../../redux/slices/adminSlice';
+import { adminGetRequest, adminPatchRequest } from '../../utils/AxiosAdmin';
+import { apiEndPointAdmin } from '../../utils/constant';
+import { HotToastSuccess } from '../../utils/notificationToast';
+import { Toaster } from 'react-hot-toast';
+import DocumentViewer from './DocumentViewer';
 
 export interface Location {
   address: string;
@@ -23,18 +19,14 @@ interface RejectModalProps {
   onSubmit: (reason: string) => void;
 }
 
-const RejectModal: React.FC<RejectModalProps> = ({
-  isOpen,
-  onClose,
-  onSubmit,
-}) => {
-  const [reason, setReason] = useState<string>("");
+const RejectModal: React.FC<RejectModalProps> = ({ isOpen, onClose, onSubmit }) => {
+  const [reason, setReason] = useState<string>('');
 
   if (!isOpen) return null;
 
   const handleSubmit = () => {
     onSubmit(reason);
-    setReason("");
+    setReason('');
   };
 
   return (
@@ -45,13 +37,10 @@ const RejectModal: React.FC<RejectModalProps> = ({
           className="w-full p-3 mb-4 text-white bg-gray-700 rounded-md min-h-32"
           placeholder="Please provide a reason for rejection..."
           value={reason}
-          onChange={(e) => setReason(e.target.value)}
+          onChange={e => setReason(e.target.value)}
         />
         <div className="flex justify-end space-x-3">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 text-gray-300 bg-gray-700 rounded-md hover:bg-gray-600"
-          >
+          <button onClick={onClose} className="px-4 py-2 text-gray-300 bg-gray-700 rounded-md hover:bg-gray-600">
             Cancel
           </button>
           <button
@@ -72,25 +61,24 @@ const ServiceProviderVerification: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [isRejectModalOpen, setIsRejectModalOpen] = useState<boolean>(false);
-  const [selectedProviderId, setSelectedProviderId] = useState<string | null>(
-    null
-  );
+  const [selectedProviderId, setSelectedProviderId] = useState<string | null>(null);
+  const [serviceProviders, setServiceProviders] = useState([]);
   const [imagePreview, setImagePreview] = useState<{
     open: boolean;
     url: string;
   }>({
     open: false,
-    url: "",
+    url: '',
   });
 
   const getAllServiceProviders = useCallback(async () => {
     try {
-      const res = await adminGetRequest(apiEndPointAdmin.serviceProvider);
+      const res = await adminGetRequest(apiEndPointAdmin.serviceProvider, { params: { verification: true } });
       if (res.data && res.data.data) {
-        dispatch(addServiceProviders(res.data.data));
+        setServiceProviders(res.data.data);
       }
     } catch (error) {
-      console.error("Error fetching service providers:", error);
+      console.error('Error fetching service providers:', error);
     } finally {
       setLoading(false);
     }
@@ -100,23 +88,16 @@ const ServiceProviderVerification: React.FC = () => {
     getAllServiceProviders();
   }, [getAllServiceProviders]);
 
-  const serviceProviders = useSelector(
-    (state: RootState) => state.admin.serviceProviders
-  );
-
   const handleVerify = async (providerId: string) => {
     try {
-      const data = { serviceProviderId: providerId, action: "verify" };
-      const res = await adminPatchRequest(
-        apiEndPointAdmin.serviceProviderVerify,
-        data
-      );
+      const data = { serviceProviderId: providerId, action: 'verify' };
+      const res = await adminPatchRequest(apiEndPointAdmin.serviceProviderVerify, data);
       console.log(res.data.data);
 
-      HotToastSuccess("Service provider verified successfully");
+      HotToastSuccess('Service provider verified successfully');
       getAllServiceProviders();
     } catch (error) {
-      console.error("Error verifying service provider:", error);
+      console.error('Error verifying service provider:', error);
     }
   };
 
@@ -131,19 +112,16 @@ const ServiceProviderVerification: React.FC = () => {
     try {
       const data = {
         serviceProviderId: selectedProviderId,
-        action: "reject",
+        action: 'reject',
         reason: reason,
       };
-       await adminPatchRequest(
-        apiEndPointAdmin.serviceProviderReject,
-        data
-      );
-      HotToastSuccess("Service provider rejected");
+      await adminPatchRequest(apiEndPointAdmin.serviceProviderReject, data);
+      HotToastSuccess('Service provider rejected');
       getAllServiceProviders();
       setIsRejectModalOpen(false);
       setSelectedProviderId(null);
     } catch (error) {
-      console.error("Error rejecting service provider:", error);
+      console.error('Error rejecting service provider:', error);
     }
   };
 
@@ -156,15 +134,15 @@ const ServiceProviderVerification: React.FC = () => {
   };
 
   const closeImagePreview = () => {
-    setImagePreview({ open: false, url: "" });
+    setImagePreview({ open: false, url: '' });
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
     });
   };
 
@@ -176,10 +154,7 @@ const ServiceProviderVerification: React.FC = () => {
       {imagePreview.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
           <div className="relative max-w-4xl max-h-screen p-4">
-            <button
-              onClick={closeImagePreview}
-              className="absolute top-0 right-0 p-2 m-2 rounded-full bg-base-200"
-            >
+            <button onClick={closeImagePreview} className="absolute top-0 right-0 p-2 m-2 rounded-full bg-base-200">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-6 h-6"
@@ -187,36 +162,21 @@ const ServiceProviderVerification: React.FC = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-            <img
-              src={imagePreview.url}
-              alt="Preview"
-              className="object-contain max-w-full max-h-screen"
-            />
+            <img src={imagePreview.url} alt="Preview" className="object-contain max-w-full max-h-screen" />
           </div>
         </div>
       )}
 
       {/* Reject Modal */}
-      <RejectModal
-        isOpen={isRejectModalOpen}
-        onClose={() => setIsRejectModalOpen(false)}
-        onSubmit={handleReject}
-      />
+      <RejectModal isOpen={isRejectModalOpen} onClose={() => setIsRejectModalOpen(false)} onSubmit={handleReject} />
 
       <main className="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="mb-6">
           <h1 className="text-3xl font-bold">Service Provider Verification</h1>
-          <p className="mt-1 text-base-content/70">
-            Review and verify service provider applications
-          </p>
+          <p className="mt-1 text-base-content/70">Review and verify service provider applications</p>
         </div>
 
         {loading ? (
@@ -237,9 +197,7 @@ const ServiceProviderVerification: React.FC = () => {
                       <div className="flex items-start md:w-1/3">
                         <div
                           className="relative w-20 h-20 overflow-hidden rounded-lg cursor-pointer"
-                          onClick={() =>
-                            handleImagePreview(provider.profileImage)
-                          }
+                          onClick={() => handleImagePreview(provider.profileImage)}
                         >
                           <img
                             src={provider.profileImage}
@@ -270,32 +228,28 @@ const ServiceProviderVerification: React.FC = () => {
                           </div>
                         </div>
                         <div className="ml-4">
-                          <h3 className="text-xl font-semibold">
-                            {provider.serviceProviderName}
-                          </h3>
+                          <h3 className="text-xl font-semibold">{provider.serviceProviderName}</h3>
                           <div className="flex flex-wrap gap-1 mt-1">
                             <span
                               className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                provider.isVerified === "verified"
-                                  ? "bg-success/20 text-success"
-                                  : provider.isVerified === "rejected"
-                                    ? "bg-error/20 text-error"
-                                    : "bg-warning/20 text-warning"
+                                provider.isVerified === 'verified'
+                                  ? 'bg-success/20 text-success'
+                                  : provider.isVerified === 'rejected'
+                                    ? 'bg-error/20 text-error'
+                                    : 'bg-warning/20 text-warning'
                               }`}
                             >
-                              {provider.isVerified === "verified"
-                                ? "Verified"
-                                : provider.isVerified === "rejected"
-                                  ? "Rejected"
-                                  : "Pending"}
+                              {provider.isVerified === 'verified'
+                                ? 'Verified'
+                                : provider.isVerified === 'rejected'
+                                  ? 'Rejected'
+                                  : 'Pending'}
                             </span>
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/20 text-primary">
                               {provider.experience} Years Exp
                             </span>
                           </div>
-                          <p className="mt-1 text-base-content/70">
-                            {provider.location.address}
-                          </p>
+                          <p className="mt-1 text-base-content/70">{provider.location.address}</p>
                         </div>
                       </div>
 
@@ -358,7 +312,7 @@ const ServiceProviderVerification: React.FC = () => {
 
                       {/* Actions */}
                       <div className="flex flex-col gap-2 mt-4 md:mt-0 md:w-1/3 md:items-end">
-                        {provider.isVerified === "rejected" && (
+                        {provider.isVerified === 'rejected' && (
                           <button
                             onClick={() => handleVerify(provider._id)}
                             className="px-4 py-2 transition rounded-md text-success-content bg-success hover:bg-success-focus"
@@ -366,7 +320,7 @@ const ServiceProviderVerification: React.FC = () => {
                             Verify Provider
                           </button>
                         )}
-                        {provider.isVerified === "pending" && (
+                        {provider.isVerified === 'pending' && (
                           <>
                             <button
                               onClick={() => handleVerify(provider._id)}
@@ -386,9 +340,7 @@ const ServiceProviderVerification: React.FC = () => {
                           onClick={() => handleToggleExpand(provider._id)}
                           className="px-4 py-2 transition rounded-md bg-base-300 hover:bg-base-300/80"
                         >
-                          {expandedId === provider._id
-                            ? "Hide Details"
-                            : "View Details"}
+                          {expandedId === provider._id ? 'Hide Details' : 'View Details'}
                         </button>
                       </div>
                     </div>
@@ -399,14 +351,10 @@ const ServiceProviderVerification: React.FC = () => {
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                           {/* Services & Skills */}
                           <div>
-                            <h4 className="mb-2 text-lg font-medium">
-                              Services & Skills
-                            </h4>
+                            <h4 className="mb-2 text-lg font-medium">Services & Skills</h4>
                             <div className="space-y-3">
                               <div>
-                                <span className="text-sm text-base-content/70">
-                                  Services:
-                                </span>
+                                <span className="text-sm text-base-content/70">Services:</span>
                                 <div className="flex flex-wrap gap-1 mt-1">
                                   {provider.services.map((service, idx) => (
                                     <span
@@ -419,9 +367,7 @@ const ServiceProviderVerification: React.FC = () => {
                                 </div>
                               </div>
                               <div>
-                                <span className="text-sm text-base-content/70">
-                                  Skills:
-                                </span>
+                                <span className="text-sm text-base-content/70">Skills:</span>
                                 <div className="flex flex-wrap gap-1 mt-1">
                                   {provider.skills.map((skill: any, idx) => (
                                     <span
@@ -438,24 +384,14 @@ const ServiceProviderVerification: React.FC = () => {
 
                           {/* Description */}
                           <div>
-                            <h4 className="mb-2 text-lg font-medium">
-                              Description
-                            </h4>
-                            <p className="text-sm">
-                              {provider.description ||
-                                "No description provided."}
-                            </p>
+                            <h4 className="mb-2 text-lg font-medium">Description</h4>
+                            <p className="text-sm">{provider.description || 'No description provided.'}</p>
                           </div>
 
                           {/* Documents - Using the new DocumentViewer component */}
                           <div>
-                            <h4 className="mb-2 text-lg font-medium">
-                              Verification Documents
-                            </h4>
-                            <DocumentViewer
-                              documents={provider.document}
-                              onImagePreview={handleImagePreview}
-                            />
+                            <h4 className="mb-2 text-lg font-medium">Verification Documents</h4>
+                            <DocumentViewer documents={provider.document} onImagePreview={handleImagePreview} />
                           </div>
                         </div>
                       </div>
