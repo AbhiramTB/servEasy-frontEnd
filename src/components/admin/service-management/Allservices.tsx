@@ -133,10 +133,10 @@ const Allservices = () => {
                   <span className="text-sm truncate text-base-content/70">{service.location.address}</span>
                 </div>
 
-                <div className="mb-4">
+                {/* <div className="mb-4">
                   <span className="text-sm text-base-content/70">Category: </span>
                   <span className="text-sm font-medium text-base-content">{service.category}</span>
-                </div>
+                </div> */}
 
                 {/* Price and Provider Info */}
                 <div className="flex items-center justify-between pt-2 border-t border-base-300">
