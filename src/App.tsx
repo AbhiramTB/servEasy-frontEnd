@@ -99,7 +99,7 @@ function App() {
           </Route>
 
           <Route
-            path="admin/sigin"
+            path="admin/signin"
             element={adminAccessToken ? <Navigate to={'/admin/home'} replace /> : <AdminSignIn />}
           />
           <Route element={<AdminProtectedRoute />}>

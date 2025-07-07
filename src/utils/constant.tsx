@@ -88,7 +88,7 @@ export const routes = {
   home: "/",
 };
 export const adminRoutes = {
-  AdminSignIn: "/admin/sigin",
+  AdminSignIn: "/admin/signin",
 };
 
 export const paymentRoutes = {
