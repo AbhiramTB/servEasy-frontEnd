@@ -284,7 +284,6 @@ const ServiceBookingDetails = () => {
               <div className="divider"></div>
 
               <div className="">
-                {serviceProvider.userId}
                 <UserInfoCompact
                   profileImage={serviceProvider.profileImage}
                   userName={serviceProvider.serviceProviderName}
