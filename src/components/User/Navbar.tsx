@@ -21,6 +21,7 @@ import { connectSocket } from "../../utils/socket";
 import VideoCallNotification from "../../utils/ui/VideoCallNotification";
 import { useFetchUserProfile } from "../../hooks/useFetchUserProfile";
 import { useTheme } from "../../hooks/useTheme";
+import Sample from "../../Sample";
 
 const ringtune = new Audio("/Ringtone Video call.mp3");
 const notificatioRingtune = new Audio("/Ringtone Notification.mp3");
@@ -196,6 +197,7 @@ if(pathUrl!=="/chats"){
 
   return (
     <div>
+      <div>
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled 
@@ -445,6 +447,8 @@ if(pathUrl!=="/chats"){
 
       {/* Spacer for fixed navbar */}
       <div className="h-16"></div>
+    </div>
+
     </div>
   );
 };

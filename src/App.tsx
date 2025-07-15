@@ -46,6 +46,8 @@ import { useAuth } from './hooks/useAuth.tsx';
 import NotFound from './components/ui/NotFound.tsx';
 import SlotPage from './components/ServiceProvider/SlotManagement/SlotPage.tsx';
 import AdminLogs from './components/admin/AdminLogs.tsx';
+import CouponListPage from './components/admin/coupon management/CouponPage.tsx';
+import Sample from './Sample.tsx';
 
 function App() {
   const { userAccessToken = true, adminAccessToken } = useAuth();
@@ -69,6 +71,7 @@ function App() {
               <Route path="booked-services/" element={<BookedService />} />
               <Route path="aboutus" element={<AboutUs />} />
             </Route>
+              <Route path='sample' element={<Sample/>}/>
 
             <Route path="/booked-services" element={<BookedService />} />
             <Route path="/service-details/:id" element={<SingleServiceCard />} />
@@ -112,7 +115,9 @@ function App() {
               <Route path="booking-management" element={<BookingManagement />}></Route>
               <Route path="category-management" element={<CategoryList />} />
               <Route path="site-settings" element={<SiteSettingsPage />} />
-               <Route path='logs' element={<AdminLogs/>}/>
+               <Route path='coupon-management' element={<CouponListPage/>}/>
+
+              <Route path='logs' element={<AdminLogs/>}/>
             </Route>
           </Route>
 
