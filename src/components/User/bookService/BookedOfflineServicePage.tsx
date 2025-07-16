@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getRequest, putRequest } from '../../../utils/makeRequestInstance';
+import { deleteRequest, getRequest, postRequest, putRequest } from '../../../utils/makeRequestInstance';
 import RazorpayButton from '../../ui/PaymentButton';
 import ShowBills from '../../ui/ShowBills';
 import ReviewCard from './ReviewCard';
@@ -16,6 +16,8 @@ import BookingStepper from '../../ServiceProvider/booking/BookingStepper';
 import UserInfoCompact from '../../ServiceProvider/booking/UserInfoCompact';
 import ServiceCardCompact from '../../ServiceProvider/booking/ServiceCardCompact';
 import CancelBookingModal from '../../ServiceProvider/booking/CancelBookingModal';
+import CouponInput from '../../ui/CouponInput';
+import LoadingSpinner from '../../ui/LoadingSpinner';
 
 interface Address {
   name: string;
@@ -25,14 +27,17 @@ interface Address {
   phone: string;
 }
 
-interface Ipayment {
+export interface IPayment {
   serviceCost?: number;
-  metaialCost?: number;
-  travelCost?: number;
-  inspectionCost?: number;
+  metaialCost: number;
+  travelCost: number;
+  inspectionCost: number;
+  convenienceFee: number;
   total: number;
-  convenienceFee?: number;
+  discountAmount: number;
+  finalTotal?: number;
 }
+
 interface Location {
   address: string;
   latitude: number;
@@ -88,7 +93,8 @@ interface BookedService {
   bookingHistory?: IBookingHistory[];
 
   cancelReason?: string;
-  payment?: Ipayment;
+  payment?: IPayment;
+  coupon?: ICouponApplied;
 }
 
 export interface BookingData {
@@ -96,6 +102,13 @@ export interface BookingData {
   service: Service;
   serviceProvider: ServiceProvider;
   review?: IReview;
+}
+
+export interface ICouponApplied {
+  _id?: string;
+  code: string;
+  discountAmount: number;
+  appliedAt: Date;
 }
 
 const ServiceBookingDetails = () => {
@@ -108,6 +121,34 @@ const ServiceBookingDetails = () => {
   const [download, setDownload] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState<boolean>(false);
   const [cancelReason, setCancelReason] = useState<string>('');
+
+  const handleApplyCoupon = async (coupon: string) => {
+    try {
+      const response = await postRequest(`/service/bookings/${id}/coupon/apply`, {
+        couponCode: coupon.trim(),
+      });
+      console.log(response);
+      if (response.status === 200) {
+        HotToastSuccess(response.data.message);
+        if (!bookedService) return;
+        setBookingData(prev =>
+          prev
+            ? {
+                ...prev,
+                bookedService: {
+                  ...prev.bookedService,
+                  payment: response.data.payment,
+                },
+              }
+            : null
+        );
+      }
+    } catch (error: any) {
+      HotToastError(error?.response?.data?.message || 'Failed to apply coupon');
+    } finally {
+    }
+  };
+  
 
   const handleCancelBooking = async () => {
     try {
@@ -129,6 +170,30 @@ const ServiceBookingDetails = () => {
     } catch (err) {
       HotToastError('Failed to cancel booking');
       console.error(err);
+    }
+  };
+
+  const handleRemove = async () => {
+    try {
+      setLoading(true);
+      const res = await deleteRequest(`/service/bookings/${id}/coupon/remove `);
+      if (res.status == 200) {
+        HotToastSuccess(`Coupon removed`);
+        if (res.data.updatedBooking) {
+          setBookingData(prev =>
+            prev
+              ? {
+                  ...prev,
+                  bookedService: res.data.updatedBooking,
+                }
+              : null
+          );
+        }
+      }
+    } catch (error: any) {
+      HotToastError(error?.response?.data?.message || 'Failed to remove coupon');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -157,12 +222,10 @@ const ServiceBookingDetails = () => {
     }
   };
 
-
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-base-200">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
-      </div>
+      <LoadingSpinner/>
+
     );
   }
 
@@ -532,7 +595,7 @@ const ServiceBookingDetails = () => {
 
           {bookedService.payment && (
             <div className="shadow card bg-base-100">
-              <div className="p-4 card-body">
+              {/* <div className="p-4 card-body">
                 <h3 className="text-base card-title">Price Details</h3>
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between">
@@ -553,10 +616,83 @@ const ServiceBookingDetails = () => {
                     <span>Total</span>
                     <span>₹{bookedService.payment.total}</span>
                   </div>
-                  {bookedService.payment.convenienceFee && bookedService.payment.convenienceFee > 0 && (
-                    <div className="flex justify-between mt-1 text-xs opacity-75">
-                      <span>convenience Fee (10%)</span>
-                      <span>₹{bookedService.payment?.convenienceFee} </span>
+
+                  <div className="flex justify-between font-bold">
+                    <span>discount</span>
+                    <span>₹{bookedService.payment.discountAmount}</span>
+                  </div>
+
+                  <div className="flex justify-between font-bold">
+                    <span>total after discount</span>
+                    <span>₹{bookedService.payment.finalTotal}</span>
+                  </div>
+                </div>
+                <div className="">
+                  <CouponInput bookingId={id + ''} handleApply={(coupon: string) => handleApplyCoupon(coupon)} />
+                </div>
+              </div> */}
+
+              <div className="p-4 card-body">
+                <h3 className="text-base font-semibold card-title">Price Details</h3>
+
+                <div className="space-y-2 text-sm">
+                  {/* Base Costs */}
+                  <div className="flex justify-between">
+                    <span>Service Cost</span>
+                    <span>₹{bookedService.payment.serviceCost}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Material Cost</span>
+                    <span>₹{bookedService.payment.metaialCost}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Travel Cost</span>
+                    <span>₹{bookedService.payment.travelCost}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>inspection Cost</span>
+                    <span>₹{bookedService.payment.inspectionCost}</span>
+                  </div>
+
+                  <div className="my-2 divider" />
+
+                  {/* Subtotal */}
+                  <div className="flex justify-between font-medium">
+                    <span>Subtotal</span>
+                    <span>₹{bookedService.payment.total}</span>
+                  </div>
+
+                  {/* If discount applied */}
+                  {bookedService.payment.discountAmount > 0 ? (
+                    <>
+                      <div className="flex justify-between font-semibold text-success">
+                        <span>Discount</span>
+                        <span>- ₹{bookedService.payment.discountAmount}</span>
+                      </div>
+
+                      <div className="my-2 divider" />
+
+                      <div className="flex justify-between text-lg font-bold text-primary">
+                        <span>Total After Discount</span>
+                        <span>₹{bookedService.payment.finalTotal}</span>
+                      </div>
+                    </>
+                  ) : (
+                    // If no discount applied
+                    <div className="flex justify-between text-lg font-bold text-primary">
+                      <span>Total</span>
+                      <span>₹{bookedService.payment.total}</span>
+                    </div>
+                  )}
+
+                  {id && bookedService.paymentStatus !== 'completed' && (
+                    <div className="mt-4">
+                      <CouponInput
+                        bookingId={id + ''}
+                        currentCoupon={bookedService.coupon?.code || null}
+                        handleRemoveCoupon={() => handleRemove()}
+                        handleApply={(coupon: string) => handleApplyCoupon(coupon)}
+                      />
                     </div>
                   )}
                 </div>
@@ -566,7 +702,7 @@ const ServiceBookingDetails = () => {
                 <RazorpayButton
                   serviceid={id}
                   reloadData={() => getBookedService(id)}
-                  total={bookedService.payment.total}
+                  total={bookedService.payment.total - 100}
                 />
               )}
             </div>

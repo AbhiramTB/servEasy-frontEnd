@@ -1,7 +1,8 @@
 import { Toaster } from "react-hot-toast";
 import { HotToastError } from "../../utils/notificationToast";
 import { postRequest } from "../../utils/makeRequestInstance";
-
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 interface PaymentProps {
   serviceid: string;
   total: number;
@@ -9,6 +10,7 @@ interface PaymentProps {
 }
 
 const RazorpayButton = ({ serviceid, reloadData}: PaymentProps) => {
+  const user=useSelector((state:RootState)=>state.user)
   const handlePayment = async () => {
     const isLoaded = await loadRazorpayScript();
     if (!isLoaded) {
@@ -26,7 +28,7 @@ const RazorpayButton = ({ serviceid, reloadData}: PaymentProps) => {
         amount: order.order.amount,
         currency: order.order.currency,
         name: "ServEase",
-        description: "Service Booking Payment",
+        description: "Payment for your booking",
         order_id: order.order.id,
         handler: async function (response: any) {
           try {
@@ -53,13 +55,18 @@ const RazorpayButton = ({ serviceid, reloadData}: PaymentProps) => {
           }
         },
         prefill: {
-          name: "Abhiram",
-          email: "abhiram@example.com",
-          contact: "9999999999",
+          name: user.userName,
+          email: user.email||"",
+          contact: user.phone||"",
         },
         theme: {
-          color: "#6366F1",
+        color: "#000000",
         },
+        modal:{
+          escape: true,
+    backdropclose: true,
+        }
+      
       };
 
       const rzp = new (window as any).Razorpay(options);
