@@ -71,7 +71,7 @@ function App() {
               <Route path="booked-services/" element={<BookedService />} />
               <Route path="aboutus" element={<AboutUs />} />
             </Route>
-              <Route path='sample' element={<Sample/>}/>
+              {/* <Route path='sample' element={<Sample/>}/> */}
 
             <Route path="/booked-services" element={<BookedService />} />
             <Route path="/service-details/:id" element={<SingleServiceCard />} />

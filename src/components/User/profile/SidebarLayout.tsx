@@ -9,8 +9,9 @@ const SidebarLayout = () => {
   const user = useSelector((state: RootState) => state.user);
 
   return (
-    <div className="flex min-h-screen">
-      <aside className="w-64 p-4 shadow-md bg-base-300">
+    <div className="flex flex-col min-h-screen lg:flex-row">
+      {/* Desktop Sidebar */}
+      <aside className="hidden w-64 p-4 shadow-md lg:block bg-base-300">
         <div className="mb-6 text-xl font-semibold">
           Hello, {user.userName.toUpperCase()}
         </div>
@@ -22,8 +23,16 @@ const SidebarLayout = () => {
         </nav>
       </aside>
 
-      {/* Main content */}
-      <main className="flex-1 p-6">
+      {/* Mobile Top Navbar */}
+      <nav className="flex px-2 py-3 space-x-4 overflow-x-auto shadow-sm lg:hidden bg-base-200">
+        <SidebarItem icon={<FaUser />} label="My Profile" to="/myprofile" end />
+        <SidebarItem icon={<FaCalendarCheck />} label="Bookings" to="/myprofile/booked-services/" />
+        <SidebarItem icon={<FaPalette />} label="Theme" to="/myprofile/appearance" />
+        <SidebarItem icon={<Info />} label="About" to="/myprofile/aboutus" />
+      </nav>
+
+      {/* Main Content */}
+      <main className="flex-1 p-4">
         <Outlet />
       </main>
     </div>
@@ -34,7 +43,7 @@ interface SidebarItemProps {
   icon: React.ReactNode;
   label: string;
   to: string;
-  end?: boolean; 
+  end?: boolean;
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = ({ icon, label, to, end }) => {
@@ -43,15 +52,15 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon, label, to, end }) => {
       to={to}
       end={end}
       className={({ isActive }) =>
-        `flex items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
+        `flex items-center gap-2 whitespace-nowrap px-3 py-2 rounded-md transition-colors text-sm ${
           isActive
             ? 'text-accent font-semibold'
-            : 'hover:text-info hover:bg-base-200'
+            : 'hover:text-info hover:bg-base-100'
         }`
       }
     >
-      <span className="text-lg">{icon}</span>
-      <span className="font-medium">{label}</span>
+      <span className="text-base">{icon}</span>
+      <span>{label}</span>
     </NavLink>
   );
 };

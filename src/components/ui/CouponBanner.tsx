@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getRequest } from './utils/makeRequestInstance';
-import { IBannerCoupon } from './utils/types/ICoupon';
+import { getRequest } from '../../utils/makeRequestInstance'; 
+import { IBannerCoupon } from '../../utils/types/ICoupon'; 
 import { useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -11,7 +11,7 @@ interface Iprop {
   isBannerHidden: (action: boolean) => void;
 }
 
-const Sample: React.FC<Iprop> = ({ isBannerHidden }) => {
+const CouponBanner: React.FC<Iprop> = ({ isBannerHidden }) => {
   const [coupon, setCoupon] = useState<IBannerCoupon | null>(null);
   const [skipIndex, setSkipIndex] = useState(0);
   const [totalCoupons, setTotalCoupons] = useState(0);
@@ -114,4 +114,4 @@ const Sample: React.FC<Iprop> = ({ isBannerHidden }) => {
   );
 };
 
-export default Sample;
+export default CouponBanner;
