@@ -1,14 +1,19 @@
-const LoadingSpinner = () => {
+import React from "react";
+
+interface Iprop{
+  backGoundColor?:string
+}
+const LoadingSpinner:React.FC<Iprop> = ({backGoundColor}) => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-base-100">
+    <div className={`flex flex-col items-center justify-center min-h-screen ${backGoundColor?backGoundColor:""}`}>
       {/* Spinner Container */}
-      <div className="relative w-32 h-32 mb-6">
+      <div className="relative mb-6 w-52 h-52">
         {/* Rotating outer ring */}
-        <div className="absolute inset-0 rounded-full border-[6px] border-primary border-t-transparent animate-spin"></div>
+        <div className="absolute inset-0 rounded-full border-[5px] border-primary/20 border-t-transparent animate-spin"></div>
 
         {/* Inner animated 'S' */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-6xl font-extrabold text-primary drop-shadow-md animate-pulse">
+          <span className="font-extrabold text-7xl text-primary drop-shadow-md animate-pulse">
             S
           </span>
         </div>
@@ -33,7 +38,7 @@ const LoadingSpinner = () => {
       </div>
 
       {/* Optional subtext */}
-      <p className="mt-6 text-sm text-gray-500 animate-pulse">
+      <p className="mt-6 text-sm text-accent animate-pulse">
         Please wait while we load your experience...
       </p>
     </div>

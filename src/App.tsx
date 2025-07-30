@@ -49,6 +49,7 @@ import AdminLogs from './components/admin/AdminLogs.tsx';
 import CouponListPage from './components/admin/coupon management/CouponPage.tsx';
 import Sample from './Sample.tsx';
 
+
 function App() {
   const { userAccessToken = true, adminAccessToken } = useAuth();
 
@@ -71,7 +72,7 @@ function App() {
               <Route path="booked-services/" element={<BookedService />} />
               <Route path="aboutus" element={<AboutUs />} />
             </Route>
-              {/* <Route path='sample' element={<Sample/>}/> */}
+              <Route path='sample' element={<Sample/>}/>
 
             <Route path="/booked-services" element={<BookedService />} />
             <Route path="/service-details/:id" element={<SingleServiceCard />} />
