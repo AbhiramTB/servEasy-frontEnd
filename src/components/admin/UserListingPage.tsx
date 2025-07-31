@@ -9,15 +9,17 @@ import { HotToastSuccess } from '../../utils/notificationToast';
 import { Toaster } from 'react-hot-toast';
 import Pagination from '../../utils/ui/pagination';
 import SearchComponent from '../ui/SearchComponent';
+import { UserCardSkeleton } from '../../Skeleton/admin/UserCardSkeleton';
+import ConfirmModal from '../ui/modal/ConfirmModal';
 
 const UserListingPage: React.FC = () => {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState<boolean>(true);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [crrPage, setPage] = useState<number>(0);
   const [totalData, setTotalData] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const dataLimit = 8;
+  const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const getAllUser = useCallback(
     async (page: number, searchQuery?: string) => {
       try {
@@ -38,8 +40,6 @@ const UserListingPage: React.FC = () => {
         }
       } catch (error) {
         console.error('Error fetching users:', error);
-      } finally {
-        setLoading(false);
       }
     },
     [dispatch, dataLimit]
@@ -93,15 +93,26 @@ const UserListingPage: React.FC = () => {
 
         {selectedUser && <UserProfileView user={selectedUser} onClose={handleCloseProfile} />}
 
-        {loading ? (
-          <div className="flex items-center justify-center h-64">
-            <span className="text-lg text-base-content/70">Loading users...</span>
+        {!users.length ? (
+          <div className="flex flex-wrap ">
+            {Array(dataLimit)
+              .fill(0)
+              .map((d, i) => (
+                <UserCardSkeleton key={d + i} />
+              ))}
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {users.length > 0 ? (
+            {users.length > 0 &&
               users.map(user => (
                 <div key={user._id} className="overflow-hidden border rounded-lg shadow-md bg-base-200 border-base-300">
+                  <ConfirmModal
+                    isOpen={isOpenModal}
+                    message={`Are you sure you want to ${user.isBlocked ? 'unblock' : 'block'} this user?`}
+                    onClose={() => setOpenModal(false)}
+                    onConfirm={() => handleBlockUser(user._id, user.isBlocked ? 'Unblock' : 'Block')}
+                  />
+
                   <div className="p-5">
                     <div className="flex items-center mb-4">
                       <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary">
@@ -133,7 +144,7 @@ const UserListingPage: React.FC = () => {
                       View Profile
                     </button>
                     <button
-                      onClick={() => handleBlockUser(user._id, user.isBlocked ? 'Unblock' : 'Block')}
+                      onClick={() => setOpenModal(true)}
                       className="flex items-center justify-center flex-1 py-3 text-sm font-medium text-error hover:bg-base-300"
                     >
                       {user.isBlocked ? 'Unblock' : 'Block'}
@@ -141,10 +152,7 @@ const UserListingPage: React.FC = () => {
                   </div>
                   <div className="flex border-t border-base-300"></div>
                 </div>
-              ))
-            ) : (
-              <p className="text-center text-base-content/70 col-span-full">No users found.</p>
-            )}
+              ))}
           </div>
         )}
       </main>
