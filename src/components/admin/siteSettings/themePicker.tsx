@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '../../../hooks/useTheme'; 
+import { useTheme } from '../../../hooks/useTheme';
 
 interface ThemePickerProps {
   themes: string[];
@@ -7,10 +7,19 @@ interface ThemePickerProps {
 
 const ThemePicker: React.FC<ThemePickerProps> = ({ themes }) => {
   const { theme, setTheme } = useTheme(themes[0]);
-
   return (
     <div className="flex flex-wrap gap-2 p-4">
-      {themes.map((rawTheme) => {
+      {(!themes || themes.length === 0) && (
+        <>
+          {Array(20)
+            .fill(9)
+            .map((i, id) => (
+              <div key={i + id} className="h-10 skeleton w-28"></div>
+            ))}
+        </>
+      )}
+
+      {themes.map(rawTheme => {
         const trimmed = rawTheme.trim();
         return (
           <button
