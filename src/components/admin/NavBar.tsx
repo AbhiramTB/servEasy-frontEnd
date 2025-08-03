@@ -4,14 +4,35 @@ import { useSelector } from 'react-redux';
 import { adminGetRequest } from '../../utils/AxiosAdmin';
 import { apiEndPointAdmin } from '../../utils/constant';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ConfirmModal from '../ui/modal/ConfirmModal';
 import { adminLinks } from '../../utils/constants/adminLinks';
 import { LogOut } from 'lucide-react';
+import { addProfile } from '../../redux/slices/adminSlice';
+import { useDispatch } from 'react-redux';
 
 const NavBar = () => {
+  const dispatch=useDispatch()
   const admin = useSelector((state: RootState) => state.admin);
   const [isLogout, setisLogout] = useState<boolean>(false);
+
+
+
+
+ useEffect(()=>{
+    getUserProfile();
+
+  },[])
+  const getUserProfile = async () => {
+    try {
+      const res = await adminGetRequest(apiEndPointAdmin.getPrfoile);
+      dispatch(addProfile(res.data.data));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+
 
   const handleLogOut = async () => {
     try {
