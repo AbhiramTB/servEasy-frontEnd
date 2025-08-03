@@ -10,7 +10,6 @@ import { Toaster } from 'react-hot-toast';
 import Pagination from '../../utils/ui/pagination';
 import SearchComponent from '../ui/SearchComponent';
 import { UserCardSkeleton } from '../../Skeleton/admin/UserCardSkeleton';
-import ConfirmModal from '../ui/modal/ConfirmModal';
 
 const UserListingPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -19,7 +18,6 @@ const UserListingPage: React.FC = () => {
   const [totalData, setTotalData] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const dataLimit = 8;
-  const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const getAllUser = useCallback(
     async (page: number, searchQuery?: string) => {
       try {
@@ -106,12 +104,7 @@ const UserListingPage: React.FC = () => {
             {users.length > 0 &&
               users.map(user => (
                 <div key={user._id} className="overflow-hidden border rounded-lg shadow-md bg-base-200 border-base-300">
-                  <ConfirmModal
-                    isOpen={isOpenModal}
-                    message={`Are you sure you want to ${user.isBlocked ? 'unblock' : 'block'} this user?`}
-                    onClose={() => setOpenModal(false)}
-                    onConfirm={() => handleBlockUser(user._id, user.isBlocked ? 'Unblock' : 'Block')}
-                  />
+              
 
                   <div className="p-5">
                     <div className="flex items-center mb-4">
@@ -144,7 +137,7 @@ const UserListingPage: React.FC = () => {
                       View Profile
                     </button>
                     <button
-                      onClick={() => setOpenModal(true)}
+                      onClick={() => handleBlockUser(user._id, user.isBlocked ? 'Unblock' : 'Block') }
                       className="flex items-center justify-center flex-1 py-3 text-sm font-medium text-error hover:bg-base-300"
                     >
                       {user.isBlocked ? 'Unblock' : 'Block'}
