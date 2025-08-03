@@ -1,5 +1,7 @@
 import React from 'react';
 import { useTheme } from '../../../hooks/useTheme';
+ const themeSwitchSound = new Audio("/sounds/themeSwitch.mp3")
+
 
 interface ThemePickerProps {
   themes: string[];
@@ -24,7 +26,11 @@ const ThemePicker: React.FC<ThemePickerProps> = ({ themes }) => {
         return (
           <button
             key={trimmed}
-            onClick={() => setTheme(trimmed)}
+            onClick={() => {setTheme(trimmed)
+              themeSwitchSound.volume=0.5
+              themeSwitchSound.play();
+              themeSwitchSound.currentTime=0
+            }}
             className={`px-4 py-2 rounded-full border transition ${
               theme === trimmed
                 ? 'bg-primary text-white border-primary'
