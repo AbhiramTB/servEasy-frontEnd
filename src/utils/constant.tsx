@@ -69,7 +69,7 @@ export const apiEndPointAdmin = {
  deleteSiteSettings:'admin/site-settings/delete',
  addsiteSettings:'admin/site-settings/add',
   getSiteSettings:'admin/site-settings',
-  getWalletLists:"admin/wallets"
+  getWalletLists:"admin/wallets/"
 
 };
 
