@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getRequest, putRequest } from '../../utils/makeRequestInstance';
 import { addServiceProvider } from '../../redux/slices/serviceProvider';
 import { apiEndPointServiceProvider } from '../../utils/constant';
-import { MessageSquare, Home, LayoutGrid, Calendar, CreditCard, Bell } from 'lucide-react';
+import { MessageSquare, Home, LayoutGrid, Calendar, CreditCard, Bell, Wallet } from 'lucide-react';
 import { useSocketNotifications } from '../../hooks/useNotifications';
 import { HotToastChatNotification, HotToastSuccess } from '../../utils/notificationToast';
 import toast from 'react-hot-toast';
@@ -202,6 +202,15 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                 >
                   <CreditCard size={18} />
                   <span>Payment Management</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/wallet"
+                  className="flex items-center gap-2 font-medium hover:bg-primary-focus"
+                >
+                  <Wallet size={18} />
+                  <span>wallet</span>
                 </Link>
               </li>
               <li>

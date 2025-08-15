@@ -1,14 +1,17 @@
-import React, { useEffect, useState, useMemo } from "react";
-import dayjs from "dayjs";
-import { useParams } from "react-router-dom";
-import { adminGetRequest } from "../../../utils/AxiosAdmin";
-import { apiEndPointAdmin } from "../../../utils/constant";
+import React, { useEffect, useState, useMemo } from 'react';
+import dayjs from 'dayjs';
+import { Link, useParams } from 'react-router-dom';
+import { adminGetRequest, adminPatchRequest } from '../../../utils/AxiosAdmin';
+import { apiEndPointAdmin } from '../../../utils/constant';
+import axios from 'axios';
+import { HotToastSuccess } from '../../../utils/notificationToast';
+import RejectionReasonModal from './RejectionReasonModal';
 
 export interface IWalletTransactionView {
   _id: string;
-  type: "credit" | "debit";
+  type: 'credit' | 'debit';
   amount: number;
-  status: "none" | "pending" | "success" | string;
+  status: 'none' | 'pending' | 'success' | string;
   date: Date;
   refBookingId?: string | null;
   note?: string | null;
@@ -44,13 +47,12 @@ const AdminProviderWallet: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [wallet, setWallet] = useState<IProviderWalletDetailsView | null>(null);
   const [loading, setLoading] = useState(false);
+  const [transactionId, setTransactionId] = useState<string | null>(null);
 
   const fetchData = async (providerId: string) => {
     try {
       setLoading(true);
-      const { data } = await adminGetRequest(
-        apiEndPointAdmin.getWalletLists + providerId
-      );
+      const { data } = await adminGetRequest(apiEndPointAdmin.getWalletLists + providerId);
       setWallet(data);
     } catch (err) {
       console.error(err);
@@ -70,21 +72,27 @@ const AdminProviderWallet: React.FC = () => {
     );
   }, [wallet]);
 
-  const updateTransactionStatus = (
-    txId: string,
-    newStatus: "success" | "rejected"
-  ) => {
+  const updateTransactionStatus = async (transactionId: string, newStatus: 'success' | 'rejected',reason?:string) => {
     if (!wallet) return;
-    setWallet((prev) =>
+
+    const res = await adminPatchRequest(apiEndPointAdmin.getWalletLists+id,{transactionId,newStatus,...(reason ? { reason } : {})})
+      if(res.status==200){
+
+        HotToastSuccess(`transaction ${newStatus}`)
+
+
+          setWallet(prev =>
       prev
         ? {
             ...prev,
-            debitTransactions: prev.debitTransactions.map((tx) =>
-              tx._id === txId ? { ...tx, status: newStatus } : tx
-            ),
+            debitTransactions: prev.debitTransactions.map(tx => (tx._id === transactionId ? { ...tx, status: newStatus } : tx)),
           }
         : null
     );
+
+      }
+
+  
   };
 
   if (loading) {
@@ -97,6 +105,21 @@ const AdminProviderWallet: React.FC = () => {
 
   const provider = wallet.serviceProvider;
 
+ const handleReject=(reason:string)=>{
+   if(transactionId){ 
+  updateTransactionStatus(transactionId, 'rejected',reason);
+    (document.getElementById("reason_modal") as HTMLDialogElement)?.close();
+    setTransactionId(null)
+
+}
+ }
+
+   const handleOpenModal = ( transactionId: string) => {
+    setTransactionId(transactionId);
+    (document.getElementById("reason_modal") as HTMLDialogElement)?.showModal();
+  };
+
+
   return (
     <div className="p-4 mx-auto space-y-8 max-w-7xl">
       <h2 className="text-3xl font-bold">Provider Wallet Overview</h2>
@@ -105,15 +128,9 @@ const AdminProviderWallet: React.FC = () => {
       <div className="flex flex-col gap-6 p-6 border shadow-sm rounded-xl bg-base-100 lg:flex-row">
         {/* Profile */}
         <div className="flex items-center flex-1 gap-6">
-          <img
-            src={provider.profileImage}
-            alt="Profile"
-            className="object-cover w-24 h-24 border rounded-full"
-          />
+          <img src={provider.profileImage} alt="Profile" className="object-cover w-24 h-24 border rounded-full" />
           <div>
-            <h3 className="text-xl font-semibold">
-              {provider.serviceProviderName}
-            </h3>
+            <h3 className="text-xl font-semibold">{provider.serviceProviderName}</h3>
             <p className="text-sm text-gray-600">{provider.serviceProviderEmail}</p>
             <p className="text-sm text-gray-600">📞 {provider.serviceProviderPhone}</p>
             <p className="mt-2 text-sm text-base-content/70">
@@ -158,56 +175,60 @@ const AdminProviderWallet: React.FC = () => {
               <th>Type</th>
               <th>Amount</th>
               <th>Status</th>
-              <th>Booking Ref</th>
+              <th>Booking </th>
               <th>Note</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {allTransactions.map((tx) => (
+            {allTransactions.map(tx => (
               <tr key={tx._id}>
-                <td>{dayjs(tx.date).format("DD MMM YYYY, hh:mm A")}</td>
+                <td>{dayjs(tx.date).format('DD MMM YYYY, hh:mm A')}</td>
                 <td className="capitalize">{tx.type}</td>
                 <td>₹{tx.amount}</td>
                 <td>
                   <span
                     className={`badge ${
-                      tx.status === "success"
-                        ? "badge-success"
-                        : tx.status === "pending"
-                        ? "badge-warning"
-                        : tx.status === "rejected"
-                        ? "badge-error"
-                        : "badge-ghost"
+                      tx.status === 'success'
+                        ? 'badge-success'
+                        : tx.status === 'pending'
+                          ? 'badge-warning'
+                          : tx.status === 'rejected'
+                            ? 'badge-error'
+                            : 'badge-ghost'
                     }`}
                   >
                     {tx.status}
                   </span>
                 </td>
-                <td>{tx.refBookingId || "-"}</td>
-                <td>{tx.note || "-"}</td>
+                {tx.refBookingId ? (
+                  <td className="cursor-pointer">
+                    {' '}
+                    <Link to={tx.refBookingId + ''}> </Link>view booking{' '}
+                  </td>
+                ) : (
+                  <td className="cursor-not-allowed"> - </td>
+                )}
+
+                <td>{tx.note || '-'}</td>
                 <td>
-                  {tx.type === "debit" && tx.status === "pending" && (
+                  {tx.type === 'debit' && tx.status === 'pending' && (
                     <div className="flex gap-2">
                       <button
                         className="btn btn-xs btn-primary"
-                        onClick={() =>
-                          updateTransactionStatus(tx._id, "success")
-                        }
+                        onClick={() => updateTransactionStatus(tx._id, 'success')}
                       >
                         Transfer Money
                       </button>
                       <button
                         className="btn btn-xs btn-outline btn-error"
-                        onClick={() =>
-                          updateTransactionStatus(tx._id, "rejected")
-                        }
+                        onClick={() =>handleOpenModal(tx._id)}
                       >
                         Reject
                       </button>
                     </div>
                   )}
-                  {(tx.type === "credit" || tx.status !== "pending") && (
+                  {(tx.type === 'credit' || tx.status !== 'pending') && (
                     <span className="text-xs text-gray-400">-</span>
                   )}
                 </td>
@@ -216,6 +237,7 @@ const AdminProviderWallet: React.FC = () => {
           </tbody>
         </table>
       </div>
+      <RejectionReasonModal  onSubmit={handleReject}/>
     </div>
   );
 };
