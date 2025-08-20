@@ -1,6 +1,8 @@
-export const UserCardSkeleton = () => (
-  <div className="m-6 overflow-hidden border rounded-lg shadow-md bg-base-200 border-base-300 animate-pulse">
-    <div className="p-6">
+export const UserCardSkeleton = ({w=null,h=null}:{w?:string|null,h?:string|null}) => (
+<div
+  className={`m-6 overflow-hidden border rounded-lg shadow-md bg-base-200 border-base-300 animate-pulse 
+    ${w ? w : ""} ${h ? h : ""}`}
+>    <div className="p-6">
       <div className="flex items-center mb-4">
         <div className="w-12 h-12 rounded-full bg-base-300" />
         <div className="w-full ml-4 space-y-2">

@@ -22,8 +22,10 @@ export interface IServiceProvider {
   isBlocked: boolean;
   createdAt: string;
   updatedAt: string;
+  isProServiceProvider:boolean;
   bankDetails?: BankDetails;
     allServices: IService[]; 
+
 }
 
 export interface BankDetails {

@@ -35,8 +35,9 @@ import Myprofile from './components/ServiceProvider/service/profile/Myprofile.ts
 import { useAuth } from './hooks/useAuth.tsx';
 import NotFound from './components/ui/NotFound.tsx';
 import SlotPage from './components/ServiceProvider/SlotManagement/SlotPage.tsx';
-import Sample from './Sample.tsx';
+
 import AdminRoutes from './routes/AdminRoutes.tsx';
+import Walletpage from './components/ServiceProvider/wallet/walletPage.tsx';
 
 
 function App() {
@@ -61,7 +62,6 @@ function App() {
               <Route path="booked-services/" element={<BookedService />} />
               <Route path="aboutus" element={<AboutUs />} />
             </Route>
-              <Route path='sample' element={<Sample/>}/>
 
             <Route path="/booked-services" element={<BookedService />} />
             <Route path="/service-details/:id" element={<SingleServiceCard />} />
@@ -88,6 +88,7 @@ function App() {
               <Route path="service-management" element={<ServiceManagement />} />
               <Route path="payment-management" element={<PaymentManagement />} />
               <Route path="slot-management" element={<SlotPage />} />
+              <Route path='wallet' element={<Walletpage/>}/>
             </Route>
           </Route>
 

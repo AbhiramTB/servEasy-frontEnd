@@ -5,6 +5,9 @@ import RazorpayButton from '../../ui/PaymentButton';
 import ShowBills from '../../ui/ShowBills';
 import dayjs from 'dayjs';
 import ServiceCardCompact from '../../ServiceProvider/booking/ServiceCardCompact';
+import { HotToastError } from '../../../utils/notificationToast';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 
 interface BookingData {
   bookedService: {
@@ -64,6 +67,7 @@ const ServiceBookingDetailsOnline = () => {
   const [showBills, setShowBills] = useState(false);
   const [showPaymentConfirm, setShowPaymentConfirm] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState<string>('');
+  const user=useSelector((state:RootState)=>state.user)
 
   useEffect(() => {
     if (id) {
@@ -395,10 +399,17 @@ const ServiceBookingDetailsOnline = () => {
 
               {id && (
                 <RazorpayButton
-                  serviceid={id}
-                  reloadData={() => getBookedService(id)}
-                  total={bookedService.payment.total}
+                  onSuccess={() => getBookedService(id)}
+                  buttonStyle={{className:'p-3 text-base font-bold rounded-md hover:bg-opacity-45 bg-primary',buttonText:"Pay Now"}}
+                  createOrderApi="/payment/create-order"
+                  customerInfo={{email:user.email||"" ,phone:user.phone||"",userName:user.userName||''}}
+                  onError={()=>HotToastError('your attempted transaction was unsuccessful')}
+                  payload={{"serviceId":id}}
+                  total={bookedService.payment.total - 100}
+                  verifyApi={"/payment/verify"}
+                  
                 />
+            
               )}
             </div>
           </div>

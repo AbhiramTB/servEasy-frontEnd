@@ -156,6 +156,8 @@ const UserListingPage: React.FC = () => {
         totaldata={totalData}
         fetchData={(p: number) => getAllUser(p, searchQuery)}
       />
+
+      
     </div>
   );
 };

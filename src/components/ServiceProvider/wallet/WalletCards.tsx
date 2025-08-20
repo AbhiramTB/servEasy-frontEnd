@@ -1,170 +1,4 @@
-// import { useEffect, useState } from 'react';
-// import { getRequest } from './utils/makeRequestInstance';
-// import { IBannerCoupon } from './utils/types/ICoupon';
-// import { useLocation } from 'react-router-dom';
-// import dayjs from 'dayjs';
-// import relativeTime from 'dayjs/plugin/relativeTime';
-
-// dayjs.extend(relativeTime);
-
-// interface Iprop {
-//   isBannerHidden: (action: boolean) => void;
-// }
-
-// const Sample: React.FC<Iprop> = ({ isBannerHidden }) => {
-//   const [coupon, setCoupon] = useState<IBannerCoupon | null>(null);
-//   const [skipIndex, setSkipIndex] = useState(0);
-//   const [totalCoupons, setTotalCoupons] = useState(0);
-//   const [hideBanner, setHideBanner] = useState(false);
-//   const location = useLocation();
-
-//   const fetchCoupon = async (skip = 0) => {
-//     try {
-//       const res = await getRequest(`/coupons/featured?skip=${skip}`);
-//       if(res.data.coupon&&res.data.total){
-//         setCoupon(res.data.coupon);
-//         setTotalCoupons(res.data.total);
-//             isBannerHidden(false);
-
-//       }else{
-
-//             isBannerHidden(true);
-
-//       }
-//     } catch (error) {
-//       console.error('Error fetching coupon:', error);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchCoupon(0);
-//     setSkipIndex(0);
-//   }, []);
-
-//   useEffect(() => {
-//     fetchCoupon(skipIndex);
-//   }, [skipIndex]);
-
-//   useEffect(() => {
-//     setSkipIndex(0);
-//   }, [location.pathname]);
-
-//   useEffect(() => {
-//     const handleScroll = () => {
-//       setHideBanner(window.scrollY > 50);
-//     };
-//     window.addEventListener('scroll', handleScroll);
-//     return () => window.removeEventListener('scroll', handleScroll);
-//   }, []);
-
-//   const handleDismiss = () => {
-//     if (skipIndex + 1 >= totalCoupons) {
-//       setCoupon(null);
-//       isBannerHidden(true);
-//     } else {
-//       setSkipIndex(prev => prev + 1);
-//     }
-//   };
-
-//   if (!coupon || hideBanner)   return null;
-
-//   const timeLeft = dayjs(coupon.validTo).fromNow(true);
-//   const endDate = dayjs(coupon.validTo).format('DD MMM YYYY');
-
-//   return (
-//     <div className="fixed top-0 left-0 z-50 w-full text-white bg-slate-800">
-//       <div className="container px-4 py-2 mx-auto max-w-7xl">
-//         <div className="flex items-center justify-between">
-//           {/* Left content */}
-//           <div className="flex items-center gap-2 text-sm">
-//             <span>🎟️</span>
-//             <span>
-//               Save ₹{coupon.discountValue} with code <strong className="font-bold">{coupon.code}</strong>
-//             </span>
-//             <span className="hidden md:inline text-white/80">• {coupon.description}</span>
-//             <span className="hidden lg:inline text-white/70">
-//               • Expires {endDate} ({timeLeft} left)
-//             </span>
-//           </div>
-
-//           {/* Right actions */}
-//           <div className="flex items-center gap-2">
-//             <a href="/coupons" className="text-sm transition-colors hover:text-white/80">
-//               View All →
-//             </a>
-//             <button
-//               onClick={handleDismiss}
-//               className="ml-2 transition-colors text-white/70 hover:text-white"
-//               aria-label="Dismiss coupon"
-//             >
-//               ✕
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Sample;
-
-import { Link } from 'react-router-dom';
-import { getRequest, postRequest } from './utils/makeRequestInstance';
-
-const Sample = () => {
-  const [crrPage, setPage] = useState<number>(0);
-  const [totalData, setTotalData] = useState<number>(0);
-  const dataLimit = 10;
-
-  useEffect(() => {
-    getData();
-  }, []);
-  async function getData(page?: number, pagination?: boolean) {
-      const params: Record<string, any> = {};
- if (page !== undefined) params.skip = page;
-  if (pagination !== undefined) params.pagination = pagination;
-
-  params.limit = dataLimit; 
-
-    const res = await getRequest("/service-providers/wallet",params);
-    setWallet(res.data.data);
-            setTotalData(res.data.count);
-
-            setPage(page||0);
-
-  }
-  const [ wallet, setWallet] = useState<ProviderWalletProps | null>(null);
-
-  return (
-    <div>
-      {/* <button className="p-4 bg-primary" onClick={getData}>
-        CLICK ME TO GET DATA
-      </button> */}
-      {!wallet && <LoadingSpinner backGoundColor="bg-base-300" />}
-
-      {wallet && (
-        <div>
-          {' '}
-          <ProviderWallet
-            balance={wallet.balance}
-            transactions={wallet.transactions}
-            serviceProviderId={wallet.serviceProviderId}
-          />
-          <Pagination
-            crrPage={crrPage}
-            dataLimit={dataLimit}
-            totaldata={totalData}
-            fetchData={(p: number) => getData(p, true)}
-          />{' '}
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default Sample;
-
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   AlertCircle,
   ArrowDownToLine,
@@ -178,34 +12,20 @@ import {
   Wallet,
   XCircle,
 } from 'lucide-react';
-import { HotToastError } from './utils/notificationToast';
-import LoadingSpinner from './components/ui/LoadingSpinner';
-import Pagination from './utils/ui/pagination';
-const bankDetails = {
-  accountHolderName: 'abhiram',
-  accountNumber: '9906352571',
-  ifscCode: 'ifce CODE',
-};
-type WalletTransaction = {
-  _id: string;
-  amount: number;
-  type: 'credit' | 'debit';
-  status: string;
-  date: string;
-  refBookingId: string;
-  note: string | null;
-};
-
-type ProviderWalletProps = {
-  balance: number;
-  serviceProviderId: string;
-  transactions: WalletTransaction[];
-};
+import { HotToastError } from '../../../utils/notificationToast';
+import { postRequest } from '../../../utils/makeRequestInstance';
+import { Link } from 'react-router-dom';
+import { IBankDetailsWallet, ProviderWalletProps } from '../../../utils/types/IServiceProviderWallet';
 
 const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions }) => {
   const [showWithdrawSection, setShowWithdrawSection] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState<number>(0);
 
+  const bankDetails: IBankDetailsWallet = {
+    accountHolderName: '',
+    accountNumber: '',
+    ifscCode: '',
+  };
   const handleWithdrawClick = () => {
     setShowWithdrawSection(prev => !prev);
   };
@@ -423,3 +243,5 @@ const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions }
     </div>
   );
 };
+
+export default ProviderWallet;
