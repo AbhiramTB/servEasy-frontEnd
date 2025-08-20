@@ -3,24 +3,15 @@ import RazorpayButton from '../../ui/PaymentButton';
 import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
+import { ISubscriptionPlan } from '../../../utils/types/ISubscriptionPlan';
 
-interface Plan {
-  _id: string;
-  name: string;
-  price: number;
-  validityDays: number;
-  features: string[];
-  description: string;
-  adLimitPerMonth: number;
-  payoutSpeedDays: number;
-}
+
 
 interface PlanCardProps {
-  plan: Plan;
-  onSubscribe?: () => void;
+  plan: ISubscriptionPlan;
 }
 
-const PlanCard: React.FC<PlanCardProps> = ({ plan, onSubscribe }) => {
+const PlanCard: React.FC<PlanCardProps> = ({ plan }) => {
   const serviceProvider = useSelector((state: RootState) => state.serviceProvider);
   return (
     <div className="shadow-sm w-96 card bg-base-100">
@@ -51,7 +42,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan, onSubscribe }) => {
           ))}
         </ul>
 
-        {onSubscribe && (
+        
           <div className="mt-6">
             <RazorpayButton
               onSuccess={() => HotToastSuccess('Subscription activated successfully. Welcome to Premium!')}
@@ -71,7 +62,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan, onSubscribe }) => {
               verifyApi={'/payment/subscription/verify'}
             />{' '}
           </div>
-        )}
+        
       </div>
     </div>
   );
