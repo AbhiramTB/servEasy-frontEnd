@@ -18,6 +18,8 @@ import ServiceCardCompact from '../../ServiceProvider/booking/ServiceCardCompact
 import CancelBookingModal from '../../ServiceProvider/booking/CancelBookingModal';
 import CouponInput from '../../ui/CouponInput';
 import LoadingSpinner from '../../ui/LoadingSpinner';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 
 interface Address {
   name: string;
@@ -121,13 +123,13 @@ const ServiceBookingDetails = () => {
   const [download, setDownload] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState<boolean>(false);
   const [cancelReason, setCancelReason] = useState<string>('');
+  const user=useSelector((state:RootState)=>state.user)
 
   const handleApplyCoupon = async (coupon: string) => {
     try {
       const response = await postRequest(`/service/bookings/${id}/coupon/apply`, {
         couponCode: coupon.trim(),
       });
-      console.log(response);
       if (response.status === 200) {
         HotToastSuccess(response.data.message);
         if (!bookedService) return;
@@ -700,9 +702,15 @@ const ServiceBookingDetails = () => {
 
               {id && bookedService.paymentStatus !== 'completed' && (
                 <RazorpayButton
-                  serviceid={id}
-                  reloadData={() => getBookedService(id)}
+                  onSuccess={() => getBookedService(id)}
+                  buttonStyle={{className:'p-3 text-base font-bold rounded-md hover:bg-opacity-45 bg-primary',buttonText:"Pay Now"}}
+                  createOrderApi="/payment/create-order"
+                  customerInfo={{email:user.email||"" ,phone:user.phone||"",userName:user.userName||''}}
+                  onError={()=>HotToastError('your attempted transaction was unsuccessful')}
+                  payload={{"serviceId":id}}
                   total={bookedService.payment.total - 100}
+                  verifyApi={"/payment/verify"}
+                  
                 />
               )}
             </div>
