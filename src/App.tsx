@@ -38,7 +38,7 @@ import SlotPage from './components/ServiceProvider/SlotManagement/SlotPage.tsx';
 
 import AdminRoutes from './routes/AdminRoutes.tsx';
 import Walletpage from './components/ServiceProvider/wallet/walletPage.tsx';
-
+import AiAssistancePage from './components/ServiceProvider/aiAssistance/AssistancePage.tsx';
 
 function App() {
   const { userAccessToken = true, adminAccessToken } = useAuth();
@@ -52,6 +52,9 @@ function App() {
           <Route path="/payment/verify" element={<PaymentVerify />} />
           <Route path="/signIn" element={userAccessToken ? <Navigate to="/" replace /> : <AuthPage />} />
           <Route path="otp" element={<Otp />} />
+
+          <Route path="/assistance" element={<AiAssistancePage />} />
+          <Route path="/assistance/:chatId" element={<AiAssistancePage />} />
 
           <Route path="/" element={<Body />}>
             <Route index element={<HomePage />} />
@@ -88,7 +91,7 @@ function App() {
               <Route path="service-management" element={<ServiceManagement />} />
               <Route path="payment-management" element={<PaymentManagement />} />
               <Route path="slot-management" element={<SlotPage />} />
-              <Route path='wallet' element={<Walletpage/>}/>
+              <Route path="wallet" element={<Walletpage />} />
             </Route>
           </Route>
 
@@ -97,7 +100,7 @@ function App() {
             element={adminAccessToken ? <Navigate to={'/admin/home'} replace /> : <AdminSignIn />}
           />
 
-{          AdminRoutes()}
+          {AdminRoutes()}
 
           <Route path="*" element={<NotFound />} />
         </Routes>
