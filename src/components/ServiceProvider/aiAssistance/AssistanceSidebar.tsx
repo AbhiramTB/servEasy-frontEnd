@@ -1,7 +1,7 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { IChatSession } from "../../../utils/types/IAiassistance";
-import { useState } from "react";
-import { Menu, X } from "lucide-react"; // hamburger & close icons
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { IChatSession } from '../../../utils/types/IAiassistance';
+import { useState } from 'react';
+import { Menu, X, MessageSquare, Bot } from 'lucide-react';
 
 interface Props {
   chats: IChatSession[];
@@ -14,55 +14,72 @@ export default function AssistanceSidebar({ chats, onNewChat }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
-    <>
-      {/* Mobile toggle button (fixed top-left) */}
+    <div className="relative">
+      {/* Hamburger button (only on mobile) */}
+
       <button
+        className="absolute z-50 p-2 rounded-md text-primary-content bg-primary top-2 left-2 md:hidden"
         onClick={() => setOpen(!open)}
-        className="absolute z-50 p-2 rounded-md top-4 left-4 bg-base-200 md:hidden"
       >
-        {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
 
       {/* Sidebar */}
       <div
         className={`
-          fixed inset-y-0 left-0 z-40 w-64 transform bg-base-200 p-4 transition-transform duration-200 ease-in-out
+          fixed left-0 z-40 w-64 transform bg-base-100 border-r shadow-lg
+          transition-transform duration-200 ease-in-out
           md:static md:translate-x-0
-          ${open ? "translate-x-0" : "-translate-x-full"}
+          md:bg-base-100/50 
+          ${open ? 'translate-x-0' : '-translate-x-full'}
         `}
+        style={{ top: '64px', height: 'calc(100vh - 64px)' }}
       >
-        <button
-          onClick={onNewChat}
-          className="w-full p-2 mb-4 rounded-lg bg-success hover:bg-success/50"
-        >
-          + New Chat
-        </button>
+        <div className="flex flex-col h-full p-4">
+          {/* New Chat */}
+          <div className="">
+            <Bot className="w-5 h-5 mx-auto text-primary" />
+            <h1 className="mt-2 mb-5 text-xl font-bold text-primary">ServEase AI Chatbot</h1>
+          </div>
+          <button
+            onClick={onNewChat}
+            className="w-full py-2 mb-4 text-sm font-medium transition rounded-lg text-primary-content bg-primary hover:bg-primary/50"
+          >
+            + New Chat
+          </button>
 
-        <div className="flex-1 space-y-2 overflow-y-auto">
-          {chats.map((chat) => (
-            <div
-              key={chat.id}
-              onClick={() => {
-                navigate(`/assistance/${chat.id?chat.id:""}`);
-                setOpen(false); 
-              }}
-              className={`p-2 rounded-lg cursor-pointer ${
-                chatId === chat.id ? "bg-primary/15" : "hover:bg-primary/50"
-              }`}
-            >
-              {chat.title}
-            </div>
-          ))}
+
+          {/* Chat List (scrollable) */}
+          <div className="flex-1 space-y-1 overflow-y-auto">
+            {chats.length > 0 ? (
+              chats.map(chat => (
+                <Link key={chat._id} to={`/service-provider/assistance/${chat._id}`}>
+                  <div
+                    onClick={() => {
+                      if (chat._id) {
+                        navigate(`/assistance/${chat._id}`);
+                        setOpen(false); // close on mobile
+                      }
+                    }}
+                    className={`flex items-center gap-2 p-2 rounded-md cursor-pointer transition
+                      ${
+                        chatId === chat._id
+                          ? 'bg-primary/50 border-l-4 border-primary font-medium'
+                          : 'hover:bg-base-300/40'
+                      }
+                    `}
+                  >
+                    <MessageSquare className="w-4 h-4 text-primary" />
+                    <span className="truncate text-base-content">{chat.title || 'Untitled Chat'}</span>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <p className="mt-10 text-sm text-center text-primary">No chats yet. Start one!</p>
+            )}
+          </div>
         </div>
       </div>
-
-      {/* Overlay when sidebar is open on mobile */}
-      {open && (
-        <div
-          className="fixed inset-0 z-30 bg-black/40 md:hidden"
-          onClick={() => setOpen(false)}
-        />
-      )}
-    </>
+    </div>
   );
 }

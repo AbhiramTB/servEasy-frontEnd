@@ -1,12 +1,12 @@
 export interface Message {
-  id: string;
+  _id: string;
   role: "user" | "assistant";
   content: string;
   createdAt: string;
 }
 
 export interface IChatSession {
-  id?: string;
+  _id?: string;
   title: string;
   messages: Message[];
 }

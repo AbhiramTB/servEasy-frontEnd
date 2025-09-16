@@ -1,28 +1,23 @@
-import { Message } from '../../../utils/types/IAiassistance';
-import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeHighlight from 'rehype-highlight';
-import 'highlight.js/styles/github.css';
+import { Message } from "../../../utils/types/IAiassistance";
 
-export default function AssistanceBubble({ message }: { message: Message }) {
-  const isUser = message.role === 'user';
+interface Props {
+  message: Message;
+}
 
+export default function AssistanceBubble({ message }: Props) {
+  const isUser = message.role === "user";
   return (
-    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-2` }>
+    <div className={`flex mb-3 ${isUser ? "justify-end" : "justify-start"}`}>
       <div
-        className={`max-w-full sm:max-w-xl lg:max-w-2xl break-words whitespace-pre-wrap px-4 py-2 rounded-2xl ${
-          isUser ? 'bg-primary/75 text-primary-content' : 'bg-base-300 text-base-content'
-        }`}
+        className={`
+          max-w-xs md:max-w-md px-4 py-2 rounded-2xl shadow
+          ${isUser ? "bg-primary text-primary-content rounded-br-none" : "bg-base-100 text-base-content rounded-bl-none"}
+        `}
       >
-        {isUser ? (
-          message.content
-        ) : (
-          <div className="prose-sm prose max-w-none ">
-            <Markdown  remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
-              {message.content}
-            </Markdown>
-          </div>
-        )}
+        <p className="text-sm">{message.content}</p>
+        <span className={`block mt-1 text-[10px] ${isUser?"text-primary-content/55":"text-base-content/55" } `}>
+          {new Date(message.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+        </span>
       </div>
     </div>
   );

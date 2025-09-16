@@ -218,7 +218,29 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                   <MessageSquare size={18} />
                   <span>Messages</span>
                 </Link>
+
+
+
               </li>
+
+
+ <li>
+                <Link
+                  to="/service-provider/assistance"
+                  className="flex items-center gap-2 font-medium hover:bg-primary-focus"
+                >
+                  <MessageSquare size={18} />
+                  <span>ai Messages</span>
+                </Link>
+
+
+
+              </li>
+
+
+
+
+              
             </ul>
             <div className="flex items-center gap-3 ml-4">
               <span className="font-semibold text-white">{isOnDuty ? 'On Duty' : 'On Leave'}</span>
