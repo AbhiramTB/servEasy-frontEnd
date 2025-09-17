@@ -1,21 +1,20 @@
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { IChatSession } from '../../../utils/types/IAiassistance';
+import { Link, useNavigate } from 'react-router-dom';
+import { IAiAssistanceChatInfo, IChatSession } from '../../../utils/types/IAiassistance';
 import { useState } from 'react';
 import { Menu, X, MessageSquare, Bot } from 'lucide-react';
 
 interface Props {
-  chats: IChatSession[];
+  chats: IAiAssistanceChatInfo[];
   onNewChat: () => void;
+  activeChat:IChatSession|null
 }
 
-export default function AssistanceSidebar({ chats, onNewChat }: Props) {
-  const { chatId } = useParams();
+export default function AssistanceSidebar({ chats, onNewChat,activeChat}: Props) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
   return (
     <div className="relative">
-      {/* Hamburger button (only on mobile) */}
 
       <button
         className="absolute z-50 p-2 rounded-md text-primary-content bg-primary top-2 left-2 md:hidden"
@@ -24,7 +23,6 @@ export default function AssistanceSidebar({ chats, onNewChat }: Props) {
         {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
 
-      {/* Sidebar */}
       <div
         className={`
           fixed left-0 z-40 w-64 transform bg-base-100 border-r shadow-lg
@@ -36,7 +34,6 @@ export default function AssistanceSidebar({ chats, onNewChat }: Props) {
         style={{ top: '64px', height: 'calc(100vh - 64px)' }}
       >
         <div className="flex flex-col h-full p-4">
-          {/* New Chat */}
           <div className="">
             <Bot className="w-5 h-5 mx-auto text-primary" />
             <h1 className="mt-2 mb-5 text-xl font-bold text-primary">ServEase AI Chatbot</h1>
@@ -49,7 +46,6 @@ export default function AssistanceSidebar({ chats, onNewChat }: Props) {
           </button>
 
 
-          {/* Chat List (scrollable) */}
           <div className="flex-1 space-y-1 overflow-y-auto">
             {chats.length > 0 ? (
               chats.map(chat => (
@@ -58,12 +54,13 @@ export default function AssistanceSidebar({ chats, onNewChat }: Props) {
                     onClick={() => {
                       if (chat._id) {
                         navigate(`/assistance/${chat._id}`);
-                        setOpen(false); // close on mobile
+                        setOpen(false); 
                       }
                     }}
                     className={`flex items-center gap-2 p-2 rounded-md cursor-pointer transition
                       ${
-                        chatId === chat._id
+
+                         chat._id==activeChat?._id
                           ? 'bg-primary/50 border-l-4 border-primary font-medium'
                           : 'hover:bg-base-300/40'
                       }

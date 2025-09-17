@@ -10,3 +10,6 @@ export interface IChatSession {
   title: string;
   messages: Message[];
 }
+
+export type IAiAssistanceChatInfo = Pick<IChatSession,"_id"|"title">
+

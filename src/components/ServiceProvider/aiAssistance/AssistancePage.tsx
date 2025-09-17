@@ -11,12 +11,12 @@ export default function AssistancePage() {
   const { chatId } = useParams();
   const [allChats, setAllChats] = useState<IChatSession[]>([]);
   const [activeChat, setActiveChat] = useState<IChatSession | null>(null);
-  const [isloading,setLoading]=useState(false)
-  const serviceProviderId=useSelector((state:RootState)=>state.serviceProvider._id)
-  const navigate=useNavigate()
+  const [isloading, setLoading] = useState(false);
+  const serviceProviderId = useSelector((state: RootState) => state.serviceProvider._id);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if(!serviceProviderId)return
+    if (!serviceProviderId) return;
 
     getRequest(`/service-providers/ai-assistance/providers/${serviceProviderId}/chats`).then(res => {
       if (res.status === 200) {
@@ -25,9 +25,8 @@ export default function AssistancePage() {
     });
   }, [serviceProviderId]);
 
-  
   useEffect(() => {
-    if (chatId&&chatId!='undefined') {
+    if (chatId && chatId != 'undefined') {
       const found = allChats.find(c => c._id === chatId);
       if (found) {
         setActiveChat(found);
@@ -48,13 +47,15 @@ export default function AssistancePage() {
       title: 'New Chat',
       messages: [],
     };
-    setAllChats(prev => [...prev, newChat]);
+    navigate(`/service-provider/assistance/${newChat._id}`);
+
     setActiveChat(newChat);
+    setAllChats(prev => [newChat, ...prev]);
   };
 
   const handleSend = async (text: string) => {
     if (!activeChat) return;
-setLoading(true)
+    setLoading(true);
     const newMsg: Message = {
       _id: Date.now() + '',
       role: 'user',
@@ -69,96 +70,50 @@ setLoading(true)
 
     setAllChats(prev => prev.map(c => (c._id === activeChat._id ? updatedChat : c)));
     setActiveChat(updatedChat);
-    
+
     console.log(activeChat._id);
-    console.log(activeChat._id)
-    
+    console.log(activeChat._id);
+
     const res = await postRequest(`/service-providers/ai-assistance/chats/`, {
       message: text,
-      // ...(activeChat._id ? { activeChatId: activeChat._id } : {}),
-      ...(chatId!='undefined' && chatId? { activeChatId: chatId } : {})
-      
+      ...(chatId != 'undefined' && chatId ? { activeChatId: chatId } : {}),
     });
     if (res.status == 200) {
       console.log(res.data);
       const updatedWithReply = {
         ...updatedChat,
-        messages: [...updatedChat.messages, res.data],  
+        messages: [...updatedChat.messages, res.data],
       };
-      setLoading(false)
+      setLoading(false);
       if (res.data.id) {
       }
 
-setAllChats(prev => prev.map(c => (c._id === activeChat._id ? updatedWithReply : c)));
-  setActiveChat(updatedWithReply);
+      setAllChats(prev => prev.map(c => (c._id === activeChat._id ? updatedWithReply : c)));
+      setActiveChat(updatedWithReply);
 
       setActiveChat(updatedWithReply);
-      // window.history.pushState({}, '', `/assistance/${res.data.id}`);
-      navigate(`/service-provider/assistance/${res.data.id}`);
 
+      navigate(`/service-provider/assistance/${res.data.id}`);
     }
   };
 
   console.log(activeChat);
 
-  // console.log(activeChat?.messages)
-  // return (
-  //   <div className="flex h-screen bg-blue-400 pb-11">
-  //     <AssistanceSidebar chats={allChats} onNewChat={handleNewChat} />
-
-  //     {/* Chat Window takes remaining space and scrolls independently */}
-  //     <div className="flex flex-col flex-1 w-full">
-  //       {activeChat ? (
-  //         <AssistanceWindow messages={activeChat.messages} newMessageLoading={isloading} onSend={handleSend} />
-  //       ) : (
-  //         <div className="flex items-center justify-center flex-1">
-  //           <p className="text-primary">Select or create a chat</p>
-  //         </div>
-  //       )}
-  //     </div>
-  //   </div>
-  // );
-
-
-
   return (
-    <div className='overflow-hidden'> 
+    <div className="overflow-hidden">
+      <div className="flex h-[90vh] overflow-hidden bg-gradient-to-br from-primary/20 via-base-300 to-primary/20 ">
+        <AssistanceSidebar chats={allChats} onNewChat={handleNewChat} activeChat={activeChat} />
 
-  <div className="flex h-[90vh] overflow-hidden bg-gradient-to-br from-primary/20 via-base-300 to-primary/20 ">
-    {/* Sidebar */}
-    <AssistanceSidebar chats={allChats} onNewChat={handleNewChat} />
-
-    {/* Main Content */}
-    <div className="flex flex-col flex-1 w-full overflow-hidden">
-      {/* Header */}
-      {/* <div className="p-4 bg-white border-b shadow-sm">
-        <h2 className="text-lg font-semibold text-gray-800">
-          ServEasy AI Assistant
-        </h2>
-        <p className="text-sm text-gray-500">
-          Ask queries about anything – technical or service-related
-        </p>
-      </div> */}
-
-      {/* Chat Window */}
-      {activeChat ? (
-        <AssistanceWindow
-        messages={activeChat.messages}
-        newMessageLoading={isloading}
-        onSend={handleSend}
-        />
-      ) : (
-        <div className="flex items-center justify-center flex-1 ">
-            <h1 className='text-xl '>Select or create a chat to get started </h1>
-          </div>
-      )}
-    </div>
-  </div>
+        <div className="flex flex-col flex-1 w-full overflow-hidden">
+          {activeChat ? (
+            <AssistanceWindow messages={activeChat.messages} newMessageLoading={isloading} onSend={handleSend} />
+          ) : (
+            <div className="flex items-center justify-center flex-1 ">
+              <h1 className="text-xl ">Select or create a chat to get started </h1>
+            </div>
+          )}
+        </div>
       </div>
-);
-
-
-
-
+    </div>
+  );
 }
-

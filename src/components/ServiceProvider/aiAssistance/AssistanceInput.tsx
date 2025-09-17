@@ -2,9 +2,10 @@ import { useState } from "react";
 
 interface Props {
   onSend: (text: string) => void;
+  loading:boolean
 }
 
-export default function AssistanceInput({ onSend }: Props) {
+export default function AssistanceInput({ onSend,loading }: Props) {
   const [input, setInput] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -22,7 +23,7 @@ export default function AssistanceInput({ onSend }: Props) {
         placeholder="Type your message..."
         className="flex-1 w-full input input-bordered"
       />
-      <button type="submit" className="btn btn-primary shrink-0">
+      <button type="submit" className="btn btn-primary shrink-0" disabled={loading}>
         Send
       </button>
     </form>
