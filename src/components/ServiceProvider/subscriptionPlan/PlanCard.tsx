@@ -4,15 +4,21 @@ import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { ISubscriptionPlan } from '../../../utils/types/ISubscriptionPlan';
-
-
+import { useDispatch } from 'react-redux';
+import { closeModal } from '../../../redux/slices/subscriptionSlice';
+import useFetchServiceProviderProfile from '../../../hooks/useFetchServiceProviderProfile';
 
 interface PlanCardProps {
   plan: ISubscriptionPlan;
+  loading: boolean;
+  setLoading: (state: boolean) => void;
 }
 
-const PlanCard: React.FC<PlanCardProps> = ({ plan }) => {
+const PlanCard: React.FC<PlanCardProps> = ({ plan, loading, setLoading }) => {
   const serviceProvider = useSelector((state: RootState) => state.serviceProvider);
+  const dispatch = useDispatch();
+    const getServiceProvider=useFetchServiceProviderProfile()
+
   return (
     <div className="shadow-sm w-96 card bg-base-100">
       <div className="card-body">
@@ -42,12 +48,17 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan }) => {
           ))}
         </ul>
 
-        
-          <div className="mt-6">
+        <div className="mt-6">
+          {!loading ? (
             <RazorpayButton
-              onSuccess={() => HotToastSuccess('Subscription activated successfully. Welcome to Premium!')}
+              onSuccess={() => {
+                HotToastSuccess('Subscription activated successfully. Welcome to Premium!');
+                getServiceProvider()
+                dispatch(closeModal());
+              }}
               buttonStyle={{
-                className: 'p-3 text-base font-bold w-full text-primary-content rounded-md hover:bg-opacity-45 bg-primary',
+                className:
+                  'p-3 text-base font-bold w-full text-primary-content rounded-md hover:bg-opacity-45 bg-primary',
                 buttonText: `Subscribe Now`,
               }}
               createOrderApi="/payment/subscription/createOrder"
@@ -60,9 +71,17 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan }) => {
               payload={{ planId: plan._id }}
               total={plan.price}
               verifyApi={'/payment/subscription/verify'}
-            />{' '}
-          </div>
-        
+              setLoading={setLoading}
+            />
+          ) : (
+            <button
+              className="w-full p-3 text-base font-bold rounded-md cursor-progress text-primary-content bg-primary"
+              disabled={true}
+            >
+              <span className="loading loading-bars loading-xl"></span>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import {  IService} from "../../redux/slices/serviceProvider";
+import { IService } from '../../redux/slices/serviceProvider';
 
 export interface IServiceProvider {
   _id: string;
@@ -7,25 +7,34 @@ export interface IServiceProvider {
   serviceProviderPhone: string;
   description: string;
   socialMedia: string;
-  services: string[]; 
-  skills: string[]; 
+  services: string[];
+  skills: string[];
   location: {
     type?: string;
-    coordinates?: [number, number]; 
+    coordinates?: [number, number];
     address?: string;
   };
   experience: number;
   profileImage: string;
   document: string;
-  isVerified: 'verified' | 'pending' | 'rejected'|"idle"; 
+  isVerified: 'verified' | 'pending' | 'rejected' | 'idle';
   userId: string;
   isBlocked: boolean;
   createdAt: string;
   updatedAt: string;
-  isProServiceProvider:boolean;
+  isProServiceProvider: boolean;
   bankDetails?: BankDetails;
-    allServices: IService[]; 
+  allServices: IService[];
+  subscriptions?: ISubscription[];
+}
 
+export interface ISubscription {
+  planId: string;
+  startDate: Date;
+  endDate: Date;
+  status: 'active' | 'expired';
+  createdAt?: Date;
+  paymentId: string;
 }
 
 export interface BankDetails {

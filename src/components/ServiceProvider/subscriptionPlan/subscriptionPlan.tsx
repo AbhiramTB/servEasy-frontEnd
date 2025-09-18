@@ -11,6 +11,7 @@ const SubscriptionModal: React.FC = () => {
   const { isOpen } = useSelector((state: RootState) => state.subscriptionModal);
   const [plans, setPlans] = useState<ISubscriptionPlan[] | []>([]);
   const serviceProviderInfo = useSelector((state: RootState) => state.serviceProvider);
+  const [loading,setLoading]=useState(false)
 
   useEffect(() => {
     if (serviceProviderInfo.isProServiceProvider) {
@@ -45,8 +46,13 @@ const SubscriptionModal: React.FC = () => {
             </div>
 
             {plans.map(plan => (
-              <div className="flex justify-center">{plans && <PlanCard plan={plan} key={plan._id} />}</div>
-            ))}
+              <> 
+              <div className="flex justify-center">{plans && <PlanCard plan={plan} key={plan._id} loading={loading} setLoading={(state:boolean)=>setLoading(state)} />}</div>
+
+              </>
+          ))}
+
+          
           </div>
           <form method="dialog" className="modal-backdrop">
             <button onClick={() => dispatch(closeModal())}>close</button>

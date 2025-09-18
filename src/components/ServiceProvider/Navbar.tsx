@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { RootState } from '../../redux/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { getRequest, putRequest } from '../../utils/makeRequestInstance';
-import { addServiceProvider } from '../../redux/slices/serviceProvider';
+import {  useSelector } from 'react-redux';
+import { putRequest } from '../../utils/makeRequestInstance';
+
 import { apiEndPointServiceProvider } from '../../utils/constant';
 import { MessageSquare, Home, LayoutGrid, Calendar, CreditCard, Bell, Wallet, Crown } from 'lucide-react';
 import { useSocketNotifications } from '../../hooks/useNotifications';
@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 import { connectSocket } from '../../utils/socket';
 import { IVideoCallNotification } from '../../utils/types/INotification';
 import VideoCallNotification from '../../utils/ui/VideoCallNotification';
+import useFetchServiceProviderProfile from '../../hooks/useFetchServiceProviderProfile';
 
 const ringtune = new Audio('/Ringtone Video call.mp3');
 
@@ -22,9 +23,8 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ profile }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const serviceProviderInfo = useSelector((state: RootState) => state.serviceProvider);
-  const dispatch = useDispatch();
   const [isOnDuty, setIsOnDuty] = useState(true);
-
+  
   const toggleStatus = () => {
     setIsOnDuty(prev => !prev);
   };
@@ -34,7 +34,7 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
   const [acceptFn, setAcceptFn] = useState<() => void>(() => () => {});
 
   const navigate = useNavigate();
-
+  const getServiceProvider=useFetchServiceProviderProfile()
   const handleOnDutty = async () => {
     try {
       const res = await putRequest(apiEndPointServiceProvider.makeActiveAllservice + serviceProviderInfo._id, {});
@@ -65,15 +65,7 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
     getServiceProvider();
   }, []);
 
-  const getServiceProvider = async () => {
-    try {
-      const res = await getRequest(apiEndPointServiceProvider.getServiceProvider);
-          console.log(res.data.serviceProvider)
-      dispatch(addServiceProvider(res.data.serviceProvider));
-    } catch (error) {
-      console.error('Error fetching service provider:', error);
-    }
-  };
+ 
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);

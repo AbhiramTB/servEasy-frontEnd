@@ -52,6 +52,10 @@ export interface Location {
   longitude: number;
 }
 
+
+
+
+
 const serviceProviderSlice = createSlice({
   name: 'serviceProvider',
   initialState,

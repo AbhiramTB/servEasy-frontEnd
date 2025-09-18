@@ -1,4 +1,3 @@
-import { Toaster } from 'react-hot-toast';
 import { HotToastError } from '../../utils/notificationToast';
 import { postRequest } from '../../utils/makeRequestInstance';
 
@@ -11,6 +10,7 @@ interface PaymentProps {
   onSuccess: () => void;
   onError: () => void;
   verifyApi: string;
+  setLoading?: (state: boolean) => void;
 }
 
 const RazorpayButton = ({
@@ -21,6 +21,7 @@ const RazorpayButton = ({
   verifyApi,
   payload,
   createOrderApi,
+  setLoading,
 }: PaymentProps) => {
   const handlePayment = async () => {
     const isLoaded = await loadRazorpayScript();
@@ -28,6 +29,7 @@ const RazorpayButton = ({
       alert('Razorpay SDK failed to load.');
       return;
     }
+          if (setLoading) setLoading(true);
 
     try {
       const { data: order } = await postRequest(createOrderApi, {
@@ -42,6 +44,7 @@ const RazorpayButton = ({
         description: 'Payment for your booking',
         order_id: order.order.id,
         handler: async function (response: any) {
+
           try {
             const verificationRes = await postRequest(verifyApi, {
               ...payload,
@@ -57,7 +60,7 @@ const RazorpayButton = ({
             }
           } catch (err) {
             console.error('Verification error:', err);
-
+         
             HotToastError('❌ Something went wrong during verification.');
           }
         },
@@ -81,12 +84,16 @@ const RazorpayButton = ({
       if (error.response.data.message) {
         HotToastError(error.response.data.message);
       }
+    }finally{
+   if (setLoading) {
+              setLoading(false);
+            }
     }
   };
 
   return (
     <>
-      <button className={buttonStyle.className||""} onClick={handlePayment}>
+      <button className={buttonStyle.className || ''} onClick={handlePayment}>
         {buttonStyle.buttonText}
       </button>
     </>
