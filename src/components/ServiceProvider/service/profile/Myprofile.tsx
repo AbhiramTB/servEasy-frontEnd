@@ -5,8 +5,6 @@ import { IServiceProvider } from '../../../../utils/types/IServiceProvider';
 import { putRequest } from '../../../../utils/makeRequestInstance';
 import { apiEndPointServiceProvider } from '../../../../utils/constant';
 import SubscriptionInfoServiceProvider from './SubscriptionInfoServiceProvider';
-import { openModal } from '../../../../redux/slices/subscriptionSlice';
-import { useDispatch } from 'react-redux';
 import UpgradePlanButton from '../../../ui/UpgradePlanButton';
 import { Crown, Edit, Save } from 'lucide-react';
 
@@ -126,7 +124,7 @@ const Myprofile = () => {
   };
 
   return (
-    <div className="min-h-screen py-4 sm:py-8 bg-base-100">
+    <div className="min-h-screen py-4 sm:py-8 bg-base-100" >
       <div className="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="p-4 mb-6 border shadow-sm sm:p-6 bg-base-200 rounded-xl">
