@@ -29,8 +29,8 @@ const SubscriptionModal: React.FC = () => {
     fetchPlans();
   }, []);
 
-  if (serviceProviderInfo.isProServiceProvider) return null;
-
+  // if (serviceProviderInfo.isProServiceProvider) return null;
+                        
   if (!isOpen || !plans) return null;
 
   return (
