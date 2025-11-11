@@ -101,7 +101,7 @@ function App() {
 
           {AdminRoutes()}
 
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<NotFound/>} />
         </Routes>
       </BrowserRouter>
     </>
