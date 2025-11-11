@@ -1,6 +1,6 @@
 import { Route } from 'react-router-dom';
-import AdminProtectedRoute from '../pages/AdminProtectedRoute';
-import AdminLayout from '../pages/AdminLayout';
+// import AdminProtectedRoute from '../pages/AdminProtectedRoute';
+import AdminLayout from '../layouts/admin/AdminLayout.tsx';
 import UserListingPage from '../components/admin/UserListingPage';
 import ServiceProviderVerification from '../components/admin/ServiceProviderVerification';
 import ServiceProviderListing from '../components/admin/serviceProviderListing';
@@ -17,9 +17,9 @@ import { ROUTES } from '../utils/constants/routes.ts';
 
 const AdminRoutes = () => {
   return (
-    <Route element={<AdminProtectedRoute />}>
+    <Route>
       <Route path={ROUTES.ADMIN.ROOT} element={<AdminLayout />}>
-        <Route path={ROUTES.ADMIN.HOME }element={<AdminHome />} />
+        <Route path={ROUTES.ADMIN.HOME} element={<AdminHome />} />
         <Route path={ROUTES.ADMIN.USERS} element={<UserListingPage />} />
         <Route path={ROUTES.ADMIN.SERVICE_PROVIDER_VERIFICATION} element={<ServiceProviderVerification />} />
         <Route path={ROUTES.ADMIN.SERVICE_PROVIDER_LISTING} element={<ServiceProviderListing />} />
@@ -28,7 +28,7 @@ const AdminRoutes = () => {
         <Route path={ROUTES.ADMIN.CATEGORY_MANAGEMENT} element={<CategoryList />} />
         <Route path={ROUTES.ADMIN.SITE_SETTINGS} element={<SiteSettingsPage />} />
         <Route path={ROUTES.ADMIN.COUPON_MANAGEMENT} element={<CouponListPage />} />
-        <Route path={ROUTES.ADMIN.SERVICE_PROVIDER_WALLET_DETAIL(":id")} element={<AdminProviderWallet />} />
+        <Route path={ROUTES.ADMIN.SERVICE_PROVIDER_WALLET_DETAIL(':id')} element={<AdminProviderWallet />} />
         <Route path={ROUTES.ADMIN.SERVICE_PROVIDER_WALLETS} element={<WalletListing />} />
         <Route path={ROUTES.ADMIN.LOGS} element={<AdminLogs />} />
       </Route>

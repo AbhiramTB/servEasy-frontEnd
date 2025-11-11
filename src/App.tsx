@@ -1,12 +1,11 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import AuthPage from './components/User/AuthModel/AuthPage.tsx';
-import Body from './pages/Body';
+import Body from './layouts/user/UserLayout.tsx';
 import Otp from './components/User/AuthModel/Otp';
 import Register from './components/ServiceProvider/Register/Register.tsx';
 import AdminSignIn from '../src/components/admin/auth/Sigin.tsx';
 import Dashboard from './components/ServiceProvider/Dashboard.tsx';
-import ServiceProviderLayout from './pages/ServiceProviderLayout.tsx';
-import ProtectedRoute from './pages/ProtectedRoute.tsx';
+import ServiceProviderLayout from './layouts/provider/ServiceProviderLayout.tsx';
 import ServiceManagement from './components/ServiceProvider/service/ServiceManagement.tsx';
 import SingleServiceCard from './components/User/bookService/ServiceDetailsPage.tsx';
 import BookService from './components/User/bookService/bookedServiceList/BookOfflineServicePage.tsx';
@@ -74,7 +73,7 @@ function App() {
             <Route path="chats" element={<ChatsUser />}></Route>
           </Route>
 
-          <Route element={<ProtectedRoute />}>
+          <Route>
             <Route path="/service-provider" element={<ServiceProviderLayout />}>
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="register" element={<Register />} />
@@ -101,7 +100,7 @@ function App() {
 
           {AdminRoutes()}
 
-          <Route path="*" element={<NotFound/>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </>
