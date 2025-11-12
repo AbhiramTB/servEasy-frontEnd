@@ -38,6 +38,7 @@ import SlotPage from './components/ServiceProvider/SlotManagement/SlotPage.tsx';
 import AdminRoutes from './routes/AdminRoutes.tsx';
 import Walletpage from './components/ServiceProvider/wallet/walletPage.tsx';
 import AiAssistancePage from './components/ServiceProvider/aiAssistance/AssistancePage.tsx';
+import SubscriptionFeaturesRoutes from './routes/SubscriptionFeaturesRoutes.tsx';
 
 function App() {
   const { userAccessToken = true, adminAccessToken } = useAuth();
@@ -88,8 +89,23 @@ function App() {
               <Route path="payment-management" element={<PaymentManagement />} />
               <Route path="slot-management" element={<SlotPage />} />
               <Route path="wallet" element={<Walletpage />} />
-              <Route path="assistance" element={<AiAssistancePage />} />
-              <Route path="assistance/:chatId" element={<AiAssistancePage />} />
+
+              <Route
+                path="assistance"
+                element={
+                  <SubscriptionFeaturesRoutes>
+                    <AiAssistancePage />
+                  </SubscriptionFeaturesRoutes>
+                }
+              />
+              <Route
+                path="assistance/:chatId"
+                element={
+                  <SubscriptionFeaturesRoutes>
+                    <AiAssistancePage />
+                  </SubscriptionFeaturesRoutes>
+                }
+              />
             </Route>
           </Route>
 

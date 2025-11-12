@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { RootState } from '../../redux/store';
-import {  useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { putRequest } from '../../utils/makeRequestInstance';
 
 import { apiEndPointServiceProvider } from '../../utils/constant';
@@ -24,7 +24,7 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const serviceProviderInfo = useSelector((state: RootState) => state.serviceProvider);
   const [isOnDuty, setIsOnDuty] = useState(true);
-  
+
   const toggleStatus = () => {
     setIsOnDuty(prev => !prev);
   };
@@ -34,7 +34,7 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
   const [acceptFn, setAcceptFn] = useState<() => void>(() => () => {});
 
   const navigate = useNavigate();
-  const getServiceProvider=useFetchServiceProviderProfile()
+  const getServiceProvider = useFetchServiceProviderProfile();
   const handleOnDutty = async () => {
     try {
       const res = await putRequest(apiEndPointServiceProvider.makeActiveAllservice + serviceProviderInfo._id, {});
@@ -64,8 +64,6 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
   useEffect(() => {
     getServiceProvider();
   }, []);
-
- 
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -210,13 +208,9 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                   <MessageSquare size={18} />
                   <span>Messages</span>
                 </Link>
-
-
-
               </li>
 
-
- <li>
+              <li>
                 <Link
                   to="/service-provider/assistance"
                   className="flex items-center gap-2 font-medium hover:bg-primary-focus"
@@ -224,15 +218,7 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                   <MessageSquare size={18} />
                   <span>ai Messages</span>
                 </Link>
-
-
-
               </li>
-
-
-
-
-              
             </ul>
             <div className="flex items-center gap-3 ml-4">
               <span className="font-semibold text-white">{isOnDuty ? 'On Duty' : 'On Leave'}</span>
