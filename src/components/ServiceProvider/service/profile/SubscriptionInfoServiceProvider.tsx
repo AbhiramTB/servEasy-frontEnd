@@ -1,6 +1,5 @@
-import dayjs from 'dayjs'
-import { ISubscription } from '../../../../utils/types/IServiceProvider'
-
+import dayjs from 'dayjs';
+import { ISubscription } from '../../../../utils/types/ISubscription';
 interface SubscriptionInfoProps {
   subscriptions: ISubscription[];
 }
@@ -19,26 +18,21 @@ const getStatusBadgeClass = (status?: string) => {
 };
 
 const SubscriptionInfoServiceProvider = ({ subscriptions }: SubscriptionInfoProps) => {
-
   return (
     <div className="space-y-4">
-      {subscriptions.map((subscription) => (
+      {subscriptions.map(subscription => (
         <div
-          key={subscription.planId+subscription.createdAt}
+          key={subscription.planId + subscription.createdAt}
           className="p-4 border rounded-lg bg-base-50 border-base-300"
         >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <label className="text-sm font-medium text-base-content/70">Start Date</label>
-              <p className="text-base font-medium">
-                {dayjs(subscription.startDate).format('MMM DD, YYYY')}
-              </p>
+              <p className="text-base font-medium">{dayjs(subscription.startDate).format('MMM DD, YYYY')}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-base-content/70">End Date</label>
-              <p className="text-base font-medium">
-                {dayjs(subscription.endDate).format('MMM DD, YYYY')}
-              </p>
+              <p className="text-base font-medium">{dayjs(subscription.endDate).format('MMM DD, YYYY')}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-base-content/70">Duration</label>
@@ -50,8 +44,7 @@ const SubscriptionInfoServiceProvider = ({ subscriptions }: SubscriptionInfoProp
               <label className="text-sm font-medium text-base-content/70">Status</label>
               <div className="mt-1">
                 <span className={getStatusBadgeClass(subscription.status)}>
-                  {subscription.status?.charAt(0).toUpperCase() +
-                    subscription.status?.slice(1)}
+                  {subscription.status?.charAt(0).toUpperCase() + subscription.status?.slice(1)}
                 </span>
               </div>
             </div>

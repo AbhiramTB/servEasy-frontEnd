@@ -10,19 +10,16 @@ import { adminLinks } from '../../utils/constants/adminLinks';
 import { LogOut } from 'lucide-react';
 import { addProfile } from '../../redux/slices/adminSlice';
 import { useDispatch } from 'react-redux';
+import InitialAvatar from '../../utils/ui/InitialAvatar';
 
 const NavBar = () => {
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const admin = useSelector((state: RootState) => state.admin);
   const [isLogout, setisLogout] = useState<boolean>(false);
 
-
-
-
- useEffect(()=>{
+  useEffect(() => {
     getUserProfile();
-
-  },[])
+  }, []);
   const getUserProfile = async () => {
     try {
       const res = await adminGetRequest(apiEndPointAdmin.getPrfoile);
@@ -31,8 +28,6 @@ const NavBar = () => {
       console.error(err);
     }
   };
-
-
 
   const handleLogOut = async () => {
     try {
@@ -61,8 +56,6 @@ const NavBar = () => {
       />
 
       <div className="sticky top-0 z-10 border-b shadow-lg sm:px-20 navbar bg-base-200 border-base-content/10">
-
-        
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -72,14 +65,14 @@ const NavBar = () => {
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                >
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
               </svg>
             </div>
             <ul
               tabIndex={0}
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-60"
-              >
+            >
               <NavLinks isMobile={true} />
             </ul>
           </div>
@@ -105,7 +98,12 @@ const NavBar = () => {
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
-                <img alt="Admin avatar" src={admin.profileImage} />
+                <InitialAvatar
+                  name={admin.userName}
+                  bgColor="bg-primary/70"
+                  textColor="text-base-100"
+                  imageSrc={admin.profileImage}
+                />
               </div>
             </div>
             <ul
@@ -124,8 +122,6 @@ const NavBar = () => {
             </ul>
           </div>
         </div>
-
-
       </div>
     </>
   );

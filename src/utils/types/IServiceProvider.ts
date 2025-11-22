@@ -1,4 +1,5 @@
 import { IService } from '../../redux/slices/serviceProvider';
+import { ISubscription } from './ISubscription';
 
 export interface IServiceProvider {
   _id: string;
@@ -13,10 +14,12 @@ export interface IServiceProvider {
     type?: string;
     coordinates?: [number, number];
     address?: string;
+
   };
+  
   experience: number;
   profileImage: string;
-  document: string;
+  document?: string[];
   isVerified: 'verified' | 'pending' | 'rejected' | 'idle';
   userId: string;
   isBlocked: boolean;
@@ -28,14 +31,6 @@ export interface IServiceProvider {
   subscriptions?: ISubscription[];
 }
 
-export interface ISubscription {
-  planId: string;
-  startDate: Date;
-  endDate: Date;
-  status: 'active' | 'expired';
-  createdAt?: Date;
-  paymentId: string;
-}
 
 export interface BankDetails {
   accountHolderName: string;

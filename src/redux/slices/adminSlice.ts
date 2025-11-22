@@ -59,6 +59,7 @@ export interface ServiceProvider {
   __v: number;
   _id: string;
   
+  
 }
 
 const initialState: UserState = {
