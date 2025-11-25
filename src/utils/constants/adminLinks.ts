@@ -2,6 +2,8 @@ import {
   LayoutDashboard, Users, BadgeCheck, Briefcase, Layers,
   CalendarCheck, FolderCog, Settings, FileText,
   Wallet,
+
+  CalendarCog,
 } from 'lucide-react';
 import { ROUTES } from './routes';
 
@@ -15,6 +17,7 @@ export const adminLinks = [
   { to: ROUTES.ADMIN.CATEGORY_MANAGEMENT, icon: FolderCog, label: 'Category Management' },
   { to: ROUTES.ADMIN.SITE_SETTINGS, icon: Settings, label: 'Site Settings' },
   {to: ROUTES.ADMIN.SERVICE_PROVIDER_WALLETS,icon:Wallet,label:"service-provider wallets"},
+  {to:ROUTES.ADMIN.subscriptionManagement ,  icon:CalendarCog, label:"Subscription-management"},
   { to: ROUTES.ADMIN.LOGS, icon: FileText, label: 'Server Logs' },
 ];
 

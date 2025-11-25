@@ -14,6 +14,7 @@ import AdminHome from '../components/admin/Home.tsx';
 import AdminProviderWallet from '../components/admin/wallet/AdminProviderWallet.tsx';
 import WalletListing from '../components/admin/wallet/WalletListing.tsx';
 import { ROUTES } from '../utils/constants/routes.ts';
+import SubscriptionPlansPage from '../components/admin/subscriptionsManagement/SubscriptionPlansPage.tsx';
 
 const AdminRoutes = () => {
   return (
@@ -31,6 +32,7 @@ const AdminRoutes = () => {
         <Route path={ROUTES.ADMIN.SERVICE_PROVIDER_WALLET_DETAIL(':id')} element={<AdminProviderWallet />} />
         <Route path={ROUTES.ADMIN.SERVICE_PROVIDER_WALLETS} element={<WalletListing />} />
         <Route path={ROUTES.ADMIN.LOGS} element={<AdminLogs />} />
+        <Route path={ROUTES.ADMIN.subscriptionManagement} element={<SubscriptionPlansPage />} />
       </Route>
     </Route>
   );

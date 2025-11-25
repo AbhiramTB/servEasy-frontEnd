@@ -12,13 +12,11 @@ const WalletHeaderSection: React.FC<Props> = ({ wallet }) => {
 
   return (
     <div className="flex flex-col gap-6 p-5 rounded-xl bg-base-100 border shadow-sm">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">Provider Wallet Overview</h2>
         <SubscriptionIcon isSubscribedProvider={wallet.isSubscribedProvider} />
       </div>
 
-      {/* Provider Info */}
       <div className="flex flex-col sm:flex-row gap-5 items-center sm:items-start">
         <ImagePreview src={provider.profileImage} className="w-24 h-24 rounded-full object-cover border" />
 
@@ -31,9 +29,7 @@ const WalletHeaderSection: React.FC<Props> = ({ wallet }) => {
         </div>
       </div>
 
-      {/* Bank + Wallet Summary */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Bank */}
         <div className="p-4 bg-base-200 rounded-lg">
           <h4 className="font-semibold mb-2">Bank Details</h4>
           <p>
@@ -47,7 +43,6 @@ const WalletHeaderSection: React.FC<Props> = ({ wallet }) => {
           </p>
         </div>
 
-        {/* Wallet */}
         <div className="p-4 bg-base-200 rounded-lg text-center">
           <p className="text-3xl font-bold text-success">₹{wallet.balance.toLocaleString()}</p>
           <p className="text-gray-500">Wallet Balance</p>

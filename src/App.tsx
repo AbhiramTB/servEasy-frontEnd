@@ -39,6 +39,7 @@ import AdminRoutes from './routes/AdminRoutes.tsx';
 import Walletpage from './components/ServiceProvider/wallet/walletPage.tsx';
 import AiAssistancePage from './components/ServiceProvider/aiAssistance/AssistancePage.tsx';
 import SubscriptionFeaturesRoutes from './routes/SubscriptionFeaturesRoutes.tsx';
+import SubscriptionPlansPage from './components/admin/subscriptionsManagement/SubscriptionPlansPage.tsx';
 
 function App() {
   const { userAccessToken = true, adminAccessToken } = useAuth();
@@ -49,6 +50,8 @@ function App() {
 
       <BrowserRouter basename="/">
         <Routes>
+          <Route path="cp" element={<SubscriptionPlansPage />} />
+
           <Route path="/payment/verify" element={<PaymentVerify />} />
           <Route path="/signIn" element={userAccessToken ? <Navigate to="/" replace /> : <AuthPage />} />
           <Route path="otp" element={<Otp />} />
@@ -73,11 +76,11 @@ function App() {
             <Route path="chat/:serviceProviderId" element={<Chat />} />
             <Route path="chats" element={<ChatsUser />}></Route>
           </Route>
+          <Route path="/service-provider/register" element={<Register />} />
 
           <Route>
             <Route path="/service-provider" element={<ServiceProviderLayout />}>
               <Route path="dashboard" element={<Dashboard />} />
-              <Route path="register" element={<Register />} />
               <Route path="booked-services" element={<BookedServiceServiceProvider />} />
               <Route path="chats" element={<ChatUI />}></Route>
               <Route path="video-call/:userId" element={<ServiceProviderVideoCall />}></Route>
