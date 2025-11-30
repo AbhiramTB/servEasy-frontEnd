@@ -1,8 +1,8 @@
-import { useState, useCallback } from "react";
-import lodash from "lodash";
-import { apiEndPoint } from "../../../utils/constant";
-import { getRequest } from "../../../utils/makeRequestInstance";
-import { MapPin, Search, Loader2 } from "lucide-react";
+import { useState, useCallback } from 'react';
+import lodash from 'lodash';
+import { apiEndPoint } from '../../../utils/constant';
+import { getRequest } from '../../../utils/makeRequestInstance';
+import { MapPin, Search, Loader2 } from 'lucide-react';
 
 export interface Location {
   address: string;
@@ -15,13 +15,8 @@ interface LocationSearchProps {
   initialLocation?: string;
 }
 
-const LocationSearch: React.FC<LocationSearchProps> = ({
-  onLocationSelect,
-  initialLocation,
-}) => {
-  const [query, setQuery] = useState<string>(
-    initialLocation ? initialLocation : ""
-  );
+const LocationSearch: React.FC<LocationSearchProps> = ({ onLocationSelect, initialLocation }) => {
+  const [query, setQuery] = useState<string>(initialLocation ? initialLocation : '');
   const [results, setResults] = useState<Location[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const debounce = lodash.debounce;
@@ -34,21 +29,16 @@ const LocationSearch: React.FC<LocationSearchProps> = ({
 
     setIsLoading(true);
     try {
-      const response = await getRequest(
-        `${apiEndPoint.locationAutocomplete}?query=${searchTerm}`
-      );
+      const response = await getRequest(`${apiEndPoint.locationAutocomplete}?query=${searchTerm}`);
       setResults(response.data);
     } catch (error) {
-      console.error("Error fetching locations:", error);
+      console.error('Error fetching locations:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const debouncedFetchLocations = useCallback(
-    debounce(fetchLocations, 500),
-    []
-  );
+  const debouncedFetchLocations = useCallback(debounce(fetchLocations, 500), []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -66,7 +56,7 @@ const LocationSearch: React.FC<LocationSearchProps> = ({
   };
 
   const handleClear = () => {
-    setQuery("");
+    setQuery('');
     setResults([]);
     onLocationSelect(null);
   };
@@ -89,10 +79,7 @@ const LocationSearch: React.FC<LocationSearchProps> = ({
           />
           {isLoading ? (
             <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-              <Loader2
-                size={18}
-                className="animate-spin text-primary dark:text-primary-foreground"
-              />
+              <Loader2 size={18} className="animate-spin text-primary dark:text-primary-foreground" />
             </div>
           ) : (
             query && (
@@ -128,15 +115,11 @@ const LocationSearch: React.FC<LocationSearchProps> = ({
                   className="px-4 py-2.5 flex items-start hover:bg-primary hover:text-primary-content cursor-pointer transition-colors duration-150"
                   onClick={() => handleSuggestionClick(location)}
                 >
-                  <MapPin
-                    size={18}
-                    className="mr-2 text-primary dark:text-primary hover:text-primary-content"
-                  />
+                  <MapPin size={18} className="mr-2 text-primary dark:text-primary hover:text-primary-content" />
                   <div>
                     <p className="font-medium">{location.address}</p>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      {location.latitude.toFixed(6)},{" "}
-                      {location.longitude.toFixed(6)}
+                      {location.latitude.toFixed(6)}, {location.longitude.toFixed(6)}
                     </p>
                   </div>
                 </li>

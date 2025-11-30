@@ -40,6 +40,7 @@ import Walletpage from './components/ServiceProvider/wallet/walletPage.tsx';
 import AiAssistancePage from './components/ServiceProvider/aiAssistance/AssistancePage.tsx';
 import SubscriptionFeaturesRoutes from './routes/SubscriptionFeaturesRoutes.tsx';
 import SubscriptionPlansPage from './components/admin/subscriptionsManagement/SubscriptionPlansPage.tsx';
+import AdsPage from './components/ServiceProvider/ads/AdsPage.tsx';
 
 function App() {
   const { userAccessToken = true, adminAccessToken } = useAuth();
@@ -51,6 +52,8 @@ function App() {
       <BrowserRouter basename="/">
         <Routes>
           <Route path="cp" element={<SubscriptionPlansPage />} />
+
+          <Route path="ads" element={<AdsPage />} />
 
           <Route path="/payment/verify" element={<PaymentVerify />} />
           <Route path="/signIn" element={userAccessToken ? <Navigate to="/" replace /> : <AuthPage />} />
