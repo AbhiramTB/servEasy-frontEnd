@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { RootState } from '../../redux/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { getRequest, putRequest } from '../../utils/makeRequestInstance';
-import { addServiceProvider } from '../../redux/slices/serviceProvider';
+import { useSelector } from 'react-redux';
+import { putRequest } from '../../utils/makeRequestInstance';
+
 import { apiEndPointServiceProvider } from '../../utils/constant';
-import { MessageSquare, Home, LayoutGrid, Calendar, CreditCard, Bell } from 'lucide-react';
+import { MessageSquare, Home, LayoutGrid, Calendar, CreditCard, Bell, Wallet, Crown } from 'lucide-react';
 import { useSocketNotifications } from '../../hooks/useNotifications';
 import { HotToastChatNotification, HotToastSuccess } from '../../utils/notificationToast';
 import toast from 'react-hot-toast';
 import { connectSocket } from '../../utils/socket';
 import { IVideoCallNotification } from '../../utils/types/INotification';
 import VideoCallNotification from '../../utils/ui/VideoCallNotification';
+import useFetchServiceProviderProfile from '../../hooks/useFetchServiceProviderProfile';
 
 const ringtune = new Audio('/Ringtone Video call.mp3');
 
@@ -22,7 +23,6 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ profile }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const serviceProviderInfo = useSelector((state: RootState) => state.serviceProvider);
-  const dispatch = useDispatch();
   const [isOnDuty, setIsOnDuty] = useState(true);
 
   const toggleStatus = () => {
@@ -34,7 +34,7 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
   const [acceptFn, setAcceptFn] = useState<() => void>(() => () => {});
 
   const navigate = useNavigate();
-
+  const getServiceProvider = useFetchServiceProviderProfile();
   const handleOnDutty = async () => {
     try {
       const res = await putRequest(apiEndPointServiceProvider.makeActiveAllservice + serviceProviderInfo._id, {});
@@ -64,16 +64,6 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
   useEffect(() => {
     getServiceProvider();
   }, []);
-
-  const getServiceProvider = async () => {
-    try {
-      const res = await getRequest(apiEndPointServiceProvider.getServiceProvider);
-
-      dispatch(addServiceProvider(res.data.serviceProvider));
-    } catch (error) {
-      console.error('Error fetching service provider:', error);
-    }
-  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -205,12 +195,28 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                 </Link>
               </li>
               <li>
+                <Link to="/wallet" className="flex items-center gap-2 font-medium hover:bg-primary-focus">
+                  <Wallet size={18} />
+                  <span>wallet</span>
+                </Link>
+              </li>
+              <li>
                 <Link
                   to="/service-provider/chats"
                   className="flex items-center gap-2 font-medium hover:bg-primary-focus"
                 >
                   <MessageSquare size={18} />
                   <span>Messages</span>
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/service-provider/assistance"
+                  className="flex items-center gap-2 font-medium hover:bg-primary-focus"
+                >
+                  <MessageSquare size={18} />
+                  <span>ai Messages</span>
                 </Link>
               </li>
             </ul>
@@ -264,8 +270,13 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
 
             <div className="dropdown dropdown-end">
               <button tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full md:w-12 lg:w-16">
-                  <img alt="Profile Image" src={profile} />
+                <div className="relative w-10 md:w-12 lg:w-16">
+                  <img alt="Profile Image" src={profile} className="object-cover w-full h-full rounded-full" />
+                  {serviceProviderInfo.isProServiceProvider && (
+                    <div className="absolute bottom-0 right-0 bg-white rounded-full p-0.5 shadow">
+                      <Crown size={14} color="#ffbb00" />
+                    </div>
+                  )}
                 </div>
               </button>
               <ul

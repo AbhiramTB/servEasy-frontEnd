@@ -17,7 +17,6 @@ const DocumentViewer: React.FC<DocumentViewerProps> = ({ documents, onImagePrevi
   return (
     <div className="space-y-3">
       {documents.length === 1 ? (
-        // Single document - full width
         <div
           className="w-full h-40 overflow-hidden transition-colors border rounded-lg cursor-pointer border-base-300 hover:border-primary/50"
           onClick={() => onImagePreview(documents[0])}

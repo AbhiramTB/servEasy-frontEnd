@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { adminGetRequest } from '../../utils/AxiosAdmin';
 import { RefreshCcw } from 'lucide-react';
+import LoadingSpinner from '../ui/LoadingSpinner';
 
 const AdminLogs: React.FC = () => {
   const [logs, setLogs] = useState<string>('');
@@ -25,9 +26,17 @@ const AdminLogs: React.FC = () => {
   }, []);
 
   return (
-    <div className="p-4 bg-white rounded shadow">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold">Server Logs</h2>
+      <>
+
+      {loading ? (
+       <LoadingSpinner />
+) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : (<>
+          <div className="p-4 rounded shadow">
+
+      <div className="flex items-center justify-between mb-4 ">
+        <h2 className="text-xl font-bold ">Server Logs</h2>
         <button
           onClick={fetchLogs}
           className="p-2 transition rounded hover:bg-gray-200"
@@ -36,17 +45,15 @@ const AdminLogs: React.FC = () => {
           <RefreshCcw className={`${loading ? 'animate-spin' : ''}`} />
         </button>
       </div>
-
-      {loading ? (
-        <p>Loading logs...</p>
-      ) : error ? (
-        <p className="text-red-500">{error}</p>
-      ) : (
-        <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto max-h-[550px] whitespace-pre-wrap">
+       <pre className=" p-4  bg-base-300 rounded text-sm text-base-content overflow-auto max-h-[550px] whitespace-pre-wrap">
           {logs}
         </pre>
+            </div>
+
+      </>
+       
       )}
-    </div>
+      </>
   );
 };
 

@@ -39,7 +39,7 @@ const SiteSettingsPage = () => {
 
   const handleMarkDefault = async (id: string) => {
     try {
-      await adminPutRequest(`${apiEndPointAdmin.makeActiveSiteSettings}`, { type: 'home', id });
+      await adminPutRequest(`${apiEndPointAdmin.makeActiveSiteSettings}`, { type: 'makeActiveHomeBanner', id });
 
       setHomeBanners(prev => prev.map(b => ({ ...b, isActive: b._id === id })));
     } catch (error) {
@@ -50,7 +50,7 @@ const SiteSettingsPage = () => {
     <div className="p-6 bg-slate-black">
       <h1 className="mb-4 text-2xl font-bold">Site Settings</h1>
 
-      <div className="flex gap-x-6">
+      <div className=" gap-x-6">
         {/* Home Banners Section */}
         <div className="border p1">
           <div className="flex justify-between mb-4">

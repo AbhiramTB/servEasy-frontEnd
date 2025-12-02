@@ -7,6 +7,7 @@ import {
 import React, { useState, FormEvent } from "react";
 import { apiEndPointAdmin } from "../../../utils/constant";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 interface SignInCredentials {
   identifier: string;
   password: string;
@@ -99,46 +100,28 @@ const AdminSignIn: React.FC = () => {
     }
   };
 
+  const [showPassword, setShowPassword] = useState(false);
+
+  
+
   return (
-    <div
-      className="flex items-center justify-center min-h-screen px-4"
-      style={{
-        background: "linear-gradient(135deg, #121212 0%, #1e1e1e 100%)",
-      }}
-    >
-      <div className="w-full max-w-md bg-gray-800 border border-gray-700 shadow-xl card">
-        {/* <figure className="px-6 pt-6">
-          <div className="flex items-center justify-center w-32 h-32 p-4 bg-blue-900 rounded-full">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-20 h-20 text-blue-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </div>
-        </figure> */}
+    <div className="flex items-center justify-center min-h-screen px-4 bg-primary/5">
+      <div className="w-full max-w-md border shadow-2xl card bg-base-100 border-base-300">
         <div className="card-body">
-          <h2 className="mb-6 text-2xl font-bold text-center text-blue-400">
+          <h2 className="mb-6 text-2xl font-bold text-center text-primary">
             Admin Sign In
           </h2>
 
           {error && (
-            <div className="mb-4 text-red-200 bg-red-900 border border-red-800 alert">
+            <div className="mb-4 text-sm alert alert-error">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 stroke-current shrink-0"
+                className="w-6 h-6 shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
               >
                 <path
+                  stroke="currentColor"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
@@ -152,42 +135,41 @@ const AdminSignIn: React.FC = () => {
           <form onSubmit={handleSubmit}>
             <div className="mb-4 form-control">
               <label className="label">
-                <span className="font-medium text-blue-400 label-text">
+                <span className="font-semibold label-text text-primary">
                   Sign in with
                 </span>
               </label>
-              <div className="flex gap-6 mb-2">
-                <label className="justify-start gap-2 cursor-pointer label">
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
                     name="identifierType"
-                    className="bg-gray-700 border-gray-600 radio radio-primary"
+                    className="radio radio-primary"
                     value="email"
                     checked={identifierType === "email"}
                     onChange={handleIdentifierTypeChange}
                   />
-                  <span className="text-gray-300 label-text">Email</span>
+                  <span className="label-text">Email</span>
                 </label>
-                <label className="justify-start gap-2 cursor-pointer label">
+
+                <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
                     name="identifierType"
-                    className="bg-gray-700 border-gray-600 radio radio-primary"
+                    className="radio radio-primary"
                     value="phone"
                     checked={identifierType === "phone"}
                     onChange={handleIdentifierTypeChange}
                   />
-                  <span className="text-gray-300 label-text">Phone Number</span>
+                  <span className="label-text">Phone Number</span>
                 </label>
               </div>
             </div>
 
             <div className="form-control">
               <label className="label">
-                <span className="font-medium text-blue-400 label-text">
-                  {identifierType === "email"
-                    ? "Email Address"
-                    : "Phone Number"}
+                <span className="font-semibold label-text text-primary">
+                  {identifierType === "email" ? "Email Address" : "Phone Number"}
                 </span>
               </label>
               <input
@@ -198,7 +180,7 @@ const AdminSignIn: React.FC = () => {
                     ? "admin@example.com"
                     : "Phone Number"
                 }
-                className="text-white placeholder-gray-400 bg-gray-700 border-gray-600 input input-bordered focus:border-blue-500"
+                className="input input-bordered bg-base-200 text-base-content"
                 value={credentials.identifier}
                 onChange={handleChange}
                 required
@@ -207,47 +189,50 @@ const AdminSignIn: React.FC = () => {
 
             <div className="mt-4 form-control">
               <label className="label">
-                <span className="font-medium text-blue-400 label-text">
+                <span className="font-semibold label-text text-primary">
                   Password
                 </span>
-               
               </label>
-              <input
-                type="password"
-                name="password"
-                placeholder="••••••••"
-                className="text-white placeholder-gray-400 bg-gray-700 border-gray-600 input input-bordered focus:border-blue-500"
-                value={credentials.password}
-                onChange={handleChange}
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="••••••••"
+                  className="w-full pr-12 input input-bordered bg-base-200 text-base-content"
+                  value={credentials.password}
+                  onChange={handleChange}
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute -translate-y-1/2 right-3 top-2/4 text-base-content"
+                  onClick={() => setShowPassword(!showPassword)}
+                  tabIndex={-1}
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
             </div>
 
             <div className="mt-6 form-control">
               <button
                 type="submit"
-                className="text-white bg-blue-600 border-none btn hover:bg-blue-700"
+                className="btn btn-primary"
                 disabled={isLoading}
               >
                 {isLoading ? "Signing in..." : "Sign In"}
               </button>
             </div>
           </form>
-
-          {/* <div className="mt-6 text-gray-500 divider">OR</div> */}
-
-          {/* <div className="text-center">
-            <p className="text-sm text-gray-400">
-              Need access?{" "}
-              <a href="#" className="text-blue-400 hover:text-blue-300 link">
-                Contact system administrator
-              </a>
-            </p>
-          </div> */}
         </div>
       </div>
     </div>
   );
+
 };
 
 export default AdminSignIn;
