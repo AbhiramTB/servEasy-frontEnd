@@ -59,7 +59,7 @@ const BookedService = () => {
       console.error('Error fetching booked services', error);
     }
   };
-
+  // {dfdfdf}
   return (
     <div className="px-4 bg-base-100">
       <h1 className="mb-4 text-xl font-bold">Booked Services</h1>
