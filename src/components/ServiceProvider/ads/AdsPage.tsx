@@ -7,29 +7,8 @@ import { HotToastSuccess } from '../../../utils/notificationToast';
 import { getRequest, postRequest, putRequest } from '../../../utils/makeRequestInstance';
 import { ICreateAdDTO } from '../../../utils/types/DTO/ICreateAdDTO';
 
-const API = '/api/provider/ads';
-
 const AdsPage = () => {
-  const [ads, setAds] = useState<IAd[]>([
-    {
-      _id: '656a1c3b8f9a1a0012ab3451',
-      serviceId: '656a12de8f9a1a0012ab1111',
-      providerId: '656a10bb8f9a1a0012ab0001',
-      caption: 'Fast AC Repair Services',
-      description: 'Quick and affordable AC repair service near your area.',
-      image: 'https://hellomangaluru.online/media/2021/12/CamScanner-12-07-2021-13.15.20_4.jpg',
-      targetLocation: { type: 'Point', coordinates: [76.2651, 11.6768] },
-      radiusKm: 10,
-      planType: 'basic',
-      views: 120,
-      clicks: 22,
-      status: 'approved',
-      startDate: '2025-11-20T00:00:00.000Z',
-      endDate: '2025-11-23T00:00:00.000Z',
-      createdAt: '2025-11-19T10:15:00.000Z',
-      updatedAt: '2025-11-20T08:00:00.000Z',
-    },
-  ]);
+  const [ads, setAds] = useState<IAd[] | []>([]);
 
   const [open, setOpen] = useState(false);
   const [editAd, setEditAd] = useState<IAd | null>(null);
@@ -39,8 +18,9 @@ const AdsPage = () => {
     try {
       setLoading(true);
       const { data } = await getRequest(`service-providers/ads/provider/6912e29c0048a5bae03d4fc8`);
-      if (data?.data?.length) {
-        setAds(data.data);
+      console.log(data);
+      if (data?.length) {
+        setAds(data);
       }
     } catch (error) {
       console.error('Fetch ads failed, using mock data');
@@ -66,7 +46,7 @@ const AdsPage = () => {
     setOpen(true);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: string, action: string) => {
     try {
       await axios.delete(`service-providers/ads/${id}`);
 
@@ -112,7 +92,7 @@ const AdsPage = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {ads.map(ad => (
-          <AdCard key={ad._id} ad={ad} onEdit={handleEdit} onDelete={handleDelete} />
+          <AdCard key={ad._id} ad={ad} onEdit={handleEdit} onActiveInactive={handleDelete} />
         ))}
       </div>
 

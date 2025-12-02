@@ -53,8 +53,6 @@ function App() {
         <Routes>
           <Route path="cp" element={<SubscriptionPlansPage />} />
 
-          <Route path="ads" element={<AdsPage />} />
-
           <Route path="/payment/verify" element={<PaymentVerify />} />
           <Route path="/signIn" element={userAccessToken ? <Navigate to="/" replace /> : <AuthPage />} />
           <Route path="otp" element={<Otp />} />
@@ -83,6 +81,8 @@ function App() {
 
           <Route>
             <Route path="/service-provider" element={<ServiceProviderLayout />}>
+              <Route path="ads" element={<AdsPage />} />
+
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="booked-services" element={<BookedServiceServiceProvider />} />
               <Route path="chats" element={<ChatUI />}></Route>

@@ -11,7 +11,8 @@ export interface IAd {
   // Location targeting
   targetLocation?: {
     type: 'Point';
-    coordinates: [number, number]; // [lng, lat]
+    coordinates: [number, number];
+    address?:string // [lng, lat]
   };
 
   radiusKm?: number;
@@ -23,7 +24,7 @@ export interface IAd {
   clicks?: number;
 
   // Status
-  status?: 'pending' | 'approved' | 'rejected' | 'expired';
+    status?: "active" |"block" |"expired"
 
   // Dates (stored as ISO strings on frontend)
   startDate?: string;

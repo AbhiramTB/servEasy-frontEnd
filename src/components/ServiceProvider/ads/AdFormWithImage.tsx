@@ -5,19 +5,15 @@ import { ILocation } from '../../../utils/types/ILocation';
 import { LocateIcon } from 'lucide-react';
 import { ICreateAdDTO } from '../../../utils/types/DTO/ICreateAdDTO';
 import { HotToastError } from '../../../utils/notificationToast';
+import { getRequest } from '../../../utils/makeRequestInstance';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 
 interface Props {
   ad: IAd | null;
   onClose: () => void;
   onSubmit: (data: ICreateAdDTO, id?: string) => void;
 }
-
-const mockServices = [
-  { id: '6912e9c30048a5bae03d527e', name: 'AC Repair' },
-  { id: '6912e9c30048a5bae03d527e', name: 'Electrician Service' },
-  { id: '6912e9c30048a5bae03d527e', name: 'Plumbing' },
-  { id: '6912e9c30048a5bae03d527e', name: 'Home Cleaning' },
-];
 
 const AdFormWithImage: React.FC<Props> = ({ ad, onClose, onSubmit }) => {
   const [caption, setCaption] = useState('');
@@ -27,20 +23,11 @@ const AdFormWithImage: React.FC<Props> = ({ ad, onClose, onSubmit }) => {
   const [endDate, setEndDate] = useState('');
   const [radiusKm, setRadiusKm] = useState(0);
   const [location, setLocation] = useState<ILocation | null>(null);
-
+  const [services, setService] = useState<{ serviceName: string; serviceId: string }[]>();
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
-  const [adData, setAdData] = useState<ICreateAdDTO>({
-    caption: '',
-    description: '',
-    serviceId: '',
-    startDate: '',
-    endDate: '',
-    targetLocation: null,
-    radiusKm: null,
-    image: null,
-  });
+  const providerId = useSelector((root: RootState) => root.serviceProvider._id);
 
   useEffect(() => {
     if (ad) {
@@ -54,7 +41,7 @@ const AdFormWithImage: React.FC<Props> = ({ ad, onClose, onSubmit }) => {
 
       if (ad.targetLocation?.coordinates) {
         setLocation({
-          address: '',
+          address: ad.targetLocation.address || '',
           longitude: ad.targetLocation.coordinates[0],
           latitude: ad.targetLocation.coordinates[1],
         });
@@ -78,22 +65,18 @@ const AdFormWithImage: React.FC<Props> = ({ ad, onClose, onSubmit }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 🔥 Validation
     if (!caption.trim()) {
       HotToastError('Caption is missing');
-      setAdData(prev => ({ ...prev, caption }));
       return;
     }
 
     if (!description.trim()) {
       HotToastError('Description is missing');
-      setAdData(prev => ({ ...prev, description }));
       return;
     }
 
     if (!serviceId) {
       HotToastError('Service is required');
-      setAdData(prev => ({ ...prev, serviceId }));
       return;
     }
 
@@ -114,10 +97,21 @@ const AdFormWithImage: React.FC<Props> = ({ ad, onClose, onSubmit }) => {
       image: imageBase64 || null,
     };
 
-    setAdData(payload);
-
     onSubmit(payload, ad?._id);
   };
+
+  useEffect(() => {
+    try {
+      if (providerId) {
+        const getService = async () => {
+          const { data } = await getRequest(`/service-providers/providers/${providerId}/services/names`);
+          console.log(data);
+          setService(data.data);
+        };
+        getService();
+      }
+    } catch (error) {}
+  }, [providerId]);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -155,11 +149,12 @@ const AdFormWithImage: React.FC<Props> = ({ ad, onClose, onSubmit }) => {
           required
         >
           <option value="">Select Service</option>
-          {mockServices.map(service => (
-            <option key={service.id} value={service.id}>
-              {service.name} ({service.id})
-            </option>
-          ))}
+          {services?.length &&
+            services.map(service => (
+              <option key={service.serviceId} value={service.serviceId}>
+                {service.serviceName}
+              </option>
+            ))}
         </select>
       </div>
 
@@ -189,7 +184,7 @@ const AdFormWithImage: React.FC<Props> = ({ ad, onClose, onSubmit }) => {
 
       <div>
         <label className="label-text font-medium">Location</label>
-        <LocationSearch onLocationSelect={setLocation} />
+        <LocationSearch onLocationSelect={setLocation} initialLocation={ad?.targetLocation?.address} />
 
         {location && (
           <div className="text-xs text-gray-500 mt-1">
@@ -216,7 +211,6 @@ const AdFormWithImage: React.FC<Props> = ({ ad, onClose, onSubmit }) => {
 
       {/* Preview */}
       {preview && <img src={preview} className="w-full h-auto object-contain rounded-lg bg-black" />}
-      {/* {preview && <ImagePreview src={preview} className="w-full h-auto object-contain rounded-lg bg-black" />} */}
 
       {/* Buttons */}
       <div className="flex justify-end gap-2 pt-2">
