@@ -7,6 +7,10 @@ import {
 import React, { useState, FormEvent } from "react";
 import { apiEndPointAdmin } from "../../../utils/constant";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
+=======
+import { Eye, EyeOff } from "lucide-react";
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 interface SignInCredentials {
   identifier: string;
   password: string;
@@ -99,6 +103,7 @@ const AdminSignIn: React.FC = () => {
     }
   };
 
+<<<<<<< HEAD
   return (
     <div
       className="flex items-center justify-center min-h-screen px-4"
@@ -127,18 +132,40 @@ const AdminSignIn: React.FC = () => {
         </figure> */}
         <div className="card-body">
           <h2 className="mb-6 text-2xl font-bold text-center text-blue-400">
+=======
+  const [showPassword, setShowPassword] = useState(false);
+
+  
+
+  return (
+    <div className="flex items-center justify-center min-h-screen px-4 bg-primary/5">
+      <div className="w-full max-w-md border shadow-2xl card bg-base-100 border-base-300">
+        <div className="card-body">
+          <h2 className="mb-6 text-2xl font-bold text-center text-primary">
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
             Admin Sign In
           </h2>
 
           {error && (
+<<<<<<< HEAD
             <div className="mb-4 text-red-200 bg-red-900 border border-red-800 alert">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-6 h-6 stroke-current shrink-0"
+=======
+            <div className="mb-4 text-sm alert alert-error">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-6 h-6 shrink-0"
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                 fill="none"
                 viewBox="0 0 24 24"
               >
                 <path
+<<<<<<< HEAD
+=======
+                  stroke="currentColor"
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
@@ -152,6 +179,7 @@ const AdminSignIn: React.FC = () => {
           <form onSubmit={handleSubmit}>
             <div className="mb-4 form-control">
               <label className="label">
+<<<<<<< HEAD
                 <span className="font-medium text-blue-400 label-text">
                   Sign in with
                 </span>
@@ -162,10 +190,23 @@ const AdminSignIn: React.FC = () => {
                     type="radio"
                     name="identifierType"
                     className="bg-gray-700 border-gray-600 radio radio-primary"
+=======
+                <span className="font-semibold label-text text-primary">
+                  Sign in with
+                </span>
+              </label>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="identifierType"
+                    className="radio radio-primary"
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                     value="email"
                     checked={identifierType === "email"}
                     onChange={handleIdentifierTypeChange}
                   />
+<<<<<<< HEAD
                   <span className="text-gray-300 label-text">Email</span>
                 </label>
                 <label className="justify-start gap-2 cursor-pointer label">
@@ -173,21 +214,40 @@ const AdminSignIn: React.FC = () => {
                     type="radio"
                     name="identifierType"
                     className="bg-gray-700 border-gray-600 radio radio-primary"
+=======
+                  <span className="label-text">Email</span>
+                </label>
+
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="identifierType"
+                    className="radio radio-primary"
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                     value="phone"
                     checked={identifierType === "phone"}
                     onChange={handleIdentifierTypeChange}
                   />
+<<<<<<< HEAD
                   <span className="text-gray-300 label-text">Phone Number</span>
+=======
+                  <span className="label-text">Phone Number</span>
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                 </label>
               </div>
             </div>
 
             <div className="form-control">
               <label className="label">
+<<<<<<< HEAD
                 <span className="font-medium text-blue-400 label-text">
                   {identifierType === "email"
                     ? "Email Address"
                     : "Phone Number"}
+=======
+                <span className="font-semibold label-text text-primary">
+                  {identifierType === "email" ? "Email Address" : "Phone Number"}
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                 </span>
               </label>
               <input
@@ -198,7 +258,11 @@ const AdminSignIn: React.FC = () => {
                     ? "admin@example.com"
                     : "Phone Number"
                 }
+<<<<<<< HEAD
                 className="text-white placeholder-gray-400 bg-gray-700 border-gray-600 input input-bordered focus:border-blue-500"
+=======
+                className="input input-bordered bg-base-200 text-base-content"
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                 value={credentials.identifier}
                 onChange={handleChange}
                 required
@@ -207,6 +271,7 @@ const AdminSignIn: React.FC = () => {
 
             <div className="mt-4 form-control">
               <label className="label">
+<<<<<<< HEAD
                 <span className="font-medium text-blue-400 label-text">
                   Password
                 </span>
@@ -221,18 +286,52 @@ const AdminSignIn: React.FC = () => {
                 onChange={handleChange}
                 required
               />
+=======
+                <span className="font-semibold label-text text-primary">
+                  Password
+                </span>
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="••••••••"
+                  className="w-full pr-12 input input-bordered bg-base-200 text-base-content"
+                  value={credentials.password}
+                  onChange={handleChange}
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute -translate-y-1/2 right-3 top-2/4 text-base-content"
+                  onClick={() => setShowPassword(!showPassword)}
+                  tabIndex={-1}
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
             </div>
 
             <div className="mt-6 form-control">
               <button
                 type="submit"
+<<<<<<< HEAD
                 className="text-white bg-blue-600 border-none btn hover:bg-blue-700"
+=======
+                className="btn btn-primary"
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                 disabled={isLoading}
               >
                 {isLoading ? "Signing in..." : "Sign In"}
               </button>
             </div>
           </form>
+<<<<<<< HEAD
 
           {/* <div className="mt-6 text-gray-500 divider">OR</div> */}
 
@@ -244,10 +343,16 @@ const AdminSignIn: React.FC = () => {
               </a>
             </p>
           </div> */}
+=======
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
         </div>
       </div>
     </div>
   );
+<<<<<<< HEAD
+=======
+
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 };
 
 export default AdminSignIn;

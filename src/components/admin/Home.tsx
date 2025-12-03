@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react';
+<<<<<<< HEAD
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { adminGetRequest } from '../../utils/AxiosAdmin';
 import { apiEndPointAdmin } from '../../utils/constant';
 import { addProfile } from '../../redux/slices/adminSlice';
+=======
+import {  useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { adminGetRequest } from '../../utils/AxiosAdmin';
+import { apiEndPointAdmin } from '../../utils/constant';
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 import FilterSection from '../Chart/FilterSection';
 import StatsSection from '../Chart/StatsSection';
 import PaymentChartSection from '../Chart/PaymentChartSection';
@@ -17,7 +24,10 @@ interface PaymentData {
 }
 
 const AdminDashboard: React.FC = () => {
+<<<<<<< HEAD
   const dispatch = useDispatch();
+=======
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
   const admin = useSelector((state: RootState) => state.admin);
 
   const [paymentData, setPaymentData] = useState<PaymentData[]>([]);
@@ -26,6 +36,7 @@ const AdminDashboard: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+<<<<<<< HEAD
     getUserProfile();
     fetchPaymentInfo();
   }, []);
@@ -39,6 +50,13 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
+=======
+    fetchPaymentInfo();
+  }, []);
+
+
+ 
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
   const fetchPaymentInfo = async () => {
     setLoading(true);
     try {

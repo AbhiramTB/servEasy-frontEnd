@@ -1,17 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { RootState } from '../../redux/store';
+<<<<<<< HEAD
 import { useDispatch, useSelector } from 'react-redux';
 import { getRequest, putRequest } from '../../utils/makeRequestInstance';
 import { addServiceProvider } from '../../redux/slices/serviceProvider';
 import { apiEndPointServiceProvider } from '../../utils/constant';
 import { MessageSquare, Home, LayoutGrid, Calendar, CreditCard, Bell } from 'lucide-react';
+=======
+import { useSelector } from 'react-redux';
+import { putRequest } from '../../utils/makeRequestInstance';
+
+import { apiEndPointServiceProvider } from '../../utils/constant';
+import { MessageSquare, Home, LayoutGrid, Calendar, CreditCard, Bell, Wallet, Crown } from 'lucide-react';
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 import { useSocketNotifications } from '../../hooks/useNotifications';
 import { HotToastChatNotification, HotToastSuccess } from '../../utils/notificationToast';
 import toast from 'react-hot-toast';
 import { connectSocket } from '../../utils/socket';
 import { IVideoCallNotification } from '../../utils/types/INotification';
 import VideoCallNotification from '../../utils/ui/VideoCallNotification';
+<<<<<<< HEAD
+=======
+import useFetchServiceProviderProfile from '../../hooks/useFetchServiceProviderProfile';
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 
 const ringtune = new Audio('/Ringtone Video call.mp3');
 
@@ -22,7 +34,10 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ profile }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const serviceProviderInfo = useSelector((state: RootState) => state.serviceProvider);
+<<<<<<< HEAD
   const dispatch = useDispatch();
+=======
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
   const [isOnDuty, setIsOnDuty] = useState(true);
 
   const toggleStatus = () => {
@@ -34,7 +49,11 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
   const [acceptFn, setAcceptFn] = useState<() => void>(() => () => {});
 
   const navigate = useNavigate();
+<<<<<<< HEAD
 
+=======
+  const getServiceProvider = useFetchServiceProviderProfile();
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
   const handleOnDutty = async () => {
     try {
       const res = await putRequest(apiEndPointServiceProvider.makeActiveAllservice + serviceProviderInfo._id, {});
@@ -65,6 +84,7 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
     getServiceProvider();
   }, []);
 
+<<<<<<< HEAD
   const getServiceProvider = async () => {
     try {
       const res = await getRequest(apiEndPointServiceProvider.getServiceProvider);
@@ -75,6 +95,8 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
     }
   };
 
+=======
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -205,6 +227,15 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                 </Link>
               </li>
               <li>
+<<<<<<< HEAD
+=======
+                <Link to="/wallet" className="flex items-center gap-2 font-medium hover:bg-primary-focus">
+                  <Wallet size={18} />
+                  <span>wallet</span>
+                </Link>
+              </li>
+              <li>
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                 <Link
                   to="/service-provider/chats"
                   className="flex items-center gap-2 font-medium hover:bg-primary-focus"
@@ -213,6 +244,19 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                   <span>Messages</span>
                 </Link>
               </li>
+<<<<<<< HEAD
+=======
+
+              <li>
+                <Link
+                  to="/service-provider/assistance"
+                  className="flex items-center gap-2 font-medium hover:bg-primary-focus"
+                >
+                  <MessageSquare size={18} />
+                  <span>ai Messages</span>
+                </Link>
+              </li>
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
             </ul>
             <div className="flex items-center gap-3 ml-4">
               <span className="font-semibold text-white">{isOnDuty ? 'On Duty' : 'On Leave'}</span>
@@ -264,8 +308,18 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
 
             <div className="dropdown dropdown-end">
               <button tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+<<<<<<< HEAD
                 <div className="w-10 rounded-full md:w-12 lg:w-16">
                   <img alt="Profile Image" src={profile} />
+=======
+                <div className="relative w-10 md:w-12 lg:w-16">
+                  <img alt="Profile Image" src={profile} className="object-cover w-full h-full rounded-full" />
+                  {serviceProviderInfo.isProServiceProvider && (
+                    <div className="absolute bottom-0 right-0 bg-white rounded-full p-0.5 shadow">
+                      <Crown size={14} color="#ffbb00" />
+                    </div>
+                  )}
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                 </div>
               </button>
               <ul

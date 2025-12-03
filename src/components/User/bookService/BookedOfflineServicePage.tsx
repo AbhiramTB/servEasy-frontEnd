@@ -1,6 +1,10 @@
 import { useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+<<<<<<< HEAD
 import { getRequest, putRequest } from '../../../utils/makeRequestInstance';
+=======
+import { deleteRequest, getRequest, postRequest, putRequest } from '../../../utils/makeRequestInstance';
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 import RazorpayButton from '../../ui/PaymentButton';
 import ShowBills from '../../ui/ShowBills';
 import ReviewCard from './ReviewCard';
@@ -16,6 +20,13 @@ import BookingStepper from '../../ServiceProvider/booking/BookingStepper';
 import UserInfoCompact from '../../ServiceProvider/booking/UserInfoCompact';
 import ServiceCardCompact from '../../ServiceProvider/booking/ServiceCardCompact';
 import CancelBookingModal from '../../ServiceProvider/booking/CancelBookingModal';
+<<<<<<< HEAD
+=======
+import CouponInput from '../../ui/CouponInput';
+import LoadingSpinner from '../../ui/LoadingSpinner';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 
 interface Address {
   name: string;
@@ -25,6 +36,7 @@ interface Address {
   phone: string;
 }
 
+<<<<<<< HEAD
 interface Ipayment {
   serviceCost?: number;
   metaialCost?: number;
@@ -33,6 +45,19 @@ interface Ipayment {
   total: number;
   convenienceFee?: number;
 }
+=======
+export interface IPayment {
+  serviceCost?: number;
+  metaialCost: number;
+  travelCost: number;
+  inspectionCost: number;
+  convenienceFee: number;
+  total: number;
+  discountAmount: number;
+  finalTotal?: number;
+}
+
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 interface Location {
   address: string;
   latitude: number;
@@ -88,7 +113,12 @@ interface BookedService {
   bookingHistory?: IBookingHistory[];
 
   cancelReason?: string;
+<<<<<<< HEAD
   payment?: Ipayment;
+=======
+  payment?: IPayment;
+  coupon?: ICouponApplied;
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 }
 
 export interface BookingData {
@@ -98,6 +128,16 @@ export interface BookingData {
   review?: IReview;
 }
 
+<<<<<<< HEAD
+=======
+export interface ICouponApplied {
+  _id?: string;
+  code: string;
+  discountAmount: number;
+  appliedAt: Date;
+}
+
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 const ServiceBookingDetails = () => {
   const { id } = useParams();
   const [bookingData, setBookingData] = useState<BookingData | null>(null);
@@ -108,6 +148,37 @@ const ServiceBookingDetails = () => {
   const [download, setDownload] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState<boolean>(false);
   const [cancelReason, setCancelReason] = useState<string>('');
+<<<<<<< HEAD
+=======
+  const user=useSelector((state:RootState)=>state.user)
+
+  const handleApplyCoupon = async (coupon: string) => {
+    try {
+      const response = await postRequest(`/service/bookings/${id}/coupon/apply`, {
+        couponCode: coupon.trim(),
+      });
+      if (response.status === 200) {
+        HotToastSuccess(response.data.message);
+        if (!bookedService) return;
+        setBookingData(prev =>
+          prev
+            ? {
+                ...prev,
+                bookedService: {
+                  ...prev.bookedService,
+                  payment: response.data.payment,
+                },
+              }
+            : null
+        );
+      }
+    } catch (error: any) {
+      HotToastError(error?.response?.data?.message || 'Failed to apply coupon');
+    } finally {
+    }
+  };
+  
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 
   const handleCancelBooking = async () => {
     try {
@@ -132,6 +203,33 @@ const ServiceBookingDetails = () => {
     }
   };
 
+<<<<<<< HEAD
+=======
+  const handleRemove = async () => {
+    try {
+      setLoading(true);
+      const res = await deleteRequest(`/service/bookings/${id}/coupon/remove `);
+      if (res.status == 200) {
+        HotToastSuccess(`Coupon removed`);
+        if (res.data.updatedBooking) {
+          setBookingData(prev =>
+            prev
+              ? {
+                  ...prev,
+                  bookedService: res.data.updatedBooking,
+                }
+              : null
+          );
+        }
+      }
+    } catch (error: any) {
+      HotToastError(error?.response?.data?.message || 'Failed to remove coupon');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
   useEffect(() => {
     if (id) {
       getBookedService(id);
@@ -157,12 +255,19 @@ const ServiceBookingDetails = () => {
     }
   };
 
+<<<<<<< HEAD
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-base-200">
         <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
+=======
+  if (loading) {
+    return (
+      <LoadingSpinner/>
+
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
     );
   }
 
@@ -531,7 +636,11 @@ const ServiceBookingDetails = () => {
 
           {bookedService.payment && (
             <div className="shadow card bg-base-100">
+<<<<<<< HEAD
               <div className="p-4 card-body">
+=======
+              {/* <div className="p-4 card-body">
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                 <h3 className="text-base card-title">Price Details</h3>
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between">
@@ -552,10 +661,90 @@ const ServiceBookingDetails = () => {
                     <span>Total</span>
                     <span>₹{bookedService.payment.total}</span>
                   </div>
+<<<<<<< HEAD
                   {bookedService.payment.convenienceFee && bookedService.payment.convenienceFee > 0 && (
                     <div className="flex justify-between mt-1 text-xs opacity-75">
                       <span>convenience Fee (10%)</span>
                       <span>₹{bookedService.payment?.convenienceFee} </span>
+=======
+
+                  <div className="flex justify-between font-bold">
+                    <span>discount</span>
+                    <span>₹{bookedService.payment.discountAmount}</span>
+                  </div>
+
+                  <div className="flex justify-between font-bold">
+                    <span>total after discount</span>
+                    <span>₹{bookedService.payment.finalTotal}</span>
+                  </div>
+                </div>
+                <div className="">
+                  <CouponInput bookingId={id + ''} handleApply={(coupon: string) => handleApplyCoupon(coupon)} />
+                </div>
+              </div> */}
+
+              <div className="p-4 card-body">
+                <h3 className="text-base font-semibold card-title">Price Details</h3>
+
+                <div className="space-y-2 text-sm">
+                  {/* Base Costs */}
+                  <div className="flex justify-between">
+                    <span>Service Cost</span>
+                    <span>₹{bookedService.payment.serviceCost}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Material Cost</span>
+                    <span>₹{bookedService.payment.metaialCost}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Travel Cost</span>
+                    <span>₹{bookedService.payment.travelCost}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>inspection Cost</span>
+                    <span>₹{bookedService.payment.inspectionCost}</span>
+                  </div>
+
+                  <div className="my-2 divider" />
+
+                  {/* Subtotal */}
+                  <div className="flex justify-between font-medium">
+                    <span>Subtotal</span>
+                    <span>₹{bookedService.payment.total}</span>
+                  </div>
+
+                  {/* If discount applied */}
+                  {bookedService.payment.discountAmount > 0 ? (
+                    <>
+                      <div className="flex justify-between font-semibold text-success">
+                        <span>Discount</span>
+                        <span>- ₹{bookedService.payment.discountAmount}</span>
+                      </div>
+
+                      <div className="my-2 divider" />
+
+                      <div className="flex justify-between text-lg font-bold text-primary">
+                        <span>Total After Discount</span>
+                        <span>₹{bookedService.payment.finalTotal}</span>
+                      </div>
+                    </>
+                  ) : (
+                    // If no discount applied
+                    <div className="flex justify-between text-lg font-bold text-primary">
+                      <span>Total</span>
+                      <span>₹{bookedService.payment.total}</span>
+                    </div>
+                  )}
+
+                  {id && bookedService.paymentStatus !== 'completed' && (
+                    <div className="mt-4">
+                      <CouponInput
+                        bookingId={id + ''}
+                        currentCoupon={bookedService.coupon?.code || null}
+                        handleRemoveCoupon={() => handleRemove()}
+                        handleApply={(coupon: string) => handleApplyCoupon(coupon)}
+                      />
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                     </div>
                   )}
                 </div>
@@ -563,9 +752,21 @@ const ServiceBookingDetails = () => {
 
               {id && bookedService.paymentStatus !== 'completed' && (
                 <RazorpayButton
+<<<<<<< HEAD
                   serviceid={id}
                   reloadData={() => getBookedService(id)}
                   total={bookedService.payment.total}
+=======
+                  onSuccess={() => getBookedService(id)}
+                  buttonStyle={{className:'p-3 text-base font-bold rounded-md hover:bg-opacity-45 bg-primary',buttonText:"Pay Now"}}
+                  createOrderApi="/payment/create-order"
+                  customerInfo={{email:user.email||"" ,phone:user.phone||"",userName:user.userName||''}}
+                  onError={()=>HotToastError('your attempted transaction was unsuccessful')}
+                  payload={{"serviceId":id}}
+                  total={bookedService.payment.total - 100}
+                  verifyApi={"/payment/verify"}
+                  
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                 />
               )}
             </div>

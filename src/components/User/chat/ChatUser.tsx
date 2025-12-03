@@ -244,8 +244,13 @@ const ChatUser = () => {
   if (!user?._id) return null;
 
   return (
+<<<<<<< HEAD
     <div className="max-w-4xl mx-auto">
       <div className="flex flex-col h-[90vh] rounded-xl shadow-lg overflow-hidden border border-base-300 bg-base-100">
+=======
+    <div className="max-w-5xl mx-auto ">
+      <div className="flex flex-col h-[90vh] rounded-xl shadow-lg overflow-hidden border border-base-300 bg-primary/10">
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
         {/* Chat Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b bg-base-200">
           <div className="flex items-center space-x-4">
