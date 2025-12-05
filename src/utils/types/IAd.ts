@@ -1,3 +1,6 @@
+import { ILocation } from "./ILocation";
+
+
 export interface IAd {
   _id?: string;
 
@@ -9,11 +12,8 @@ export interface IAd {
   image?: string;
 
   // Location targeting
-  targetLocation?: {
-    type: 'Point';
-    coordinates: [number, number];
-    address?:string // [lng, lat]
-  };
+  targetLocation?:  ILocation 
+
 
   radiusKm?: number;
 

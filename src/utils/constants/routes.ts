@@ -20,7 +20,8 @@ export const ROUTES = {
       `/admin/service-provider-wallets/${id}`,
     SERVICE_PROVIDER_WALLETS: "/admin/service-provider-wallets",
     LOGS: "/admin/logs",
-    subscriptionManagement:"subscription-management"
+    subscriptionManagement:"subscription-management",
+    ADSMANAGEMENT:"ads-management"
   },
   USER: {
     HOME: "/",

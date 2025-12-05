@@ -19,5 +19,7 @@ export const adminLinks = [
   {to: ROUTES.ADMIN.SERVICE_PROVIDER_WALLETS,icon:Wallet,label:"service-provider wallets"},
   {to:ROUTES.ADMIN.subscriptionManagement ,  icon:CalendarCog, label:"Subscription-management"},
   { to: ROUTES.ADMIN.LOGS, icon: FileText, label: 'Server Logs' },
+    { to: ROUTES.ADMIN.ADSMANAGEMENT, icon: Settings, label: 'ads-management' },
+
 ];
 
