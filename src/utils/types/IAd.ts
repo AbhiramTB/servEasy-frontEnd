@@ -1,3 +1,4 @@
+import { IAdStatus } from "./IAdminAd";
 import { ILocation } from "./ILocation";
 
 
@@ -24,7 +25,7 @@ export interface IAd {
   clicks?: number;
 
   // Status
-    status?: "active" |"block" |"expired"
+    status?: IAdStatus
 
   // Dates (stored as ISO strings on frontend)
   startDate?: string;

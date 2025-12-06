@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface IProps {
   crrPage: number;
@@ -8,6 +8,10 @@ interface IProps {
 }
 
 const Pagination: React.FC<IProps> = ({ crrPage, dataLimit, totaldata, fetchData }) => {
+  useEffect(() => {
+    fetchData(crrPage);
+  }, []);
+
   return (
     <div className="flex justify-center mt-10 mb-10 join">
       <button
@@ -18,9 +22,7 @@ const Pagination: React.FC<IProps> = ({ crrPage, dataLimit, totaldata, fetchData
         «
       </button>
 
-      <button className="join-item btn bg-base-300">
-        Page {crrPage + 1}
-      </button>
+      <button className="join-item btn bg-base-300">Page {crrPage + 1}</button>
 
       <button
         className="text-3xl font-bold join-item btn bg-primary text-primary-content"

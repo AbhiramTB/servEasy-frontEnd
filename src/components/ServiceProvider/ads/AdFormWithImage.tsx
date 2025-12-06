@@ -39,11 +39,11 @@ const AdFormWithImage: React.FC<Props> = ({ ad, onClose, onSubmit }) => {
       setRadiusKm(ad.radiusKm || 0);
       setPreview(ad.image || null);
 
-      if (ad.targetLocation?.coordinates) {
+      if (ad.targetLocation) {
         setLocation({
           address: ad.targetLocation.address || '',
-          longitude: ad.targetLocation.coordinates[0],
-          latitude: ad.targetLocation.coordinates[1],
+          longitude: ad.targetLocation.longitude,
+          latitude: ad.targetLocation.latitude,
         });
       }
     }

@@ -1,5 +1,6 @@
 import { ILocation } from "./ILocation";
 
+ export type IAdStatus ="active" | "inactive" | "expired";
 
 export interface IAdminAd {
   _id: string;
@@ -17,12 +18,11 @@ export interface IAdminAd {
 
   radiusKm: number;
 
-  startDate: string; // ISO string
-  endDate: string;   // ISO string
-
+  startDate: string; 
+  endDate: string;   
+status:IAdStatus
   views: number;
   clicks: number;
-  status: "active" | "inactive" | "expired"|string;
 
   createdAt: string;
   updatedAt: string;
