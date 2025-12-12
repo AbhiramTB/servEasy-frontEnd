@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 import { IAd } from '../../../utils/types/IAd';
 import AdModal from './AdModal';
 import AdCard from './AdCard';
@@ -7,6 +6,7 @@ import { HotToastSuccess } from '../../../utils/notificationToast';
 import { getRequest, patchRequest, postRequest, putRequest } from '../../../utils/makeRequestInstance';
 import { ICreateAdDTO } from '../../../utils/types/DTO/ICreateAdDTO';
 import { IAdStatus } from '../../../utils/types/IAdminAd';
+import Pagination from '../../ui/Pagination';
 
 const AdsPage = () => {
   const [ads, setAds] = useState<IAd[] | []>([]);
@@ -14,14 +14,19 @@ const AdsPage = () => {
   const [open, setOpen] = useState(false);
   const [editAd, setEditAd] = useState<IAd | null>(null);
   const [loading, setLoading] = useState(false);
-
-  const fetchAds = async () => {
+  const [crrPage, setCrrPage] = useState<number>(0);
+  const [totalData, setTotalData] = useState<number>(0);
+  const dataLimit = 1;
+  const fetchAds = async (page: number) => {
     try {
       setLoading(true);
-      const { data } = await getRequest(`service-providers/ads/provider/6912e29c0048a5bae03d4fc8`);
-      console.log(data);
-      if (data?.length) {
-        setAds(data);
+      const res = await getRequest(
+        `service-providers/ads/provider/6912e29c0048a5bae03d4fc8/?page=${page}&limit=${dataLimit}`
+      );
+      setCrrPage(page);
+      setTotalData(res.data.count);
+      if (res.data?.ads.length > 0) {
+        setAds(res.data.ads);
       }
     } catch (error) {
       console.error('Fetch ads failed, using mock data');
@@ -30,12 +35,9 @@ const AdsPage = () => {
     }
   };
 
-  useEffect(() => {
-    fetchAds();
-  }, []);
-
   const handleCreate = () => {
     HotToastSuccess('done');
+    dataLimit;
     setEditAd(null);
     setOpen(true);
   };
@@ -74,7 +76,7 @@ const AdsPage = () => {
       }
 
       setOpen(false);
-      fetchAds();
+      fetchAds(crrPage);
     } catch (err) {
       console.error(err);
     }
@@ -99,9 +101,13 @@ const AdsPage = () => {
         ))}
       </div>
 
-      {/* Modal */}
-
       <AdModal open={open} onClose={() => setOpen(false)} ad={editAd} onSubmit={handleSubmit} />
+      <Pagination
+        crrPage={crrPage}
+        dataLimit={dataLimit}
+        totaldata={totalData}
+        fetchData={(p: number) => fetchAds(p)}
+      />
     </div>
   );
 };

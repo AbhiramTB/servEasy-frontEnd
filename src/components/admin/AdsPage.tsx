@@ -7,7 +7,8 @@ import Pagination from '../ui/Pagination';
 
 const AdsPage = () => {
   const [ads, setAds] = useState<IAdminAd[] | []>([]);
-  const dataLimit = 3;
+  const dataLimit = 1;
+
   const [loading, setLoading] = useState(false);
   const [crrPage, setCrrPage] = useState<number>(0);
   const [totalData, setTotalData] = useState<number>(0);
