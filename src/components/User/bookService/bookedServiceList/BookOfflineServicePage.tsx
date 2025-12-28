@@ -14,6 +14,7 @@ import ServiceDateTimePicker from '../ServiceDateTimePicker';
 import { IServiceDateTime } from '../../../../utils/types/booking';
 import ServiceProviderCard from '../../../ui/ServiceProviderCard';
 import ServiceCardCompact from '../../../ServiceProvider/booking/ServiceCardCompact';
+import BookingPageSkeleton from '../../../../Skeleton/Pages/BookingPageSkeleton';
 
 const BookService = () => {
   const [addresses, setAddresses] = useState<IAddress[]>([]);
@@ -138,8 +139,16 @@ const BookService = () => {
     }
   };
 
+  if (!service) {
+    return (
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-14">
+        <BookingPageSkeleton />
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4">
+    <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 ">
       {conformCard && (
         <div className="mt-3 bg-base-100">
           <BookingSuccess
@@ -151,7 +160,7 @@ const BookService = () => {
       )}
 
       {!conformCard && (
-        <div className="container min-h-screen p-2 sm:p-4 md:p-6">
+        <div className="container p-2 sm:p-4 md:p-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 bg-base-100 border shadow-lg rounded-lg p-2 md:p-4">
             <div className="space-y-4 md:col-span-1 order-2 md:order-1">
               <div className="flex items-center justify-between p-3 md:p-4">
