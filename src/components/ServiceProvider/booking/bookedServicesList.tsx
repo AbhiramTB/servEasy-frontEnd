@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { getRequest } from "../../../utils/makeRequestInstance";
-import { serviceEndPoint } from "../../../utils/constant";
+import { useEffect, useState } from 'react';
+import { getRequest } from '../../../utils/makeRequestInstance';
+import { serviceEndPoint } from '../../../utils/constant';
 
-import { Link } from "react-router-dom";
-import ServiceBookingCard from "../../User/bookService/bookedServiceList/BookedServiceCard";
-import Pagination from "../../ui/Pagination";
+import { Link } from 'react-router-dom';
+import ServiceBookingCard from '../../User/bookService/bookedServiceList/BookedServiceCard';
+import Pagination from '../../ui/Pagination';
 
 interface Address {
   name: string;
@@ -38,20 +38,18 @@ const BookedServiceServiceProvider = () => {
 
   const getBookedService = async (page: number) => {
     try {
-      const res = await getRequest(
-        `${serviceEndPoint.getServiceProviderBookService}?page=${page}&limit=${dataLimit}`
-      );
+      const res = await getRequest(`${serviceEndPoint.getServiceProviderBookService}?page=${page}&limit=${dataLimit}`);
       setCrrPage(page);
       console.log(res);
 
       if (res.status === 200) {
-        console.log(res.data.service);
-        
-        setBookedServices(res.data.service);
+        console.log(res.data.services);
+
+        setBookedServices(res.data.services);
         setTotaldata(res.data.count);
       }
     } catch (error) {
-      console.error("Error fetching booked services", error);
+      console.error('Error fetching booked services', error);
     }
   };
 
@@ -60,16 +58,16 @@ const BookedServiceServiceProvider = () => {
       <h1 className="mb-4 text-xl font-bold">Booked Services</h1>
       {bookedServices.length > 0 ? (
         <div className="grid gap-4 ">
-          {bookedServices.map((service) => (
+          {bookedServices.map(service => (
             <Link
               to={
-                service.serviceType==="Online"
+                service.serviceType === 'Online'
                   ? `/service-provider/booked-services-online/${service._id}`
                   : `/service-provider/booked-services/${service._id}`
               }
             >
-              {" "}
-              <ServiceBookingCard  booking={service} key={service._id} />
+              {' '}
+              <ServiceBookingCard booking={service} key={service._id} />
             </Link>
           ))}
         </div>
@@ -77,12 +75,7 @@ const BookedServiceServiceProvider = () => {
         <p className="text-gray-600">No booked services found.</p>
       )}
 
-      <Pagination
-        crrPage={crrPage}
-        dataLimit={dataLimit}
-        totaldata={totaldata}
-        fetchData={(p) => getBookedService(p)}
-      />
+      <Pagination crrPage={crrPage} dataLimit={dataLimit} totaldata={totaldata} fetchData={p => getBookedService(p)} />
     </div>
   );
 };

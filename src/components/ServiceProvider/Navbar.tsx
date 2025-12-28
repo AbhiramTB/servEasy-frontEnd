@@ -195,7 +195,10 @@ const Navbar: React.FC<NavbarProps> = ({ profile }) => {
                 </Link>
               </li>
               <li>
-                <Link to="/wallet" className="flex items-center gap-2 font-medium hover:bg-primary-focus">
+                <Link
+                  to="/service-provider/wallet"
+                  className="flex items-center gap-2 font-medium hover:bg-primary-focus"
+                >
                   <Wallet size={18} />
                   <span>wallet</span>
                 </Link>

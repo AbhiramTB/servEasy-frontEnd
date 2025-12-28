@@ -11,10 +11,12 @@ const AdminLayout = () => {
   }
 
   return (
-    <div>
+    <>
       <Navbar />
-      <Outlet />
-    </div>
+      <div className="bg-base-100 bg-grid-pattern">
+        <Outlet />
+      </div>
+    </>
   );
 };
 

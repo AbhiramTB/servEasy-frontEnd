@@ -6,7 +6,17 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+      extend: {
+      backgroundImage: {
+        'stripe-pattern': "repeating-linear-gradient(to bottom, oklch(var(--b1)), oklch(var(--b1)) 10px, oklch(var(--b2)) 10px, oklch(var(--b2)) 20px)",
+        'stripe-primary': "repeating-linear-gradient(to bottom, oklch(var(--b1)), oklch(var(--b1)) 10px, oklch(var(--p) / 0.05) 10px, oklch(var(--p) / 0.05) 20px)",
+      'stripe-sm': "repeating-linear-gradient(to bottom, oklch(var(--b1)), oklch(var(--b1)) 2px, oklch(var(--b2)) 2px, oklch(var(--b2)) 4px)",
+      'stripe-notebook': "repeating-linear-gradient(to bottom, oklch(var(--b1)), oklch(var(--b1)) 27px, oklch(var(--p)) 27px, oklch(var(--b2)) 28px)",
+'grid-pattern': `repeating-linear-gradient(to right, oklch(var(--p) / 0.05) 0 1px, transparent 1px 50px),
+                   repeating-linear-gradient(to bottom, oklch(var(--p) / 0.05) 0 1px, transparent 1px 50px)`,
+    }
+    }
+    
   },
   plugins: [daisyui],
   daisyui: {
@@ -15,7 +25,7 @@ export default {
     themes: [
 
      "dark","light" ,"cupcake", "retro", "forest", "corporate", "pastel",
-      "synthwave", "halloween", "black", "luxury", "dracula", "business",
+      "synthwave", "halloween", "black", "luxury", "business",
       "night", "coffee", "dim", "sunset", "bumblebee", "emerald",
       "valentine", "garden", "lofi", "dracula", "cyberpunk", "fantasy", "wireframe","acid",
 

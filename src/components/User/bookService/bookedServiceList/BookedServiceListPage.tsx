@@ -51,8 +51,8 @@ const BookedService = () => {
     try {
       const res = await getRequest(`${serviceEndPoint.getUserBookService}?page=${page}&limit=${dataLimit}`);
       if (res.status === 200) {
-        console.log(res.data.service);
-        setBookedServices(res.data.service);
+        console.log(res.data.services);
+        setBookedServices(res.data.services);
         setPage(page);
       }
     } catch (error) {
@@ -63,7 +63,7 @@ const BookedService = () => {
   return (
     <div className="px-4 bg-base-100">
       <h1 className="mb-4 text-xl font-bold">Booked Services</h1>
-      {bookedServices.length > 0 ? (
+      {bookedServices && bookedServices.length > 0 ? (
         <div className="grid gap-4 ">
           {bookedServices.map(service => (
             <Link

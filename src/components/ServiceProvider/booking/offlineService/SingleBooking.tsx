@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getRequest, postRequest, putRequest } from '../../../../utils/makeRequestInstance';
+import { getRequest, patchRequest, postRequest } from '../../../../utils/makeRequestInstance';
 import { HotToastError, HotToastSuccess } from '../../../../utils/notificationToast';
-import { Toaster } from 'react-hot-toast';
 import PaymentModal from '../paymentModal';
 import { Ipayment } from '../../../../utils/types/Ipayment';
 import { getMinMaxDateTime } from '../../../../utils/getMinMaxDateTime';
@@ -21,7 +20,9 @@ import ServiceAddressCard from '../ServiceAddressCard';
 import { getServiceStatusFlags } from '../../../../utils/getServiceStatusFlags';
 import ScheduleAndPaymentInfo from '../ScheduleAndPaymentInfo';
 import RescheduleBookingModal from '../rescheduleBooking';
-
+import { IReview } from '../../../../utils/types/IReview';
+import StarRating from '../../../ui/StarRating';
+import dayjs from 'dayjs';
 interface IliveLocation {
   lat: number;
   lng: number;
@@ -38,6 +39,8 @@ interface BookingData {
     serviceStatus: string;
     paymentStatus: string;
     paymentType: string;
+    serviceBills?: [string];
+
     address: {
       name: string;
       houseName: string;
@@ -46,7 +49,7 @@ interface BookingData {
       phone: string;
     };
     payment?: Ipayment;
-    cancellationReason?: string;
+    cancelReason?: string;
     preferredSlot: IServiceDateTime;
     liveLocation: IliveLocation;
   };
@@ -65,6 +68,7 @@ interface BookingData {
     email: string;
     phone?: string;
   };
+  review?: IReview;
 }
 
 const ServiceProviderBookingManage = () => {
@@ -105,14 +109,15 @@ const ServiceProviderBookingManage = () => {
     try {
       setLoading(true);
       const res = await getRequest(`/service/bookings/serviceProvider/${id}`);
-
+      console.log(res.data.service);
       if (res.status === 200) {
-        console.log(res.data.service);
+        console.log('--------------------------------------------_________-------------');
+        console.log(res.data);
 
         setBookingData(res.data.service);
-
+        console.log('--------------------------------------------_________-------------');
         if (res.data.service.bookedService.serviceStatus) {
-          setNewStatus(res.data.service.bookedService.serviceStatus);
+          // setNewStatus(res.data.service.bookedService.serviceStatus);
         }
       }
     } catch (err) {
@@ -138,17 +143,17 @@ const ServiceProviderBookingManage = () => {
       }
       let res;
       if (action == 'reschedule') {
-        res = await putRequest(`service/service-provider/bookings/${id}/accept`, {
+        res = await patchRequest(`service/service-provider/booking/${id}/confirm`, {
           estimatedServiceTime: estimatedTime,
           serviceStatus: bookedService.serviceStatus,
           reschedule: true,
           reschedReason: reason,
         });
       } else {
-        res = await putRequest(`service/service-provider/bookings/${id}/accept`, {
+        res = await patchRequest(`service/service-provider/booking/${id}/confirm`, {
           estimatedServiceTime: estimatedTime,
           serviceStatus: 'confirmed',
-          reschedule:false
+          reschedule: false,
         });
       }
 
@@ -177,7 +182,7 @@ const ServiceProviderBookingManage = () => {
         return;
       }
 
-      const res = await putRequest(`service/service-provider/bookings/${id}/cancel`, {
+      const res = await patchRequest(`service/service-provider/booking/${id}/cancel`, {
         serviceStatus: 'cancelled',
         cancellationReason: cancelReason,
       });
@@ -192,10 +197,11 @@ const ServiceProviderBookingManage = () => {
       console.error(err);
     }
   };
+  console.log(bookingData?.review);
 
   const handleStatusUpdate = async () => {
     try {
-      const res = await putRequest(`service/service-provider/bookings/${id}/status`, {
+      const res = await patchRequest(`service/service-provider/booking/${id}/status`, {
         serviceStatus: newStatus,
       });
 
@@ -214,7 +220,7 @@ const ServiceProviderBookingManage = () => {
     try {
       console.log(payment);
 
-      const res = await putRequest(`service/service-provider/bookings/${id}/payment-request`, {
+      const res = await patchRequest(`service/service-provider/booking/${id}/payment-request`, {
         payment,
         paymentStatus: 'requested',
       });
@@ -258,6 +264,7 @@ const ServiceProviderBookingManage = () => {
 
       if (response.status === 201) {
         HotToastSuccess(`Successfully uploaded ${invoiceFiles.length} invoice image(s)`);
+        getBookedService(id as string);
       }
 
       setShowInvoiceModal(false);
@@ -288,27 +295,185 @@ const ServiceProviderBookingManage = () => {
 
   const { bookedService, service, user } = bookingData;
 
-  const formattedBookedDate = new Date(bookedService.bookedTime).toLocaleDateString();
+  const formattedBookedDate = dayjs(bookedService.bookedTime).format('DD/MM/YYYY');
+
   const formattedServiceDate = bookedService.estimatedServiceTime
-    ? new Date(bookedService.estimatedServiceTime).toLocaleDateString()
+    ? dayjs(bookedService.estimatedServiceTime).format('DD/MM/YYYY')
     : 'Not set';
+
   const formattedServiceTime = bookedService.estimatedServiceTime
-    ? new Date(bookedService.estimatedServiceTime).toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-      })
+    ? dayjs(bookedService.estimatedServiceTime).format('hh:mm A')
     : '';
   const { isPending, isConfirmed, isInProgress, isCompleted, isCancelled, isPaymentRequested } = getServiceStatusFlags(
     bookedService.serviceStatus
   );
 
-  return (
-    <div className="container min-h-screen p-2 mx-auto border border-primary/20 bg-primary/5">
-      <Toaster></Toaster>
+  // return (
+  //   <div className="container min-h-screen p-2 mx-auto border border-primary/20 bg-primary/5">
+  //     <StatusAlert status={bookedService.serviceStatus} cancellationReason={bookedService.cancellationReason} />
+  //     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+  //       <div className="p-4 shadow md:col-span-2 bg-base-100 rounded-box">
+  //         <ServiceCardCompact
+  //           serviceImage={service.serviceImage}
+  //           serviceName={service.serviceName}
+  //           serviceType={service.serviceType}
+  //           description={service.description}
+  //           estimatedPrice={service.estimatedPrice}
+  //         />
 
-      <StatusAlert status={bookedService.serviceStatus} cancellationReason={bookedService.cancellationReason} />
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div className="p-4 shadow md:col-span-2 bg-base-100 rounded-box">
+  //         <div className="divider"></div>
+
+  //         {/* Customer Details */}
+  //         <UserInfoCompact
+  //           profileImage={user.profileImage}
+  //           userName={user.userName}
+  //           email={user.email}
+  //           phone={user.phone ?? ' '}
+  //         />
+
+  //         {/* Status Timeline */}
+
+  //         <BookingStepper status={bookedService.serviceStatus} />
+
+  //         <ScheduleAndPaymentInfo
+  //           bookedDate={formattedBookedDate}
+  //           serviceDate={formattedServiceDate}
+  //           serviceTime={formattedServiceTime}
+  //           isPending={isPending}
+  //           estimatedServiceTime={bookedService.estimatedServiceTime}
+  //           paymentStatus={bookedService.paymentStatus}
+  //           paymentType={bookedService.paymentType}
+  //         />
+
+  //         <div className="flex flex-wrap justify-center gap-2 mt-4">
+  //           {isPending && (
+  //             <>
+  //               <button className="btn btn-success" onClick={() => setShowAcceptModal(true)}>
+  //                 Accept Booking
+  //               </button>
+  //               <button className="btn btn-error" onClick={() => setShowCancelModal(true)}>
+  //                 Cancel Booking
+  //               </button>
+  //             </>
+  //           )}
+
+  //           {isConfirmed && (
+  //             <>
+  //               <button className="btn btn-primary" onClick={() => setShowStatusModal(true)}>
+  //                 Update Status
+  //               </button>
+  //             </>
+  //           )}
+
+  //           <Link to={'/service-provider/chat/' + user._id}>
+  //             <button className="btn btn-secondary">Contact Customer</button>
+  //           </Link>
+
+  //           {isConfirmed && (
+  //             <>
+  //               <button className="btn btn-success" onClick={() => setRescheduleModal(true)}>
+  //                 reschedule your booking
+  //               </button>
+  //             </>
+  //           )}
+
+  //           {(isInProgress || isPaymentRequested || isCompleted) && !bookedService.serviceBills && (
+  //             <button className="btn btn-info" onClick={() => setShowInvoiceModal(true)}>
+  //               Upload Bills
+  //             </button>
+  //           )}
+
+  //           {isInProgress && (
+  //             <button className="w-full mt-4 btn btn-warning" onClick={() => setPaymentForm(true)}>
+  //               Request Payment
+  //             </button>
+  //           )}
+
+  //           {paymentForm && (
+  //             <PaymentModal
+  //               payment={payment}
+  //               setPayment={(data: Ipayment) => setPayment(data)}
+  //               closeModal={() => setPaymentForm(false)}
+  //               makePaymentRequest={handlePaymentRequest}
+  //             />
+  //           )}
+  //         </div>
+  //       </div>
+
+  //       <div className="md:col-span-1">
+  //         <div className="mb-4 shadow card bg-base-100">
+  //           <ServiceDateTime
+  //             serviceDateTime={bookedService?.preferredSlot || 0}
+  //             userType="serviceProvider"
+  //             isCancelled={isCancelled ? true : false}
+  //           />
+  //         </div>
+  //         <div className="mb-4 ">
+  //           <ServiceAddressCard address={bookedService.address} liveLocation={bookedService.liveLocation} />
+  //         </div>
+  //         <div className=" w-full">
+  //           <span className="text-lg font-semibold text-primary">user review</span>
+  //           <StarRating comment={bookingData.review.comment} rating={bookingData.review.rating} />
+  //         </div>
+
+  //         {/* Price Details */}
+  //         {bookedService.payment && <PriceDetailsCard payment={bookedService.payment} />}
+  //       </div>
+  //     </div>
+
+  //     <AcceptServiceModal
+  //       estimatedTime={estimatedTime}
+  //       max={max}
+  //       min={min}
+  //       handleAcceptBooking={() => handleAcceptBooking('accept')}
+  //       setEstimatedTime={setEstimatedTime}
+  //       setShow={setShowAcceptModal}
+  //       show={showAcceptModal}
+  //     />
+
+  //     <RescheduleBookingModal
+  //       estimatedTime={estimatedTime}
+  //       setEstimatedTime={setEstimatedTime}
+  //       setShowAcceptModal={setRescheduleModal}
+  //       handleAcceptBooking={() => handleAcceptBooking('reschedule')}
+  //       reason={reason}
+  //       setReason={setReason}
+  //       show={rescheduleModal}
+  //     />
+
+  //     <CancelBookingModal
+  //       show={showCancelModal}
+  //       setShow={setShowCancelModal}
+  //       cancelReason={cancelReason}
+  //       setCancelReason={setCancelReason}
+  //       handleCancelBooking={handleCancelBooking}
+  //     />
+
+  //     <StatusUpdateModal
+  //       show={showStatusModal}
+  //       onClose={() => setShowStatusModal(false)}
+  //       onUpdate={handleStatusUpdate}
+  //       statusList={['confirmed', 'inProgress']}
+  //       selectedStatus={newStatus}
+  //       setSelectedStatus={setNewStatus}
+  //     />
+
+  //     <UploadDocumentsModal
+  //       showModal={showInvoiceModal}
+  //       setShowModal={setShowInvoiceModal}
+  //       invoiceFiles={invoiceFiles}
+  //       setInvoiceFiles={setInvoiceFiles}
+  //       onUpload={handleInvoiceUpload}
+  //     />
+  //   </div>
+  // );
+
+  return (
+    <div className="container mx-auto min-h-screen p-4 md:p-6 bg-gradient-to-br from-primary/5 to-base-100">
+      <StatusAlert status={bookedService.serviceStatus} cancellationReason={bookedService.cancelReason} />
+
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3 animate-fadeIn">
+        <div className="md:col-span-2 bg-base-100 rounded-2xl shadow-lg border border-base-200 p-5 space-y-6">
           <ServiceCardCompact
             serviceImage={service.serviceImage}
             serviceName={service.serviceName}
@@ -317,9 +482,8 @@ const ServiceProviderBookingManage = () => {
             estimatedPrice={service.estimatedPrice}
           />
 
-          <div className="divider"></div>
+          <div className="border-t border-dashed pt-4" />
 
-          {/* Customer Details */}
           <UserInfoCompact
             profileImage={user.profileImage}
             userName={user.userName}
@@ -327,9 +491,11 @@ const ServiceProviderBookingManage = () => {
             phone={user.phone ?? ' '}
           />
 
-          {/* Status Timeline */}
+          <div className="border-t pt-4" />
 
-          <BookingStepper status={bookedService.serviceStatus} />
+          <BookingStepper status={bookedService.serviceStatus} cancellationReason={bookedService.cancelReason} />
+
+          <div className="border-t pt-4" />
 
           <ScheduleAndPaymentInfo
             bookedDate={formattedBookedDate}
@@ -341,75 +507,87 @@ const ServiceProviderBookingManage = () => {
             paymentType={bookedService.paymentType}
           />
 
-          <div className="flex flex-wrap justify-center gap-2 mt-4">
+          <div className="flex flex-wrap justify-center gap-3 pt-6">
             {isPending && (
               <>
-                <button className="btn btn-success" onClick={() => setShowAcceptModal(true)}>
+                <button className="btn btn-success hover:scale-105 transition" onClick={() => setShowAcceptModal(true)}>
                   Accept Booking
                 </button>
-                <button className="btn btn-error" onClick={() => setShowCancelModal(true)}>
+
+                <button className="btn btn-error  hover:scale-105 transition" onClick={() => setShowCancelModal(true)}>
                   Cancel Booking
                 </button>
               </>
             )}
 
             {isConfirmed && (
-              <>
-                <button className="btn btn-primary" onClick={() => setShowStatusModal(true)}>
-                  Update Status
-                </button>
-              </>
+              <button className="btn btn-primary  hover:scale-105 transition" onClick={() => setShowStatusModal(true)}>
+                Update Status
+              </button>
             )}
 
-            <Link to={'/service-provider/chat/' + user._id}>
-              <button className="btn btn-secondary">Contact Customer</button>
+            <Link to={`/service-provider/chat/${user._id}`}>
+              <button className="btn btn-secondary  hover:btn-secondary transition-all">💬 Contact Customer</button>
             </Link>
 
             {isConfirmed && (
-              <>
-                <button className="btn btn-success" onClick={() => setRescheduleModal(true)}>
-                  reschedule your booking
-                </button>
-              </>
+              <button className="btn btn-success hover:scale-105 transition" onClick={() => setRescheduleModal(true)}>
+                Reschedule Booking
+              </button>
             )}
 
-            {(isInProgress || isPaymentRequested || isCompleted) && (
-              <button className="btn btn-info" onClick={() => setShowInvoiceModal(true)}>
+            {(isInProgress || isPaymentRequested || isCompleted) && !bookedService.serviceBills && (
+              <button className="btn btn-info  hover:scale-105 transition" onClick={() => setShowInvoiceModal(true)}>
                 Upload Bills
               </button>
             )}
 
             {isInProgress && (
-              <button className="w-full mt-4 btn btn-warning" onClick={() => setPaymentForm(true)}>
+              <button className="btn btn-warning w-full md:w-auto animate-pulse" onClick={() => setPaymentForm(true)}>
                 Request Payment
               </button>
             )}
-
-            {paymentForm && (
-              <PaymentModal
-                payment={payment}
-                setPayment={(data: Ipayment) => setPayment(data)}
-                closeModal={() => setPaymentForm(false)}
-                makePaymentRequest={handlePaymentRequest}
-              />
-            )}
           </div>
+
+          {paymentForm && (
+            <PaymentModal
+              payment={payment}
+              setPayment={(data: Ipayment) => setPayment(data)}
+              closeModal={() => setPaymentForm(false)}
+              makePaymentRequest={handlePaymentRequest}
+            />
+          )}
         </div>
 
-        <div className="md:col-span-1">
-          <div className="mb-4 shadow card bg-base-100">
-            <ServiceDateTime
-              serviceDateTime={bookedService.preferredSlot}
-              userType="serviceProvider"
-              isCancelled={isCancelled ? true : false}
-            />
-          </div>
-          <div className="mb-4 ">
-            <ServiceAddressCard address={bookedService.address} liveLocation={bookedService.liveLocation} />
+        <div className="space-y-4">
+          <div className="card bg-base-100 shadow-md border border-base-200 rounded-xl">
+            <div className="card-body p-4">
+              <ServiceDateTime
+                serviceDateTime={bookedService?.preferredSlot || 0}
+                userType="serviceProvider"
+                isCancelled={isCancelled}
+              />
+            </div>
           </div>
 
-          {/* Price Details */}
-          {bookedService.payment && <PriceDetailsCard payment={bookedService.payment} />}
+          <div className="card bg-base-100 shadow-md border border-base-200 rounded-xl">
+            <div className="card-body p-4">
+              <ServiceAddressCard address={bookedService.address} liveLocation={bookedService.liveLocation} />
+            </div>
+          </div>
+
+          {bookingData.review && (
+            <div className="p-4 bg-base-200 rounded-xl">
+              <h3 className="text-lg font-semibold text-primary mb-2">⭐ User Review</h3>
+              <StarRating comment={bookingData.review.comment} rating={bookingData.review.rating} />
+            </div>
+          )}
+
+          {bookedService.payment && (
+            <div className="border border-success/30 bg-success/5 rounded-xl shadow p-2">
+              <PriceDetailsCard payment={bookedService.payment} />
+            </div>
+          )}
         </div>
       </div>
 
@@ -449,8 +627,6 @@ const ServiceProviderBookingManage = () => {
         selectedStatus={newStatus}
         setSelectedStatus={setNewStatus}
       />
-
-      {/* Update Status Modal */}
 
       <UploadDocumentsModal
         showModal={showInvoiceModal}

@@ -33,7 +33,7 @@ const UserLayout = () => {
         <Navbar scrolled={scrolled} />
       </div>
 
-      <div className="flex-grow">
+      <div className="flex-grow  bg-base-100 bg-grid-pattern">
         <Outlet />
       </div>
 

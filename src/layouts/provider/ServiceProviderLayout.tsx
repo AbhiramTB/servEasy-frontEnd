@@ -19,7 +19,9 @@ const ServiceProviderLayout = () => {
     <div>
       <Navbar profile={serviceProviderInfo.profileImage}></Navbar>
       <SubscriptionModal />
-      <Outlet />
+      <div className="bg-base-100 bg-grid-pattern">
+        <Outlet />
+      </div>
     </div>
   );
 };
