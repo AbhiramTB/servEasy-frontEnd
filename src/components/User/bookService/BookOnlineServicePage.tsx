@@ -57,10 +57,9 @@ const BookOnlineService = () => {
       if (!selectedSlotId) {
         return HotToastError('Please select a slot before confirming.');
       }
-      const res = await postRequest(serviceEndPoint.bookservice, {
+      const res = await postRequest(serviceEndPoint.bookOnlineService, {
         serviceId: id,
-        slotId:selectedSlotId,
-        isOnline: true,
+        slotId: selectedSlotId,
       });
       if (res.status === 201) {
         HotToastSuccess('Service booking successfully confirmed!');

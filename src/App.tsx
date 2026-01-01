@@ -93,7 +93,7 @@ function App() {
               <Route path="booked-services-online/:id" element={<OnlineBookingManagement />} />
               <Route path="service-management" element={<ServiceManagement />} />
               <Route path="payment-management" element={<PaymentManagement />} />
-              <Route path="slot-management" element={<SlotPage />} />
+              <Route path="slot-management/:serviceId" element={<SlotPage />} />
               <Route path="wallet" element={<Walletpage />} />
 
               <Route

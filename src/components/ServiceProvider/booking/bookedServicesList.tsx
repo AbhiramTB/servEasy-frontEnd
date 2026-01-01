@@ -17,13 +17,15 @@ interface Address {
 
 interface Booking {
   _id: string;
-  serviceStatus: string;
+  serviceStatus: 'pending' | 'in-progress' | 'completed' | 'cancelled' | 'confirmed';
   paymentType: string;
   serviceBookedAddress: Address;
   serviceName: string;
   serviceType: string;
   serviceImage: string;
   isOnlineService?: boolean;
+  bookedTime?: Date;
+  estimatedServiceTime?: Date;
 }
 
 const BookedServiceServiceProvider = () => {
@@ -31,10 +33,6 @@ const BookedServiceServiceProvider = () => {
   const [bookedServices, setBookedServices] = useState<Booking[]>([]);
   const [crrPage, setCrrPage] = useState<number>(0);
   const [totaldata, setTotaldata] = useState<number>(0);
-
-  useEffect(() => {
-    getBookedService(crrPage);
-  }, []);
 
   const getBookedService = async (page: number) => {
     try {

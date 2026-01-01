@@ -67,7 +67,7 @@ const ServiceBookingDetailsOnline = () => {
   const [showBills, setShowBills] = useState(false);
   const [showPaymentConfirm, setShowPaymentConfirm] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState<string>('');
-  const user=useSelector((state:RootState)=>state.user)
+  const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     if (id) {
@@ -121,7 +121,7 @@ const ServiceBookingDetailsOnline = () => {
   const getBookedService = async (id: string) => {
     try {
       setLoading(true);
-      const res = await getRequest(`service/bookings${id}`); // Fixed the URL
+      const res = await getRequest(`service/bookings${id}`);
       if (res.status === 200) {
         console.log(res.data);
 
@@ -191,7 +191,7 @@ const ServiceBookingDetailsOnline = () => {
   // };
 
   return (
-    <div className="container px-4 py-4 mx-auto bg-base-200">
+    <div className="container px-4 py-4 mx-auto ">
       {/* Breadcrumbs */}
       <div className="mb-4 text-sm breadcrumbs">
         <ul>
@@ -400,16 +400,17 @@ const ServiceBookingDetailsOnline = () => {
               {id && (
                 <RazorpayButton
                   onSuccess={() => getBookedService(id)}
-                  buttonStyle={{className:'p-3 text-base font-bold rounded-md hover:bg-opacity-45 bg-primary',buttonText:"Pay Now"}}
+                  buttonStyle={{
+                    className: 'p-3 text-base font-bold rounded-md hover:bg-opacity-45 bg-primary',
+                    buttonText: 'Pay Now',
+                  }}
                   createOrderApi="/payment/create-order"
-                  customerInfo={{email:user.email||"" ,phone:user.phone||"",userName:user.userName||''}}
-                  onError={()=>HotToastError('your attempted transaction was unsuccessful')}
-                  payload={{"serviceId":id}}
+                  customerInfo={{ email: user.email || '', phone: user.phone || '', userName: user.userName || '' }}
+                  onError={() => HotToastError('your attempted transaction was unsuccessful')}
+                  payload={{ serviceId: id }}
                   total={bookedService.payment.total - 100}
-                  verifyApi={"/payment/verify"}
-                  
+                  verifyApi={'/payment/verify'}
                 />
-            
               )}
             </div>
           </div>

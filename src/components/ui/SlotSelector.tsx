@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { ISlot } from "../../utils/types/ISlot";
+import React, { useState } from 'react';
+import { ISlot } from '../../utils/types/ISlot';
+import dayjs from 'dayjs';
 
 interface SlotSelectorProps {
   slots: ISlot[];
@@ -18,7 +19,7 @@ const SlotSelector: React.FC<SlotSelectorProps> = ({ slots, onSelect }) => {
 
   return (
     <div className="flex flex-wrap gap-4">
-      {slots.map((slot) => {
+      {slots.map(slot => {
         const isSelected = selectedSlotId === slot._id;
 
         return (
@@ -29,13 +30,15 @@ const SlotSelector: React.FC<SlotSelectorProps> = ({ slots, onSelect }) => {
             className={`px-4 py-2 rounded-lg border transition-all
               ${
                 slot.booked
-                  ? "bg-accent/45 text-accent-content  cursor-not-allowed border-border"
+                  ? 'bg-accent/45 text-accent-content  cursor-not-allowed border-border'
                   : isSelected
-                  ? "bg-primary text-primary-content border-2 border-primary"
-                  : "bg-base-300 text-base-content hover:bg-primary/15 hover:text-accent-foreground border-border"
+                    ? 'bg-primary text-primary-content border-2 border-primary'
+                    : 'bg-base-300 text-base-content hover:bg-primary/15 hover:text-accent-foreground border-border'
               }`}
           >
-            {slot.startTime} - {slot.endTime}
+            <span>
+              {dayjs(slot.startTime).format('hh:mm A')} - {dayjs(slot.endTime).format('hh:mm A')}
+            </span>
           </button>
         );
       })}
