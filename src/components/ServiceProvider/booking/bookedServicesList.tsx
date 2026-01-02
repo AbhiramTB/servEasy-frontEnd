@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { getRequest } from '../../../utils/makeRequestInstance';
 import { serviceEndPoint } from '../../../utils/constant';
 

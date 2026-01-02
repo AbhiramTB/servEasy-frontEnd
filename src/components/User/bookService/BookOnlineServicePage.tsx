@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 import { useParams } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
 
 import ServiceDetailsCard from '../../ui/ServiceDetailsCard';
 import BookingSuccess from '../../ui/bookingSuccessCard';
@@ -84,7 +83,6 @@ const BookOnlineService = () => {
 
   return (
     <div className="container min-h-screen px-4 py-8 mx-auto bg-base-100">
-      <Toaster />
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
         <div className="space-y-6 md:col-span-2">
           {service?.serviceProviderDetails && (

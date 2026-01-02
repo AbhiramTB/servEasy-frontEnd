@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getRequest, putRequest } from '../../../../utils/makeRequestInstance';
+import { getRequest, patchRequest, putRequest } from '../../../../utils/makeRequestInstance';
 import { HotToastError, HotToastSuccess } from '../../../../utils/notificationToast';
 import { Toaster } from 'react-hot-toast';
 import CancelBookingModal from '../CancelBookingModal';
@@ -10,6 +10,7 @@ import UserInfoCompact from '../UserInfoCompact';
 import ScheduleAndPaymentInfo from '../ScheduleAndPaymentInfo';
 import StatusAlert from '../StatusAlert';
 import dayjs from 'dayjs';
+import RescheduleSlotModal from './RescheduleSlotModal';
 
 interface BookingData {
   bookedService: {
@@ -34,6 +35,7 @@ interface BookingData {
     serviceType: string;
   };
   user: {
+    _id: string;
     userName: string;
     profileImage: string;
     email: string;
@@ -55,7 +57,52 @@ const OnlineBookingManagement = () => {
   const [showStatusModal, setShowStatusModal] = useState<boolean>(false);
   const [cancelReason, setCancelReason] = useState<string>('');
   const [newStatus, setNewStatus] = useState<string>('');
+  const [openReschedule, setOpenReschedule] = useState(false);
+  const handleOpenReschedule = () => {
+    setOpenReschedule(true);
+  };
 
+  const handleCloseReschedule = () => {
+    setOpenReschedule(false);
+  };
+
+  const handleRescheduleSubmit = async (payload: { date: Date; startTime: Date; endTime: Date }) => {
+    console.log('Reschedule Payload:', payload);
+    const bookingId = bookingData?.bookedService._id;
+
+    if (!bookingId) {
+      console.error('bookingId missing');
+      return;
+    }
+    const res = await patchRequest(`/service/online-bookings/${bookingData?.bookedService._id}/reschedule`, {
+      bookingId,
+      date: payload.date,
+      startTime: payload.startTime,
+      endTime: payload.endTime,
+    });
+
+    if (res.status === 200) {
+      HotToastSuccess('Rescheduled successfully');
+
+      setBookingData((prev): BookingData | null => {
+        if (!prev) return prev;
+
+        return {
+          ...prev,
+          bookedService: {
+            ...prev.bookedService,
+            serviceSlot: {
+              ...prev.bookedService.serviceSlot,
+              date: payload.date,
+              startTime: payload.startTime.toISOString(),
+              endTime: payload.endTime.toISOString(),
+            },
+          },
+        };
+      });
+      handleCloseReschedule();
+    }
+  };
   useEffect(() => {
     if (id) {
       getBookedService(id);
@@ -166,10 +213,7 @@ const OnlineBookingManagement = () => {
   })();
 
   return (
-    <div className="container max-w-4xl min-h-screen p-4 mx-auto bg-base-200">
-      <Toaster />
-
-      {/* Status Banner */}
+    <div className=" max-w-4xl min-h-screen p-4 mx-auto bg-base-100">
       <StatusAlert status={bookedService.serviceStatus} />
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -206,9 +250,9 @@ const OnlineBookingManagement = () => {
           <ScheduleAndPaymentInfo
             bookedDate={dayjs(bookedService.bookedTime).format('DD MMM YYYY, hh:mm A')}
             serviceDate={dayjs(bookedService.serviceSlot.date).format('DD MMM YYYY, hh:mm A')}
-            serviceTime={`${bookedService.serviceSlot.startTime} to ${bookedService.serviceSlot.endTime}`}
+            serviceTime={`${dayjs(bookedService.serviceSlot.startTime).format('hh:mm A')}  to ${dayjs(bookedService.serviceSlot.endTime).format(' hh:mm A')} `}
             isPending={isPending}
-            estimatedServiceTime={bookedService.estimatedServiceTime}
+            estimatedServiceTime={dayjs(bookedService.estimatedServiceTime).format('DD MMM YYYY, hh:mm A')}
             paymentStatus={bookedService.paymentStatus}
             paymentType={bookedService.paymentType}
           />
@@ -218,6 +262,13 @@ const OnlineBookingManagement = () => {
               <>
                 <button className="btn btn-primary btn-sm" onClick={() => setShowStatusModal(true)}>
                   Update Status
+                </button>
+
+                <Link to={`/service-provider/chat/${bookingData.user._id}`}>
+                  <button className="btn btn-primary btn-sm">Chat</button>
+                </Link>
+                <button className="btn btn-sm btn-outline" onClick={handleOpenReschedule}>
+                  Reschedule
                 </button>
 
                 {/* <button className="btn btn-secondary btn-sm">Contact Customer</button> */}
@@ -291,7 +342,6 @@ const OnlineBookingManagement = () => {
         />
       )}
 
-      <h1>{newStatus}</h1>
       <StatusUpdateModal
         show={showStatusModal}
         onClose={() => setShowStatusModal(false)}
@@ -300,6 +350,8 @@ const OnlineBookingManagement = () => {
         selectedStatus={newStatus}
         setSelectedStatus={setNewStatus}
       />
+
+      {openReschedule && <RescheduleSlotModal onClose={handleCloseReschedule} onSubmit={handleRescheduleSubmit} />}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Briefcase, Mail, Home, Phone, Timer, CircleUserRound } from 'lucide-react';
+import { Briefcase, Home, Phone, Timer, CircleUserRound } from 'lucide-react';
 import dayjs from 'dayjs';
 import { IServiceDateTime } from '../../../../utils/types/booking';
 
@@ -40,7 +40,8 @@ const ServiceBookingCard: React.FC<ServiceBookingCardProps> = ({ booking }) => {
         return 'badge-warning';
       case 'cancelled':
         return 'badge-error';
-      case 'in progress':
+      case 'in-progress':
+        return 'badge-info';
       case 'requested':
         return 'badge-info';
       default:
@@ -62,8 +63,9 @@ const ServiceBookingCard: React.FC<ServiceBookingCardProps> = ({ booking }) => {
   };
 
   return (
-    <div className="flex flex-col overflow-hidden transition-all duration-300 border shadow-xl bg-base-200 border-primary hover:shadow-2xl rounded-xl lg:flex-row">
-      {/* Image */}
+    <div
+      className={`flex flex-col overflow-hidden transition-all duration-300 border shadow-xl bg-base-200 border-primary hover:shadow-2xl rounded-xl lg:flex-row ${booking.serviceType == 'Online' ? 'bg-primary/10' : 'bg-base-200'} `}
+    >
       <div className="w-full h-48 lg:w-1/4 lg:h-auto">
         <img
           src={booking?.serviceImage || '/default-service.jpg'}
@@ -72,9 +74,7 @@ const ServiceBookingCard: React.FC<ServiceBookingCardProps> = ({ booking }) => {
         />
       </div>
 
-      {/* Content */}
       <div className="flex-1 p-4">
-        {/* Header */}
         <div className="flex flex-col justify-between gap-2 sm:flex-row">
           <h2 className="text-lg font-semibold text-primary">{booking?.serviceName}</h2>
 
@@ -90,9 +90,7 @@ const ServiceBookingCard: React.FC<ServiceBookingCardProps> = ({ booking }) => {
 
         <div className="my-3 divider" />
 
-        {/* Info Sections */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {/* LEFT — Service & Time */}
           <div className="space-y-3">
             {booking?.serviceType && (
               <div className="flex items-center gap-2 text-sm">
@@ -128,7 +126,6 @@ const ServiceBookingCard: React.FC<ServiceBookingCardProps> = ({ booking }) => {
             )}
           </div>
 
-          {/* RIGHT — User & Address */}
           <div className="space-y-3">
             {booking?.serviceBookedAddress?.name && (
               <div className="flex items-center gap-2 text-sm">
