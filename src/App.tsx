@@ -41,6 +41,7 @@ import AiAssistancePage from './components/ServiceProvider/aiAssistance/Assistan
 import SubscriptionFeaturesRoutes from './routes/SubscriptionFeaturesRoutes.tsx';
 import SubscriptionPlansPage from './components/admin/subscriptionsManagement/SubscriptionPlansPage.tsx';
 import AdsPage from './components/ServiceProvider/ads/AdsPage.tsx';
+import ServiceProviderLanding from './page/serviceProvider/LandingPage.tsx';
 
 function App() {
   const { userAccessToken = true, adminAccessToken } = useAuth();
@@ -51,6 +52,7 @@ function App() {
 
       <BrowserRouter basename="/">
         <Routes>
+          <Route path="/landingSp" element={<ServiceProviderLanding />} />
           <Route path="cp" element={<SubscriptionPlansPage />} />
 
           <Route path="/payment/verify" element={<PaymentVerify />} />
