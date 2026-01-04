@@ -1,10 +1,10 @@
 import Footer from '../../components/ui/Footer';
-import Navbar from '../../components/ui/landing/Navbar';
-import FinalCTA from '../../components/ui/landing/FinalCTA';
-import HeroSection from '../../components/ui/landing/HeroSection';
-import HowItWorks from '../../components/ui/landing/HowItWorks';
-import ProblemsWeSolve from '../../components/ui/landing/ProblemsWeSolve';
-import WhyRegister from '../../components/ui/landing/WhyRegister';
+import Navbar from '../../components/landing/Navbar';
+import FinalCTA from '../../components/landing/FinalCTA';
+import HeroSection from '../../components/landing/HeroSection';
+import HowItWorks from '../../components/landing/HowItWorks';
+import ProblemsWeSolve from '../../components/landing/ProblemsWeSolve';
+import WhyRegister from '../../components/landing/WhyRegister';
 
 const ServiceProviderLanding = () => {
   return (
