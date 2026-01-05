@@ -1,9 +1,9 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import Navbar from '../../components/ServiceProvider/Navbar';
+import Sidebar from '../../components/ServiceProvider/Navbar';
 import { RootState } from '../../redux/store';
 import { useSelector } from 'react-redux';
 import SubscriptionModal from '../../components/ServiceProvider/subscriptionPlan/subscriptionPlan';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 const ServiceProviderLayout = () => {
   const navigate = useNavigate();
   const serviceProviderInfo = useSelector((state: RootState) => state.serviceProvider);
@@ -15,12 +15,25 @@ const ServiceProviderLayout = () => {
       return;
     }
   }, [user]);
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
   return (
-    <div>
-      <Navbar profile={serviceProviderInfo.profileImage}></Navbar>
+    <div className="min-h-screen bg-base-100">
+      <Sidebar
+        profile={serviceProviderInfo.profileImage}
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
+      />
       <SubscriptionModal />
-      <div className="bg-base-100 bg-grid-pattern">
-        <Outlet />
+
+      <div className={`min-h-screen transition-all duration-300 ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}`}>
+        <div className="lg:hidden h-16" />
+        <main className="w-full">
+          <div className="container mx-auto p-4 lg:p-6">
+            <Outlet />
+          </div>
+        </main>
       </div>
     </div>
   );
