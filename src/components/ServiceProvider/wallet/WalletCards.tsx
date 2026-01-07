@@ -68,7 +68,7 @@ const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions, 
   return (
     <div className="min-h-screen ">
       <div className="max-w-6xl p-4 mx-auto md:p-8">
-        <div className="mb-8 text-center">
+        <div className=" text-center">
           <h1 className="mb-2 text-3xl font-bold text-base-content md:text-4xl">Provider Wallet</h1>
           <p className="text-base-content/70">Manage your earnings and withdrawals</p>
         </div>

@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import { getRequest } from "../../../utils/makeRequestInstance";
-import { paymentRoutes } from "../../../utils/constant";
-import PaymentInfoTable from "../../ui/PaymentInfoTable";
-import PaymentInfoModal from "../../ui/paymentInfoModal";
+import { useEffect, useState } from 'react';
+import { getRequest } from '../../../utils/makeRequestInstance';
+import { paymentRoutes } from '../../../utils/constant';
+import PaymentInfoTable from '../../ui/PaymentInfoTable';
+import PaymentInfoModal from '../../ui/paymentInfoModal';
+import EmptyState from '../../ui/EmptyState';
 
 interface PaymentDetails {
   convenienceFee: number;
@@ -56,7 +57,7 @@ const PaymentManagement = () => {
       setPaymentData(response.data || []);
       console.log(response.data);
     } catch (error) {
-      setError("Failed to fetch payment information");
+      setError('Failed to fetch payment information');
       console.error(error);
     } finally {
       setLoading(false);
@@ -66,11 +67,9 @@ const PaymentManagement = () => {
   const formatCurrency = (amount: number): string => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'INR'
+      currency: 'INR',
     }).format(amount);
   };
-
-
 
   const handleViewDetails = (booking: ServiceBooking) => {
     setSelectedBooking(booking);
@@ -85,7 +84,6 @@ const PaymentManagement = () => {
   const handlePrintReceipt = () => {
     if (selectedBooking) {
       console.log(`Printing receipt for booking: ${selectedBooking._id}`);
-     
     }
   };
 
@@ -99,22 +97,27 @@ const PaymentManagement = () => {
 
   if (error) {
     return (
-      <div className="shadow-lg alert alert-error">
-        <div>
-          <svg xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0 w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <span>{error}</span>
-        </div>
+      <div className="container px-4 py-6 mx-auto">
+        <h1 className="mb-6 text-2xl font-bold">Payment Management</h1>
+        <EmptyState
+          title="No payments found"
+          message="We couldn't load your data. Please try again later."
+          icon="system-error"
+        />
+        ;
       </div>
     );
   }
 
   if (paymentData.length === 0) {
     return (
-      <div className="shadow-lg alert alert-info">
-        <div>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="flex-shrink-0 w-6 h-6 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          <span>No payment information available.</span>
-        </div>
+      <div className="container px-4 py-6 mx-auto">
+        <h1 className="mb-6 text-2xl font-bold">Payment Management</h1>
+        <EmptyState
+          title="No payments found"
+          message="Your payment history will appear here once  complete a transaction."
+          icon="product-empty"
+        />
       </div>
     );
   }
@@ -122,24 +125,27 @@ const PaymentManagement = () => {
   return (
     <div className="container px-4 py-6 mx-auto">
       <h1 className="mb-6 text-2xl font-bold">Payment Management</h1>
-      
+
       <div className="w-full mb-6 shadow stats">
         <div className="stat">
           <div className="stat-title">Total Bookings</div>
           <div className="stat-value">{paymentData.length}</div>
         </div>
-        
+
         <div className="stat">
           <div className="stat-title">Total Revenue</div>
           <div className="stat-value">
             {formatCurrency(paymentData.reduce((sum, booking) => sum + booking.payment.total, 0))}
           </div>
         </div>
-        
+
         <div className="stat">
           <div className="stat-title">your Earnings</div>
           <div className="stat-value">
-            {formatCurrency(paymentData.reduce((sum, booking) => sum + booking.payment.total, 0) - paymentData.reduce((sum, booking) => sum + booking.payment.convenienceFee, 0))}
+            {formatCurrency(
+              paymentData.reduce((sum, booking) => sum + booking.payment.total, 0) -
+                paymentData.reduce((sum, booking) => sum + booking.payment.convenienceFee, 0)
+            )}
           </div>
         </div>
       </div>
@@ -158,20 +164,19 @@ const PaymentManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {paymentData.map((booking) => (
-              <PaymentInfoTable 
+            {paymentData.map(booking => (
+              <PaymentInfoTable
                 key={booking._id}
                 booking={booking}
-                handleViewDetails={()=>handleViewDetails(booking)}
+                handleViewDetails={() => handleViewDetails(booking)}
               />
             ))}
           </tbody>
         </table>
       </div>
 
-      {/* Payment Details Modal */}
       {selectedBooking && (
-        <PaymentInfoModal 
+        <PaymentInfoModal
           isOpen={showDetailsModal}
           selectedBooking={selectedBooking}
           closeDetailsModal={closeDetailsModal}

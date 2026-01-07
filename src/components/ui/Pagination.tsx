@@ -8,10 +8,6 @@ interface IProps {
 }
 
 const Pagination: React.FC<IProps> = ({ crrPage, dataLimit, totaldata, fetchData }) => {
-  useEffect(() => {
-    fetchData(crrPage);
-  }, []);
-
   return (
     <div className="flex justify-center mt-10 mb-10 join">
       <button
