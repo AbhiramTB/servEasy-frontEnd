@@ -16,7 +16,7 @@ const AdsPage = () => {
   const [loading, setLoading] = useState(false);
   const [crrPage, setCrrPage] = useState<number>(0);
   const [totalData, setTotalData] = useState<number>(0);
-  const dataLimit = 1;
+  const dataLimit = 3;
   const fetchAds = async (page: number) => {
     try {
       setLoading(true);

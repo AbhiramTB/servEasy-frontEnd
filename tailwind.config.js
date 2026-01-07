@@ -8,13 +8,9 @@ export default {
   theme: {
       extend: {
       backgroundImage: {
-        'stripe-pattern': "repeating-linear-gradient(to bottom, oklch(var(--b1)), oklch(var(--b1)) 10px, oklch(var(--b2)) 10px, oklch(var(--b2)) 20px)",
-        'stripe-primary': "repeating-linear-gradient(to bottom, oklch(var(--b1)), oklch(var(--b1)) 10px, oklch(var(--p) / 0.05) 10px, oklch(var(--p) / 0.05) 20px)",
-      'stripe-sm': "repeating-linear-gradient(to bottom, oklch(var(--b1)), oklch(var(--b1)) 2px, oklch(var(--b2)) 2px, oklch(var(--b2)) 4px)",
-      'stripe-notebook': "repeating-linear-gradient(to bottom, oklch(var(--b1)), oklch(var(--b1)) 27px, oklch(var(--p)) 27px, oklch(var(--b2)) 28px)",
+
 'grid-pattern': `repeating-linear-gradient(to right, oklch(var(--p) / 0.05) 0 1px, transparent 1px 50px),
                    repeating-linear-gradient(to bottom, oklch(var(--p) / 0.05) 0 1px, transparent 1px 50px)`,
-                           "chat-doodle": "url('/svg/chatBackground.svg')",
 
     }
     }
