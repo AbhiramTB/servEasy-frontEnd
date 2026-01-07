@@ -64,9 +64,9 @@ const ServiceManagement = () => {
   };
 
   return (
-    <div className="p-4 bg-base-200">
-      <Toaster />
-      {/* Header and Buttons */}
+    <div className="">
+      <h1 className="mb-4 text-xl font-bold">Service Management</h1>
+
       <div className="flex flex-wrap gap-2 mb-4">
         <button className="btn btn-primary" onClick={() => setService(!addService)}>
           {addService ? 'Cancel' : 'Add Service'}

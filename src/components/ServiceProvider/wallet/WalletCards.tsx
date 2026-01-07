@@ -12,20 +12,15 @@ import {
   Wallet,
   XCircle,
 } from 'lucide-react';
-import { HotToastError } from '../../../utils/notificationToast';
+import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
 import { postRequest } from '../../../utils/makeRequestInstance';
 import { Link } from 'react-router-dom';
-import { IBankDetailsWallet, ProviderWalletProps } from '../../../utils/types/IServiceProviderWallet';
+import { ProviderWalletProps } from '../../../utils/types/IServiceProviderWallet';
 
-const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions }) => {
+const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions, bankDetails, refreshData }) => {
   const [showWithdrawSection, setShowWithdrawSection] = useState(false);
-  const [withdrawAmount, setWithdrawAmount] = useState<number>(0);
+  const [withdrawAmount, setWithdrawAmount] = useState<number>(balance);
 
-  const bankDetails: IBankDetailsWallet = {
-    accountHolderName: '',
-    accountNumber: '',
-    ifscCode: '',
-  };
   const handleWithdrawClick = () => {
     setShowWithdrawSection(prev => !prev);
   };
@@ -36,7 +31,11 @@ const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions }
         HotToastError('please enter amount');
         return;
       }
-      postRequest('/service-providers/wallet', { amount: withdrawAmount });
+      const res = await postRequest('/service-providers/wallet', { amount: withdrawAmount });
+      if (res.status === 200) {
+        HotToastSuccess('Withdrawal request confirmed');
+        if (refreshData) refreshData();
+      }
     } catch (error) {}
   };
 
@@ -67,18 +66,15 @@ const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions }
   };
 
   return (
-    <div className="min-h-screen bg-base-300">
+    <div className="min-h-screen ">
       <div className="max-w-6xl p-4 mx-auto md:p-8">
-        {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="mb-2 text-3xl font-bold text-base-content md:text-4xl">Provider Wallet</h1>
           <p className="text-base-content/70">Manage your earnings and withdrawals</p>
         </div>
 
-        {/* Balance Card */}
         <div className="relative p-8 mb-8 overflow-hidden shadow-lg bg-base-100 rounded-3xl">
           <div className="absolute z-20 p-5 transition duration-300 -translate-y-1/2 shadow-xl w-72 right-6 top-1/2 bg-base-200 rounded-2xl hover:shadow-2xl">
-            {/* Header */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Banknote className="w-5 h-5 text-primary" />
@@ -96,7 +92,6 @@ const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions }
               )}
             </div>
 
-            {/* Bank Details */}
             {bankDetails ? (
               <div className="space-y-2 text-sm text-base-content">
                 <p>
@@ -136,7 +131,6 @@ const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions }
           </div>
         </div>
 
-        {/* Withdraw Section */}
         {showWithdrawSection && (
           <div className="p-8 mb-8 shadow-xl bg-base-100 rounded-3xl">
             <div className="flex items-center gap-3 mb-6">
@@ -177,7 +171,6 @@ const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions }
           </div>
         )}
 
-        {/* Transactions Section */}
         <div className="p-8 shadow-xl bg-base-100 rounded-3xl">
           <div className="flex items-center gap-3 mb-6">
             <Clock className="w-6 h-6 text-primary" />
@@ -230,9 +223,14 @@ const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions }
                       {getStatusIcon(txn.status)}
                       <span className="capitalize">{txn.status}</span>
                     </div>
-                    <button className="px-4 py-2 transition-colors border text-primary border-primary/20 hover:bg-primary/10 rounded-xl">
-                      View Details
-                    </button>
+
+                    {txn.refBookingId && (
+                      <Link to={`/service-provider/booked-services/${txn.refBookingId}`}>
+                        <button className="px-4 py-2 transition-colors border text-primary border-primary/20 hover:bg-primary/10 rounded-xl">
+                          View Details
+                        </button>
+                      </Link>
+                    )}
                   </div>
                 </div>
               ))}

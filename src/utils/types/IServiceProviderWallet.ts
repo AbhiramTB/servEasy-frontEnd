@@ -1,8 +1,7 @@
-
 export interface IBankDetailsWallet {
-    accountHolderName: string;
+  accountHolderName: string;
   accountNumber: string;
-  ifscCode:string
+  ifscCode: string;
 }
 type WalletTransaction = {
   _id: string;
@@ -18,4 +17,6 @@ export type ProviderWalletProps = {
   balance: number;
   serviceProviderId: string;
   transactions: WalletTransaction[];
+  bankDetails?: IBankDetailsWallet;
+  refreshData?: () => void;
 };

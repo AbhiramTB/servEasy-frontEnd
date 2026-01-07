@@ -52,7 +52,7 @@ const BookedServiceServiceProvider = () => {
   };
 
   return (
-    <div className="p-4 bg-base-100">
+    <div className="">
       <h1 className="mb-4 text-xl font-bold">Booked Services</h1>
       {bookedServices.length > 0 ? (
         <div className="grid gap-4 ">

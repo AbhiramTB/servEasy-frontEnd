@@ -13,6 +13,7 @@ import { IMessage } from '../../../utils/types/IChat';
 import { uploadImage } from './uploadImg';
 import ChatMessage from '../../ui/chat/ChatMessage';
 import ChatInput from '../../ui/chat/ChatInput';
+import InitialAvatar from '../../../utils/ui/InitialAvatar';
 
 dayjs.extend(relativeTime);
 
@@ -220,45 +221,51 @@ const ChatServiceProvider = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="flex flex-col h-[90vh] rounded-xl shadow-lg overflow-hidden border border-base-300 bg-base-100">
-        <div className="flex items-center justify-between px-6 py-4 border-b bg-base-200">
-          <div className="flex items-center space-x-4">
-            <div className={`avatar ${isOnline ? 'online' : ''}`}>
-              <div className="w-12 rounded-full ring ring-primary ring-offset-2 ring-offset-base-100">
-                <img
-                  src={userData?.userAvatar || import.meta.env.VITE_IMAGE_PLACEHOLDER}
-                  alt={userData?.userName || 'User'}
-                />
-              </div>
-            </div>
+    <div className="max-w-4xl mx-auto p-4">
+      <div className="flex flex-col h-[90vh] rounded-xl shadow-xl overflow-hidden border border-base-300 bg-base-100">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-base-300 bg-base-200">
+          <div className="flex items-center gap-4">
+            <InitialAvatar
+              name={userData?.userName || 'User'}
+              imageSrc={userData?.userAvatar}
+              bgColor="bg-primary"
+              textColor="text-primary-content"
+            />
 
             <div>
-              <h3 className="text-lg font-bold">{userData?.userName || 'User'}</h3>
+              <h3 className="text-lg font-bold text-base-content">{userData?.userName || 'User'}</h3>
               {isOnline ? (
-                <p className="text-xs text-success">Online</p>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2 h-2 rounded-full bg-success animate-pulse"></div>
+                  <p className="text-xs text-success font-medium">Online</p>
+                </div>
               ) : (
-                <p className="text-xs opacity-70">{formatLastSeen(lastSeen)}</p>
+                <p className="text-xs text-base-content/60">{formatLastSeen(lastSeen)}</p>
               )}
             </div>
           </div>
 
-          <div className="flex space-x-3">
+          <div className="flex gap-2">
             <button
               onClick={() => navigate(`/service-provider/video-call/${userid}`)}
-              className="btn btn-circle btn-ghost"
+              className="btn btn-ghost btn-circle hover:bg-primary/10"
+              aria-label="Start video call"
             >
-              <Video size={18} />
+              <Video size={20} className="text-primary" />
             </button>
           </div>
         </div>
 
-        <div className="flex-1 p-6 overflow-y-auto bg-gradient-to-b from-base-200/50 to-base-100">
+        <div className="flex-1 p-6 overflow-y-auto bg-base-100">
           {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-base-content/70">
-              <div className="max-w-xs p-6 text-center border shadow-md card bg-base-100 border-base-300">
-                <h3 className="mb-2 text-lg font-medium">Start your conversation</h3>
-                <p className="text-sm">Send a message to begin chatting with {userData?.userName || 'User'}</p>
+            <div className="flex flex-col items-center justify-center h-full">
+              <div className="card max-w-md bg-base-200 shadow-lg border border-base-300">
+                <div className="card-body text-center">
+                  <h3 className="card-title justify-center text-primary">Start your conversation</h3>
+                  <p className="text-sm text-base-content/70">
+                    Send a message to begin chatting with {userData?.userName || 'User'}
+                  </p>
+                </div>
               </div>
             </div>
           ) : (

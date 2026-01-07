@@ -19,7 +19,7 @@ const ServiceProviderLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
-    <div className="min-h-screen bg-base-100">
+    <div className="min-h-screen bg-base-100 ">
       <Sidebar
         profile={serviceProviderInfo.profileImage}
         isSidebarOpen={isSidebarOpen}

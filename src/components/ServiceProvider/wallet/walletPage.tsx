@@ -1,4 +1,3 @@
-
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import ProviderWallet from './WalletCards';
 import Pagination from '../../ui/Pagination';
@@ -24,29 +23,23 @@ const Walletpage = () => {
     setWallet(res.data.data);
     setTotalData(res.data.count);
 
-
-
-
-
-     
     setPage(page || 0);
   }
+
   const [wallet, setWallet] = useState<ProviderWalletProps | null>(null);
 
   return (
     <div>
-      {/* <button className="p-4 bg-primary" onClick={getData}>
-        CLICK ME TO GET DATA
-      </button> */}
-      {!wallet && <LoadingSpinner backGoundColor="bg-base-300" />}
+      {!wallet && <LoadingSpinner backGoundColor="" />}
 
       {wallet && (
         <div>
-          {' '}
           <ProviderWallet
             balance={wallet.balance}
             transactions={wallet.transactions}
             serviceProviderId={wallet.serviceProviderId}
+            bankDetails={wallet.bankDetails}
+            refreshData={() => getData(crrPage)}
           />
           <Pagination
             crrPage={crrPage}

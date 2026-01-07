@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import MessageStatus from './MessageStatus.tsx';
 import { IMessage } from '../../../utils/types/IChat';
+import InitialAvatar from '../../../utils/ui/InitialAvatar.tsx';
 
 interface ChatMessageProps {
   msg: IMessage;
@@ -36,11 +37,16 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ msg, currentRole, participant
 
   return (
     <>
-      <div className={`chat ${bubbleAlignClass}`}>
+      <div className={`chat ${bubbleAlignClass} `}>
         {showAvatar && (
           <div className="chat-image avatar">
             <div className="w-10 rounded-full">
-              <img src={participantAvatar || import.meta.env.VITE_IMAGE_PLACEHOLDER} alt={participantName || 'User'} />
+              <InitialAvatar
+                name={participantName || 'User'}
+                imageSrc={participantAvatar}
+                bgColor="bg-accent"
+                textColor="text-accent-content"
+              />
             </div>
           </div>
         )}
