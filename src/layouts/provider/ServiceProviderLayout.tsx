@@ -1,9 +1,9 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import Sidebar from '../../components/ServiceProvider/Navbar';
 import { RootState } from '../../redux/store';
 import { useSelector } from 'react-redux';
 import SubscriptionModal from '../../components/ServiceProvider/subscriptionPlan/subscriptionPlan';
 import { useEffect, useState } from 'react';
+import Sidebar from '../../components/ServiceProvider/sideBar/Sidebar';
 const ServiceProviderLayout = () => {
   const navigate = useNavigate();
   const serviceProviderInfo = useSelector((state: RootState) => state.serviceProvider);

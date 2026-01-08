@@ -43,6 +43,7 @@ import SubscriptionPlansPage from './components/admin/subscriptionsManagement/Su
 import AdsPage from './components/ServiceProvider/ads/AdsPage.tsx';
 import ServiceProviderLanding from './page/serviceProvider/LandingPage.tsx';
 import Sample from './Sample.tsx';
+import { ROUTES } from './utils/constants/routes.ts';
 
 function App() {
   const { userAccessToken = true, adminAccessToken } = useAuth();
@@ -85,8 +86,6 @@ function App() {
 
           <Route>
             <Route path="/service-provider" element={<ServiceProviderLayout />}>
-              <Route path="ads" element={<AdsPage />} />
-
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="booked-services" element={<BookedServiceServiceProvider />} />
               <Route path="chats" element={<ChatUI />}></Route>
@@ -113,6 +112,15 @@ function App() {
                 element={
                   <SubscriptionFeaturesRoutes>
                     <AiAssistancePage />
+                  </SubscriptionFeaturesRoutes>
+                }
+              />
+
+              <Route
+                path={ROUTES.SERVICEPROVIDER.ADS}
+                element={
+                  <SubscriptionFeaturesRoutes>
+                    <AdsPage />
                   </SubscriptionFeaturesRoutes>
                 }
               />

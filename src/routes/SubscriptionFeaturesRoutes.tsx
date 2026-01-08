@@ -12,7 +12,6 @@ const SubscriptionFeaturesRoutes = ({ children }: { children: React.ReactNode })
   const handleOpenPopUp = () => {
     dispatch(openModal());
   };
-  handleOpenPopUp();
 
   useEffect(() => {
     if (!isSubscribedProvider) {

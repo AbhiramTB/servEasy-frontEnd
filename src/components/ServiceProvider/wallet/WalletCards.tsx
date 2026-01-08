@@ -73,61 +73,80 @@ const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions, 
           <p className="text-base-content/70">Manage your earnings and withdrawals</p>
         </div>
 
-        <div className="relative p-8 mb-8 overflow-hidden shadow-lg bg-base-100 rounded-3xl">
-          <div className="absolute z-20 p-5 transition duration-300 -translate-y-1/2 shadow-xl w-72 right-6 top-1/2 bg-base-200 rounded-2xl hover:shadow-2xl">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Banknote className="w-5 h-5 text-primary" />
-                <h3 className="text-lg font-semibold text-base-content">Bank Info</h3>
+        <div className="relative p-6 mb-8 overflow-hidden shadow-lg bg-base-100 rounded-3xl md:p-8">
+          {/* Wrapper */}
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
+            {/* LEFT: Balance Section */}
+            <div className="relative z-10 flex-1">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <Wallet className="w-8 h-8 text-primary" />
+                  <h2 className="text-2xl font-bold text-base-content">Total Balance</h2>
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <p className="text-4xl font-bold text-primary md:text-6xl">₹{balance.toLocaleString()}</p>
+              </div>
+
+              <button
+                onClick={handleWithdrawClick}
+                className="flex items-center gap-2 px-6 py-3 font-semibold transition-all duration-300 shadow-lg text-primary-content bg-primary hover:shadow-xl rounded-xl hover:scale-105 active:scale-95"
+              >
+                <ArrowDownToLine className="w-5 h-5" />
+                {showWithdrawSection ? 'Cancel Withdrawal' : 'Withdraw Funds'}
+              </button>
+            </div>
+
+            {/* RIGHT: Bank Info */}
+            <div
+              className="
+        relative z-20 w-full p-5 transition duration-300 shadow-xl 
+        bg-base-200 rounded-2xl hover:shadow-2xl
+        lg:absolute lg:right-6 lg:top-1/2 lg:w-72 lg:-translate-y-1/2
+      "
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Banknote className="w-5 h-5 text-primary" />
+                  <h3 className="text-lg font-semibold text-base-content">Bank Info</h3>
+                </div>
+
+                {bankDetails ? (
+                  <Link
+                    to="/service-provider/myprofile"
+                    title="Edit Bank Info"
+                    className="p-1 rounded hover:bg-base-300"
+                  >
+                    <Edit className="w-4 h-4 text-primary" />
+                  </Link>
+                ) : (
+                  <Link
+                    to="/service-provider/myprofile"
+                    title="Add Bank Info"
+                    className="p-1 rounded hover:bg-base-300"
+                  >
+                    <Plus className="w-4 h-4 text-success" />
+                  </Link>
+                )}
               </div>
 
               {bankDetails ? (
-                <Link to="/service-provider/myprofile" title="Edit Bank Info" className="p-1 rounded hover:bg-base-300">
-                  <Edit className="w-4 h-4 text-primary" />
-                </Link>
+                <div className="space-y-2 text-sm text-base-content">
+                  <p>
+                    <span className="font-medium">Holder Name:</span> {bankDetails.accountHolderName}
+                  </p>
+                  <p>
+                    <span className="font-medium">Account No:</span> {bankDetails.accountNumber}
+                  </p>
+                  <p>
+                    <span className="font-medium">IFSC:</span> {bankDetails.ifscCode}
+                  </p>
+                </div>
               ) : (
-                <Link to="/service-provider/myprofile" title="Add Bank Info" className="p-1 rounded hover:bg-base-300">
-                  <Plus className="w-4 h-4 text-success" />
-                </Link>
+                <p className="text-sm text-base-content">No bank info added yet.</p>
               )}
             </div>
-
-            {bankDetails ? (
-              <div className="space-y-2 text-sm text-base-content">
-                <p>
-                  <span className="font-medium">Holder Name:</span> {bankDetails.accountHolderName}
-                </p>
-                <p>
-                  <span className="font-medium">Account No:</span> {bankDetails.accountNumber}
-                </p>
-                <p>
-                  <span className="font-medium">IFSC:</span> {bankDetails.ifscCode}
-                </p>
-              </div>
-            ) : (
-              <p className="text-sm text-base-content">No bank info added yet.</p>
-            )}
-          </div>
-
-          <div className="relative z-10">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <Wallet className="w-8 h-8 text-primary" />
-                <h2 className="text-2xl font-bold text-base-content">Total Balance</h2>
-              </div>
-            </div>
-
-            <div className="mb-6">
-              <p className="text-5xl font-bold text-primary md:text-6xl">₹{balance.toLocaleString()}</p>
-            </div>
-
-            <button
-              onClick={handleWithdrawClick}
-              className="flex items-center gap-2 px-6 py-3 font-semibold transition-all duration-300 shadow-lg text-primary-content bg-primary hover:shadow-xl rounded-xl hover:scale-105 active:scale-95"
-            >
-              <ArrowDownToLine className="w-5 h-5" />
-              {showWithdrawSection ? 'Cancel Withdrawal' : 'Withdraw Funds'}
-            </button>
           </div>
         </div>
 

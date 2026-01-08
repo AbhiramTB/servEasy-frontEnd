@@ -40,15 +40,12 @@ const ChatUI: React.FC = () => {
   const filteredChats = chats?.filter(chat => chat.userName.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
-    <div className="flex h-screen bg-base-100">
-      {/* Chat List Sidebar */}
+    <div className="flex h-screen bg-base-100 justify-center">
       <div className="w-80 bg-base-200 border-r border-base-300 flex flex-col">
-        {/* Header */}
         <div className="p-4 border-b border-base-300 bg-base-200">
           <h2 className="text-lg font-bold text-primary">All Chats</h2>
         </div>
 
-        {/* Search Input */}
         <div className="p-4">
           <input
             type="text"
@@ -59,7 +56,6 @@ const ChatUI: React.FC = () => {
           />
         </div>
 
-        {/* Chat List */}
         <div className="flex-1 overflow-y-auto">
           {chats === null ? (
             <div className="flex justify-center items-center p-8">
@@ -125,8 +121,8 @@ const ChatUI: React.FC = () => {
       </div>
 
       {/* Empty State */}
-      <div className="flex-1 flex items-center justify-center bg-base-100">
-        <div className="card bg-base-200 shadow-xl max-w-md">
+      <div className="hidden md:flex flex-1 items-center justify-center ">
+        <div className="  max-w-md">
           <div className="card-body text-center">
             <h2 className="card-title justify-center text-primary text-2xl">Welcome to Chat</h2>
             <p className="text-base-content/70">Select a conversation from the list to start messaging</p>

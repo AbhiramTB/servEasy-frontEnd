@@ -31,7 +31,7 @@ interface Booking {
 }
 
 const BookedServiceServiceProvider = () => {
-  const dataLimit = 4;
+  const dataLimit = 3;
   const [bookedServices, setBookedServices] = useState<Booking[]>([]);
   const [crrPage, setCrrPage] = useState<number>(0);
   const [totaldata, setTotaldata] = useState<number>(0);

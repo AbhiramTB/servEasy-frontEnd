@@ -1,5 +1,5 @@
 export interface IVideoCallNotification {
-  type: "video_call";
+  type: 'video_call';
   callerId: string;
   callerName: string;
   callerProfile: string;
@@ -8,7 +8,7 @@ export interface IVideoCallNotification {
 }
 
 export interface IChatNotification {
-  type: "chat";
+  type: 'chat';
   senderId: string;
   senderName: string;
   senderProfile: string;
@@ -18,7 +18,7 @@ export interface IChatNotification {
 }
 
 export interface INotification {
-  type: "notification";
+  type: 'notification';
   content: string;
   read: Boolean;
 }

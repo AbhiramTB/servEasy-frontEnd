@@ -1,4 +1,3 @@
-import LoadingSpinner from '../../ui/LoadingSpinner';
 import ProviderWallet from './WalletCards';
 import Pagination from '../../ui/Pagination';
 import { useEffect, useState } from 'react';
