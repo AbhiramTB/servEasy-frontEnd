@@ -294,3 +294,32 @@ export function HotToastSystemNotification(notification: { content: string; time
     { duration: 20000 }
   );
 }
+
+type ToastPromiseMessages = {
+  loading: string;
+  success: string;
+  error: string;
+};
+
+type ApiResponse = {
+  status: number;
+};
+
+export async function HotToastPromise<T extends ApiResponse>(
+  promise: Promise<T>,
+  messages: ToastPromiseMessages
+): Promise<T> {
+  return toast.promise(
+    promise.then(res => {
+      if (res.status !== 200) {
+        throw new Error(`Request failed with status ${res.status}`);
+      }
+      return res; // ✅ full response returned
+    }),
+    {
+      loading: messages.loading,
+      success: messages.success,
+      error: messages.error,
+    }
+  );
+}

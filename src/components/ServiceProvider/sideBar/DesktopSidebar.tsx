@@ -69,7 +69,9 @@ const DesktopSidebar: React.FC<Props> = ({
                   <div className="relative">
                     <Icon size={22} />
                     {item.isNotification && notificationCount > 0 && (
-                      <span className="badge badge-error badge-xs absolute -top-1 -right-1"></span>
+                      <span className="badge badge-error badge-xs absolute -top-1 -right-1">
+                        {notificationCount <= 9 ? notificationCount : '9+'}
+                      </span>
                     )}
                   </div>
                   {isSidebarOpen && <span className="flex-1">{item.label}</span>}
