@@ -30,6 +30,8 @@ export const ROUTES = {
   SERVICEPROVIDER: {
     BASE: '/service-provider',
 
+    REGISTER: '/service-provider/register',
+
     DASHBOARD: '/service-provider/dashboard',
     ADS: '/service-provider/ads',
 

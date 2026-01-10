@@ -55,7 +55,6 @@ function App() {
       <BrowserRouter basename="/">
         <Routes>
           <Route path="/sample" element={<Sample />} />
-          <Route path="/landingSp" element={<ServiceProviderLanding />} />
           <Route path="cp" element={<SubscriptionPlansPage />} />
 
           <Route path="/payment/verify" element={<PaymentVerify />} />
@@ -82,7 +81,8 @@ function App() {
             <Route path="chat/:serviceProviderId" element={<Chat />} />
             <Route path="chats" element={<ChatsUser />}></Route>
           </Route>
-          <Route path="/service-provider/register" element={<Register />} />
+          <Route path={ROUTES.SERVICEPROVIDER.REGISTER} element={<Register />} />
+          <Route path="/landingSp" element={<ServiceProviderLanding />} />
 
           <Route>
             <Route path="/service-provider" element={<ServiceProviderLayout />}>

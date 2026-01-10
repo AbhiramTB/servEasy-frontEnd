@@ -13,9 +13,7 @@ import NotificationPanel from './NotificationPanel';
 
 import VideoCallNotification from '../../../utils/ui/VideoCallNotification';
 import { ISavedNotification, IVideoCallNotification } from '../../../utils/types/INotification';
-import useFetchServiceProviderProfile from '../../../hooks/useFetchServiceProviderProfile';
-import { deleteRequest, getRequest, patchRequest } from '../../../utils/makeRequestInstance';
-import toast from 'react-hot-toast';
+import { getRequest, patchRequest } from '../../../utils/makeRequestInstance';
 
 interface SidebarProps {
   profile: string;
@@ -28,7 +26,6 @@ const ringtone = new Audio('/Ringtone Video call.mp3');
 const Sidebar: React.FC<SidebarProps> = ({ profile, isSidebarOpen, setIsSidebarOpen }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const getProfile = useFetchServiceProviderProfile();
   const serviceProviderInfo = useSelector((state: RootState) => state.serviceProvider);
 
   const notificationRef = useRef<HTMLDivElement>(null);
@@ -108,7 +105,6 @@ const Sidebar: React.FC<SidebarProps> = ({ profile, isSidebarOpen, setIsSidebarO
   useSocketNotifications(serviceProviderInfo.userId, handleSocketNotification);
 
   useEffect(() => {
-    getProfile();
     getNotfication();
   }, []);
 
