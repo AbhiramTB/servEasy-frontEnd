@@ -15,13 +15,17 @@ import VideoCallNotification from '../../utils/ui/VideoCallNotification';
 import { useFetchUserProfile } from '../../hooks/useFetchUserProfile';
 import { useTheme } from '../../hooks/useTheme';
 import MobileBottomNav from './MobileBottomNav';
+import InitialAvatar from '../../utils/ui/InitialAvatar';
+import AppLogo from '../ui/AppLogo';
+import DesktopNavbar from './Navbar/DesktopNavbar';
+import MobileNavbar from './Navbar/MobileNavbar';
 
 const ringtune = new Audio('/Ringtone Video call.mp3');
 const notificatioRingtune = new Audio('/Ringtone Notification.mp3');
-interface IProp{
-  scrolled:boolean
+interface IProp {
+  scrolled: boolean;
 }
-const Navbar:React.FC<IProp> = ({scrolled}) => {
+const Navbar: React.FC<IProp> = ({ scrolled }) => {
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.user);
 
@@ -130,13 +134,6 @@ const Navbar:React.FC<IProp> = ({scrolled}) => {
     //   }
     // };
 
-
-
-
-
-
-
-
     // window.addEventListener('scroll', handleScroll);
     // return () => {
     //   window.removeEventListener('scroll', handleScroll);
@@ -144,15 +141,15 @@ const Navbar:React.FC<IProp> = ({scrolled}) => {
   }, []);
 
   useEffect(() => {
-  const handleResize = () => {
-    setMobileMenuOpen(window.innerWidth <= 768);
-  };
+    const handleResize = () => {
+      setMobileMenuOpen(window.innerWidth <= 768);
+    };
 
-  handleResize(); 
-  window.addEventListener("resize", handleResize);
+    handleResize();
+    window.addEventListener('resize', handleResize);
 
-  return () => window.removeEventListener("resize", handleResize);
-}, []);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const getNotfication = async () => {
     try {
@@ -200,283 +197,54 @@ const Navbar:React.FC<IProp> = ({scrolled}) => {
   };
 
   return (
-    <div >
+    <div>
       <div>
-        <nav
-          className={`fixed  left-0 right-0 z-50 transition-all  duration-300 ${
-            scrolled ? 'bg-base-100  shadow-lg border-b border-base-300' : 'bg-primary/5 border-b border-base-200'
-          }`}
-        >
-          
-
-         {!mobileMenuOpen&&
-           <div className="mx-auto max-w-7xl ">
-            <div className="flex items-center justify-between h-16">
-              {/* Logo */}
-              <div className="flex-shrink-0">
-                <Link to="/" className="flex items-center">
-                  <span className="text-2xl font-bold text-base-content">
-                    Serv<span className="text-primary">Easy</span>
-                  </span>
-                </Link>
-              </div>
-
-              {/* Desktop Navigation */}
-              <div className="hidden md:flex md:items-center md:space-x-4">
-                {!user.serviceProvider && (
-                  <Link to="service-provider/register">
-                    <button className="btn btn-outline btn-primary btn-sm">Become a Service Provider</button>
-                  </Link>
-                )}
-
-                {/* Chat Button with Red Dot */}
-                <div className="relative">
-                  <button
-                    onClick={handleChatClick}
-                    className="btn btn-ghost btn-circle hover:bg-base-200"
-                    aria-label="Open Chat"
-                  >
-                    <MessageCircle className="w-5 h-5 text-base-content" />
-                    {chatNotificationCount > 0 && (
-                      <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-error rounded-full min-w-[18px] h-[18px]">
-                        {chatNotificationCount > 9 ? '9+' : chatNotificationCount}
-                      </span>
-                    )}
-                  </button>
-                </div>
-
-                {/* Notification Bell */}
-                <div className="relative">
-                  <button
-                    onClick={toggleNotifications}
-                    className="btn btn-ghost btn-circle hover:bg-base-200"
-                    aria-label="Notifications"
-                  >
-                    <Bell className="w-5 h-5 text-base-content" />
-                    {notificationCount > 0 && (
-                      <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-error rounded-full min-w-[18px] h-[18px]">
-                        {notificationCount > 9 ? '9+' : notificationCount}
-                      </span>
-                    )}
-                  </button>
-
-                  {showNotifications && (
-                    <div className="absolute right-0 mt-2">
-                      <Notifications
-                        countMakeitZero={() => setNotificationCount(0)}
-                        localNotifications={notifications}
-                        setLocalNotifications={setNotifications}
-                        decrementUnreadCount={() => setNotificationCount(Math.max(0, notificationCount - 1))}
-                      />
-                    </div>
-                  )}
-                </div>
-
-                {user.serviceProvider && (
-                  <button onClick={verifyServiceProvider} className="btn btn-outline btn-secondary btn-sm">
-                    Go to Service Dashboard
-                  </button>
-                )}
-
-                {/* User Profile Dropdown */}
-                <div className="dropdown dropdown-end">
-                  <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                    <div className="w-12 rounded-full">
-                      <img
-                        alt="User profile"
-                        src={
-                          user.profileImage ||
-                          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541'
-                        }
-                        className="object-cover w-full h-full"
-                      />
-                    </div>
-                  </div>
-
-                  <ul
-                    tabIndex={0}
-                    className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-56 border border-base-300"
-                  >
-                    <li>
-                      <Link to="/myprofile" className="flex items-center text-base-content hover:bg-base-200">
-                        <User className="w-4 h-4 mr-2" />
-                        My Account
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="/myprofile/booked-services/"
-                        className="flex items-center text-base-content hover:bg-base-200"
-                      >
-                        <Calendar className="w-4 h-4 mr-2" />
-                        Your Bookings
-                      </Link>
-                    </li>
-
-                    <li className="pt-2 mt-2 border-t border-base-300">
-                      <button
-                        onClick={handleLogOut}
-                        className="flex items-center w-full text-error hover:bg-error hover:bg-opacity-10"
-                      >
-                        <LogOut className="w-4 h-4 mr-2" />
-                        Logout
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-         
-            </div>
-          </div>}
-
-          
-
+        <nav>
+          <MobileNavbar
+            chatNotificationCount={chatNotificationCount}
+            handleChatClick={handleChatClick}
+            handleLogOut={handleLogOut}
+            mobileMenuOpen={mobileMenuOpen}
+            notificationCount={notificationCount}
+            notifications={notifications}
+            scrolled={scrolled}
+            setNotificationCount={setNotificationCount}
+            setNotifications={setNotifications}
+            showNotifications={showNotifications}
+            toggleNotifications={toggleNotifications}
+            user={user}
+            verifyServiceProvider={verifyServiceProvider}
+          />
 
           {/* Top bar for mobile view */}
-          <div className="fixed left-0 right-0 z-40 flex items-center justify-between h-16 px-4 border-b md:hidden bg-base-100 border-base-300">
-            <Link to="/" className="text-xl font-bold text-base-content">
-              Serv<span className="text-primary">Easy</span>
-            </Link>
+          {/* <MobileNavbar
+            chatNotificationCount={chatNotificationCount}
+            handleChatClick={handleChatClick}
+            handleLogOut={handleLogOut}
+            mobileMenuOpen={mobileMenuOpen}
+            notificationCount={notificationCount}
+            notifications={notifications}
+            scrolled={scrolled}
+            setNotificationCount={setNotificationCount}
+            setNotifications={setNotifications}
+            showNotifications={showNotifications}
+            toggleNotifications={toggleNotifications}
+            user={user}
+            verifyServiceProvider={verifyServiceProvider}
+          /> */}
 
-            <div className="flex items-center gap-3">
-              {/* Chat Notification Icon */}
-              <div className="relative">
-                {user.serviceProvider && (
-                  <button onClick={verifyServiceProvider} className="btn btn-outline btn-secondary btn-sm">
-                    Go to Service Dashboard
-                  </button>
-                )}
-              </div>
-
-               {!user.serviceProvider && (
-                  <Link to="service-provider/register">
-                    <button className="btn btn-outline btn-primary btn-sm">Become a Service Provider</button>
-                  </Link>
-                )}
-                
-
-              {/* Notification Bell */}
-              <div className="relative">
-                <button
-                  onClick={toggleNotifications}
-                  className="btn btn-ghost btn-circle hover:bg-base-200"
-                  aria-label="Notifications"
-                >
-                  <Bell className="w-5 h-5 text-base-content" />
-                  {notificationCount > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-error text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
-                      {notificationCount > 9 ? '9+' : notificationCount}
-                    </span>
-                  )}
-                </button>
-
-                {showNotifications && (
-                  <div className="absolute right-0 z-50 mt-2">
-                    <Notifications
-                      countMakeitZero={() => setNotificationCount(0)}
-                      localNotifications={notifications}
-                      setLocalNotifications={setNotifications}
-                      decrementUnreadCount={() => setNotificationCount(Math.max(0, notificationCount - 1))}
-                    />
-                  </div>
-                )}
-                <button
-                        onClick={handleLogOut}
-                        className=""
-                      >
-                        <LogOut className="w-4 h-4 mr-2" />
-                      </button>
-              </div>
-
-              {/* Go to Dashboard */}
-              {user.serviceProvider && (
-                <button onClick={verifyServiceProvider} className="btn btn-xs btn-outline btn-secondary">
-                  Dashboard
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Mobile Navigation Menu */}
-          {/* {mobileMenuOpen && (
-          <div className="border-t md:hidden border-base-300 bg-base-100">
-            <div className="px-4 py-3 space-y-3">
-              {!user.serviceProvider && (
-                <Link to="service-provider/register">
-                  <button className="w-full btn btn-outline btn-primary btn-sm">
-                    Become a Service Provider
-                  </button>
-                </Link>
-              )}
-
-              <button
-                onClick={handleChatClick}
-                className="flex items-center justify-between w-full p-3 transition-colors duration-200 rounded-lg text-base-content hover:bg-base-200"
-              >
-                <div className="flex items-center">
-                  <MessageCircle className="w-5 h-5 mr-3" />
-                  Messages
-                </div>
-                {chatNotificationCount > 0 && (
-                  <span className="text-white badge badge-error badge-sm">
-                    {chatNotificationCount > 9 ? '9+' : chatNotificationCount}
-                  </span>
-                )}
-              </button>
-
-              <button
-                onClick={toggleNotifications}
-                className="flex items-center justify-between w-full p-3 transition-colors duration-200 rounded-lg text-base-content hover:bg-base-200"
-              >
-                <div className="flex items-center">
-                  <Bell className="w-5 h-5 mr-3" />
-                  Notifications
-                </div>
-                {notificationCount > 0 && (
-                  <span className="text-white badge badge-error badge-sm">
-                    {notificationCount > 9 ? '9+' : notificationCount}
-                  </span>
-                )}
-              </button>
-
-              {user.serviceProvider && (
-                <button
-                  onClick={verifyServiceProvider}
-                  className="w-full btn btn-outline btn-secondary btn-sm"
-                >
-                  Go to Service Dashboard
-                </button>
-              )}
-
-              <Link
-                to="/myprofile/booked-services/"
-                className="flex items-center w-full p-3 transition-colors duration-200 rounded-lg text-base-content hover:bg-base-200"
-              >
-                <Calendar className="w-5 h-5 mr-3" />
-                Your Bookings
-              </Link>
-
-              <Link
-                to="/myprofile"
-                className="flex items-center w-full p-3 transition-colors duration-200 rounded-lg text-base-content hover:bg-base-200"
-              >
-                <User className="w-5 h-5 mr-3" />
-                Profile
-              </Link>
-
-             
-
-              <button
-                onClick={handleLogOut}
-                className="flex items-center w-full p-3 transition-colors duration-200 rounded-lg text-error hover:bg-error hover:bg-opacity-10"
-              >
-                <LogOut className="w-5 h-5 mr-3" />
-                Logout
-              </button>
-            </div>
-          </div>
-        )} */}
+          {/* <MobileNavbar
+            handleLogOut={handleLogOut}
+            notificationCount={notificationCount}
+            notifications={notifications}
+            setNotificationCount={setNotificationCount}
+            setNotifications={setNotifications}
+            showNotifications={showNotifications}
+            toggleNotifications={toggleNotifications}
+            user={user}
+            verifyServiceProvider={verifyServiceProvider}
+            key={'dfdf'}
+          /> */}
 
           {mobileMenuOpen && <MobileBottomNav chatCount={chatNotificationCount} />}
         </nav>

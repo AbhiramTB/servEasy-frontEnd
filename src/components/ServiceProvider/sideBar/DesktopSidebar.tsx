@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Location } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, LogOut } from 'lucide-react';
-import { ServiceProviderLinks } from '../../../utils/constants/ServiceProviderLinks';
+import { ServiceProviderLinks } from '../../../utils/constants/navLinks/serviceProviderLinks/ServiceProviderLinks';
 import { HotToastError } from '../../../utils/notificationToast';
 import AppLogo from '../../ui/AppLogo';
 

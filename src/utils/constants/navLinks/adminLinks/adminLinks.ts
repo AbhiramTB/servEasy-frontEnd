@@ -11,7 +11,7 @@ import {
   Wallet,
   CalendarCog,
 } from 'lucide-react';
-import { ROUTES } from './routes';
+import { ROUTES } from '../../routes';
 
 export const adminLinks = [
   { to: ROUTES.ADMIN.HOME, icon: LayoutDashboard, label: 'Dashboard' },

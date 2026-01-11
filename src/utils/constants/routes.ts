@@ -29,7 +29,7 @@ export const ROUTES = {
   },
   SERVICEPROVIDER: {
     BASE: '/service-provider',
-
+    LANDING: '/service-provider/become',
     REGISTER: '/service-provider/register',
 
     DASHBOARD: '/service-provider/dashboard',

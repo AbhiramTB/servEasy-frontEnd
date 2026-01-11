@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Location } from 'react-router-dom';
 import { Bell, Menu, X } from 'lucide-react';
-import { ServiceProviderLinks } from '../../../utils/constants/ServiceProviderLinks';
+import { ServiceProviderLinks } from '../../../utils/constants/navLinks/serviceProviderLinks/ServiceProviderLinks';
 import { ROUTES } from '../../../utils/constants/routes';
 import AppLogo from '../../ui/AppLogo';
 
