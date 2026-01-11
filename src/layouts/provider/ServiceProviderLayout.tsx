@@ -8,9 +8,22 @@ import useFetchServiceProviderProfile from '../../hooks/useFetchServiceProviderP
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { getRequest } from '../../utils/makeRequestInstance';
 import { apiEndPointServiceProvider } from '../../utils/constant';
+import { IServiceProviderStatus } from '../../utils/types/IServiceProvider';
 
 const ServiceProviderLayout = () => {
   const navigate = useNavigate();
+
+  // const [status, setStatus] = useState<
+  //   { hasProvider: false } | { hasProvider: true; status: IServiceProviderStatus }
+  // >();
+
+  // const getServiceProviderStatus = async () => {
+  //   const res = await getRequest(apiEndPointServiceProvider.STATUS);
+  //   if (res.status == 200) {
+  //     await getProfile();
+  //     setStatus(res.data);
+  //   }
+  // };
 
   const serviceProviderInfo = useSelector((state: RootState) => state.serviceProvider);
 
@@ -39,6 +52,7 @@ const ServiceProviderLayout = () => {
 
   useEffect(() => {
     verifyServiceProvider();
+    // getServiceProviderStatus();
   }, []);
 
   useEffect(() => {

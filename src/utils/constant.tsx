@@ -37,6 +37,9 @@ export const apiEndPointServiceProvider = {
   getPaymentInfo: '/service-providers/get-paymentinfo',
   makeActiveAllservice: '/service-providers/services/activate-all/',
   makeInactiveAllService: '/service-providers/services/deactivate-all/',
+  REGISTRATION_DETAILS: '/service-providers/registration/details',
+  STATUS: '/service-providers/status',
+  REAPPLY: '/service-providers/reapply',
 };
 
 export const apiEndPointAdmin = {

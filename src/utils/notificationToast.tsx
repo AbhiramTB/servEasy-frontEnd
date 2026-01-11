@@ -311,7 +311,7 @@ export async function HotToastPromise<T extends ApiResponse>(
 ): Promise<T> {
   return toast.promise(
     promise.then(res => {
-      if (res.status !== 200) {
+      if (res.status !== 200 && res.status !== 201) {
         throw new Error(`Request failed with status ${res.status}`);
       }
       return res; // ✅ full response returned

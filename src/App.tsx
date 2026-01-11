@@ -2,7 +2,6 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import AuthPage from './components/User/AuthModel/AuthPage.tsx';
 import Body from './layouts/user/UserLayout.tsx';
 import Otp from './components/User/AuthModel/Otp';
-import Register from './components/ServiceProvider/Register/Register.tsx';
 import AdminSignIn from '../src/components/admin/auth/Sigin.tsx';
 import Dashboard from './components/ServiceProvider/Dashboard.tsx';
 import ServiceProviderLayout from './layouts/provider/ServiceProviderLayout.tsx';
@@ -44,6 +43,7 @@ import AdsPage from './components/ServiceProvider/ads/AdsPage.tsx';
 import ServiceProviderLanding from './page/serviceProvider/LandingPage.tsx';
 import Sample from './Sample.tsx';
 import { ROUTES } from './utils/constants/routes.ts';
+import ServiceProviderRegisterPage from './components/ServiceProvider/Register/ServiceProviderRegisterPage.tsx';
 
 function App() {
   const { userAccessToken = true, adminAccessToken } = useAuth();
@@ -81,7 +81,7 @@ function App() {
             <Route path="chat/:serviceProviderId" element={<Chat />} />
             <Route path="chats" element={<ChatsUser />}></Route>
           </Route>
-          <Route path={ROUTES.SERVICEPROVIDER.REGISTER} element={<Register />} />
+          <Route path={ROUTES.SERVICEPROVIDER.REGISTER} element={<ServiceProviderRegisterPage />} />
           <Route path="/landingSp" element={<ServiceProviderLanding />} />
 
           <Route>
