@@ -1,6 +1,5 @@
-import { IAdStatus } from "./IAdminAd";
-import { ILocation } from "./ILocation";
-
+import { IAdStatus } from './IAdminAd';
+import { ILocation } from './ILocation';
 
 export interface IAd {
   _id?: string;
@@ -13,8 +12,7 @@ export interface IAd {
   image?: string;
 
   // Location targeting
-  targetLocation?:  ILocation 
-
+  targetLocation?: ILocation;
 
   radiusKm?: number;
 
@@ -25,7 +23,7 @@ export interface IAd {
   clicks?: number;
 
   // Status
-    status?: IAdStatus
+  status?: IAdStatus;
 
   // Dates (stored as ISO strings on frontend)
   startDate?: string;
@@ -33,4 +31,14 @@ export interface IAd {
 
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface IAdDTO {
+  _id: string;
+  caption: string;
+  description: string;
+  image: string;
+  serviceId: string;
+  providerId: string;
+  profileImage: string;
 }

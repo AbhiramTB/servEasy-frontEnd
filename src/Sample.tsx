@@ -409,146 +409,146 @@ const ServiceDetailsPage: React.FC = () => {
 //   serviceImage: string;
 // }
 
-interface ServiceDetailsCardProps {
-  serviceName: string;
-  serviceDescription: string;
-  serviceImage: string;
-  servicePrice: number;
-  serviceType?: 'online' | 'offline';
-  distance?: string;
-}
+// interface ServiceDetailsCardProps {
+//   serviceName: string;
+//   serviceDescription: string;
+//   serviceImage: string;
+//   servicePrice: number;
+//   serviceType?: 'online' | 'offline';
+//   distance?: string;
+// }
 
-export const ServiceDetailsCardSample = ({
-  serviceName,
-  serviceDescription,
-  serviceImage,
-  servicePrice,
-  serviceType,
-  distance = '—',
-}: ServiceDetailsCardProps) => {
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div className="lg:col-span-2 space-y-6">
-        <div className="card bg-base-100 shadow-xl">
-          <figure className="h-96 ">
-            <img src={serviceImage} alt={serviceName} className="w-full h-full object-cover" />
-          </figure>
+// export const ServiceDetailsCardSample = ({
+//   serviceName,
+//   serviceDescription,
+//   serviceImage,
+//   servicePrice,
+//   serviceType,
+//   distance = '—',
+// }: ServiceDetailsCardProps) => {
+//   return (
+//     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+//       <div className="lg:col-span-2 space-y-6">
+//         <div className="card bg-base-100 shadow-xl">
+//           <figure className="h-96 ">
+//             <img src={serviceImage} alt={serviceName} className="w-full h-full object-cover" />
+//           </figure>
 
-          <div className="card-body space-y-3">
-            {distance && (
-              <div className="flex items-center gap-2 text-sm text-base-content/70">
-                <MapPin className="w-4 h-4" />
-                <span>{distance} away</span>
-              </div>
-            )}
+//           <div className="card-body space-y-3">
+//             {distance && (
+//               <div className="flex items-center gap-2 text-sm text-base-content/70">
+//                 <MapPin className="w-4 h-4" />
+//                 <span>{distance} away</span>
+//               </div>
+//             )}
 
-            {/* Price info */}
-            <div className="group relative w-fit">
-              <span className="text-xs text-base-content/60 cursor-help underline-offset-2 group-hover:underline">
-                Average price :<span className="ml-1 text-sm font-semibold text-primary">₹{servicePrice}</span>
-              </span>
+//             {/* Price info */}
+//             <div className="group relative w-fit">
+//               <span className="text-xs text-base-content/60 cursor-help underline-offset-2 group-hover:underline">
+//                 Average price :<span className="ml-1 text-sm font-semibold text-primary">₹{servicePrice}</span>
+//               </span>
 
-              <div className="absolute left-0 top-full z-10 mt-1 hidden w-60 rounded-md bg-base-100 p-2 text-xs text-base-content shadow-lg group-hover:block">
-                Final cost may vary based on your service needs and requirements.
-              </div>
-            </div>
+//               <div className="absolute left-0 top-full z-10 mt-1 hidden w-60 rounded-md bg-base-100 p-2 text-xs text-base-content shadow-lg group-hover:block">
+//                 Final cost may vary based on your service needs and requirements.
+//               </div>
+//             </div>
 
-            <h2 className="card-title text-2xl">{serviceName}</h2>
+//             <h2 className="card-title text-2xl">{serviceName}</h2>
 
-            <p className="text-base-content/70">{serviceDescription}</p>
+//             <p className="text-base-content/70">{serviceDescription}</p>
 
-            <div>
-              <span className="badge badge-outline">
-                {serviceType === 'online' ? 'Online Service' : 'On-site Service'}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+//             <div>
+//               <span className="badge badge-outline">
+//                 {serviceType === 'online' ? 'Online Service' : 'On-site Service'}
+//               </span>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
-interface Review {
-  id: number;
-  username: string;
-  rating: number;
-  date: string;
-  comment: string;
-}
+// interface Review {
+//   id: number;
+//   username: string;
+//   rating: number;
+//   date: string;
+//   comment: string;
+// }
 
-export const ReviewCard = () => {
-  const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
-    return (
-      <div className="flex gap-1">
-        {[...Array(5)].map((_, i) => (
-          <Star
-            key={i}
-            className={`w-4 h-4 ${i < rating ? 'fill-warning text-warning' : 'fill-gray-300 text-gray-300'}`}
-          />
-        ))}
-      </div>
-    );
-  };
+// export const ReviewCard = () => {
+//   const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
+//     return (
+//       <div className="flex gap-1">
+//         {[...Array(5)].map((_, i) => (
+//           <Star
+//             key={i}
+//             className={`w-4 h-4 ${i < rating ? 'fill-warning text-warning' : 'fill-gray-300 text-gray-300'}`}
+//           />
+//         ))}
+//       </div>
+//     );
+//   };
 
-  const reviews = [
-    {
-      id: 1,
-      name: 'Rahul Nair',
-      avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop',
-      rating: 5,
-      comment:
-        'Excellent service! The electrician arrived on time and fixed the issue quickly. Very professional and polite.',
-    },
-    {
-      id: 2,
-      name: 'Anjali Menon',
-      avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop',
-      rating: 4,
-      comment: 'Good experience overall. Pricing was fair and the work was done neatly. Would definitely recommend.',
-    },
-    {
-      id: 3,
-      name: 'Suresh Kumar',
-      avatar: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=150&h=150&fit=crop',
-      rating: 5,
-      comment: 'Very skilled professional. Explained the problem clearly and completed the work efficiently.',
-    },
-    {
-      id: 4,
-      name: 'Neha Sharma',
-      avatar: 'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=150&h=150&fit=crop',
-      rating: 4,
-      comment: 'Service was good, but arrived a little late. However, the quality of work was excellent.',
-    },
-  ];
+//   const reviews = [
+//     {
+//       id: 1,
+//       name: 'Rahul Nair',
+//       avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop',
+//       rating: 5,
+//       comment:
+//         'Excellent service! The electrician arrived on time and fixed the issue quickly. Very professional and polite.',
+//     },
+//     {
+//       id: 2,
+//       name: 'Anjali Menon',
+//       avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop',
+//       rating: 4,
+//       comment: 'Good experience overall. Pricing was fair and the work was done neatly. Would definitely recommend.',
+//     },
+//     {
+//       id: 3,
+//       name: 'Suresh Kumar',
+//       avatar: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=150&h=150&fit=crop',
+//       rating: 5,
+//       comment: 'Very skilled professional. Explained the problem clearly and completed the work efficiently.',
+//     },
+//     {
+//       id: 4,
+//       name: 'Neha Sharma',
+//       avatar: 'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=150&h=150&fit=crop',
+//       rating: 4,
+//       comment: 'Service was good, but arrived a little late. However, the quality of work was excellent.',
+//     },
+//   ];
 
-  return (
-    <>
-      <div className="card bg-base-100 shadow-xl">
-        <div className="card-body">
-          <h3 className="text-2xl font-bold text-base-content mb-4">Customer Reviews</h3>
-          <div className="flex items-center gap-2 mb-6">
-            <StarRating rating={4} />
-            <span className="text-base-content/70">(558k reviews)</span>
-          </div>
+//   return (
+//     <>
+//       <div className="card bg-base-100 shadow-xl">
+//         <div className="card-body">
+//           <h3 className="text-2xl font-bold text-base-content mb-4">Customer Reviews</h3>
+//           <div className="flex items-center gap-2 mb-6">
+//             <StarRating rating={4} />
+//             <span className="text-base-content/70">(558k reviews)</span>
+//           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {reviews.map(review => (
-              <div key={review.id} className="border border-base-300 rounded-lg p-4">
-                <div className="flex items-center gap-3 mb-3">
-                  <img src={review.avatar} alt={review.name} className="w-12 h-12 rounded-full object-cover" />
-                  <div>
-                    <h4 className="font-semibold text-base-content">{review.name}</h4>
-                    <StarRating rating={review.rating} />
-                  </div>
-                </div>
-                <p className="text-sm text-base-content/70">{review.comment}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
+//           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//             {reviews.map(review => (
+//               <div key={review.id} className="border border-base-300 rounded-lg p-4">
+//                 <div className="flex items-center gap-3 mb-3">
+//                   <img src={review.avatar} alt={review.name} className="w-12 h-12 rounded-full object-cover" />
+//                   <div>
+//                     <h4 className="font-semibold text-base-content">{review.name}</h4>
+//                     <StarRating rating={review.rating} />
+//                   </div>
+//                 </div>
+//                 <p className="text-sm text-base-content/70">{review.comment}</p>
+//               </div>
+//             ))}
+//           </div>
+//         </div>
+//       </div>
+//     </>
+//   );
+// };

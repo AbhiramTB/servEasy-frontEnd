@@ -10,7 +10,7 @@ interface ReviewListProps {
 
 const ReviewList: React.FC<ReviewListProps> = ({ reviews, averageRating, totalReviews }) => {
   return (
-    <div className="card bg-base-100 shadow-xl">
+    <div className=" bg-base-100 ">
       <div className="card-body">
         <h3 className="text-2xl font-bold text-base-content mb-4">Customer Reviews</h3>
 

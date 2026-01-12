@@ -59,7 +59,7 @@ const ServiceProviderCard: React.FC<ServiceProviderCardProps> = ({
       : 'Price on request';
 
   return (
-    <div className="card bg-base-100 shadow-xl  ">
+    <div className="card bg-base-100   ">
       <div className="card-body">
         <h3 className="text-xl font-bold text-base-content mb-4">Service Provider Details</h3>
 
