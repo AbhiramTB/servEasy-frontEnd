@@ -1,85 +1,403 @@
 import React from 'react';
+import { Star, MapPin, Mail, Phone, Video, MessageCircle, CheckCircle } from 'lucide-react';
 
-const Sample = () => {
-  // WhatsApp-style doodle pattern as inline style
-  const whatsappDoodleStyle = {
-    backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23cbd5e0' stroke-opacity='0.2' stroke-width='2'%3E%3Ccircle cx='30' cy='30' r='8'/%3E%3Ccircle cx='170' cy='40' r='6'/%3E%3Cpath d='M60 25 Q 70 20 80 25 T 100 25'/%3E%3Cpath d='M130 30 L 145 30 M 137.5 22.5 L 137.5 37.5'/%3E%3Ccircle cx='40' cy='80' r='10'/%3E%3Cpath d='M80 75 Q 90 70 100 75 T 120 75'/%3E%3Crect x='150' y='70' width='15' height='15' rx='2'/%3E%3Cpath d='M30 130 L 40 120 L 50 130 L 40 140 Z'/%3E%3Ccircle cx='90' cy='130' r='9'/%3E%3Cpath d='M130 125 Q 140 120 150 125 T 170 125'/%3E%3Cpath d='M50 170 L 60 170 M 55 162.5 L 55 177.5'/%3E%3Ccircle cx='120' cy='170' r='7'/%3E%3Cpath d='M160 165 Q 170 160 180 165'/%3E%3C/g%3E%3C/svg%3E")`,
-    backgroundRepeat: 'repeat',
+const ServiceCard = ({ service }: { service: IServiceListing }) => {
+  return (
+    <div className="max-w-4xl bg-white rounded-lg shadow-md overflow-hidden">
+      {/* Header Section */}
+      <div className="p-6 flex items-start justify-between">
+        <div className="flex-1">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">{service.title}</h2>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-1">
+              <Star className="w-5 h-5 fill-red-500 text-red-500" />
+              <span className="font-semibold text-gray-800">{service.rating}</span>
+              <span className="text-gray-500">({service.reviews})</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <img
+              src={service.providerImage}
+              alt={service.providerName}
+              className="w-16 h-16 rounded-full object-cover"
+            />
+            <div>
+              <h3 className="font-semibold text-lg text-gray-800">{service.providerName}</h3>
+              <span className="inline-block bg-slate-800 text-emerald-400 text-sm px-3 py-1 rounded-full">
+                {service.experience}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-gray-600 text-sm mb-1">Price Range:</p>
+          <p className="text-2xl font-bold text-gray-800">
+            ₹{service.priceMin} - ₹{service.priceMax}
+          </p>
+        </div>
+      </div>
+
+      {/* Image Section */}
+      <div className="relative h-80">
+        <img src={service.serviceImage} alt={service.title} className="w-full h-full object-cover" />
+      </div>
+
+      {/* Footer Section */}
+      <div className="p-6 flex items-center justify-between bg-gray-50">
+        <div className="flex items-center gap-2 text-gray-600">
+          <MapPin className="w-5 h-5" />
+          <span className="font-medium">{service.distance}</span>
+          <span className="ml-2 text-gray-800 font-semibold">{service.title}</span>
+        </div>
+        <div className="text-right">
+          <p className="text-lg font-semibold text-gray-800">{service.serviceType}</p>
+        </div>
+      </div>
+
+      {/* Service Tag */}
+      <div className="px-6 pb-6 bg-gray-50">
+        <p className="text-gray-500 text-sm">Service</p>
+      </div>
+    </div>
+  );
+};
+export interface IServiceListing {
+  id: number;
+  title: string;
+
+  rating: number; // e.g. 4.7
+  reviews: string; // e.g. "312K"
+
+  providerName: string;
+  providerImage: string; // image URL
+
+  experience: string; // e.g. "10+ years"
+
+  priceMin: number;
+  priceMax: number;
+
+  serviceImage: string; // banner / cover image URL
+  distance: string; // e.g. "12 km away"
+
+  serviceType: string; // e.g. "Custom Furniture & Repairs"
+}
+
+// Mock Data
+const mockServices: IServiceListing[] = [
+  {
+    id: 1,
+    title: 'Electrical Inspectorate',
+    rating: 4.8,
+    reviews: '568K',
+    providerName: 'sirman',
+    providerImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop',
+    experience: '5+ years',
+    priceMin: 500,
+    priceMax: 1200,
+    serviceImage: 'https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=800&h=400&fit=crop',
+    distance: '15 km away',
+    serviceType: 'Electrician & Wiring Services',
+  },
+  {
+    id: 2,
+    title: 'Plumbing Services',
+    rating: 4.9,
+    reviews: '423K',
+    providerName: 'rahul_plumber',
+    providerImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop',
+    experience: '7+ years',
+    priceMin: 300,
+    priceMax: 900,
+    serviceImage: 'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=800&h=400&fit=crop',
+    distance: '8 km away',
+    serviceType: 'Residential & Commercial Plumbing',
+  },
+  {
+    id: 3,
+    title: 'Carpentry & Furniture',
+    rating: 4.7,
+    reviews: '312K',
+    providerName: 'kumar_wood',
+    providerImage: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop',
+    experience: '10+ years',
+    priceMin: 800,
+    priceMax: 2500,
+    serviceImage: 'https://images.unsplash.com/photo-1608532051206-e8c6774c0e4d?w=800&h=400&fit=crop',
+    distance: '12 km away',
+    serviceType: 'Custom Furniture & Repairs',
+  },
+];
+
+// Main App Component
+export default function Sample() {
+  return (
+    <div className="min-h-screen bg-gray-100 py-8 px-4">
+      <div className="max-w-6xl mx-auto space-y-6">
+        <h1 className="text-3xl font-bold text-gray-800 mb-8">Service Listings</h1>
+        {mockServices.map(service => (
+          <ServiceCard key={service.id} service={service} />
+        ))}
+      </div>
+      <ServiceDetailsPage />
+    </div>
+  );
+}
+
+interface Review {
+  id: number;
+  name: string;
+  avatar: string;
+  rating: number;
+  comment: string;
+}
+
+interface ServiceProvider {
+  name: string;
+  avatar: string;
+  priceRange: string;
+  experience: string;
+  priceRange8: string;
+  memberSince: string;
+  joinedSince: string;
+  email: string;
+  alternateEmail: string;
+  phone: string;
+}
+
+interface SponsoredAd {
+  id: number;
+  name: string;
+  avatar: string;
+  description: string;
+  badge?: string;
+}
+
+const ServiceDetailsPage: React.FC = () => {
+  const provider: ServiceProvider = {
+    name: 'sirman',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop',
+    priceRange: '₹500 - ₹1200',
+    experience: '5+ years',
+    priceRange8: 'Price 8 range:',
+    memberSince: 'Member Since:',
+    joinedSince: 'Jan 2020',
+    email: 'siman.elisck@email.com',
+    alternateEmail: '+91 Bingnail.com',
+    phone: '+91 9897665 4210',
   };
 
-  const denseDoodleStyle = {
-    backgroundImage: `url("data:image/svg+xml,%3Csvg width='150' height='150' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23cbd5e0' stroke-opacity='0.25' stroke-width='2'%3E%3Ccircle cx='20' cy='20' r='6'/%3E%3Ccircle cx='60' cy='25' r='8'/%3E%3Ccircle cx='100' cy='20' r='7'/%3E%3Ccircle cx='130' cy='30' r='5'/%3E%3Cpath d='M15 55 Q 25 50 35 55 T 55 55'/%3E%3Cpath d='M70 53 L 80 57 M 80 53 L 90 57'/%3E%3Cpath d='M105 55 Q 115 50 125 55'/%3E%3Crect x='10' y='75' width='12' height='12' rx='2'/%3E%3Ccircle cx='45' cy='85' r='9'/%3E%3Cpath d='M65 80 L 75 90 M 75 80 L 85 90'/%3E%3Ccircle cx='110' cy='85' r='8'/%3E%3Crect x='130' y='78' width='10' height='10' rx='5'/%3E%3Cpath d='M20 115 L 30 105 L 40 115 L 30 125 Z'/%3E%3Ccircle cx='65' cy='115' r='10'/%3E%3Cpath d='M90 110 Q 100 105 110 110 T 130 110'/%3E%3Ccircle cx='25' cy='140' r='6'/%3E%3Cpath d='M50 135 Q 60 130 70 135'/%3E%3Cpath d='M90 138 L 100 138 M 95 133 L 95 143'/%3E%3Ccircle cx='125' cy='138' r='7'/%3E%3C/g%3E%3C/svg%3E")`,
-    backgroundRepeat: 'repeat',
-  };
+  const reviews: Review[] = [
+    // {
+    //   id: 1,
+    //   name: 'Dat Havlen',
+    //   avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+    //   rating: 4,
+    //   comment:
+    //     'Frrolod lncas nckoy the vamathd. Stlt lme teing n Welt tatsed. Apctee d the Meullins and eporat anv lts merl Glvaher liigs.',
+    // },
+    // {
+    //   id: 2,
+    //   name: 'Fion Vtech Jmplicy',
+    //   avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',
+    //   rating: 4,
+    //   comment:
+    //     'At et Edltorns fo de re vocn wan esmd. stndocdcng the thsat ed and easiasy a m Stoa lt atpeat uo tmd the',
+    // },
+    // {
+    //   id: 3,
+    //   name: 'Licet Mawgly',
+    //   avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
+    //   rating: 4,
+    //   comment: 'Alll foal lo th speh furza and carcrs toyase bsten ad the hall isend.',
+    // },
+    // {
+    //   id: 4,
+    //   name: 'Hep Meattlon',
+    //   avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop',
+    //   rating: 4,
+    //   comment: 'Txs Morre tro yor trniry trve ftogltrern lint ge yol uooe ene canty.',
+    // },
+  ];
 
-  const cleanDoodleStyle = {
-    backgroundImage: `url("data:image/svg+xml,%3Csvg width='180' height='180' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23cbd5e0' stroke-opacity='0.2' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='30' cy='30' r='10'/%3E%3Cpath d='M80 25 Q 95 20 110 25'/%3E%3Ccircle cx='150' cy='30' r='8'/%3E%3Cpath d='M25 80 Q 40 75 55 80 T 85 80'/%3E%3Crect x='110' y='72' width='16' height='16' rx='3'/%3E%3Ccircle cx='160' cy='80' r='9'/%3E%3Crect x='20' y='122' width='14' height='14' rx='2'/%3E%3Ccircle cx='70' cy='130' r='11'/%3E%3Cpath d='M110 125 Q 125 120 140 125'/%3E%3Cpath d='M30 165 L 40 175 M 40 165 L 50 175'/%3E%3Ccircle cx='100' cy='170' r='8'/%3E%3Cpath d='M140 165 Q 150 160 160 165'/%3E%3C/g%3E%3C/svg%3E")`,
-    backgroundRepeat: 'repeat',
-  };
+  const sponsoredAds: SponsoredAd[] = [
+    {
+      id: 1,
+      name: 'Ciaing narlbit',
+      avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop',
+      description:
+        'Lourmit imce eo toote lo capernhitts. poe tlcvltons tp ooris orcanity tovs wile toe txatrrn s ired nouse kiee pecbet youir cnttstcmd an and to thenieset.',
+      badge: 'VERIFIED',
+    },
+    {
+      id: 2,
+      name: 'Sponsored Ads',
+      avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=300&fit=crop',
+      description: '',
+    },
+  ];
 
-  const circuitStyle = {
-    backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23cbd5e0' stroke-opacity='0.25' stroke-width='1.5'%3E%3Ccircle cx='20' cy='20' r='4'/%3E%3Cpath d='M20 20 L 20 40'/%3E%3Ccircle cx='20' cy='40' r='3'/%3E%3Cpath d='M20 40 L 40 40'/%3E%3Ccircle cx='40' cy='40' r='3'/%3E%3Ccircle cx='60' cy='20' r='4'/%3E%3Cpath d='M60 20 L 80 20'/%3E%3Ccircle cx='80' cy='20' r='3'/%3E%3Cpath d='M80 20 L 80 40'/%3E%3Crect x='77' y='37' width='6' height='6' rx='1'/%3E%3Ccircle cx='60' cy='60' r='4'/%3E%3Cpath d='M60 60 L 60 80'/%3E%3Ccircle cx='60' cy='80' r='3'/%3E%3Ccircle cx='20' cy='80' r='4'/%3E%3Cpath d='M20 80 L 40 80'/%3E%3Crect x='37' y='77' width='6' height='6' rx='1'/%3E%3C/g%3E%3C/svg%3E")`,
-    backgroundRepeat: 'repeat',
+  const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
+    return (
+      <div className="flex gap-1">
+        {[...Array(5)].map((_, i) => (
+          <Star
+            key={i}
+            className={`w-4 h-4 ${i < rating ? 'fill-warning text-warning' : 'fill-gray-300 text-gray-300'}`}
+          />
+        ))}
+      </div>
+    );
   };
 
   return (
-    <div className="space-y-8">
-      {/* 1. WhatsApp-style chat background */}
-      <div className="min-h-screen bg-base-200 p-8" style={whatsappDoodleStyle}>
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">WhatsApp Style Doodle</h2>
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <p>Your chat messages would go here</p>
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-base-200 p-6">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-3xl font-bold text-base-content mb-6">Service Details</h1>
 
-      {/* 2. Dense doodle background */}
-      <div className="min-h-[50vh] bg-base-100 p-8" style={denseDoodleStyle}>
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Dense Doodle Pattern</h2>
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <p>Content with dense doodles in background</p>
-          </div>
-        </div>
-      </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column - Main Content */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Service Image and Details */}
+            <div className="card bg-base-100 shadow-xl">
+              <figure className="h-96">
+                <img
+                  src="https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=800&h=400&fit=crop"
+                  alt="Electrical Service"
+                  className="w-full h-full object-cover"
+                />
+              </figure>
+              <div className="card-body">
+                <div className="flex items-center gap-2 text-base-content/70 mb-2">
+                  <MapPin className="w-5 h-5" />
+                  <span>15 km away</span>
+                </div>
+                <h2 className="card-title text-2xl text-base-content">Electrical Inspectorate</h2>
+                <p className="text-base-content/70">
+                  Comprehensive electrical inpen, wiring spair services for residential empirai and commercial
+                  properties.
+                </p>
+              </div>
+            </div>
 
-      {/* 3. Clean minimal doodle */}
-      <div className="min-h-[50vh] bg-base-300 p-8" style={cleanDoodleStyle}>
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Clean Minimal Doodle</h2>
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <p>Minimal and clean doodle pattern</p>
-          </div>
-        </div>
-      </div>
+            {/* Customer Reviews */}
+            <div className="card bg-base-100 shadow-xl">
+              <div className="card-body">
+                <h3 className="text-2xl font-bold text-base-content mb-4">Customer Reviews</h3>
+                <div className="flex items-center gap-2 mb-6">
+                  <StarRating rating={4} />
+                  <span className="text-base-content/70">(558k reviews)</span>
+                </div>
 
-      {/* 4. Circuit board style */}
-      <div className="min-h-[50vh] bg-base-100 p-8" style={circuitStyle}>
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Circuit Board Style</h2>
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <p>Tech-inspired circuit pattern</p>
-          </div>
-        </div>
-      </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {reviews.map(review => (
+                    <div key={review.id} className="border border-base-300 rounded-lg p-4">
+                      <div className="flex items-center gap-3 mb-3">
+                        <img src={review.avatar} alt={review.name} className="w-12 h-12 rounded-full object-cover" />
+                        <div>
+                          <h4 className="font-semibold text-base-content">{review.name}</h4>
+                          <StarRating rating={review.rating} />
+                        </div>
+                      </div>
+                      <p className="text-sm text-base-content/70">{review.comment}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
 
-      {/* 5. Dark theme with doodles */}
-      <div className="min-h-[50vh] bg-base-100 p-8" style={whatsappDoodleStyle} data-theme="dark">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4 text-base-content">Dark Theme Doodle</h2>
-          <div className="bg-base-200 rounded-lg shadow-lg p-6">
-            <p className="text-base-content">Dark mode with subtle doodles</p>
-          </div>
-        </div>
-      </div>
+            {/* Sponsored Ads */}
+            <div className="card bg-base-100 shadow-xl">
+              <div className="card-body">
+                <h3 className="text-2xl font-bold text-base-content mb-4">Sponsored Ads</h3>
 
-      {/* 6. Gradient with doodles */}
-      <div className="min-h-[50vh] bg-gradient-to-br from-base-100 to-base-300 p-8" style={whatsappDoodleStyle}>
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Gradient + Doodles</h2>
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <p>Beautiful gradient combined with doodle pattern</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {sponsoredAds.map(ad => (
+                    <div key={ad.id} className="border border-base-300 rounded-lg p-4">
+                      {ad.badge && (
+                        <div className="flex justify-end mb-2">
+                          <span className="badge badge-info badge-sm">{ad.badge}</span>
+                        </div>
+                      )}
+                      <div className="flex items-start gap-3">
+                        <img src={ad.avatar} alt={ad.name} className="w-16 h-16 rounded-full object-cover" />
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-base-content mb-2">{ad.name}</h4>
+                          {ad.description && <p className="text-sm text-base-content/70">{ad.description}</p>}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Provider Details */}
+          <div className="lg:col-span-1">
+            <div className="card bg-base-100 shadow-xl sticky top-6">
+              <div className="card-body">
+                <h3 className="text-xl font-bold text-base-content mb-4">Service Provider Details</h3>
+
+                {/* Provider Profile */}
+                <div className="flex items-center gap-3 mb-4">
+                  <img src={provider.avatar} alt={provider.name} className="w-16 h-16 rounded-full object-cover" />
+                  <div>
+                    <h4 className="font-bold text-lg text-base-content">{provider.name}</h4>
+                    <p className="text-base-content/70">{provider.priceRange}</p>
+                  </div>
+                </div>
+
+                {/* Experience Badge */}
+                <div className="flex items-center gap-2 mb-4">
+                  <CheckCircle className="w-5 h-5 text-primary" />
+                  <span className="badge badge-success badge-lg text-white">{provider.experience}</span>
+                </div>
+
+                {/* Provider Info */}
+                <div className="space-y-2 mb-4 text-sm text-base-content/70">
+                  <p>{provider.priceRange8}</p>
+                  <p>{provider.memberSince}</p>
+                  <p>{provider.joinedSince}</p>
+                </div>
+
+                <div className="divider"></div>
+
+                {/* Contact Information */}
+                <div className="space-y-2 mb-4">
+                  <h5 className="font-semibold text-base-content mb-2">Experience:</h5>
+                  <div className="flex items-center gap-2 text-sm text-base-content/70">
+                    <Mail className="w-4 h-4" />
+                    <span>Email: {provider.email}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-base-content/70">
+                    <Mail className="w-4 h-4" />
+                    <span>Email: {provider.alternateEmail}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-base-content/70">
+                    <Phone className="w-4 h-4" />
+                    <span>Phone: {provider.phone}</span>
+                  </div>
+                </div>
+
+                {/* Video Call Notice */}
+                <div className="alert alert-info mb-4">
+                  <Video className="w-5 h-5" />
+                  <span className="text-sm">Book Service: Video Call</span>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-3">
+                  <button className="btn btn-success flex-1 text-white">
+                    <MessageCircle className="w-5 h-5" />
+                    Chat
+                  </button>
+                  <button className="btn btn-error flex-1 text-white">
+                    <Video className="w-5 h-5" />
+                    Video Call
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -87,4 +405,150 @@ const Sample = () => {
   );
 };
 
-export default Sample;
+// interface ServiceDetailsCardProps {
+//   serviceImage: string;
+// }
+
+interface ServiceDetailsCardProps {
+  serviceName: string;
+  serviceDescription: string;
+  serviceImage: string;
+  servicePrice: number;
+  serviceType?: 'online' | 'offline';
+  distance?: string;
+}
+
+export const ServiceDetailsCardSample = ({
+  serviceName,
+  serviceDescription,
+  serviceImage,
+  servicePrice,
+  serviceType,
+  distance = '—',
+}: ServiceDetailsCardProps) => {
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="lg:col-span-2 space-y-6">
+        <div className="card bg-base-100 shadow-xl">
+          <figure className="h-96 ">
+            <img src={serviceImage} alt={serviceName} className="w-full h-full object-cover" />
+          </figure>
+
+          <div className="card-body space-y-3">
+            {distance && (
+              <div className="flex items-center gap-2 text-sm text-base-content/70">
+                <MapPin className="w-4 h-4" />
+                <span>{distance} away</span>
+              </div>
+            )}
+
+            {/* Price info */}
+            <div className="group relative w-fit">
+              <span className="text-xs text-base-content/60 cursor-help underline-offset-2 group-hover:underline">
+                Average price :<span className="ml-1 text-sm font-semibold text-primary">₹{servicePrice}</span>
+              </span>
+
+              <div className="absolute left-0 top-full z-10 mt-1 hidden w-60 rounded-md bg-base-100 p-2 text-xs text-base-content shadow-lg group-hover:block">
+                Final cost may vary based on your service needs and requirements.
+              </div>
+            </div>
+
+            <h2 className="card-title text-2xl">{serviceName}</h2>
+
+            <p className="text-base-content/70">{serviceDescription}</p>
+
+            <div>
+              <span className="badge badge-outline">
+                {serviceType === 'online' ? 'Online Service' : 'On-site Service'}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface Review {
+  id: number;
+  username: string;
+  rating: number;
+  date: string;
+  comment: string;
+}
+
+export const ReviewCard = () => {
+  const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
+    return (
+      <div className="flex gap-1">
+        {[...Array(5)].map((_, i) => (
+          <Star
+            key={i}
+            className={`w-4 h-4 ${i < rating ? 'fill-warning text-warning' : 'fill-gray-300 text-gray-300'}`}
+          />
+        ))}
+      </div>
+    );
+  };
+
+  const reviews = [
+    {
+      id: 1,
+      name: 'Rahul Nair',
+      avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop',
+      rating: 5,
+      comment:
+        'Excellent service! The electrician arrived on time and fixed the issue quickly. Very professional and polite.',
+    },
+    {
+      id: 2,
+      name: 'Anjali Menon',
+      avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop',
+      rating: 4,
+      comment: 'Good experience overall. Pricing was fair and the work was done neatly. Would definitely recommend.',
+    },
+    {
+      id: 3,
+      name: 'Suresh Kumar',
+      avatar: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=150&h=150&fit=crop',
+      rating: 5,
+      comment: 'Very skilled professional. Explained the problem clearly and completed the work efficiently.',
+    },
+    {
+      id: 4,
+      name: 'Neha Sharma',
+      avatar: 'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=150&h=150&fit=crop',
+      rating: 4,
+      comment: 'Service was good, but arrived a little late. However, the quality of work was excellent.',
+    },
+  ];
+
+  return (
+    <>
+      <div className="card bg-base-100 shadow-xl">
+        <div className="card-body">
+          <h3 className="text-2xl font-bold text-base-content mb-4">Customer Reviews</h3>
+          <div className="flex items-center gap-2 mb-6">
+            <StarRating rating={4} />
+            <span className="text-base-content/70">(558k reviews)</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {reviews.map(review => (
+              <div key={review.id} className="border border-base-300 rounded-lg p-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <img src={review.avatar} alt={review.name} className="w-12 h-12 rounded-full object-cover" />
+                  <div>
+                    <h4 className="font-semibold text-base-content">{review.name}</h4>
+                    <StarRating rating={review.rating} />
+                  </div>
+                </div>
+                <p className="text-sm text-base-content/70">{review.comment}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
