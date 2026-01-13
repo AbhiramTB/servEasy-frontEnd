@@ -2,12 +2,11 @@ import { useEffect, useState } from 'react';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 import ForgotPassword from '../ForgotPassword/forgotPassword';
-import { Bounce, toast, ToastContainer } from 'react-toastify';
 import ErrorAlertInfo from './ErrorAlertInfo';
 import GoogleAuthButton from './googleAuth';
 import { MapPinned } from 'lucide-react';
-import AboutSection from './AboutSection';
 import { useLocation } from 'react-router-dom';
+import { HotToastError } from '../../../utils/notificationToast';
 const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [isForgotPassword, setForgotPassword] = useState(false);
@@ -18,37 +17,19 @@ const AuthPage = () => {
 
   useEffect(() => {
     if (isBlocked === 'true') {
-      toast.error('Your account has been blocked by the admin!', {
-        position: 'top-center',
-        autoClose: 15000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'colored',
-        transition: Bounce,
-      });
+      HotToastError('Your account has been blocked by the admin!');
     }
   }, [isBlocked]);
 
   return (
-    <div className="relative w-full overflow-x-hidden bg-black">
-      {/* Background Grid & Glow */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
-        <div className="absolute left-1/2 top-[-10%] h-[1000px] w-[1000px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_400px_at_50%_300px,#fbfbfb36,#000)]"></div>
-      </div>
-
-      {/* Main Auth Section */}
-      <section className="relative z-10 flex items-center justify-center px-4 py-20">
+    <div className="relative w-full overflow-x-hidden bg-base-200 bg-grid-pattern">
+      <section className="relative z-10 flex items-center justify-center px-4 py-20  min-h-screen">
         {isForgotPassword ? (
           <ForgotPassword setForget={setForgotPassword} />
         ) : (
           <div className="flex w-full max-w-6xl overflow-hidden shadow-2xl rounded-2xl">
-            {/* Left Panel */}
             <div className="relative hidden w-1/2 lg:flex bg-[url('/loginImage.png')] bg-no-repeat bg-center bg-cover">
-              <div className="absolute inset-0 bg-gradient-to-br from-black/40 to-black/20" />
+              <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-primary/5" />
 
               <div className="relative z-10 flex flex-col items-center justify-center w-full h-full p-10">
                 <div className="w-full max-w-md p-10 text-center text-white backdrop-blur-md bg-black/10 border-white/20 rounded-2xl">
@@ -79,8 +60,10 @@ const AuthPage = () => {
                 )}
 
                 <div className="mt-6 divider">OR</div>
-                <div className="ml-[88px] opacity-60">
-                  <GoogleAuthButton />
+                <div className="flex justify-center">
+                  <div className=" ">
+                    <GoogleAuthButton />
+                  </div>
                 </div>
 
                 <div className="mt-4 text-center">
@@ -112,11 +95,6 @@ const AuthPage = () => {
           </div>
         )}
       </section>
-
-      {/* About Section Below */}
-      <AboutSection />
-
-      <ToastContainer />
     </div>
   );
 };

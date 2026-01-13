@@ -1,9 +1,8 @@
 import { validateEmail, validatePhone, validatePassword, validateUserName } from '../../../utils/validate';
-import { toastifyError } from '../../../utils/Toastify';
 import { makeRequest } from '../../../utils/makeRequest';
 import { apiEndPoint } from '../../../utils/constant';
 import axios from 'axios';
-import { HotToastSuccess } from '../../../utils/notificationToast';
+import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
 import { Dispatch, SetStateAction } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 
@@ -107,8 +106,6 @@ export const handleAuth = async (
         }
       } else {
         const res = await makeRequest(apiEndPoint.signUp, 'POST', submissionData);
-        console.log(res.status);
-        console.log(res);
 
         if (res.status === 201) {
           console.log(res);
@@ -133,7 +130,7 @@ export const handleAuth = async (
     }
   } catch (error: any) {
     if (error?.response?.data?.message) {
-      toastifyError(error?.response?.data?.message);
+      HotToastError(error?.response?.data?.message);
     }
     if (error?.response?.data?.errorOtp) {
       navigate('/otp');

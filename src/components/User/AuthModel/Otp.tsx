@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { makeRequest } from '../../../utils/makeRequest';
 import { ToastContainer } from 'react-toastify';
-import { toastifyError, toastifySuccess } from '../../../utils/Toastify';
 import { useNavigate } from 'react-router-dom';
 import { apiEndPoint } from '../../../utils/constant';
 import { validateEmail, validatePhone } from '../../../utils/validate';
+import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
 const Otp = () => {
   const OtpTimer = 60;
   const otpLength = 6;
@@ -70,7 +70,7 @@ const Otp = () => {
   const sumbitOtp = async (): Promise<void> => {
     try {
       if (otp.includes('')) {
-        toastifyError('Please fill in all the columns!');
+        HotToastError('Please fill in all the columns!');
         return;
       }
       setLoading(true);
@@ -81,15 +81,15 @@ const Otp = () => {
       const res = await makeRequest('/verify-otp', 'POST', data);
 
       if (res?.status === 200) {
-        toastifySuccess(res.data.message);
+        HotToastSuccess(res.data.message);
         localStorage.setItem('accessToken', res.data.accessToken);
 
-            navigate('/', { replace: true });
+        navigate('/', { replace: true });
       } else {
         console.log(res?.data?.errorMessage);
       }
     } catch (error: any) {
-      toastifyError(error?.response?.data.errorMessage + ' ');
+      HotToastError(error?.response?.data.errorMessage + ' ');
     } finally {
       setLoading(false);
     }
@@ -116,7 +116,7 @@ const Otp = () => {
       const res = await makeRequest(apiEndPoint.resendOtp, 'POST', data);
       if (res.status == 200) {
         setTimer(OtpTimer);
-        toastifySuccess(res.data.message);
+        HotToastSuccess(res.data.message);
       }
     } catch (error) {
       console.log(error);
@@ -126,11 +126,7 @@ const Otp = () => {
   };
 
   return (
-    <div className="relative w-full h-full min-h-screen bg-black">
-      <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
-      <div className="absolute left-0 right-0 top-[-10%] h-[1000px] w-[1000px] rounded-full bg-[radial-gradient(circle_400px_at_50%_300px,#fbfbfb36,#000)]"></div>
-
-      {/* OTP Card */}
+    <div className="relative w-full h-full min-h-screen bg-base-100 bg-grid-pattern">
       <div className="relative z-10 flex justify-center pt-24">
         <div className="card bg-base-100 w-[500px] border border-primary shadow-2xl">
           <div className="mt-3 text-center">

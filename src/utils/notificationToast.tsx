@@ -314,7 +314,7 @@ export async function HotToastPromise<T extends ApiResponse>(
       if (res.status !== 200 && res.status !== 201) {
         throw new Error(`Request failed with status ${res.status}`);
       }
-      return res; // ✅ full response returned
+      return res;
     }),
     {
       loading: messages.loading,

@@ -159,7 +159,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Services Section */}
       <section className="relative overflow-hidden bg-base bg-opacity-80 backdrop-blur-md">
         <div className="absolute inset-0">
           <div className="absolute rounded-full top-20 left-10 w-72 h-72 bg-primary/10 blur-3xl animate-pulse"></div>
@@ -192,8 +191,6 @@ const HomePage = () => {
             endMessage={<p className="py-4 text-center text-gray-500">No more services to show</p>}
           >
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-              {/* Filter as first card */}
-
               <div className="w-full">
                 <FilterSortComponent setFilters={setFilterState} filters={filterState} categories={categories} />
               </div>
