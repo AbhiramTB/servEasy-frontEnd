@@ -9,7 +9,7 @@ export interface FilterSortState {
 }
 
 interface Category {
-  id: string;
+  categoryId: string;
   category: string;
 }
 
@@ -67,7 +67,7 @@ const FilterSortComponent: React.FC<Props> = ({ filters, setFilters, categories 
             ${filters.category ? 'bg-primary/10 text-primary border-primary' : 'bg-base-100'}`}
         >
           <Tag className="w-4 h-4" />
-          {categories.find(c => c.id === filters.category)?.category || 'Category'}
+          {categories.find(c => c.categoryId === filters.category)?.category || 'Category'}
           <ChevronDown className="w-3 h-3 opacity-50" />
         </label>
         <ul
@@ -85,13 +85,13 @@ const FilterSortComponent: React.FC<Props> = ({ filters, setFilters, categories 
             </button>
           </li>
           {categories.map(cat => (
-            <li key={cat.id}>
+            <li key={cat.categoryId}>
               <button
-                className={`flex justify-between ${filters.category === cat.id ? 'active' : ''}`}
-                onClick={() => updateFilters({ category: cat.id })}
+                className={`flex justify-between ${filters.category === cat.categoryId ? 'active' : ''}`}
+                onClick={() => updateFilters({ category: cat.categoryId })}
               >
                 {cat.category}
-                {filters.category === cat.id && <Check className="w-4 h-4" />}
+                {filters.category === cat.categoryId && <Check className="w-4 h-4" />}
               </button>
             </li>
           ))}

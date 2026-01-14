@@ -4,6 +4,7 @@ import AppLogo from '../../ui/AppLogo';
 import Notifications from '../../ui/Notifictions';
 import { ISavedNotification } from '../../../utils/types/INotification';
 import InitialAvatar from '../../../utils/ui/InitialAvatar';
+import { ROUTES } from '../../../utils/constants/routes';
 
 type DesktopNavbarProps = {
   scrolled: boolean;
@@ -42,7 +43,7 @@ const DesktopNavbar = ({
     <div className="mx-auto max-w-7xl">
       <div className="flex items-center justify-between h-16">
         {/* Logo */}
-        <AppLogo to="/" />
+        <AppLogo to={ROUTES.USER.HOME} />
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex md:items-center md:space-x-4">

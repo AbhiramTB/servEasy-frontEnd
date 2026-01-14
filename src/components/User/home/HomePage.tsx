@@ -13,6 +13,7 @@ import FilterSortComponent, { FilterSortState } from './FilterCard';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SkeletonHomeCard from '../../../Skeleton/SkeletonHome';
 import BecomeAServiceProviderBanner from '../../ui/BecomeAServiceProviderBanner';
+import { getRequest } from '../../../utils/makeRequestInstance';
 
 interface Location {
   address: string;
@@ -50,7 +51,7 @@ const HomePage = () => {
   });
 
   const [allServices, setAllServices] = useState<IServiceHome[]>([]);
-  const [categories, setCategories] = useState<{ id: string; category: string }[]>([]);
+  const [categories, setCategories] = useState<{ categoryId: string; category: string }[]>([]);
   const [loading, setLoading] = useState(false);
   const [cursor, setCursor] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
@@ -94,7 +95,7 @@ const HomePage = () => {
         params.latitude = location.latitude;
       }
 
-      const res = await axios.get(`${backendUrl}${apiEndPoint.getServices}/`, { params });
+      const res = await getRequest(`${apiEndPoint.getServices}/`, { params });
 
       const data = res.data.allFilterServices?.services ?? [];
       const nextCursor = res.data.allFilterServices.nextCursor;
@@ -258,13 +259,15 @@ const HomePage = () => {
                     <ServiceListingCards service={service} />
                   </Link>
                 ))}
-                {loading && allServices.length === 0 && (
-                  <>
-                    <SkeletonHomeCard />
-                    <SkeletonHomeCard />
-                    <SkeletonHomeCard />
-                  </>
-                )}
+                {loading &&
+                  allServices.length === 0 &&
+                  Array()
+                    .fill(1, 2, 3)
+                    .map(k => (
+                      <>
+                        <SkeletonHomeCard key={k} />
+                      </>
+                    ))}
               </div>
             )}
           </InfiniteScroll>

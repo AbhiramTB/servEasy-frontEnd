@@ -16,8 +16,6 @@ import { useFetchUserProfile } from '../../hooks/useFetchUserProfile';
 import { useTheme } from '../../hooks/useTheme';
 import MobileBottomNav from './MobileBottomNav';
 import InitialAvatar from '../../utils/ui/InitialAvatar';
-import AppLogo from '../ui/AppLogo';
-import DesktopNavbar from './Navbar/DesktopNavbar';
 import MobileNavbar from './Navbar/MobileNavbar';
 
 const ringtune = new Audio('/Ringtone Video call.mp3');

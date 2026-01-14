@@ -33,7 +33,7 @@ const MobileView: React.FC<Props> = ({
           </button>
 
           <div className="flex items-center gap-2">
-            <AppLogo />
+            <AppLogo to={ROUTES.SERVICEPROVIDER.DASHBOARD} />
           </div>
 
           <div className="flex items-center gap-2">

@@ -1,9 +1,7 @@
 export const ROUTES = {
   AUTH: {
-    LOGIN: '/login',
     LOGOUT: '/logout',
     REGISTER: '/register',
-    FORGOT_PASSWORD: '/forgot-password',
   },
   ADMIN: {
     ROOT: '/admin',
@@ -22,11 +20,42 @@ export const ROUTES = {
     subscriptionManagement: 'subscription-management',
     ADSMANAGEMENT: 'ads-management',
   },
+  // USER: {
+  //   HOME: '/',
+  //   PROFILE: '/profile',
+  //   BOOKINGS: '/bookings',
+  // },
+
   USER: {
-    HOME: '/',
-    PROFILE: '/profile',
-    BOOKINGS: '/bookings',
+    ROOT: '/',
+    FORGOT_PASSWORD: '/forgot-password',
+    SIGN_IN: '/signin',
+    OTP: '/otp',
+    HOME: '/home',
+    LOGOUT: '/logout',
+
+    SERVEASY: '/serveasy',
+
+    PROFILE: 'myprofile',
+    PROFILE_APPEARANCE: 'appearance',
+    PROFILE_BOOKED_SERVICES: 'booked-services',
+    PROFILE_ABOUT_US: 'aboutus',
+
+    BOOKED_SERVICES: '/booked-services',
+
+    SERVICE_DETAILS: '/service-details/:id',
+    BOOK_SERVICE: '/bookService/:id',
+    BOOK_SERVICE_ONLINE: '/bookService-online/:id',
+
+    VIDEO_CALL: '/video-call/:userId',
+
+    BOOKED_SERVICE_DETAILS: '/booked-service/:id',
+    BOOKED_SERVICE_ONLINE_DETAILS: '/booked-service-online/:id',
+
+    CHAT_WITH_PROVIDER: '/chat/:serviceProviderId',
+    CHATS: '/chats',
   },
+
   SERVICEPROVIDER: {
     BASE: '/service-provider',
     LANDING: '/service-provider/become',

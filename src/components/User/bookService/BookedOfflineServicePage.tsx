@@ -472,7 +472,7 @@ const ServiceBookingDetails = () => {
                   )}
 
                   <ServiceDateTime
-                    serviceDateTime={bookedService.preferredSlot}
+                    serviceDateTime={bookedService.preferredSlot || new Date()}
                     userType="user"
                     isCancelled={isCancelled ? true : false}
                   />
@@ -589,8 +589,7 @@ const ServiceBookingDetails = () => {
 
         {/* Right Side - Details and Price Summary - 1/3 width */}
         <div className="md:col-span-1">
-          <ServiceAddressCard address={bookedService.address} />
-
+          {bookedService.address && <ServiceAddressCard address={bookedService.address} />}
           {bookedService.payment && (
             <div className="shadow card bg-base-100">
               {/* <div className="p-4 card-body">

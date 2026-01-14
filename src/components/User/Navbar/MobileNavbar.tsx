@@ -39,7 +39,7 @@ const Navbar = ({
   handleLogOut,
 }: NavbarProps) => {
   const serviceProviderLanding = () => {
-    navigate(ROUTES.SERVICEPROVIDER.LANDING);
+    navigate(ROUTES.SERVICEPROVIDER.BASE);
   };
 
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ const Navbar = ({
         <div className="dropdown"></div>
       </div>
       <div className="navbar-center">
-        <AppLogo to="/" />
+        <AppLogo to={ROUTES.USER.HOME} />
       </div>
 
       <div className="navbar-end mr-0  lg:mr-10">

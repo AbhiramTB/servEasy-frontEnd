@@ -599,7 +599,6 @@ import HowItWorks from './components/User/home/HowItWorks';
 import ServiceSearchBar from './components/User/home/ServiceSearch';
 import LocationSearchBar from './components/User/home/LocationSearchBar';
 import BrowseCategories from './components/User/home/BrowseCategories';
-import FilterSortComponentSample from './FilterSortComponentSample';
 import LandingPage from './Sample1';
 
 interface Location {
@@ -779,7 +778,7 @@ const HomePage = () => {
             }
             endMessage={<p className="py-4 text-center text-gray-500">No more services to show</p>}
           >
-            <FilterSortComponentSample setFilters={setFilterState} filters={filterState} categories={categories} />
+            {/* <FilterSortComponentSample setFilters={setFilterState} filters={filterState} categories={categories} /> */}
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {allServices.length === 0 ? (
                 loading ? (
