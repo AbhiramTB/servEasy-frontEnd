@@ -166,7 +166,7 @@ const Navbar: React.FC<IProp> = ({ scrolled }) => {
       const res = await getRequest(apiEndPoint.logOutUser);
       if (res.status === 200) {
         localStorage.removeItem('accessToken');
-        window.location.href = '/signin';
+        window.location.href = '/';
       } else {
         console.error('Logout failed:', res.data.message);
       }

@@ -40,10 +40,11 @@ import AiAssistancePage from './components/ServiceProvider/aiAssistance/Assistan
 import SubscriptionFeaturesRoutes from './routes/SubscriptionFeaturesRoutes.tsx';
 import SubscriptionPlansPage from './components/admin/subscriptionsManagement/SubscriptionPlansPage.tsx';
 import AdsPage from './components/ServiceProvider/ads/AdsPage.tsx';
-import ServiceProviderLanding from './page/serviceProvider/LandingPage.tsx';
+import ServiceProviderLanding from './components/ui/Landing/serviceProviderLanding/ServiceProviderLandingPage.tsx';
 import Sample from './Sample.tsx';
 import { ROUTES } from './utils/constants/routes.ts';
 import ServiceProviderRegisterPage from './components/ServiceProvider/Register/ServiceProviderRegisterPage.tsx';
+import UserLandingPage from './components/ui/Landing/userLanding/UserLandingPage.tsx';
 
 function App() {
   const { userAccessToken = true, adminAccessToken } = useAuth();
@@ -54,15 +55,16 @@ function App() {
 
       <BrowserRouter basename="/">
         <Routes>
-          <Route path="/sample" element={<Sample />} />
           <Route path="cp" element={<SubscriptionPlansPage />} />
+          <Route path="/sample" element={<Sample />} />
 
           <Route path="/payment/verify" element={<PaymentVerify />} />
-          <Route path="/signIn" element={userAccessToken ? <Navigate to="/" replace /> : <AuthPage />} />
           <Route path="otp" element={<Otp />} />
+          <Route path="/signIn" element={userAccessToken ? <Navigate to="/home" replace /> : <AuthPage />} />
+          <Route path="/" element={userAccessToken ? <Navigate to="/home" replace /> : <UserLandingPage />} />
 
           <Route path="/" element={<Body />}>
-            <Route index element={<HomePage />} />
+            <Route path="home" element={<HomePage />} />
             <Route path="/serveasy" element={<HomePage />} />
             <Route path="myprofile" element={<SidebarLayout />}>
               <Route index element={<UserProfile />} />

@@ -85,13 +85,15 @@ const SingleServiceCard = () => {
               <div className="divider"></div>
             </div>
 
-            <div className="shadow-sm  p-6">
-              <ReviewList
-                reviews={reviews}
-                averageRating={service.reviewDetails.avgRating}
-                totalReviews={service.reviewDetails.totalReviews}
-              />
-            </div>
+            {service.reviewDetails && (
+              <div className="shadow-sm  p-6">
+                <ReviewList
+                  reviews={reviews}
+                  averageRating={service.reviewDetails.avgRating}
+                  totalReviews={service.reviewDetails.totalReviews}
+                />
+              </div>
+            )}
           </div>
 
           <div className="md:col-span-1">
@@ -103,7 +105,7 @@ const SingleServiceCard = () => {
                 image={service.serviceProviderDetails.profileImage}
                 price={service.estimatedPrice + ''}
                 location={service.location.address}
-                reviewsCount={service.reviewDetails.totalReviews}
+                reviewsCount={service?.reviewDetails?.totalReviews || 0}
                 serviceProviderUserId={service.serviceProviderDetails.userId}
                 handleChat={() => navigate('/chat/' + service.serviceProviderDetails.userId)}
                 checkAvliblity={service.serviceProviderDetails._id}

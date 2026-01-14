@@ -9,6 +9,7 @@ import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { getRequest } from '../../utils/makeRequestInstance';
 import { apiEndPointServiceProvider } from '../../utils/constant';
 import { IServiceProviderStatus } from '../../utils/types/IServiceProvider';
+import ServiceProviderLanding from '../../components/ui/Landing/serviceProviderLanding/ServiceProviderLandingPage';
 
 const ServiceProviderLayout = () => {
   const navigate = useNavigate();
@@ -55,11 +56,15 @@ const ServiceProviderLayout = () => {
     // getServiceProviderStatus();
   }, []);
 
-  useEffect(() => {
-    if (!isLoading && isVerified === false) {
-      navigate('/landingSp', { replace: true });
-    }
-  }, [isLoading, isVerified]);
+  // useEffect(() => {
+  //   if (!isLoading && isVerified === false) {
+  //     navigate('/landingSp', { replace: true });
+  //   }
+  // }, [isLoading, isVerified]);
+
+  if (!isLoading && isVerified === false) {
+    return <ServiceProviderLanding />;
+  }
 
   if (isLoading || isVerified === null) {
     return <LoadingSpinner />;

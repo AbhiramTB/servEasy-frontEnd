@@ -12,20 +12,20 @@ const Navbar = () => {
 
       <div className="flex-none gap-4">
         <div className="hidden lg:flex gap-4 items-center">
-          <a href="#how-it-works" className="btn btn-ghost">
-            How It Works
+          <a href="" className="btn btn-ghost">
+            
           </a>
-          <a href="#problems" className="btn btn-ghost">
+          <a href="" className="btn btn-ghost">
             Solutions
           </a>
-          <a href="#why-us" className="btn btn-ghost">
-            Why Us
+          <a href="" className="btn btn-ghost">
+            
           </a>
-          <a href="#register" className="btn btn-primary">
-            Register Now
+          <a href="" className="btn btn-primary">
+           
           </a>
         </div>
-
+   
         <button className="btn btn-square btn-ghost lg:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           <Menu size={24} />
         </button>

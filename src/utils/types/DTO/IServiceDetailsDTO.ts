@@ -43,5 +43,5 @@ export interface IServiceServiceDetailsDTO {
   updatedAt: Date;
   __v: number;
   serviceProviderDetails: IServiceProviderDetailsServiceDetailsDTO;
-  reviewDetails: IReviewDetails;
+  reviewDetails?: IReviewDetails;
 }

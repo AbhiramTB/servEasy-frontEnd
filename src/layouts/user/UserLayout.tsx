@@ -3,6 +3,7 @@ import Navbar from '../../components/User/Navbar';
 import Footer from '../../components/ui/Footer';
 import { useEffect, useState } from 'react';
 import CouponBanner from '../../components/ui/CouponBanner';
+import UserLandingPage from '../../components/ui/Landing/userLanding/UserLandingPage';
 
 const UserLayout = () => {
   const location = useLocation();
@@ -12,8 +13,13 @@ const UserLayout = () => {
 
   const accessToken = localStorage.getItem('accessToken');
   const navigate = useNavigate();
+
+  // if (!accessToken) {
+  //   return <UserLandingPage />;
+  // }
+
   useEffect(() => {
-    if (!accessToken) navigate('/signIn', { replace: true });
+    if (!accessToken) navigate('/', { replace: true });
   }, [accessToken, navigate]);
 
   useEffect(() => {

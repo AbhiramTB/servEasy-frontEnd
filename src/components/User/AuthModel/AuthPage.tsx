@@ -7,6 +7,7 @@ import GoogleAuthButton from './googleAuth';
 import { MapPinned } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { HotToastError } from '../../../utils/notificationToast';
+import LandingNavbar from '../../ui/Landing/LandingNavbar';
 const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [isForgotPassword, setForgotPassword] = useState(false);
@@ -23,6 +24,7 @@ const AuthPage = () => {
 
   return (
     <div className="relative w-full overflow-x-hidden bg-base-200 bg-grid-pattern">
+      <LandingNavbar loginFunction={() => setIsSignIn(!isSignIn)} loginText={isSignIn ? 'Sign-up' : 'Sign-in'} />
       <section className="relative z-10 flex items-center justify-center px-4 py-20  min-h-screen">
         {isForgotPassword ? (
           <ForgotPassword setForget={setForgotPassword} />
