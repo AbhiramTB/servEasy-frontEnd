@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link, Location } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, LogOut } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Home, LogOut } from 'lucide-react';
 import { ServiceProviderLinks } from '../../../utils/constants/navLinks/serviceProviderLinks/ServiceProviderLinks';
 import { HotToastError } from '../../../utils/notificationToast';
 import AppLogo from '../../ui/AppLogo';
+import { ROUTES } from '../../../utils/constants/routes';
 
 interface Props {
   profile: string;
@@ -93,6 +94,17 @@ const DesktopSidebar: React.FC<Props> = ({
             </div>
           </div>
           {isSidebarOpen && <span className="text-sm">My Profile</span>}
+        </Link>
+
+        <Link to={ROUTES.USER.HOME}>
+          <button
+            className={`btn btn-ghost btn-sm w-full ${
+              isSidebarOpen ? 'justify-start' : 'justify-center'
+            } gap-4 text-info`}
+          >
+            <Home size={20} />
+            {isSidebarOpen && <span>Back to Home</span>}
+          </button>
         </Link>
 
         <button

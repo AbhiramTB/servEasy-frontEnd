@@ -1,3 +1,6 @@
+import { Link } from 'react-router-dom';
+import { ROUTES } from '../../utils/constants/routes';
+
 const BecomeAServiceProviderBanner = () => {
   return (
     <div className="w-full bg-accent/50">
@@ -18,12 +21,11 @@ const BecomeAServiceProviderBanner = () => {
           </div>
 
           <div className="w-full md:w-auto">
-            <button
-              onClick={() => console.log('Redirecting...')}
-              className="w-full md:w-auto px-10 py-5 bg-white text-slate-900 font-bold uppercase tracking-widest rounded-full hover:bg-primary hover:text-white transition-all duration-300 shadow-xl active:scale-95"
-            >
-              Join Us Now
-            </button>
+            <Link to={ROUTES.SERVICEPROVIDER.DASHBOARD}>
+              <button className="w-full md:w-auto px-10 py-5 bg-white text-slate-900 font-bold uppercase tracking-widest rounded-full hover:bg-primary hover:text-white transition-all duration-300 shadow-xl active:scale-95">
+                Join Us Now
+              </button>
+            </Link>
           </div>
         </div>
       </section>

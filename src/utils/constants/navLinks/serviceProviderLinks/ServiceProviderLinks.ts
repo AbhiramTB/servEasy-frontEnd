@@ -1,4 +1,16 @@
-import { Home, LayoutGrid, Calendar, CreditCard, MessageSquare, Bell, Wallet, Sparkles, Megaphone } from 'lucide-react';
+import {
+  Home,
+  LayoutGrid,
+  Calendar,
+  CreditCard,
+  MessageSquare,
+  Bell,
+  Wallet,
+  Sparkles,
+  Megaphone,
+  LogOut,
+} from 'lucide-react';
+import { ROUTES } from '../../routes';
 
 export interface IServiceProviderLinks {
   label: string;
@@ -36,6 +48,8 @@ export const ServiceProviderLinks: IServiceProviderLinks[] = [
     isPro: true,
     badge: 'PRO',
   },
+  { label: 'Back to Home', path: ROUTES.USER.HOME, icon: Home },
+
   // {
   //   label: 'Time Slots',
   //   path: '/service-provider/slot-management',

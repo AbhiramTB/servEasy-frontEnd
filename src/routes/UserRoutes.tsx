@@ -26,7 +26,6 @@ const UserRoutes = () => {
 
   return (
     <Route>
-      {/* -------- Auth & Landing -------- */}
       <Route path={ROUTES.USER.OTP} element={<Otp />} />
 
       <Route
@@ -39,12 +38,10 @@ const UserRoutes = () => {
         element={userAccessToken ? <Navigate to={ROUTES.USER.HOME} replace /> : <UserLandingPage />}
       />
 
-      {/* -------- Protected User Layout -------- */}
       <Route path={ROUTES.USER.ROOT} element={<UserLayout />}>
         <Route path={ROUTES.USER.HOME} element={<HomePage />} />
         <Route path={ROUTES.USER.SERVEASY} element={<HomePage />} />
 
-        {/* Profile */}
         <Route path={ROUTES.USER.PROFILE} element={<SidebarLayout />}>
           <Route index element={<UserProfile />} />
           <Route path={ROUTES.USER.PROFILE_APPEARANCE} element={<Appearance />} />
@@ -52,7 +49,6 @@ const UserRoutes = () => {
           <Route path={ROUTES.USER.PROFILE_ABOUT_US} element={<AboutUs />} />
         </Route>
 
-        {/* Services */}
         <Route path={ROUTES.USER.BOOKED_SERVICES} element={<BookedService />} />
         <Route path={ROUTES.USER.SERVICE_DETAILS} element={<SingleServiceCard />} />
         <Route path={ROUTES.USER.BOOK_SERVICE} element={<BookService />} />

@@ -25,7 +25,6 @@ type NavbarProps = {
 
 const Navbar = ({
   scrolled,
-  mobileMenuOpen,
   user,
   chatNotificationCount,
   notificationCount,

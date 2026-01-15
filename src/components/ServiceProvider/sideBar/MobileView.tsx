@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, Location } from 'react-router-dom';
-import { Bell, Menu, X } from 'lucide-react';
+import { Bell, Home, LogOut, Menu, X } from 'lucide-react';
 import { ServiceProviderLinks } from '../../../utils/constants/navLinks/serviceProviderLinks/ServiceProviderLinks';
 import { ROUTES } from '../../../utils/constants/routes';
 import AppLogo from '../../ui/AppLogo';
@@ -89,6 +89,21 @@ const MobileView: React.FC<Props> = ({
                     </Link>
                   </li>
                 ))}
+
+                <li>
+                  <div className="divider divider-error"></div>
+
+                  <button
+                    className="text-error "
+                    onClick={() => {
+                      localStorage.removeItem('accessToken');
+                      window.location.href = '/signin';
+                    }}
+                  >
+                    <LogOut size={20} />
+                    <span>Logout</span>
+                  </button>
+                </li>
               </ul>
             </nav>
           </aside>
