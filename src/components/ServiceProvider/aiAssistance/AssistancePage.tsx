@@ -101,10 +101,10 @@ export default function AssistancePage() {
 
   return (
     <div className="overflow-hidden">
-      <div className="flex h-[90vh] overflow-hidden bg-gradient-to-br from-primary/20 via-base-300 to-primary/20 ">
+      <div className="flex h-[90vh] overflow-hidden  bg-base-300 rounded-md shadow-sm">
         <AssistanceSidebar chats={allChats} onNewChat={handleNewChat} activeChat={activeChat} />
 
-        <div className="flex flex-col flex-1 w-full overflow-hidden">
+        <div className="flex flex-col flex-1 w-full overflow-hidden bg-base-100/95 bg-grid-pattern">
           {activeChat ? (
             <AssistanceWindow messages={activeChat.messages} newMessageLoading={isloading} onSend={handleSend} />
           ) : (

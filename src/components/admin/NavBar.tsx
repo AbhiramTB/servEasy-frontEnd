@@ -6,7 +6,7 @@ import { apiEndPointAdmin } from '../../utils/constant';
 
 import { useEffect, useState } from 'react';
 import ConfirmModal from '../ui/modal/ConfirmModal';
-import { adminLinks } from '../../utils/constants/adminLinks';
+import { adminLinks } from '../../utils/constants/navLinks/adminLinks/adminLinks';
 import { LogOut } from 'lucide-react';
 import { addProfile } from '../../redux/slices/adminSlice';
 import { useDispatch } from 'react-redux';
@@ -34,7 +34,8 @@ const NavBar = () => {
       const res = await adminGetRequest(apiEndPointAdmin.adminLogout);
       if (res.status == 200) {
         localStorage.removeItem('adminToken');
-        window.location.href = '/admin/signin';
+
+        window.location.href = '/admin/sign-in';
       } else {
         console.error('Logout failed:', res.data.message);
       }

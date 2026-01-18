@@ -1,5 +1,4 @@
-
-import React from "react";
+import React from 'react';
 
 interface ScheduleAndPaymentInfoProps {
   bookedDate: string;
@@ -7,7 +6,7 @@ interface ScheduleAndPaymentInfoProps {
   serviceTime?: string;
   isPending: boolean;
   estimatedServiceTime?: string;
-  paymentStatus: "paid" | "requested"  | string;
+  paymentStatus: 'paid' | 'requested' | string;
   paymentType: string;
 }
 
@@ -22,19 +21,18 @@ const ScheduleAndPaymentInfo: React.FC<ScheduleAndPaymentInfoProps> = ({
 }) => {
   const getPaymentStatusClass = () => {
     switch (paymentStatus.toLowerCase()) {
-      case "paid":
-        return "text-success";
-      case "requested":
-        return "text-warning";
-      case "refunded":
-        return "text-error";
+      case 'paid':
+        return 'text-success';
+      case 'requested':
+        return 'text-warning';
+      case 'refunded':
+        return 'text-error';
       default:
-        return "";
+        return '';
     }
   };
 
-  const capitalizedStatus =
-    paymentStatus.charAt(0).toUpperCase() + paymentStatus.slice(1);
+  const capitalizedStatus = paymentStatus.charAt(0).toUpperCase() + paymentStatus.slice(1);
 
   return (
     <div className="grid grid-cols-1 gap-4 mb-4 sm:grid-cols-2">
@@ -43,18 +41,12 @@ const ScheduleAndPaymentInfo: React.FC<ScheduleAndPaymentInfoProps> = ({
         <h3 className="mb-2 font-medium">Schedule</h3>
         <div className="text-sm">
           <p>Booked on : {bookedDate}</p>
-            <div className="divider"></div>
+          <div className="divider"></div>
 
-          <p>
-            Service slot: {serviceDate}
-            {serviceTime && ` at ${serviceTime}`}
-          </p>
+          <p>Service slot: {serviceDate}</p>
+          <p> {serviceTime && ` at ${serviceTime}`}</p>
 
-          {!estimatedServiceTime && isPending && (
-            <p className="text-warning">
-              *Accept booking to set service time
-            </p>
-          )}
+          {!estimatedServiceTime && isPending && <p className="text-warning">*Accept booking to set service time</p>}
         </div>
       </div>
 
@@ -63,8 +55,7 @@ const ScheduleAndPaymentInfo: React.FC<ScheduleAndPaymentInfoProps> = ({
         <h3 className="mb-2 font-medium">Payment</h3>
         <div className="text-sm">
           <p>
-            Status:{" "}
-            <span className={getPaymentStatusClass()}>{capitalizedStatus}</span>
+            Status: <span className={getPaymentStatusClass()}>{capitalizedStatus}</span>
           </p>
           <p>Method: {paymentType}</p>
         </div>

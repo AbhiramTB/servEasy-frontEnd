@@ -3,155 +3,138 @@ import { useEffect, useState } from 'react';
 import { getRequest, postRequest } from '../../../utils/makeRequestInstance';
 import { apiEndPoint, serviceEndPoint } from '../../../utils/constant';
 import Card from '../../ui/Card';
-import ServiceProviderDetailsCard from '../../ui/ServiceProviderDetailsCard';
 import ServiceDetailsCard from '../../ui/ServiceDetailsCard';
-import { IReview, IReviewDetails } from '../../../utils/types/IReview';
-import ReviewList from '../../ui/ReviewList';
-
-interface Location {
-  _id: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-}
-
-interface ServiceProviderDetails {
-  _id: string;
-  serviceProviderName: string;
-  serviceProviderEmail: string;
-  serviceProviderPhone: string;
-  description: string;
-  socialMedia: string;
-  services: any[];
-  skills: any[];
-  location: { address: string; latitude: string; longitude: string };
-  experience: number;
-  profileImage: string;
-  document: string;
-  isVerified: string;
-  userId: string;
-  isBlocked: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  __v: number;
-}
-
-interface Service {
-  _id: string;
-  serviceName: string;
-  description: string;
-  serviceType: string;
-  category: string;
-  location: Location;
-  estimatedPrice: number;
-  serviceProviderId: string;
-  isActive: boolean;
-  serviceImage: string;
-  createdAt: Date;
-  updatedAt: Date;
-  __v: number;
-  serviceProviderDetails: ServiceProviderDetails;
-  reviewDetails:IReviewDetails
-}
+import { IReview } from '../../../utils/types/IReview';
+import ReviewList from '../../ui/review/ReviewList';
+import EmptyState from '../../ui/EmptyState';
+import { IAdDTO } from '../../../utils/types/IAd';
+import AdCard from '../../ui/ad/AdCard';
+import ServiceDetailsSkeleton from '../../../Skeleton/ServiceDetailsSkeleton';
+import { IServiceServiceDetailsDTO } from '../../../utils/types/DTO/IServiceDetailsDTO';
+import { serviceBookingNotification } from '../../../utils/notificationToast';
 
 const SingleServiceCard = () => {
-  const [service, setService] = useState<Service>();
+  const [service, setService] = useState<IServiceServiceDetailsDTO>();
   const [reviews, setReviews] = useState<[IReview] | []>([]);
   const { id } = useParams();
+  const [ads, setAds] = useState<IAdDTO[] | []>([]);
+  const [loading, setLoading] = useState(true);
+  const getAds = async () => {
+    try {
+      const res = await getRequest('/ads/recommend?count=4');
+      if (res.status === 200) {
+        console.log(res.data);
+        setAds(res.data.ads);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
+    getAds();
     getService();
   }, []);
   const getService = async () => {
     try {
+      setLoading(true);
       const res = await getRequest(`${apiEndPoint.getSingleService}/${id}`);
 
-      console.log(res.data);
+      console.log(res.data.service);
       if (res.status == 200) {
-        setService(res.data.services[0] || null);
-        setReviews(res.data.review || []);
+        setService(res.data.service[0] || null);
+        setReviews(res.data.reviews || []);
       }
     } catch (error) {
       console.error('Error fetching service:', error);
+    } finally {
+      setLoading(false);
     }
   };
   const navigate = useNavigate();
   const bookService = async (id: string) => {
     navigate(service?.serviceType === 'Online' ? '/bookService-online/' + id : '/bookService/' + id);
-    postRequest(serviceEndPoint.bookservice, { serviceId: id });
   };
 
-  if (!service) {
+  if (loading) {
+    return <ServiceDetailsSkeleton />;
+  } else if (!service) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-base">
-        <div className="w-12 h-12 border-t-2 border-b-2 rounded-full animate-spin border-primary"></div>
+      <div className="mt-5">
+        <EmptyState
+          actionText="service not found"
+          icon="deep-search"
+          message="service not found"
+          title="service not found"
+        />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen pb-10 bg-base">
-      <div className="container px-4 mx-auto mt-5">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          <div className="md:col-span-2">
-            <ServiceDetailsCard service={service} />
-
-            <div className="w-full max-w-4xl mx-auto">
-              <h2 className="pb-2 mb-6 text-2xl font-bold border-b text-inherit">Customer Reviews</h2>
-
-              <div className="space-y-4">{reviews && <ReviewList reviews={reviews} />}</div>
+    <div className="min-h-screen pb-10 ">
+      <div className="container px-4 mx-auto mt-8 bg-base-100 shadow-sm">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3 items-start">
+          <div className="md:col-span-2 flex flex-col gap-6">
+            <div className=" rounded-2xl overflow-hidden ">
+              <ServiceDetailsCard
+                serviceDescription={service.description}
+                serviceImage={service.serviceImage}
+                serviceName={service.serviceName}
+                servicePrice={service.estimatedPrice}
+                serviceType={service.serviceType}
+              />
+              <div className="divider"></div>
             </div>
 
-            {/* <div className="p-6 rounded-lg shadow-md bg-base-200">
-              <h3 className="mb-4 text-lg font-semibold text-primary">Recommended for you</h3>
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-                {recommendedServices.map(service => (
-                  <div key={service.id} className="cursor-pointer group">
-                    <div className="relative mb-2 overflow-hidden rounded-lg">
-                      <img 
-                        src={service.image} 
-                        alt={service.name}
-                        className="object-cover w-full h-32 transition-transform duration-300 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 transition-all duration-300 bg-opacity-0 bg-primary group-hover:bg-opacity-20"></div>
-                    </div>
-                    <h4 className="text-sm font-medium text-primary">{service.name}</h4>
-                    <p className="text-xs text-gray-600">{service.provider}</p>
-                    <div className="flex items-center mt-1">
-                      <svg className="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                      </svg>
-                      <span className="ml-1 text-xs text-gray-600">{service.rating}</span>
-                    </div>
-                  </div>
-                ))}
+            {service.reviewDetails && (
+              <div className="shadow-sm  p-6">
+                <ReviewList
+                  reviews={reviews}
+                  averageRating={service.reviewDetails.avgRating}
+                  totalReviews={service.reviewDetails.totalReviews}
+                />
               </div>
-            </div> */}
+            )}
           </div>
 
           <div className="md:col-span-1">
-            <Card
-              bookService={() => bookService(service._id)}
-              title={service.serviceProviderDetails.serviceProviderName}
-              description={service.description}
-              image={service.serviceProviderDetails.profileImage}
-              price={service.estimatedPrice + ''}
-              location={service.location.address}
-              reviewsCount={24}
-              serviceProviderUserId={service.serviceProviderDetails.userId}
-              handleChat={() => navigate('/chat/' + service.serviceProviderDetails.userId)}
-              checkAvliblity={service.serviceProviderDetails._id}
-              reviewDetails={service.reviewDetails}
-            />
-
-            <ServiceProviderDetailsCard
-              email={service.serviceProviderDetails.serviceProviderEmail}
-              phone={service.serviceProviderDetails.serviceProviderPhone}
-              experience={service.serviceProviderDetails.experience}
-              location={service.serviceProviderDetails.location.address}
-            />
+            <div className="sticky top-8">
+              <Card
+                bookService={() => bookService(service._id)}
+                title={service.serviceProviderDetails.serviceProviderName}
+                description={service.description}
+                image={service.serviceProviderDetails.profileImage}
+                price={service.estimatedPrice + ''}
+                location={service.location.address}
+                reviewsCount={service?.reviewDetails?.totalReviews || 0}
+                serviceProviderUserId={service.serviceProviderDetails.userId}
+                handleChat={() => navigate('/chat/' + service.serviceProviderDetails.userId)}
+                checkAvliblity={service.serviceProviderDetails._id}
+                reviewDetails={service.reviewDetails}
+                createdAt={service.serviceProviderDetails.createdAt}
+                email={service.serviceProviderDetails.serviceProviderEmail}
+                phone={service.serviceProviderDetails.serviceProviderPhone}
+              />
+            </div>
           </div>
         </div>
+
+        {ads.length > 0 && (
+          <section className="mt-12 pt-8 border-t border-base-content">
+            <h2 className="text-xl font-bold mb-6 px-2 text-base-content text-center md:text-left">Sponsored Ads</h2>
+
+            <div
+              className={` flex gap-6 pb-4 px-2 overflow-x-auto snap-x snap-mandatory scrollbar-hide ${ads.length <= 3 ? 'justify-center' : 'justify-start'}`}
+            >
+              {ads.map(ad => (
+                <div key={ad._id} className="snap-center flex-shrink-0 w-full max-w-[320px]">
+                  <AdCard ad={ad} />
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );

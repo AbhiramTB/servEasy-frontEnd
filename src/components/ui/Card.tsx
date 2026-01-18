@@ -1,9 +1,11 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import ServiceProviderAvailability from "./ServiceProviderAvailability";
-import { IReviewDetails } from "../../utils/types/IReview";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { CheckCircle, Mail, Phone, Video, MessageCircle, MapPin, CalendarClock } from 'lucide-react';
+import ServiceProviderAvailability from './ServiceProviderAvailability';
+import { IReviewDetails } from '../../utils/types/IReview';
+import dayjs from 'dayjs';
 
-interface CardProps {
+interface ServiceProviderCardProps {
   image?: string;
   title: string;
   subtitle?: string;
@@ -16,14 +18,19 @@ interface CardProps {
   serviceProviderName?: string;
   estimatedPrice?: number;
   bookService?: () => void;
-  handleChat?:()=>void
-  serviceProviderUserId:string
-  checkAvliblity?:string,
-reviewDetails?:IReviewDetails|null
-  
+  handleChat?: () => void;
+  serviceProviderUserId: string;
+  checkAvliblity?: string;
+  reviewDetails?: IReviewDetails | null;
+  email?: string;
+  phone?: string;
+  experience?: string;
+  memberSince?: string;
+  alternateEmail?: string;
+  createdAt?: Date;
 }
 
-const Card: React.FC<CardProps> = ({
+const ServiceProviderCard: React.FC<ServiceProviderCardProps> = ({
   serviceProviderUserId,
   image,
   profileImage,
@@ -34,118 +41,155 @@ const Card: React.FC<CardProps> = ({
   estimatedPrice,
   location,
   serviceType,
-
   handleChat,
   bookService,
   checkAvliblity,
-  reviewDetails
-
-  
+  reviewDetails,
+  email,
+  phone,
+  experience = '5+ years',
+  memberSince,
+  alternateEmail,
+  createdAt,
 }) => {
+  const priceRange = estimatedPrice
+    ? `₹${Math.round(estimatedPrice * 0.8)} - ₹${estimatedPrice}`
+    : price
+      ? `₹${price}`
+      : 'Price on request';
+
   return (
-    <div className="p-6 mb-6 rounded-lg shadow-md bg-base-200">
-      <h3 className="mb-4 text-lg font-semibold text-primary">
-        Service Details
-      </h3>
+    <div className="card bg-base-100   ">
+      <div className="card-body">
+        <h3 className="text-xl font-bold text-base-content mb-4">Service Provider Details</h3>
 
-      {/* Service Provider Section */}
-      <div className="flex items-center mb-4">
-        <img
-          src={profileImage || image}
-          alt={serviceProviderName || title}
-          className="object-cover w-16 h-16 mr-4 border-2 border-white rounded-full"
-        />
-        <div>
-          <h2 className="text-xl font-semibold">
-            {serviceProviderName || title}
-          </h2>
-
-          {/* Rating Section */}
-       <div className="flex items-center mt-1">
-  <div className="flex">
-    {[...Array(5)].map((_, i) => (
-      <svg
-        key={i}
-        className={`w-4 h-4 ${
-          i < Math.round(reviewDetails?.avgRating || 0)
-            ? "text-yellow-400"
-            : "text-primary/35 opacity-50"
-        }`}
-        fill="currentColor"
-        viewBox="0 0 20 20"
-      >
-        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-      </svg>
-    ))}
-  </div>
-
-  {reviewDetails?.totalReviews !== undefined && (
-    <span className="ml-2 text-sm">
-      {reviewDetails.avgRating.toFixed(1)} ({reviewDetails.totalReviews} reviews)
-    </span>
-  )}
-</div>
-
-          {/* Description */}
-          <p className="mt-1 text-sm">
-            {description || "No description available"}
-          </p>
+        {/* Provider Profile */}
+        <div className="flex items-center gap-3 mb-4">
+          <img
+            src={profileImage || image || 'https://via.placeholder.com/150'}
+            alt={serviceProviderName || title}
+            className="w-16 h-16 rounded-full object-cover ring-2 ring-primary ring-offset-2"
+          />
+          <div className="flex-1">
+            <h4 className="font-bold text-lg text-base-content">{serviceProviderName || title}</h4>
+            <p className="text-base-content/70 text-sm">{priceRange}</p>
+          </div>
         </div>
-      </div>
 
-      {/* Details Section */}
-      <div className="space-y-4">
-        {/* Price */}
-        {(price || estimatedPrice) && (
-          <div>
-            <p className="text-sm text-gray-500">Price</p>
-            <p className="font-semibold text-primary">
-              ₹{estimatedPrice || price} / hour
-            </p>
+        {/* Rating Section */}
+        {reviewDetails && (
+          <div className="flex items-center gap-2 mb-3">
+            <div className="flex">
+              {[...Array(5)].map((_, i) => (
+                <svg
+                  key={i}
+                  className={`w-4 h-4 ${
+                    i < Math.round(reviewDetails?.avgRating || 0) ? 'text-warning' : 'text-base-content/20'
+                  }`}
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <span className="text-sm text-base-content/70">
+              {reviewDetails.avgRating.toFixed(1)} ({reviewDetails.totalReviews} reviews)
+            </span>
           </div>
         )}
 
-        {/* Category */}
+        {/* Experience Badge */}
+        <div className="flex items-center gap-2 mb-4">
+          <CheckCircle className="w-5 h-5 text-success" />
+          <span className="badge badge-success badge-lg text-white gap-2">{experience}</span>
+        </div>
+
+        {/* Description */}
+        {description && <p className="text-sm text-base-content/70 mb-4">{description}</p>}
+
+        {/* Provider Info */}
+        <div className="space-y-2 mb-4">
+          {estimatedPrice && (
+            <div className="flex justify-between text-sm">
+              <span className="text-base-content/70">Hourly Rate:</span>
+              <span className="font-semibold text-base-content">₹{estimatedPrice}/hr</span>
+            </div>
+          )}
+          {memberSince && (
+            <div className="flex justify-between text-sm">
+              <span className="text-base-content/70">Member Since:</span>
+              <span className="text-base-content">{memberSince}</span>
+            </div>
+          )}
+          {location && (
+            <div className="flex items-center gap-2 text-sm text-base-content/70">
+              <MapPin className="w-4 h-4" />
+              <span>{location}</span>
+            </div>
+          )}
+
+          {createdAt && (
+            <div className="flex items-center gap-2 text-sm text-base-content/70">
+              <CalendarClock className="w-4 h-4" />
+              <span> Provider since : {dayjs(createdAt).format('MMMM YYYY')}</span>
+            </div>
+          )}
+          {serviceType && (
+            <div className="flex justify-between text-sm">
+              <span className="text-base-content/70">Service Type:</span>
+              <span className="text-base-content">{serviceType}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Availability Check */}
         {checkAvliblity && (
-          <div>
-           <ServiceProviderAvailability serviceProviderId={checkAvliblity}/>
+          <div className="mb-4">
+            <ServiceProviderAvailability serviceProviderId={checkAvliblity} />
           </div>
         )}
 
-        {/* Location */}
-        {location && (
-          <div>
-            <p className="text-sm text-gray-500">Location</p>
-            <p>{location}</p>
+        <div className="divider my-2"></div>
+        {/* Contact Information */}
+        {(email || phone || alternateEmail) && (
+          <div className="space-y-2 mb-4">
+            <h5 className="font-semibold text-base-content mb-2">Contact:</h5>
+            {email && (
+              <div className="flex items-center gap-2 text-sm text-base-content/70">
+                <Mail className="w-4 h-4 flex-shrink-0" />
+                <span className="truncate">{email}</span>
+              </div>
+            )}
+            {alternateEmail && (
+              <div className="flex items-center gap-2 text-sm text-base-content/70">
+                <Mail className="w-4 h-4 flex-shrink-0" />
+                <span className="truncate">{alternateEmail}</span>
+              </div>
+            )}
+            {phone && (
+              <div className="flex items-center gap-2 text-sm text-base-content/70">
+                <Phone className="w-4 h-4 flex-shrink-0" />
+                <span>{phone}</span>
+              </div>
+            )}
           </div>
         )}
 
-        {/* Service Type */}
-        {serviceType && (
-          <div>
-            <p className="text-sm text-gray-500">Service Type</p>
-            <p>{serviceType}</p>
-          </div>
-        )}
-
-        {/* Action Buttons */}
-        <div className="grid grid-cols-2 gap-3 mt-2">
-          <Link to={"/video-call/"+serviceProviderUserId} >
-          <button data-tip="Initiate a video call with this provider" className="flex items-center justify-center w-full py-4 font-medium text-white transition duration-200 bg-red-600 rounded-lg tooltip hover:bg-red-700">
-          Video Call
-          </button>
-          </Link>
-          <button onClick={handleChat} className="flex items-center justify-center py-3 font-medium text-white transition duration-200 bg-green-600 rounded-lg hover:bg-green-700">
+        <div className="flex gap-3 mb-3">
+          <button onClick={handleChat} className="btn btn-success flex-1 text-white gap-2">
+            <MessageCircle className="w-5 h-5" />
             Chat
           </button>
+          <Link to={`/video-call/${serviceProviderUserId}`} className="flex-1">
+            <button className="btn btn-error w-full text-white gap-2">
+              <Video className="w-5 h-5" />
+              Video Call
+            </button>
+          </Link>
         </div>
-
-        {/* Book Service Button */}
         {bookService && (
-          <button
-            className="w-full py-3 mt-3 font-medium text-white transition duration-200 bg-blue-500 rounded-lg hover:bg-blue-600"
-            onClick={bookService}
-          >
+          <button onClick={bookService} className="btn btn-primary w-full text-white">
             Book Now
           </button>
         )}
@@ -154,4 +198,4 @@ const Card: React.FC<CardProps> = ({
   );
 };
 
-export default Card;
+export default ServiceProviderCard;

@@ -1,6 +1,6 @@
 export interface ISlot {
-  startTime: string;
-  endTime: string;
+  startTime: Date;
+  endTime: Date;
   booked: boolean;
   _id: string;
 }

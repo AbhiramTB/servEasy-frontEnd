@@ -47,12 +47,14 @@ const SubscriptionModal: React.FC = () => {
               <>
                 <div className="flex justify-center">
                   {plans && (
-                    <PlanCard
-                      plan={plan}
-                      key={plan._id}
-                      loading={loading}
-                      setLoading={(state: boolean) => setLoading(state)}
-                    />
+                    <>
+                      <PlanCard
+                        plan={plan}
+                        key={plan._id}
+                        loading={loading}
+                        setLoading={(state: boolean) => setLoading(state)}
+                      />
+                    </>
                   )}
                 </div>
               </>

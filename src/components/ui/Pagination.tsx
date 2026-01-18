@@ -18,9 +18,7 @@ const Pagination: React.FC<IProps> = ({ crrPage, dataLimit, totaldata, fetchData
         «
       </button>
 
-      <button className="join-item btn bg-base-300">
-        Page {crrPage + 1}
-      </button>
+      <button className="join-item btn bg-base-300">Page {crrPage + 1}</button>
 
       <button
         className="text-3xl font-bold join-item btn bg-primary text-primary-content"

@@ -6,8 +6,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { IReview } from '../../../utils/types/IReview';
 
-
-
 interface IReviewCardProp {
   bookedServiceId: string;
   serviceId: string;

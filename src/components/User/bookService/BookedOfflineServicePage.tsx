@@ -123,7 +123,7 @@ const ServiceBookingDetails = () => {
   const [download, setDownload] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState<boolean>(false);
   const [cancelReason, setCancelReason] = useState<string>('');
-  const user=useSelector((state:RootState)=>state.user)
+  const user = useSelector((state: RootState) => state.user);
 
   const handleApplyCoupon = async (coupon: string) => {
     try {
@@ -150,7 +150,6 @@ const ServiceBookingDetails = () => {
     } finally {
     }
   };
-  
 
   const handleCancelBooking = async () => {
     try {
@@ -225,10 +224,7 @@ const ServiceBookingDetails = () => {
   };
 
   if (loading) {
-    return (
-      <LoadingSpinner/>
-
-    );
+    return <LoadingSpinner />;
   }
 
   if (error || !bookingData) {
@@ -475,7 +471,7 @@ const ServiceBookingDetails = () => {
                   )}
 
                   <ServiceDateTime
-                    serviceDateTime={bookedService.preferredSlot}
+                    serviceDateTime={bookedService.preferredSlot || new Date()}
                     userType="user"
                     isCancelled={isCancelled ? true : false}
                   />
@@ -592,8 +588,7 @@ const ServiceBookingDetails = () => {
 
         {/* Right Side - Details and Price Summary - 1/3 width */}
         <div className="md:col-span-1">
-          <ServiceAddressCard address={bookedService.address} />
-
+          {bookedService.address && <ServiceAddressCard address={bookedService.address} />}
           {bookedService.payment && (
             <div className="shadow card bg-base-100">
               {/* <div className="p-4 card-body">
@@ -702,14 +697,16 @@ const ServiceBookingDetails = () => {
               {id && bookedService.paymentStatus !== 'completed' && (
                 <RazorpayButton
                   onSuccess={() => getBookedService(id)}
-                  buttonStyle={{className:'p-3 text-base font-bold rounded-md hover:bg-opacity-45 bg-primary',buttonText:"Pay Now"}}
+                  buttonStyle={{
+                    className: 'p-3 text-base-100 font-bold rounded-md hover:bg-opacity-45 bg-primary',
+                    buttonText: 'Pay Now',
+                  }}
                   createOrderApi="/payment/create-order"
-                  customerInfo={{email:user.email||"" ,phone:user.phone||"",userName:user.userName||''}}
-                  onError={()=>HotToastError('your attempted transaction was unsuccessful')}
-                  payload={{"serviceId":id}}
+                  customerInfo={{ email: user.email || '', phone: user.phone || '', userName: user.userName || '' }}
+                  onError={() => HotToastError('your attempted transaction was unsuccessful')}
+                  payload={{ serviceId: id }}
                   total={bookedService.payment.total - 100}
-                  verifyApi={"/payment/verify"}
-                  
+                  verifyApi={'/payment/verify'}
                 />
               )}
             </div>

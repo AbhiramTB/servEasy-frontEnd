@@ -5,6 +5,7 @@ import ServiceBookingCard from './BookedServiceCard';
 import { Link } from 'react-router-dom';
 import Pagination from '../../../ui/Pagination';
 import BookingCardSkeleton from '../../../../Skeleton/BookingListingCardSkeleton';
+import EmptyState from '../../../ui/EmptyState';
 
 interface Address {
   name: string;
@@ -17,7 +18,7 @@ interface Address {
 
 interface Booking {
   _id: string;
-  serviceStatus: string;
+  serviceStatus: 'pending' | 'in-progress' | 'completed' | 'cancelled' | 'confirmed';
   paymentType: string;
   serviceBookedAddress: Address;
   serviceName: string;
@@ -29,6 +30,7 @@ const BookedService = () => {
   const [bookedServices, setBookedServices] = useState<Booking[]>([]);
   const [crrPage, setPage] = useState<number>(0);
   const [totalData, setTotalData] = useState<number>(0);
+  const [isLoading, setLoading] = useState(true);
   const dataLimit = 3;
 
   const getCount = async () => {
@@ -49,21 +51,33 @@ const BookedService = () => {
 
   const getBookedService = async (page: number) => {
     try {
+      setLoading(true);
       const res = await getRequest(`${serviceEndPoint.getUserBookService}?page=${page}&limit=${dataLimit}`);
       if (res.status === 200) {
-        console.log(res.data.service);
-        setBookedServices(res.data.service);
+        console.log(res.data.services);
+        setBookedServices(res.data.services);
         setPage(page);
       }
     } catch (error) {
       console.error('Error fetching booked services', error);
+    } finally {
+      setLoading(false);
     }
   };
   // {dfdfdf}
   return (
     <div className="px-4 bg-base-100">
       <h1 className="mb-4 text-xl font-bold">Booked Services</h1>
-      {bookedServices.length > 0 ? (
+
+      {isLoading && (
+        <div className="grid gap-4 ">
+          <BookingCardSkeleton />
+          <BookingCardSkeleton />
+          <BookingCardSkeleton />
+        </div>
+      )}
+
+      {bookedServices && bookedServices.length > 0 ? (
         <div className="grid gap-4 ">
           {bookedServices.map(service => (
             <Link
@@ -78,11 +92,11 @@ const BookedService = () => {
           ))}
         </div>
       ) : (
-        <div className="grid gap-4 ">
-          <BookingCardSkeleton />
-          <BookingCardSkeleton />
-          <BookingCardSkeleton />
-        </div>
+        <EmptyState
+          title="No bookings yet"
+          icon="deep-search"
+          message="Once you book a service, it will appear here "
+        />
       )}
       <Pagination
         crrPage={crrPage}

@@ -1,25 +1,93 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import Navbar from '../../components/ServiceProvider/Navbar';
 import { RootState } from '../../redux/store';
 import { useSelector } from 'react-redux';
 import SubscriptionModal from '../../components/ServiceProvider/subscriptionPlan/subscriptionPlan';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import Sidebar from '../../components/ServiceProvider/sideBar/Sidebar';
+import useFetchServiceProviderProfile from '../../hooks/useFetchServiceProviderProfile';
+import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import { getRequest } from '../../utils/makeRequestInstance';
+import { apiEndPointServiceProvider } from '../../utils/constant';
+import { IServiceProviderStatus } from '../../utils/types/IServiceProvider';
+import ServiceProviderLanding from '../../components/ui/Landing/serviceProviderLanding/ServiceProviderLandingPage';
+
 const ServiceProviderLayout = () => {
   const navigate = useNavigate();
+
+  // const [status, setStatus] = useState<
+  //   { hasProvider: false } | { hasProvider: true; status: IServiceProviderStatus }
+  // >();
+
+  // const getServiceProviderStatus = async () => {
+  //   const res = await getRequest(apiEndPointServiceProvider.STATUS);
+  //   if (res.status == 200) {
+  //     await getProfile();
+  //     setStatus(res.data);
+  //   }
+  // };
+
   const serviceProviderInfo = useSelector((state: RootState) => state.serviceProvider);
-  const user = useSelector((state: RootState) => state.user);
+
+  const [isLoading, setLoading] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isVerified, setIsVerified] = useState<boolean | null>(null);
+
+  const getProfile = useFetchServiceProviderProfile();
+
+  const verifyServiceProvider = async () => {
+    try {
+      const res = await getRequest(apiEndPointServiceProvider.verifyServiceProvider);
+      console.log(res);
+      if (res.status === 200) {
+        setIsVerified(true);
+        await getProfile();
+      } else {
+        setIsVerified(false);
+      }
+    } catch {
+      setIsVerified(false);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (!user || !user.serviceProvider) {
-      navigate('/', { replace: true });
-      return;
-    }
-  }, [user]);
+    verifyServiceProvider();
+    // getServiceProviderStatus();
+  }, []);
+
+  // useEffect(() => {
+  //   if (!isLoading && isVerified === false) {
+  //     navigate('/landingSp', { replace: true });
+  //   }
+  // }, [isLoading, isVerified]);
+
+  if (!isLoading && isVerified === false) {
+    return <ServiceProviderLanding />;
+  }
+
+  if (isLoading || isVerified === null) {
+    return <LoadingSpinner />;
+  }
+
   return (
-    <div>
-      <Navbar profile={serviceProviderInfo.profileImage}></Navbar>
+    <div className="min-h-screen bg-base-100">
+      <Sidebar
+        profile={serviceProviderInfo.profileImage}
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
+      />
+
       <SubscriptionModal />
-      <Outlet />
+
+      <div className={`min-h-screen transition-all duration-300 ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}`}>
+        <div className="lg:hidden h-16" />
+        <main className="w-full">
+          <div className="container mx-auto p-4 lg:p-6">
+            <Outlet />
+          </div>
+        </main>
+      </div>
     </div>
   );
 };

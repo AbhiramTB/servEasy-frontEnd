@@ -10,6 +10,7 @@ import ServiceDetailsView from './ServiceDetailsView';
 import { HotToastSuccess } from '../../../utils/notificationToast';
 import { Toaster } from 'react-hot-toast';
 import EditService from './editService';
+import { Link } from 'react-router-dom';
 
 const ServiceManagement = () => {
   const dispatch = useDispatch();
@@ -63,9 +64,9 @@ const ServiceManagement = () => {
   };
 
   return (
-    <div className="p-4 bg-base-200">
-      <Toaster />
-      {/* Header and Buttons */}
+    <div className="">
+      <h1 className="mb-4 text-xl font-bold">Service Management</h1>
+
       <div className="flex flex-wrap gap-2 mb-4">
         <button className="btn btn-primary" onClick={() => setService(!addService)}>
           {addService ? 'Cancel' : 'Add Service'}
@@ -129,6 +130,13 @@ const ServiceManagement = () => {
               <button className="btn btn-xs btn-primary" onClick={() => handleViewMore(service._id)}>
                 View
               </button>
+
+              {service.serviceType == 'Online' && (
+                <Link to={`/service-provider/slot-management/${service._id}`}>
+                  {' '}
+                  <button className="btn btn-xs btn-primary">slot</button>
+                </Link>
+              )}
 
               <div className="flex gap-1">
                 <button className="btn btn-xs tooltip " data-tip="Edit" onClick={() => setEdit(service._id)}>

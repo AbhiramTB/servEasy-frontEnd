@@ -11,42 +11,29 @@ interface AddressCardProps {
   isSelected?: boolean;
 }
 
-export const AddressCard: React.FC<AddressCardProps> = ({ 
-  address, 
-  onEdit, 
-  onDelete, 
-  onSelect,
-  isSelected
-}) => {
+export const AddressCard: React.FC<AddressCardProps> = ({ address, onEdit, onDelete, onSelect, isSelected }) => {
   return (
-    <div 
-      className={`card bg-base-100 shadow-xl mb-4 cursor-pointer`}
-      onClick={onSelect}
-    >
-      <div className="card-body">
+    <div className={`card bg-base-100 shadow-xl mb-4 cursor-pointer border m-1`} onClick={onSelect}>
+      <div className="card-body ">
         <div className="flex justify-between items-center">
           <h2 className="card-title">
             {address.name}
-            {address.isDefault && (
-              <span className="badge badge-primary ml-2">Default</span>
-            )}
-            {isSelected && (
-              <Check className="ml-2 text-green-500" size={20} />
-            )}
+            {address.isDefault && <span className="badge badge-primary ml-2">Default</span>}
+            {isSelected && <Check className="ml-2 text-green-500" size={20} />}
           </h2>
           <div className="flex space-x-2">
-            <button 
+            <button
               className="btn btn-ghost btn-sm"
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
                 onEdit(address);
               }}
             >
               <Edit size={16} />
             </button>
-            <button 
+            <button
               className="btn btn-ghost btn-sm text-error"
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
                 onDelete(address._id);
               }}
@@ -81,12 +68,8 @@ export const AddressCard: React.FC<AddressCardProps> = ({
               {address.phone}
             </p>
           )}
-          <p className="text-sm text-gray-500">
-            {address.description}
-          </p>
+          <p className="text-sm text-gray-500">{address.description}</p>
         </div>
-
-     
       </div>
     </div>
   );

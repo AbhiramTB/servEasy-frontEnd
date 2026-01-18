@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import NotFoundGif from '../../assets/images/404.gif';
+import { ROUTES } from '../../utils/constants/routes';
 
 const NotFound = () => {
   return (
@@ -17,7 +18,7 @@ const NotFound = () => {
           </div>
 
           <a
-            href="/"
+            href={ROUTES.USER.HOME}
             className="relative group px-12 py-4 bg-gradient-to-r from-primary to-accent text-primary-content font-bold text-lg rounded-full shadow-2xl transform transition-all duration-300 hover:scale-110 hover:shadow-primary/50 overflow-hidden"
           >
             <span className="relative z-10 flex items-center gap-2">

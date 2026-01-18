@@ -7,14 +7,16 @@ const AdminLayout = () => {
   const adminToken = localStorage.getItem('adminToken');
 
   if (!adminToken) {
-    return <Navigate to="/admin/sigin" />;
+    return <Navigate to="/admin/sign-in" />;
   }
 
   return (
-    <div>
+    <>
       <Navbar />
-      <Outlet />
-    </div>
+      <div className="bg-base-100 bg-grid-pattern">
+        <Outlet />
+      </div>
+    </>
   );
 };
 

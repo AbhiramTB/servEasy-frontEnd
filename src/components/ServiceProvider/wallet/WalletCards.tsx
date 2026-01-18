@@ -12,20 +12,15 @@ import {
   Wallet,
   XCircle,
 } from 'lucide-react';
-import { HotToastError } from '../../../utils/notificationToast';
+import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
 import { postRequest } from '../../../utils/makeRequestInstance';
 import { Link } from 'react-router-dom';
-import { IBankDetailsWallet, ProviderWalletProps } from '../../../utils/types/IServiceProviderWallet';
+import { ProviderWalletProps } from '../../../utils/types/IServiceProviderWallet';
 
-const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions }) => {
+const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions, bankDetails, refreshData }) => {
   const [showWithdrawSection, setShowWithdrawSection] = useState(false);
-  const [withdrawAmount, setWithdrawAmount] = useState<number>(0);
+  const [withdrawAmount, setWithdrawAmount] = useState<number>(balance);
 
-  const bankDetails: IBankDetailsWallet = {
-    accountHolderName: '',
-    accountNumber: '',
-    ifscCode: '',
-  };
   const handleWithdrawClick = () => {
     setShowWithdrawSection(prev => !prev);
   };
@@ -36,7 +31,11 @@ const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions }
         HotToastError('please enter amount');
         return;
       }
-      postRequest('/service-providers/wallet', { amount: withdrawAmount });
+      const res = await postRequest('/service-providers/wallet', { amount: withdrawAmount });
+      if (res.status === 200) {
+        HotToastSuccess('Withdrawal request confirmed');
+        if (refreshData) refreshData();
+      }
     } catch (error) {}
   };
 
@@ -67,76 +66,90 @@ const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions }
   };
 
   return (
-    <div className="min-h-screen bg-base-300">
+    <div className="min-h-screen ">
       <div className="max-w-6xl p-4 mx-auto md:p-8">
-        {/* Header */}
-        <div className="mb-8 text-center">
+        <div className=" text-center">
           <h1 className="mb-2 text-3xl font-bold text-base-content md:text-4xl">Provider Wallet</h1>
           <p className="text-base-content/70">Manage your earnings and withdrawals</p>
         </div>
 
-        {/* Balance Card */}
-        <div className="relative p-8 mb-8 overflow-hidden shadow-lg bg-base-100 rounded-3xl">
-          <div className="absolute z-20 p-5 transition duration-300 -translate-y-1/2 shadow-xl w-72 right-6 top-1/2 bg-base-200 rounded-2xl hover:shadow-2xl">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Banknote className="w-5 h-5 text-primary" />
-                <h3 className="text-lg font-semibold text-base-content">Bank Info</h3>
+        <div className="relative p-6 mb-8 overflow-hidden shadow-lg bg-base-100 rounded-3xl md:p-8">
+          {/* Wrapper */}
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
+            {/* LEFT: Balance Section */}
+            <div className="relative z-10 flex-1">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <Wallet className="w-8 h-8 text-primary" />
+                  <h2 className="text-2xl font-bold text-base-content">Total Balance</h2>
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <p className="text-4xl font-bold text-primary md:text-6xl">₹{balance.toLocaleString()}</p>
+              </div>
+
+              <button
+                onClick={handleWithdrawClick}
+                className="flex items-center gap-2 px-6 py-3 font-semibold transition-all duration-300 shadow-lg text-primary-content bg-primary hover:shadow-xl rounded-xl hover:scale-105 active:scale-95"
+              >
+                <ArrowDownToLine className="w-5 h-5" />
+                {showWithdrawSection ? 'Cancel Withdrawal' : 'Withdraw Funds'}
+              </button>
+            </div>
+
+            {/* RIGHT: Bank Info */}
+            <div
+              className="
+        relative z-20 w-full p-5 transition duration-300 shadow-xl 
+        bg-base-200 rounded-2xl hover:shadow-2xl
+        lg:absolute lg:right-6 lg:top-1/2 lg:w-72 lg:-translate-y-1/2
+      "
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Banknote className="w-5 h-5 text-primary" />
+                  <h3 className="text-lg font-semibold text-base-content">Bank Info</h3>
+                </div>
+
+                {bankDetails ? (
+                  <Link
+                    to="/service-provider/myprofile"
+                    title="Edit Bank Info"
+                    className="p-1 rounded hover:bg-base-300"
+                  >
+                    <Edit className="w-4 h-4 text-primary" />
+                  </Link>
+                ) : (
+                  <Link
+                    to="/service-provider/myprofile"
+                    title="Add Bank Info"
+                    className="p-1 rounded hover:bg-base-300"
+                  >
+                    <Plus className="w-4 h-4 text-success" />
+                  </Link>
+                )}
               </div>
 
               {bankDetails ? (
-                <Link to="/service-provider/myprofile" title="Edit Bank Info" className="p-1 rounded hover:bg-base-300">
-                  <Edit className="w-4 h-4 text-primary" />
-                </Link>
+                <div className="space-y-2 text-sm text-base-content">
+                  <p>
+                    <span className="font-medium">Holder Name:</span> {bankDetails.accountHolderName}
+                  </p>
+                  <p>
+                    <span className="font-medium">Account No:</span> {bankDetails.accountNumber}
+                  </p>
+                  <p>
+                    <span className="font-medium">IFSC:</span> {bankDetails.ifscCode}
+                  </p>
+                </div>
               ) : (
-                <Link to="/service-provider/myprofile" title="Add Bank Info" className="p-1 rounded hover:bg-base-300">
-                  <Plus className="w-4 h-4 text-success" />
-                </Link>
+                <p className="text-sm text-base-content">No bank info added yet.</p>
               )}
             </div>
-
-            {/* Bank Details */}
-            {bankDetails ? (
-              <div className="space-y-2 text-sm text-base-content">
-                <p>
-                  <span className="font-medium">Holder Name:</span> {bankDetails.accountHolderName}
-                </p>
-                <p>
-                  <span className="font-medium">Account No:</span> {bankDetails.accountNumber}
-                </p>
-                <p>
-                  <span className="font-medium">IFSC:</span> {bankDetails.ifscCode}
-                </p>
-              </div>
-            ) : (
-              <p className="text-sm text-base-content">No bank info added yet.</p>
-            )}
-          </div>
-
-          <div className="relative z-10">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <Wallet className="w-8 h-8 text-primary" />
-                <h2 className="text-2xl font-bold text-base-content">Total Balance</h2>
-              </div>
-            </div>
-
-            <div className="mb-6">
-              <p className="text-5xl font-bold text-primary md:text-6xl">₹{balance.toLocaleString()}</p>
-            </div>
-
-            <button
-              onClick={handleWithdrawClick}
-              className="flex items-center gap-2 px-6 py-3 font-semibold transition-all duration-300 shadow-lg text-primary-content bg-primary hover:shadow-xl rounded-xl hover:scale-105 active:scale-95"
-            >
-              <ArrowDownToLine className="w-5 h-5" />
-              {showWithdrawSection ? 'Cancel Withdrawal' : 'Withdraw Funds'}
-            </button>
           </div>
         </div>
 
-        {/* Withdraw Section */}
         {showWithdrawSection && (
           <div className="p-8 mb-8 shadow-xl bg-base-100 rounded-3xl">
             <div className="flex items-center gap-3 mb-6">
@@ -177,7 +190,6 @@ const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions }
           </div>
         )}
 
-        {/* Transactions Section */}
         <div className="p-8 shadow-xl bg-base-100 rounded-3xl">
           <div className="flex items-center gap-3 mb-6">
             <Clock className="w-6 h-6 text-primary" />
@@ -230,9 +242,14 @@ const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions }
                       {getStatusIcon(txn.status)}
                       <span className="capitalize">{txn.status}</span>
                     </div>
-                    <button className="px-4 py-2 transition-colors border text-primary border-primary/20 hover:bg-primary/10 rounded-xl">
-                      View Details
-                    </button>
+
+                    {txn.refBookingId && (
+                      <Link to={`/service-provider/booked-services/${txn.refBookingId}`}>
+                        <button className="px-4 py-2 transition-colors border text-primary border-primary/20 hover:bg-primary/10 rounded-xl">
+                          View Details
+                        </button>
+                      </Link>
+                    )}
                   </div>
                 </div>
               ))}

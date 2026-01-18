@@ -1,11 +1,11 @@
 import { validateEmail, validatePhone, validatePassword, validateUserName } from '../../../utils/validate';
-import { toastifyError } from '../../../utils/Toastify';
 import { makeRequest } from '../../../utils/makeRequest';
 import { apiEndPoint } from '../../../utils/constant';
 import axios from 'axios';
-import { HotToastSuccess } from '../../../utils/notificationToast';
+import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
 import { Dispatch, SetStateAction } from 'react';
 import { NavigateFunction } from 'react-router-dom';
+import { ROUTES } from '../../../utils/constants/routes';
 
 interface FormData {
   email?: string;
@@ -86,7 +86,7 @@ export const handleAuth = async (
             HotToastSuccess('login successful');
             localStorage.setItem('accessToken', res.data.accessToken);
 
-            navigate('/', { replace: true });
+            navigate(ROUTES.USER.HOME, { replace: true });
           }
         } else if (submissionData.email) {
           localStorage.setItem('registerEmailorPhone', submissionData.email);
@@ -101,14 +101,12 @@ export const handleAuth = async (
 
           localStorage.setItem('accessToken', res.data.accessToken);
 
-          navigate('/', { replace: true });
+          navigate(ROUTES.USER.HOME, { replace: true });
         } else {
           setError(res.data.message || 'An error occurred. Please try again.');
         }
       } else {
         const res = await makeRequest(apiEndPoint.signUp, 'POST', submissionData);
-        console.log(res.status);
-        console.log(res);
 
         if (res.status === 201) {
           console.log(res);
@@ -133,7 +131,7 @@ export const handleAuth = async (
     }
   } catch (error: any) {
     if (error?.response?.data?.message) {
-      toastifyError(error?.response?.data?.message);
+      HotToastError(error?.response?.data?.message);
     }
     if (error?.response?.data?.errorOtp) {
       navigate('/otp');

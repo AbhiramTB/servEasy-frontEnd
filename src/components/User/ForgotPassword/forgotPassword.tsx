@@ -1,115 +1,107 @@
-import React, { useState} from "react";
-import { validateEmail, validatePassword } from "../../../utils/validate";
-import { makeRequest } from "../../../utils/makeRequest";
-import { apiEndPoint } from "../../../utils/constant";
+import React, { useState } from 'react';
+import { validateEmail, validatePassword } from '../../../utils/validate';
+import { makeRequest } from '../../../utils/makeRequest';
+import { apiEndPoint } from '../../../utils/constant';
 type Props = {
-    setForget: React.Dispatch<React.SetStateAction<boolean>>;
-  };
+  setForget: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 const ForgotPassword: React.FC<Props> = ({ setForget }) => {
   const [step, setStep] = useState(1);
-  const [key, setkey] = useState("");
-  const [otp, setOtp] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const [key, setkey] = useState('');
+  const [otp, setOtp] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isEmail, setIsEmail] = useState(true);
-   
- 
-  
- 
-    const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    
+
+  const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(isEmail){
-        if(!key&&!validateEmail(key)){
-            setError("please enter a valid email address");
-            return;
-        }
-        const data={email:key}
-        const res =  await sendData(apiEndPoint.forgotPassword,data)
-       
-       if(res){
-        setError("");
-    
+    if (isEmail) {
+      if (!key && !validateEmail(key)) {
+        setError('please enter a valid email address');
+        return;
+      }
+      const data = { email: key };
+      const res = await sendData(apiEndPoint.forgotPassword, data);
+
+      if (res) {
+        setError('');
+
         setStep(2);
-     }
-    }else{
-        if(!key&&!validateEmail(key)){
-            setError("please enter a valid email address");
-            return;
-        }
-        const data={phone:key}
-       const res=await sendData(apiEndPoint.forgotPassword,data)
-       if(res){
-        setError("");
-    
+      }
+    } else {
+      if (!key && !validateEmail(key)) {
+        setError('please enter a valid email address');
+        return;
+      }
+      const data = { phone: key };
+      const res = await sendData(apiEndPoint.forgotPassword, data);
+      if (res) {
+        setError('');
+
         setStep(2);
-     }
+      }
     }
-     
-    
   };
 
- async function sendData(url:string,data:object){
-    
+  async function sendData(url: string, data: object) {
     try {
-        const res= await makeRequest(url,"POST",data)
-        console.log(res);
-        if(res.status==200){
-          return true   
-        }
-        return false
-    } catch (error:any) {
-        if(error.response.data.Message){
-             setError(error.response.data.Message)
-        }
-        console.log(error);
-        
+      const res = await makeRequest(url, 'POST', data);
+      console.log(res);
+      if (res.status == 200) {
+        return true;
+      }
+      return false;
+    } catch (error: any) {
+      if (error.response.data.Message) {
+        setError(error.response.data.Message);
+      }
+      console.log(error);
     }
- }
+  }
 
   const handleOtpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!otp || otp.length !== 6) {
-      setError("Please enter a valid 6-digit OTP");
+      setError('Please enter a valid 6-digit OTP');
       return;
     }
-    const data={otp,key}
-    const res = await sendData(apiEndPoint.forgotPasswordVerifyOtp,data) 
-    if(res){
-        setError("");
-        console.log("OTP verified:", otp);
-        setStep(3);
+    const data = { otp, key };
+    const res = await sendData(apiEndPoint.forgotPasswordVerifyOtp, data);
+    if (res) {
+      setError('');
+      console.log('OTP verified:', otp);
+      setStep(3);
     }
-  
   };
 
   const handlePasswordSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-        setError("Passwords do not match");
-        return;
-      }
-    if (!validatePassword(password)) {
-      setError("Your password must be at least 6 characters long and include at least one special character (e.g., !@#$%^&*)");
+      setError('Passwords do not match');
       return;
-    }  const data:{email?:string,phone?:string,password:string}={password}
-    if(isEmail==true){
-      data.email=key
     }
-    if(isEmail==false){
-        data.phone=key
+    if (!validatePassword(password)) {
+      setError(
+        'Your password must be at least 6 characters long and include at least one special character (e.g., !@#$%^&*)'
+      );
+      return;
     }
-    const res=await sendData(apiEndPoint.resetPassword,data)
-    if(res==true){
-        setError("");
-        setStep(4);
+    const data: { email?: string; phone?: string; password: string } = { password };
+    if (isEmail == true) {
+      data.email = key;
     }
-  
-   
+    if (isEmail == false) {
+      data.phone = key;
+    }
+    const res = await sendData(apiEndPoint.resetPassword, data);
+    if (res == true) {
+      setError('');
+      setStep(4);
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -121,25 +113,21 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-base-200">
+    <div className="flex items-center justify-center min-h-screen ">
       <div className="shadow-xl card w-96 bg-base-100">
         <div className="card-body">
           <h2 className="justify-center mb-6 text-2xl font-bold text-center card-title">
-            {step === 1 && "Password Recovery"}
-            {step === 2 && "Verify OTP"}
-            {step === 3 && "Reset Password"}
-            {step === 4 && "Success"}
+            {step === 1 && 'Password Recovery'}
+            {step === 2 && 'Verify OTP'}
+            {step === 3 && 'Reset Password'}
+            {step === 4 && 'Success'}
           </h2>
 
           <ul className="w-full mb-6 steps steps-vertical lg:steps-horizontal">
-            <li className={`step ${step >= 1 ? "step-primary" : ""}`}>Email</li>
-            <li className={`step ${step >= 2 ? "step-primary" : ""}`}>OTP</li>
-            <li className={`step ${step >= 3 ? "step-primary" : ""}`}>
-              Password
-            </li>
-            <li className={`step ${step >= 4 ? "step-primary" : ""}`}>
-              Complete
-            </li>
+            <li className={`step ${step >= 1 ? 'step-primary' : ''}`}>Email</li>
+            <li className={`step ${step >= 2 ? 'step-primary' : ''}`}>OTP</li>
+            <li className={`step ${step >= 3 ? 'step-primary' : ''}`}>Password</li>
+            <li className={`step ${step >= 4 ? 'step-primary' : ''}`}>Complete</li>
           </ul>
 
           {error && (
@@ -165,9 +153,7 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
             <form onSubmit={handleEmailSubmit}>
               <div className="w-full form-control">
                 <div className="pb-2 bg-base-100">
-                  <p className="mr-4 text-sm">
-                    Select register Method:
-                  </p>
+                  <p className="mr-4 text-sm">Select register Method:</p>
 
                   <label className="label">
                     <div className="flex ">
@@ -177,17 +163,19 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
                         name="radio-4"
                         className="ml-1 mr-4 radio radio-xs radio-primary"
                         defaultChecked
-                        onClick={() => {setIsEmail(true) 
-                            setkey("")}}
+                        onClick={() => {
+                          setIsEmail(true);
+                          setkey('');
+                        }}
                       />
                       <label htmlFor="">Phone</label>
                       <input
                         type="radio"
                         name="radio-4"
                         className="ml-1 radio radio-xs radio-primary"
-
-                        onClick={() =>{ setIsEmail(false)
-                            setkey("")
+                        onClick={() => {
+                          setIsEmail(false);
+                          setkey('');
                         }}
                       />
                     </div>
@@ -217,7 +205,7 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
                       className="grow"
                       maxLength={10}
                       value={key}
-                      onChange={(e) => setkey(e.target.value)}
+                      onChange={e => setkey(e.target.value)}
                       required
                     />
                   </label>
@@ -225,18 +213,8 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
 
                 {isEmail && (
                   <label className="flex items-center gap-2 input input-bordered">
-                    <svg
-                      className="w-4 h-4 opacity-70"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                    >
-                      <g
-                        strokeLinejoin="round"
-                        strokeLinecap="round"
-                        strokeWidth="2"
-                        fill="none"
-                        stroke="currentColor"
-                      >
+                    <svg className="w-4 h-4 opacity-70" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                      <g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor">
                         <rect width="20" height="16" x="2" y="4" rx="2"></rect>
                         <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                       </g>
@@ -246,14 +224,14 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
                       placeholder="Enter your email"
                       className="grow"
                       value={key}
-                      onChange={(e) => setkey(e.target.value)}
+                      onChange={e => setkey(e.target.value)}
                       required
                     />
                   </label>
                 )}
                 <label className="label">
                   <span className="label-text-alt">
-                    We'll send a verification code to this {isEmail==true?"email":'phone'}
+                    We'll send a verification code to this {isEmail == true ? 'email' : 'phone'}
                   </span>
                 </label>
               </div>
@@ -263,11 +241,7 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
                 </button>
               </div>
               <div className="mt-4 text-center">
-                <button
-                  type="button"
-                  className="p-0 btn btn-link btn-sm"
-                  onClick={() => setForget(false)}
-                >
+                <button type="button" className="p-0 btn btn-link btn-sm" onClick={() => setForget(false)}>
                   Back to login/signup
                 </button>
               </div>
@@ -294,32 +268,21 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
                       strokeWidth="2"
                       d="M12 15v3m-3-3h6m-6 0v-3m0 0h6v3"
                     />
-                    <rect
-                      x="3"
-                      y="4"
-                      width="18"
-                      height="16"
-                      rx="2"
-                      strokeWidth="2"
-                    />
+                    <rect x="3" y="4" width="18" height="16" rx="2" strokeWidth="2" />
                   </svg>
                   <input
                     type="text"
                     placeholder="6-digit code"
                     className="grow"
                     value={otp}
-                    onChange={(e) =>
-                      setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
-                    }
+                    onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
                     pattern="[0-9]{6}"
                     maxLength={6}
                     required
                   />
                 </label>
                 <label className="label">
-                  <span className="label-text-alt">
-                    Enter the 6-digit code sent to {key}
-                  </span>
+                  <span className="label-text-alt">Enter the 6-digit code sent to {key}</span>
                 </label>
               </div>
               <div className="mt-6 form-control">
@@ -328,11 +291,7 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
                 </button>
               </div>
               <div className="mt-4 text-center">
-                <button
-                  type="button"
-                  className="p-0 btn btn-link btn-sm"
-                  onClick={() => setStep(1)}
-                >
+                <button type="button" className="p-0 btn btn-link btn-sm" onClick={() => setStep(1)}>
                   Back to Email
                 </button>
               </div>
@@ -347,41 +306,22 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
                   <span className="label-text">New Password</span>
                 </label>
                 <label className="flex items-center gap-2 input input-bordered">
-                  <svg
-                    className="w-4 h-4 opacity-70"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                  >
-                    <g
-                      strokeLinejoin="round"
-                      strokeLinecap="round"
-                      strokeWidth="2"
-                      fill="none"
-                      stroke="currentColor"
-                    >
+                  <svg className="w-4 h-4 opacity-70" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor">
                       <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path>
-                      <circle
-                        cx="16.5"
-                        cy="7.5"
-                        r=".5"
-                        fill="currentColor"
-                      ></circle>
+                      <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
                     </g>
                   </svg>
                   <input
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="New password"
                     className="grow"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={e => setPassword(e.target.value)}
                     minLength={6}
                     required
                   />
-                  <button
-                    type="button"
-                    className="btn btn-ghost btn-sm"
-                    onClick={togglePasswordVisibility}
-                  >
+                  <button type="button" className="btn btn-ghost btn-sm" onClick={togglePasswordVisibility}>
                     {showPassword ? (
                       <svg
                         className="w-5 h-5"
@@ -422,9 +362,7 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
                   </button>
                 </label>
                 <label className="label">
-                  <span className="label-text-alt">
-                    Must be at least 6 characters
-                  </span>
+                  <span className="label-text-alt">Must be at least 6 characters</span>
                 </label>
               </div>
 
@@ -433,41 +371,22 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
                   <span className="label-text">Confirm Password</span>
                 </label>
                 <label className="flex items-center gap-2 input input-bordered">
-                  <svg
-                    className="w-4 h-4 opacity-70"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                  >
-                    <g
-                      strokeLinejoin="round"
-                      strokeLinecap="round"
-                      strokeWidth="2"
-                      fill="none"
-                      stroke="currentColor"
-                    >
+                  <svg className="w-4 h-4 opacity-70" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor">
                       <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path>
-                      <circle
-                        cx="16.5"
-                        cy="7.5"
-                        r=".5"
-                        fill="currentColor"
-                      ></circle>
+                      <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
                     </g>
                   </svg>
                   <input
-                    type={showConfirmPassword ? "text" : "password"}
+                    type={showConfirmPassword ? 'text' : 'password'}
                     placeholder="Confirm password"
                     className="grow"
                     value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onChange={e => setConfirmPassword(e.target.value)}
                     minLength={6}
                     required
                   />
-                  <button
-                    type="button"
-                    className="btn btn-ghost btn-sm"
-                    onClick={toggleConfirmPasswordVisibility}
-                  >
+                  <button type="button" className="btn btn-ghost btn-sm" onClick={toggleConfirmPasswordVisibility}>
                     {showConfirmPassword ? (
                       <svg
                         className="w-5 h-5"
@@ -515,11 +434,7 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
                 </button>
               </div>
               <div className="mt-4 text-center">
-                <button
-                  type="button"
-                  className="p-0 btn btn-link btn-sm"
-                  onClick={() => setStep(2)}
-                >
+                <button type="button" className="p-0 btn btn-link btn-sm" onClick={() => setStep(2)}>
                   Back to OTP
                 </button>
               </div>
@@ -537,22 +452,12 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h3 className="mb-2 text-xl font-semibold">
-                Password Reset Successful
-              </h3>
+              <h3 className="mb-2 text-xl font-semibold">Password Reset Successful</h3>
               <p className="mb-6">Your password has been reset successfully.</p>
-              <button
-                className="btn btn-primary"
-                onClick={() => setForget(false)}
-              >
+              <button className="btn btn-primary" onClick={() => setForget(false)}>
                 Go to Login
               </button>
             </div>
@@ -563,4 +468,4 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
   );
 };
 
-export default ForgotPassword
+export default ForgotPassword;

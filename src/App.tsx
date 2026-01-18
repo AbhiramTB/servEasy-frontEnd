@@ -2,7 +2,6 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import AuthPage from './components/User/AuthModel/AuthPage.tsx';
 import Body from './layouts/user/UserLayout.tsx';
 import Otp from './components/User/AuthModel/Otp';
-import Register from './components/ServiceProvider/Register/Register.tsx';
 import AdminSignIn from '../src/components/admin/auth/Sigin.tsx';
 import Dashboard from './components/ServiceProvider/Dashboard.tsx';
 import ServiceProviderLayout from './layouts/provider/ServiceProviderLayout.tsx';
@@ -40,6 +39,13 @@ import Walletpage from './components/ServiceProvider/wallet/walletPage.tsx';
 import AiAssistancePage from './components/ServiceProvider/aiAssistance/AssistancePage.tsx';
 import SubscriptionFeaturesRoutes from './routes/SubscriptionFeaturesRoutes.tsx';
 import SubscriptionPlansPage from './components/admin/subscriptionsManagement/SubscriptionPlansPage.tsx';
+import AdsPage from './components/ServiceProvider/ads/AdsPage.tsx';
+import ServiceProviderLanding from './components/ui/Landing/serviceProviderLanding/ServiceProviderLandingPage.tsx';
+import Sample from './Sample.tsx';
+import { ROUTES } from './utils/constants/routes.ts';
+import ServiceProviderRegisterPage from './components/ServiceProvider/Register/ServiceProviderRegisterPage.tsx';
+import UserLandingPage from './components/ui/Landing/userLanding/UserLandingPage.tsx';
+import UserRoutes from './routes/UserRoutes.tsx';
 
 function App() {
   const { userAccessToken = true, adminAccessToken } = useAuth();
@@ -48,16 +54,14 @@ function App() {
     <>
       <Toaster position="top-center" reverseOrder={false} />
 
-      <BrowserRouter basename="/">
+      <BrowserRouter>
         <Routes>
-          <Route path="cp" element={<SubscriptionPlansPage />} />
+          {/* <Route path="/sample" element={<Sample />} /> */}
 
           <Route path="/payment/verify" element={<PaymentVerify />} />
-          <Route path="/signIn" element={userAccessToken ? <Navigate to="/" replace /> : <AuthPage />} />
-          <Route path="otp" element={<Otp />} />
 
-          <Route path="/" element={<Body />}>
-            <Route index element={<HomePage />} />
+          {/* <Route path="/" element={<Body />}>
+            <Route path="home" element={<HomePage />} />
             <Route path="/serveasy" element={<HomePage />} />
             <Route path="myprofile" element={<SidebarLayout />}>
               <Route index element={<UserProfile />} />
@@ -76,12 +80,53 @@ function App() {
             <Route path="/booked-service-online/:id" element={<ServiceBookingDetailsOnline />} />
             <Route path="chat/:serviceProviderId" element={<Chat />} />
             <Route path="chats" element={<ChatsUser />}></Route>
+          </Route> */}
+
+          {/* 
+          <Route path={ROUTES.USER.OTP} element={<Otp />} />
+          <Route
+            path={ROUTES.USER.SIGN_IN}
+            element={userAccessToken ? <Navigate to={ROUTES.USER.HOME} replace /> : <AuthPage />}
+          />
+          <Route
+            path={ROUTES.USER.ROOT}
+            element={userAccessToken ? <Navigate to={ROUTES.USER.HOME} replace /> : <UserLandingPage />}
+          />
+          <Route path={ROUTES.USER.ROOT} element={<Body />}>
+            <Route path={ROUTES.USER.HOME} element={<HomePage />} />
+            <Route path={ROUTES.USER.SERVEASY} element={<HomePage />} />
+            <Route path={ROUTES.USER.PROFILE} element={<SidebarLayout />}>
+              <Route index element={<UserProfile />} />
+              <Route path={ROUTES.USER.PROFILE_APPEARANCE} element={<Appearance />} />
+              <Route path={ROUTES.USER.PROFILE_BOOKED_SERVICES} element={<BookedService />} />
+              <Route path={ROUTES.USER.PROFILE_ABOUT_US} element={<AboutUs />} />
+            </Route>
+            <Route path={ROUTES.USER.BOOKED_SERVICES} element={<BookedService />} />
+
+            <Route path={ROUTES.USER.SERVICE_DETAILS} element={<SingleServiceCard />} />
+
+            <Route path={ROUTES.USER.BOOK_SERVICE} element={<BookService />} />
+
+            <Route path={ROUTES.USER.BOOK_SERVICE_ONLINE} element={<BookOnlineService />} />
+
+            <Route path={ROUTES.USER.VIDEO_CALL} element={<VideoCall />} />
+
+            <Route path={ROUTES.USER.BOOKED_SERVICE_DETAILS} element={<ViewSIngleBookedService />} />
+
+            <Route path={ROUTES.USER.BOOKED_SERVICE_ONLINE_DETAILS} element={<ServiceBookingDetailsOnline />} />
+
+            <Route path={ROUTES.USER.CHAT_WITH_PROVIDER} element={<Chat />} />
+
+            <Route path={ROUTES.USER.CHATS} element={<ChatsUser />} />
           </Route>
-          <Route path="/service-provider/register" element={<Register />} />
+
+          <Route path={ROUTES.SERVICEPROVIDER.REGISTER} element={<ServiceProviderRegisterPage />} /> */}
+
+          <Route path="/landingSp" element={<ServiceProviderLanding />} />
 
           <Route>
             <Route path="/service-provider" element={<ServiceProviderLayout />}>
-              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="/service-provider/dashboard" element={<Dashboard />} />
               <Route path="booked-services" element={<BookedServiceServiceProvider />} />
               <Route path="chats" element={<ChatUI />}></Route>
               <Route path="video-call/:userId" element={<ServiceProviderVideoCall />}></Route>
@@ -91,7 +136,7 @@ function App() {
               <Route path="booked-services-online/:id" element={<OnlineBookingManagement />} />
               <Route path="service-management" element={<ServiceManagement />} />
               <Route path="payment-management" element={<PaymentManagement />} />
-              <Route path="slot-management" element={<SlotPage />} />
+              <Route path="slot-management/:serviceId" element={<SlotPage />} />
               <Route path="wallet" element={<Walletpage />} />
 
               <Route
@@ -110,14 +155,23 @@ function App() {
                   </SubscriptionFeaturesRoutes>
                 }
               />
+
+              <Route
+                path={ROUTES.SERVICEPROVIDER.ADS}
+                element={
+                  <SubscriptionFeaturesRoutes>
+                    <AdsPage />
+                  </SubscriptionFeaturesRoutes>
+                }
+              />
             </Route>
           </Route>
 
           <Route
-            path="admin/signin"
+            path="admin/sign-in"
             element={adminAccessToken ? <Navigate to={'/admin/home'} replace /> : <AdminSignIn />}
           />
-
+          {UserRoutes()}
           {AdminRoutes()}
 
           <Route path="*" element={<NotFound />} />
