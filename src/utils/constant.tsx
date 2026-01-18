@@ -62,8 +62,22 @@ export const apiEndPointAdmin = {
   updateService: '/admin/category/service',
   deleteService: '/admin/category/service/',
 
+<<<<<<< HEAD
   adminLogout: '/admin/logout',
   gtPaymentInfo: '/admin/dashboard/payment-info',
+=======
+  adminLogout: "/admin/logout",
+  gtPaymentInfo: "/admin/dashboard/payment-info",
+
+ makeActiveSiteSettings:'admin/site-settings/activate',
+ deleteSiteSettings:'admin/site-settings/delete',
+ addsiteSettings:'admin/site-settings/add',
+  getSiteSettings:'admin/site-settings',
+<<<<<<< HEAD
+=======
+  getWalletLists:"admin/wallets/"
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
+>>>>>>> 9a5a590b2c07a625cfd50f400a3c18919d5bad68
 
   makeActiveSiteSettings: 'admin/site-settings/activate',
   deleteSiteSettings: 'admin/site-settings/delete',

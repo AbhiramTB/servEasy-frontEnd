@@ -25,9 +25,15 @@ const BannerCarousel: React.FC<Props> = ({ banners, onMarkDefault }) => {
     setCurrentIndex((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
   };
 
+<<<<<<< HEAD
+  if (banners.length === 0) {
+    return <p className="text-center">No banners available</p>;
+  }
+=======
   // if (banners.length === 0) {
   //   return <p className="text-center">No banners available</p>;
   // }
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 
   const banner = banners[currentIndex];
 
@@ -36,22 +42,37 @@ const BannerCarousel: React.FC<Props> = ({ banners, onMarkDefault }) => {
       {/* Carousel Display */}
       <div className="relative w-full overflow-hidden rounded-lg aspect-[3/1] ">
         <img
+<<<<<<< HEAD
+          src={banner.imageUrl}
+          alt={banner.title}
+=======
           src={banner?.imageUrl?banner.imageUrl:"/placeHolders/Banner_Not_Available_Placeholder.png"}
           alt={banner?.title}
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
           className="object-cover w-full h-full"
         />
 
         {/* Overlay Actions */}
         <div className="absolute bottom-0 left-0 right-0 flex flex-col items-start justify-between gap-2 p-4 text-white bg-black bg-opacity-60 md:flex-row md:items-center">
           <div>
+<<<<<<< HEAD
+            <h3 className="text-lg font-semibold">{banner.title}</h3>
+            <p className="text-sm">{banner.subtitle}</p>
+            {banner.isActive && (
+=======
             <h3 className="text-lg font-semibold">{banner?.title||"No homepage banner found"}</h3>
             <p className="text-sm">{banner?.subtitle||"Please upload a banner to display on the user homepage"}</p>
             {banner?.isActive && (
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
               <span className="mt-1 badge badge-success">Active</span>
             )}
           </div>
           <div className="flex gap-2 mt-2 md:mt-0">
+<<<<<<< HEAD
+            {!banner.isActive && (
+=======
             {!banner?.isActive &&banner?.imageUrl && (
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
               <button
                 onClick={() => onMarkDefault(banner._id)}
                 className="btn btn-sm btn-outline btn-primary"

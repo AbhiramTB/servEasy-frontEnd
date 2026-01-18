@@ -1,9 +1,25 @@
+<<<<<<< HEAD
 import { postRequest } from '../../../utils/makeRequestInstance';
 import { validateEmail, validatePassword, validatePhone } from '../../../utils/validate';
 import React, { useState, FormEvent } from 'react';
 import { apiEndPointAdmin } from '../../../utils/constant';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
+=======
+import { postRequest } from "../../../utils/makeRequestInstance";
+import {
+  validateEmail,
+  validatePassword,
+  validatePhone,
+} from "../../../utils/validate";
+import React, { useState, FormEvent } from "react";
+import { apiEndPointAdmin } from "../../../utils/constant";
+import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
+=======
+import { Eye, EyeOff } from "lucide-react";
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
+>>>>>>> 9a5a590b2c07a625cfd50f400a3c18919d5bad68
 interface SignInCredentials {
   identifier: string;
   password: string;
@@ -89,6 +105,36 @@ const AdminSignIn: React.FC = () => {
     }
   };
 
+<<<<<<< HEAD
+  return (
+    <div
+      className="flex items-center justify-center min-h-screen px-4"
+      style={{
+        background: "linear-gradient(135deg, #121212 0%, #1e1e1e 100%)",
+      }}
+    >
+      <div className="w-full max-w-md bg-gray-800 border border-gray-700 shadow-xl card">
+        {/* <figure className="px-6 pt-6">
+          <div className="flex items-center justify-center w-32 h-32 p-4 bg-blue-900 rounded-full">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-20 h-20 text-blue-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+        </figure> */}
+        <div className="card-body">
+          <h2 className="mb-6 text-2xl font-bold text-center text-blue-400">
+=======
   const [showPassword, setShowPassword] = useState(false);
 
   // return (
@@ -204,6 +250,7 @@ const AdminSignIn: React.FC = () => {
   // );
 
   return (
+<<<<<<< HEAD
     <div className="flex items-center justify-center min-h-screen px-4  bg-grid-pattern">
       <div className="flex flex-col md:flex-row w-full max-w-6xl overflow-hidden border shadow-2xl rounded-3xl bg-base-100 border-base-300 min-h-[750px]">
         {' '}
@@ -228,9 +275,108 @@ const AdminSignIn: React.FC = () => {
                   />
                 </svg>
                 <span>{error}</span>
+=======
+    <div className="flex items-center justify-center min-h-screen px-4 bg-primary/5">
+      <div className="w-full max-w-md border shadow-2xl card bg-base-100 border-base-300">
+        <div className="card-body">
+          <h2 className="mb-6 text-2xl font-bold text-center text-primary">
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
+            Admin Sign In
+          </h2>
+
+          {error && (
+<<<<<<< HEAD
+            <div className="mb-4 text-red-200 bg-red-900 border border-red-800 alert">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-6 h-6 stroke-current shrink-0"
+=======
+            <div className="mb-4 text-sm alert alert-error">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-6 h-6 shrink-0"
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+<<<<<<< HEAD
+=======
+                  stroke="currentColor"
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4 form-control">
+              <label className="label">
+<<<<<<< HEAD
+                <span className="font-medium text-blue-400 label-text">
+                  Sign in with
+                </span>
+              </label>
+              <div className="flex gap-6 mb-2">
+                <label className="justify-start gap-2 cursor-pointer label">
+                  <input
+                    type="radio"
+                    name="identifierType"
+                    className="bg-gray-700 border-gray-600 radio radio-primary"
+=======
+                <span className="font-semibold label-text text-primary">
+                  Sign in with
+                </span>
+              </label>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="identifierType"
+                    className="radio radio-primary"
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
+                    value="email"
+                    checked={identifierType === "email"}
+                    onChange={handleIdentifierTypeChange}
+                  />
+<<<<<<< HEAD
+                  <span className="text-gray-300 label-text">Email</span>
+                </label>
+                <label className="justify-start gap-2 cursor-pointer label">
+                  <input
+                    type="radio"
+                    name="identifierType"
+                    className="bg-gray-700 border-gray-600 radio radio-primary"
+=======
+                  <span className="label-text">Email</span>
+                </label>
+
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="identifierType"
+                    className="radio radio-primary"
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
+                    value="phone"
+                    checked={identifierType === "phone"}
+                    onChange={handleIdentifierTypeChange}
+                  />
+<<<<<<< HEAD
+                  <span className="text-gray-300 label-text">Phone Number</span>
+=======
+                  <span className="label-text">Phone Number</span>
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
+                </label>
+>>>>>>> 9a5a590b2c07a625cfd50f400a3c18919d5bad68
               </div>
             )}
 
+<<<<<<< HEAD
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="form-control">
                 <label className="label">
@@ -268,6 +414,63 @@ const AdminSignIn: React.FC = () => {
                     {identifierType === 'email' ? 'Email Address' : 'Phone Number'}
                   </span>
                 </label>
+=======
+            <div className="form-control">
+              <label className="label">
+<<<<<<< HEAD
+                <span className="font-medium text-blue-400 label-text">
+                  {identifierType === "email"
+                    ? "Email Address"
+                    : "Phone Number"}
+=======
+                <span className="font-semibold label-text text-primary">
+                  {identifierType === "email" ? "Email Address" : "Phone Number"}
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
+                </span>
+              </label>
+              <input
+                type={identifierType === "email" ? "email" : "tel"}
+                name="identifier"
+                placeholder={
+                  identifierType === "email"
+                    ? "admin@example.com"
+                    : "Phone Number"
+                }
+<<<<<<< HEAD
+                className="text-white placeholder-gray-400 bg-gray-700 border-gray-600 input input-bordered focus:border-blue-500"
+=======
+                className="input input-bordered bg-base-200 text-base-content"
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
+                value={credentials.identifier}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="mt-4 form-control">
+              <label className="label">
+<<<<<<< HEAD
+                <span className="font-medium text-blue-400 label-text">
+                  Password
+                </span>
+               
+              </label>
+              <input
+                type="password"
+                name="password"
+                placeholder="••••••••"
+                className="text-white placeholder-gray-400 bg-gray-700 border-gray-600 input input-bordered focus:border-blue-500"
+                value={credentials.password}
+                onChange={handleChange}
+                required
+              />
+=======
+                <span className="font-semibold label-text text-primary">
+                  Password
+                </span>
+              </label>
+              <div className="relative">
+>>>>>>> 9a5a590b2c07a625cfd50f400a3c18919d5bad68
                 <input
                   type={identifierType === 'email' ? 'email' : 'tel'}
                   name="identifier"
@@ -309,12 +512,53 @@ const AdminSignIn: React.FC = () => {
                   {isLoading ? <span className="loading loading-spinner"></span> : 'Sign In'}
                 </button>
               </div>
+<<<<<<< HEAD
             </form>
           </div>
+=======
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
+            </div>
+
+            <div className="mt-6 form-control">
+              <button
+                type="submit"
+<<<<<<< HEAD
+                className="text-white bg-blue-600 border-none btn hover:bg-blue-700"
+=======
+                className="btn btn-primary"
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
+                disabled={isLoading}
+              >
+                {isLoading ? "Signing in..." : "Sign In"}
+              </button>
+            </div>
+          </form>
+<<<<<<< HEAD
+
+          {/* <div className="mt-6 text-gray-500 divider">OR</div> */}
+
+          {/* <div className="text-center">
+            <p className="text-sm text-gray-400">
+              Need access?{" "}
+              <a href="#" className="text-blue-400 hover:text-blue-300 link">
+                Contact system administrator
+              </a>
+            </p>
+          </div> */}
+=======
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
+>>>>>>> 9a5a590b2c07a625cfd50f400a3c18919d5bad68
         </div>
       </div>
     </div>
   );
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
+>>>>>>> 9a5a590b2c07a625cfd50f400a3c18919d5bad68
 };
 
 export default AdminSignIn;
