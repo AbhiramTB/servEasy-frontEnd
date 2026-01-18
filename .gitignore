@@ -1,8 +1,4 @@
 # Logs
-<<<<<<< HEAD
-=======
-
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 logs
 *.log
 npm-debug.log*
@@ -10,19 +6,12 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-<<<<<<< HEAD
-
-=======
 .env
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 node_modules
 dist
 dist-ssr
 *.local
-<<<<<<< HEAD
-.env
-=======
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
+/src/sample 
 
 # Editor directories and files
 .vscode/*

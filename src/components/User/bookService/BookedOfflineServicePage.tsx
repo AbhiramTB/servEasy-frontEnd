@@ -1,10 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-<<<<<<< HEAD
-import { getRequest, putRequest } from '../../../utils/makeRequestInstance';
-=======
 import { deleteRequest, getRequest, postRequest, putRequest } from '../../../utils/makeRequestInstance';
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 import RazorpayButton from '../../ui/PaymentButton';
 import ShowBills from '../../ui/ShowBills';
 import ReviewCard from './ReviewCard';
@@ -20,13 +16,10 @@ import BookingStepper from '../../ServiceProvider/booking/BookingStepper';
 import UserInfoCompact from '../../ServiceProvider/booking/UserInfoCompact';
 import ServiceCardCompact from '../../ServiceProvider/booking/ServiceCardCompact';
 import CancelBookingModal from '../../ServiceProvider/booking/CancelBookingModal';
-<<<<<<< HEAD
-=======
 import CouponInput from '../../ui/CouponInput';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 
 interface Address {
   name: string;
@@ -36,16 +29,6 @@ interface Address {
   phone: string;
 }
 
-<<<<<<< HEAD
-interface Ipayment {
-  serviceCost?: number;
-  metaialCost?: number;
-  travelCost?: number;
-  inspectionCost?: number;
-  total: number;
-  convenienceFee?: number;
-}
-=======
 export interface IPayment {
   serviceCost?: number;
   metaialCost: number;
@@ -57,7 +40,6 @@ export interface IPayment {
   finalTotal?: number;
 }
 
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 interface Location {
   address: string;
   latitude: number;
@@ -113,12 +95,8 @@ interface BookedService {
   bookingHistory?: IBookingHistory[];
 
   cancelReason?: string;
-<<<<<<< HEAD
-  payment?: Ipayment;
-=======
   payment?: IPayment;
   coupon?: ICouponApplied;
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 }
 
 export interface BookingData {
@@ -128,8 +106,6 @@ export interface BookingData {
   review?: IReview;
 }
 
-<<<<<<< HEAD
-=======
 export interface ICouponApplied {
   _id?: string;
   code: string;
@@ -137,7 +113,6 @@ export interface ICouponApplied {
   appliedAt: Date;
 }
 
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 const ServiceBookingDetails = () => {
   const { id } = useParams();
   const [bookingData, setBookingData] = useState<BookingData | null>(null);
@@ -148,13 +123,7 @@ const ServiceBookingDetails = () => {
   const [download, setDownload] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState<boolean>(false);
   const [cancelReason, setCancelReason] = useState<string>('');
-<<<<<<< HEAD
   const user = useSelector((state: RootState) => state.user);
-=======
-<<<<<<< HEAD
-=======
-  const user=useSelector((state:RootState)=>state.user)
->>>>>>> 9a5a590b2c07a625cfd50f400a3c18919d5bad68
 
   const handleApplyCoupon = async (coupon: string) => {
     try {
@@ -181,11 +150,6 @@ const ServiceBookingDetails = () => {
     } finally {
     }
   };
-<<<<<<< HEAD
-=======
-  
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
->>>>>>> 9a5a590b2c07a625cfd50f400a3c18919d5bad68
 
   const handleCancelBooking = async () => {
     try {
@@ -210,8 +174,6 @@ const ServiceBookingDetails = () => {
     }
   };
 
-<<<<<<< HEAD
-=======
   const handleRemove = async () => {
     try {
       setLoading(true);
@@ -236,7 +198,6 @@ const ServiceBookingDetails = () => {
     }
   };
 
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
   useEffect(() => {
     if (id) {
       getBookedService(id);
@@ -262,24 +223,8 @@ const ServiceBookingDetails = () => {
     }
   };
 
-<<<<<<< HEAD
-
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-base-200">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
-      </div>
-=======
-  if (loading) {
-<<<<<<< HEAD
     return <LoadingSpinner />;
-=======
-    return (
-      <LoadingSpinner/>
-
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
-    );
->>>>>>> 9a5a590b2c07a625cfd50f400a3c18919d5bad68
   }
 
   if (error || !bookingData) {
@@ -400,6 +345,7 @@ const ServiceBookingDetails = () => {
               <div className="divider"></div>
 
               <div className="">
+                {serviceProvider.userId}
                 <UserInfoCompact
                   profileImage={serviceProvider.profileImage}
                   userName={serviceProvider.serviceProviderName}
@@ -646,11 +592,7 @@ const ServiceBookingDetails = () => {
           {bookedService.address && <ServiceAddressCard address={bookedService.address} />}
           {bookedService.payment && (
             <div className="shadow card bg-base-100">
-<<<<<<< HEAD
-              <div className="p-4 card-body">
-=======
               {/* <div className="p-4 card-body">
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                 <h3 className="text-base card-title">Price Details</h3>
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between">
@@ -671,12 +613,6 @@ const ServiceBookingDetails = () => {
                     <span>Total</span>
                     <span>₹{bookedService.payment.total}</span>
                   </div>
-<<<<<<< HEAD
-                  {bookedService.payment.convenienceFee && bookedService.payment.convenienceFee > 0 && (
-                    <div className="flex justify-between mt-1 text-xs opacity-75">
-                      <span>convenience Fee (10%)</span>
-                      <span>₹{bookedService.payment?.convenienceFee} </span>
-=======
 
                   <div className="flex justify-between font-bold">
                     <span>discount</span>
@@ -754,7 +690,6 @@ const ServiceBookingDetails = () => {
                         handleRemoveCoupon={() => handleRemove()}
                         handleApply={(coupon: string) => handleApplyCoupon(coupon)}
                       />
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                     </div>
                   )}
                 </div>
@@ -762,11 +697,6 @@ const ServiceBookingDetails = () => {
 
               {id && bookedService.paymentStatus !== 'completed' && (
                 <RazorpayButton
-<<<<<<< HEAD
-                  serviceid={id}
-                  reloadData={() => getBookedService(id)}
-                  total={bookedService.payment.total}
-=======
                   onSuccess={() => getBookedService(id)}
                   buttonStyle={{
                     className: 'p-3 text-base-100 font-bold rounded-md hover:bg-opacity-45 bg-primary',
@@ -777,13 +707,7 @@ const ServiceBookingDetails = () => {
                   onError={() => HotToastError('your attempted transaction was unsuccessful')}
                   payload={{ serviceId: id }}
                   total={bookedService.payment.total - 100}
-<<<<<<< HEAD
                   verifyApi={'/payment/verify'}
-=======
-                  verifyApi={"/payment/verify"}
-                  
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
->>>>>>> 9a5a590b2c07a625cfd50f400a3c18919d5bad68
                 />
               )}
             </div>

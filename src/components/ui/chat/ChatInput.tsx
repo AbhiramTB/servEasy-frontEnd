@@ -22,11 +22,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   setShowEmojiPicker,
   onEmojiClick
 }) => {
-<<<<<<< HEAD
-  const inputRef = useRef<HTMLInputElement>(null);
-=======
   const inputRef = useRef<HTMLTextAreaElement>(null);
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
   const pickerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -48,11 +44,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
           <ChatImageUploadModal uploadImg={handleImgUpload} />
         </div>
 
-<<<<<<< HEAD
-        <input
-=======
         {/* <input
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
           ref={inputRef}
           type="text"
           className="w-full py-3 rounded-full px-14 input input-bordered focus:border-primary"
@@ -60,9 +52,6 @@ const ChatInput: React.FC<ChatInputProps> = ({
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-<<<<<<< HEAD
-        />
-=======
         /> */}
         <textarea
   ref={inputRef}
@@ -77,7 +66,6 @@ const ChatInput: React.FC<ChatInputProps> = ({
     }
   }}
 />
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 
         <div className="absolute flex items-center space-x-2 right-4 tooltip tooltip-left tooltip-secondary"  data-tip="Add Emoji">
           <button

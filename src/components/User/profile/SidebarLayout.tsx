@@ -9,20 +9,9 @@ const SidebarLayout = () => {
   const user = useSelector((state: RootState) => state.user);
 
   return (
-<<<<<<< HEAD
-    <div className="flex min-h-screen">
-      <aside className="w-64 p-4 shadow-md bg-base-300">
-=======
     <div className="flex flex-col min-h-screen lg:flex-row">
       <aside className="hidden w-64 p-4 shadow-md lg:block bg-base-300">
-<<<<<<< HEAD
         <div className="mb-6 text-xl font-semibold">Hello, {user.userName.toUpperCase()}</div>
-=======
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
-        <div className="mb-6 text-xl font-semibold">
-          Hello, {user.userName.toUpperCase()}
-        </div>
->>>>>>> 9a5a590b2c07a625cfd50f400a3c18919d5bad68
         <nav className="space-y-3">
           <SidebarItem icon={<FaUser />} label="My Profile" to="/myprofile" end />
           <SidebarItem icon={<FaCalendarCheck />} label="My Bookings" to="/myprofile/booked-services/" />
@@ -31,14 +20,6 @@ const SidebarLayout = () => {
         </nav>
       </aside>
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-      {/* Main content */}
-      <main className="flex-1 p-6">
-=======
-      {/* Mobile Top Navbar */}
->>>>>>> 9a5a590b2c07a625cfd50f400a3c18919d5bad68
       <nav className="flex px-2 py-3 space-x-4 overflow-x-auto shadow-sm lg:hidden bg-base-200">
         <SidebarItem icon={<FaUser />} label="My Profile" to="/myprofile" end />
         <SidebarItem icon={<FaCalendarCheck />} label="Bookings" to="/myprofile/booked-services/" />
@@ -48,7 +29,6 @@ const SidebarLayout = () => {
       </nav>
 
       <main className="flex-1 p-4">
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
         <Outlet />
       </main>
     </div>
@@ -59,11 +39,7 @@ interface SidebarItemProps {
   icon: React.ReactNode;
   label: string;
   to: string;
-<<<<<<< HEAD
-  end?: boolean; 
-=======
   end?: boolean;
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = ({ icon, label, to, end }) => {
@@ -72,17 +48,6 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon, label, to, end }) => {
       to={to}
       end={end}
       className={({ isActive }) =>
-<<<<<<< HEAD
-        `flex items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
-          isActive
-            ? 'text-accent font-semibold'
-            : 'hover:text-info hover:bg-base-200'
-        }`
-      }
-    >
-      <span className="text-lg">{icon}</span>
-      <span className="font-medium">{label}</span>
-=======
         `flex items-center gap-2 whitespace-nowrap px-3 py-2 rounded-md transition-colors text-sm ${
           isActive ? 'text-accent font-semibold' : 'hover:text-info hover:bg-base-100'
         }`
@@ -90,7 +55,6 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon, label, to, end }) => {
     >
       <span className="text-base">{icon}</span>
       <span>{label}</span>
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
     </NavLink>
   );
 };

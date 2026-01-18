@@ -2,23 +2,16 @@ import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { RootState } from '../../../../redux/store';
 import { IServiceProvider } from '../../../../utils/types/IServiceProvider';
-<<<<<<< HEAD
-import {putRequest } from '../../../../utils/makeRequestInstance';
-import { apiEndPointServiceProvider } from '../../../../utils/constant';
-=======
 import { putRequest } from '../../../../utils/makeRequestInstance';
 import { apiEndPointServiceProvider } from '../../../../utils/constant';
 import SubscriptionInfoServiceProvider from './SubscriptionInfoServiceProvider';
 import UpgradePlanButton from '../../../ui/UpgradePlanButton';
 import { Crown, Edit, Save } from 'lucide-react';
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
 
 const Myprofile = () => {
   const serviceProvider = useSelector((state: RootState) => state.serviceProvider) as IServiceProvider;
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-<<<<<<< HEAD
-=======
   const [hasChanges, setHasChanges] = useState(false);
   const [originalData, setOriginalData] = useState({
     serviceProviderName: '',
@@ -31,7 +24,6 @@ const Myprofile = () => {
       ifscCode: '',
     },
   });
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
   const [formData, setFormData] = useState({
     serviceProviderName: '',
     serviceProviderEmail: '',
@@ -40,22 +32,12 @@ const Myprofile = () => {
     bankDetails: {
       accountHolderName: '',
       accountNumber: '',
-<<<<<<< HEAD
-      ifscCode: ''
-    }
-  });
-
-  useEffect(() => {
-    if (serviceProvider) {
-      setFormData({
-=======
       ifscCode: '',
     },
   });
   useEffect(() => {
     if (serviceProvider) {
       const initialData = {
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
         serviceProviderName: serviceProvider.serviceProviderName || '',
         serviceProviderEmail: serviceProvider.serviceProviderEmail || '',
         serviceProviderPhone: serviceProvider.serviceProviderPhone || '',
@@ -63,23 +45,6 @@ const Myprofile = () => {
         bankDetails: {
           accountHolderName: serviceProvider.bankDetails?.accountHolderName || '',
           accountNumber: serviceProvider.bankDetails?.accountNumber || '',
-<<<<<<< HEAD
-          ifscCode: serviceProvider.bankDetails?.ifscCode || ''
-        }
-      });
-    }
-  }, [serviceProvider]);
-
-  const updateProfile = async (fData: any) => {
-    try {
-       const data={...fData,_id:serviceProvider._id}
-      const response = await putRequest(apiEndPointServiceProvider.getServiceProvider,data);
-   
-        if(response.status==200){
-          
-        }  
-
-=======
           ifscCode: serviceProvider.bankDetails?.ifscCode || '',
         },
       };
@@ -100,7 +65,6 @@ const Myprofile = () => {
 
       if (response.status == 200) {
       }
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
     } catch (error) {
       console.error('Error updating profile:', error);
       throw error;
@@ -115,22 +79,13 @@ const Myprofile = () => {
         ...prev,
         bankDetails: {
           ...prev.bankDetails,
-<<<<<<< HEAD
-          [bankField]: value
-        }
-=======
           [bankField]: value,
         },
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
       }));
     } else {
       setFormData(prev => ({
         ...prev,
-<<<<<<< HEAD
-        [name]: value
-=======
         [name]: value,
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
       }));
     }
   };
@@ -150,11 +105,7 @@ const Myprofile = () => {
 
   const handleCancel = () => {
     if (serviceProvider) {
-<<<<<<< HEAD
-      setFormData({
-=======
       const resetData = {
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
         serviceProviderName: serviceProvider.serviceProviderName || '',
         serviceProviderEmail: serviceProvider.serviceProviderEmail || '',
         serviceProviderPhone: serviceProvider.serviceProviderPhone || '',
@@ -162,34 +113,6 @@ const Myprofile = () => {
         bankDetails: {
           accountHolderName: serviceProvider.bankDetails?.accountHolderName || '',
           accountNumber: serviceProvider.bankDetails?.accountNumber || '',
-<<<<<<< HEAD
-          ifscCode: serviceProvider.bankDetails?.ifscCode || ''
-        }
-      });
-    }
-    setIsEditing(false);
-  };
-
-  return (
-    <div className="min-h-screen py-8 bg-base-100">
-      <div className="max-w-4xl px-6 mx-auto">
-        <div className="p-6 mb-6 border shadow-sm bg-base-200 rounded-xl">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold">Profile Management</h1>
-              <p className="mt-1 text-base-content/70">Manage your personal and banking information</p>
-            </div>
-            {!isEditing && (
-              <button
-                onClick={() => setIsEditing(true)}
-                className="btn btn-primary"
-              >
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5
-                        m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-=======
           ifscCode: serviceProvider.bankDetails?.ifscCode || '',
         },
       };
@@ -229,7 +152,6 @@ const Myprofile = () => {
             {!isEditing && (
               <button onClick={() => setIsEditing(true)} className="w-full btn btn-primary sm:w-auto">
                 <Edit className="w-4 h-4 mr-1" />
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                 Edit Profile
               </button>
             )}
@@ -238,15 +160,9 @@ const Myprofile = () => {
 
         <div className="space-y-6">
           {/* Personal Info */}
-<<<<<<< HEAD
-          <div className="p-6 border shadow-sm bg-base-100 rounded-xl">
-            <h2 className="mb-4 text-lg font-semibold">Personal Information</h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-=======
           <div className="p-4 border shadow-sm sm:p-6 bg-base-100 rounded-xl">
             <h2 className="mb-4 text-lg font-semibold">Personal Information</h2>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
               <input
                 type="text"
                 name="serviceProviderName"
@@ -287,15 +203,9 @@ const Myprofile = () => {
           </div>
 
           {/* Bank Info */}
-<<<<<<< HEAD
-          <div className="p-6 border shadow-sm bg-base-100 rounded-xl">
-            <h2 className="mb-4 text-lg font-semibold">Banking Information</h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-=======
           <div className="p-4 border shadow-sm sm:p-6 bg-base-100 rounded-xl">
             <h2 className="mb-4 text-lg font-semibold">Banking Information</h2>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
               <input
                 type="text"
                 name="bank.accountHolderName"
@@ -326,15 +236,6 @@ const Myprofile = () => {
             </div>
           </div>
 
-<<<<<<< HEAD
-          {/* Buttons */}
-          {isEditing && (
-            <div className="flex justify-end gap-4 mt-4">
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="btn btn-outline"
-=======
           {/* Subscription Info */}
           <div className="p-4 border shadow-sm sm:p-6 bg-base-100 rounded-xl">
             <div className="flex flex-col items-start justify-between mb-6 sm:flex-row sm:items-center">
@@ -356,7 +257,6 @@ const Myprofile = () => {
                 type="button"
                 onClick={handleCancel}
                 className="w-full btn btn-outline sm:w-auto"
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                 disabled={isLoading}
               >
                 Cancel
@@ -365,30 +265,16 @@ const Myprofile = () => {
                 type="button"
                 onClick={handleSubmit}
                 disabled={isLoading}
-<<<<<<< HEAD
-                className="btn btn-primary"
-              >
-                {isLoading ? (
-                  <>
-                    <span className="loading loading-spinner"></span>
-=======
                 className="w-full btn btn-primary sm:w-auto"
               >
                 {isLoading ? (
                   <>
                     <span className="loading loading-spinner loading-sm"></span>
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                     Saving...
                   </>
                 ) : (
                   <>
-<<<<<<< HEAD
-                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                    </svg>
-=======
                     <Save className="w-4 h-4 mr-1" />
->>>>>>> bba0d59efc976b14794191f4ec7012712d072dd6
                     Save Changes
                   </>
                 )}
