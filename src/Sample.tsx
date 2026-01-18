@@ -408,414 +408,414 @@
 //   );
 // };
 
-import React from 'react';
-import { Star, MapPin, Mail, Phone, Video, MessageCircle, CheckCircle } from 'lucide-react';
+// import React from 'react';
+// import { Star, MapPin, Mail, Phone, Video, MessageCircle, CheckCircle } from 'lucide-react';
 
-export interface IServiceListing {
-  id: number;
-  title: string;
+// export interface IServiceListing {
+//   id: number;
+//   title: string;
 
-  rating: number; // e.g. 4.7
-  reviews: string; // e.g. "312K"
+//   rating: number; // e.g. 4.7
+//   reviews: string; // e.g. "312K"
 
-  providerName: string;
-  providerImage: string; // image URL
+//   providerName: string;
+//   providerImage: string; // image URL
 
-  experience: string; // e.g. "10+ years"
+//   experience: string; // e.g. "10+ years"
 
-  priceMin: number;
-  priceMax: number;
+//   priceMin: number;
+//   priceMax: number;
 
-  serviceImage: string; // banner / cover image URL
-  distance: string; // e.g. "12 km away"
+//   serviceImage: string; // banner / cover image URL
+//   distance: string; // e.g. "12 km away"
 
-  serviceType: string; // e.g. "Custom Furniture & Repairs"
-}
+//   serviceType: string; // e.g. "Custom Furniture & Repairs"
+// }
 
-const mockServices: any[] = [
-  {
-    _id: '65a1b2c3d4e5f6g7h8i901',
-    serviceName: 'Professional Interior Photography',
-    description: 'High-end real estate and interior photography with professional lighting and post-processing.',
-    serviceType: 'Offline',
-    experience: 8,
-    location: {
-      type: 'Point',
-      coordinates: [-118.2437, 34.0522],
-      address: 'Downtown, Los Angeles, CA',
-      _id: 'loc_001',
-    },
-    estimatedPrice: 250,
-    serviceImage: 'https://images.unsplash.com/photo-1560185007-cde436f6a4d0?q=80&w=800&auto=format&fit=crop',
-    createdAt: '2024-03-15T10:00:00Z',
-    serviceProviderName: 'Alex Rivera',
-    profileImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&auto=format&fit=crop',
-    category: 'Photography',
-  },
-  {
-    _id: '65a1b2c3d4e5f6g7h8i902',
-    serviceName: 'Full Stack Web Development',
-    description: 'Custom React and Node.js development for startups. Scalable architecture and clean code.',
-    serviceType: 'Online',
-    experience: 5,
-    location: {
-      type: 'Point',
-      coordinates: [-0.1276, 51.5074],
-      address: 'Remote / London, UK',
-      _id: 'loc_002',
-    },
-    estimatedPrice: 60,
-    serviceImage: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop',
-    createdAt: '2024-03-18T14:30:00Z',
-    serviceProviderName: 'Sarah Chen',
-    profileImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop',
-    category: 'Technology',
-  },
-  {
-    _id: '65a1b2c3d4e5f6g7h8i903',
-    serviceName: 'Personal Fitness Coaching',
-    description: 'One-on-one strength training and nutritional guidance tailored to your body goals.',
-    serviceType: 'Offline',
-    experience: 12,
-    location: {
-      type: 'Point',
-      coordinates: [-73.9352, 40.7306],
-      address: 'Brooklyn, New York, NY',
-      _id: 'loc_003',
-    },
-    estimatedPrice: 85,
-    serviceImage: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=800&auto=format&fit=crop',
-    createdAt: '2024-03-20T09:15:00Z',
-    serviceProviderName: 'Marcus Thorne',
-    profileImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop',
-    category: 'Health & Fitness',
-  },
-  {
-    _id: '65a1b2c3d4e5f6g7h8i904',
-    serviceName: 'Digital Marketing Strategy',
-    description: "Data-driven SEO, SEM, and social media strategy to boost your brand's online presence.",
-    serviceType: 'Online',
-    experience: 6,
-    location: {
-      type: 'Point',
-      coordinates: [144.9631, -37.8136],
-      address: 'Remote / Melbourne, AU',
-      _id: 'loc_004',
-    },
-    estimatedPrice: 120,
-    serviceImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop',
-    createdAt: '2024-03-22T11:45:00Z',
-    serviceProviderName: 'Elena Rodriguez',
-    profileImage: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop',
-    category: 'Business',
-  },
-];
+// const mockServices: any[] = [
+//   {
+//     _id: '65a1b2c3d4e5f6g7h8i901',
+//     serviceName: 'Professional Interior Photography',
+//     description: 'High-end real estate and interior photography with professional lighting and post-processing.',
+//     serviceType: 'Offline',
+//     experience: 8,
+//     location: {
+//       type: 'Point',
+//       coordinates: [-118.2437, 34.0522],
+//       address: 'Downtown, Los Angeles, CA',
+//       _id: 'loc_001',
+//     },
+//     estimatedPrice: 250,
+//     serviceImage: 'https://images.unsplash.com/photo-1560185007-cde436f6a4d0?q=80&w=800&auto=format&fit=crop',
+//     createdAt: '2024-03-15T10:00:00Z',
+//     serviceProviderName: 'Alex Rivera',
+//     profileImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&auto=format&fit=crop',
+//     category: 'Photography',
+//   },
+//   {
+//     _id: '65a1b2c3d4e5f6g7h8i902',
+//     serviceName: 'Full Stack Web Development',
+//     description: 'Custom React and Node.js development for startups. Scalable architecture and clean code.',
+//     serviceType: 'Online',
+//     experience: 5,
+//     location: {
+//       type: 'Point',
+//       coordinates: [-0.1276, 51.5074],
+//       address: 'Remote / London, UK',
+//       _id: 'loc_002',
+//     },
+//     estimatedPrice: 60,
+//     serviceImage: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop',
+//     createdAt: '2024-03-18T14:30:00Z',
+//     serviceProviderName: 'Sarah Chen',
+//     profileImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop',
+//     category: 'Technology',
+//   },
+//   {
+//     _id: '65a1b2c3d4e5f6g7h8i903',
+//     serviceName: 'Personal Fitness Coaching',
+//     description: 'One-on-one strength training and nutritional guidance tailored to your body goals.',
+//     serviceType: 'Offline',
+//     experience: 12,
+//     location: {
+//       type: 'Point',
+//       coordinates: [-73.9352, 40.7306],
+//       address: 'Brooklyn, New York, NY',
+//       _id: 'loc_003',
+//     },
+//     estimatedPrice: 85,
+//     serviceImage: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=800&auto=format&fit=crop',
+//     createdAt: '2024-03-20T09:15:00Z',
+//     serviceProviderName: 'Marcus Thorne',
+//     profileImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop',
+//     category: 'Health & Fitness',
+//   },
+//   {
+//     _id: '65a1b2c3d4e5f6g7h8i904',
+//     serviceName: 'Digital Marketing Strategy',
+//     description: "Data-driven SEO, SEM, and social media strategy to boost your brand's online presence.",
+//     serviceType: 'Online',
+//     experience: 6,
+//     location: {
+//       type: 'Point',
+//       coordinates: [144.9631, -37.8136],
+//       address: 'Remote / Melbourne, AU',
+//       _id: 'loc_004',
+//     },
+//     estimatedPrice: 120,
+//     serviceImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop',
+//     createdAt: '2024-03-22T11:45:00Z',
+//     serviceProviderName: 'Elena Rodriguez',
+//     profileImage: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop',
+//     category: 'Business',
+//   },
+// ];
 
-export default function Sample() {
-  return <HomePage />;
-  // return (
-  //   <div className="min-h-screen bg-gray-100 py-8 px-4">
-  //     <div className="max-w-6xl mx-auto space-y-6">
-  //       <h1 className="text-3xl font-bold text-gray-800 mb-8">Service Listings</h1>
-  //       {mockServices.map(service => (
-  //         <ServiceCard key={service.id} service={service} />
-  //       ))}
-  //     </div>
-  //   </div>
-  // );
-}
+// export default function Sample() {
+//   return <HomePage />;
+//   // return (
+//   //   <div className="min-h-screen bg-gray-100 py-8 px-4">
+//   //     <div className="max-w-6xl mx-auto space-y-6">
+//   //       <h1 className="text-3xl font-bold text-gray-800 mb-8">Service Listings</h1>
+//   //       {mockServices.map(service => (
+//   //         <ServiceCard key={service.id} service={service} />
+//   //       ))}
+//   //     </div>
+//   //   </div>
+//   // );
+// }
 
-const ServiceCard = ({ service }: { service: any }) => {
-  return (
-    <div className="max-w-4xl bg-white rounded-lg shadow-md overflow-hidden">
-      {/* Header Section */}
-      <div className="p-6 flex items-start justify-between">
-        <div className="flex-1">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">{service.title}</h2>
-          <div className="flex items-center gap-2 mb-4">
-            <div className="flex items-center gap-1">
-              <Star className="w-5 h-5 fill-red-500 text-red-500" />
-              <span className="font-semibold text-gray-800">{service.rating}</span>
-              <span className="text-gray-500">({service.reviews})</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <img
-              src={service.providerImage}
-              alt={service.providerName}
-              className="w-16 h-16 rounded-full object-cover"
-            />
-            <div>
-              <h3 className="font-semibold text-lg text-gray-800">{service.providerName}</h3>
-              <span className="inline-block bg-slate-800 text-emerald-400 text-sm px-3 py-1 rounded-full">
-                {service.experience}
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className="text-right">
-          <p className="text-gray-600 text-sm mb-1">Price Range:</p>
-          <p className="text-2xl font-bold text-gray-800">₹{service.estimatedPrice}</p>
-        </div>
-      </div>
+// const ServiceCard = ({ service }: { service: any }) => {
+//   return (
+//     <div className="max-w-4xl bg-white rounded-lg shadow-md overflow-hidden">
+//       {/* Header Section */}
+//       <div className="p-6 flex items-start justify-between">
+//         <div className="flex-1">
+//           <h2 className="text-2xl font-bold text-gray-800 mb-2">{service.title}</h2>
+//           <div className="flex items-center gap-2 mb-4">
+//             <div className="flex items-center gap-1">
+//               <Star className="w-5 h-5 fill-red-500 text-red-500" />
+//               <span className="font-semibold text-gray-800">{service.rating}</span>
+//               <span className="text-gray-500">({service.reviews})</span>
+//             </div>
+//           </div>
+//           <div className="flex items-center gap-3">
+//             <img
+//               src={service.providerImage}
+//               alt={service.providerName}
+//               className="w-16 h-16 rounded-full object-cover"
+//             />
+//             <div>
+//               <h3 className="font-semibold text-lg text-gray-800">{service.providerName}</h3>
+//               <span className="inline-block bg-slate-800 text-emerald-400 text-sm px-3 py-1 rounded-full">
+//                 {service.experience}
+//               </span>
+//             </div>
+//           </div>
+//         </div>
+//         <div className="text-right">
+//           <p className="text-gray-600 text-sm mb-1">Price Range:</p>
+//           <p className="text-2xl font-bold text-gray-800">₹{service.estimatedPrice}</p>
+//         </div>
+//       </div>
 
-      {/* Image Section */}
-      <div className="relative h-80">
-        <img src={service.serviceImage} alt={service.serviceImage} className="w-full h-full object-cover" />
-      </div>
+//       {/* Image Section */}
+//       <div className="relative h-80">
+//         <img src={service.serviceImage} alt={service.serviceImage} className="w-full h-full object-cover" />
+//       </div>
 
-      {/* Footer Section */}
-      <div className="p-6 flex items-center justify-between bg-gray-50">
-        <div className="flex items-center gap-2 text-gray-600">
-          <MapPin className="w-5 h-5" />
-          {service?.distance && <span className="font-medium">{service.distance}</span>}{' '}
-          <span className="ml-2 text-gray-800 font-semibold">{service.serviceName}</span>
-        </div>
-        <div className="text-right">
-          <p className="text-lg font-semibold text-gray-800">{service.serviceType}</p>
-        </div>
-      </div>
+//       {/* Footer Section */}
+//       <div className="p-6 flex items-center justify-between bg-gray-50">
+//         <div className="flex items-center gap-2 text-gray-600">
+//           <MapPin className="w-5 h-5" />
+//           {service?.distance && <span className="font-medium">{service.distance}</span>}{' '}
+//           <span className="ml-2 text-gray-800 font-semibold">{service.serviceName}</span>
+//         </div>
+//         <div className="text-right">
+//           <p className="text-lg font-semibold text-gray-800">{service.serviceType}</p>
+//         </div>
+//       </div>
 
-      {/* Service Tag */}
-      <div className="px-6 pb-6 bg-gray-50">
-        <p className="text-gray-500 text-sm">Service</p>
-      </div>
-    </div>
-  );
-};
+//       {/* Service Tag */}
+//       <div className="px-6 pb-6 bg-gray-50">
+//         <p className="text-gray-500 text-sm">Service</p>
+//       </div>
+//     </div>
+//   );
+// };
 
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import FilterSortComponent, { FilterSortState } from './components/User/home/FilterCard';
-import { IServiceHome } from './utils/types/IserviceHome';
-import { apiEndPoint } from './utils/constant';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import SkeletonHomeCard from './Skeleton/SkeletonHome';
-import { Link } from 'react-router-dom';
-import ServiceListingCards from './components/User/home/ServiceListingCards';
-import CustomerTestimonials from './components/User/home/CustomerTestimonials';
-import WhyChooseServEasy from './components/User/home/WhyCooseServEasy';
-import HowItWorks from './components/User/home/HowItWorks';
-import ServiceSearchBar from './components/User/home/ServiceSearch';
-import LocationSearchBar from './components/User/home/LocationSearchBar';
-import BrowseCategories from './components/User/home/BrowseCategories';
-import LandingPage from './Sample1';
+// import { useEffect, useState } from 'react';
+// import axios from 'axios';
+// import FilterSortComponent, { FilterSortState } from './components/User/home/FilterCard';
+// import { IServiceHome } from './utils/types/IserviceHome';
+// import { apiEndPoint } from './utils/constant';
+// import InfiniteScroll from 'react-infinite-scroll-component';
+// import SkeletonHomeCard from './Skeleton/SkeletonHome';
+// import { Link } from 'react-router-dom';
+// import ServiceListingCards from './components/User/home/ServiceListingCards';
+// import CustomerTestimonials from './components/User/home/CustomerTestimonials';
+// import WhyChooseServEasy from './components/User/home/WhyCooseServEasy';
+// import HowItWorks from './components/User/home/HowItWorks';
+// import ServiceSearchBar from './components/User/home/ServiceSearch';
+// import LocationSearchBar from './components/User/home/LocationSearchBar';
+// import BrowseCategories from './components/User/home/BrowseCategories';
+// import LandingPage from './Sample1';
 
-interface Location {
-  address: string;
-  latitude: number;
-  longitude: number;
-}
+// interface Location {
+//   address: string;
+//   latitude: number;
+//   longitude: number;
+// }
 
-interface BannerData {
-  imageUrl: string;
-  title: string;
-  subtitle: string;
-  isActive: boolean;
-  _id: string;
-}
+// interface BannerData {
+//   imageUrl: string;
+//   title: string;
+//   subtitle: string;
+//   isActive: boolean;
+//   _id: string;
+// }
 
-interface Banners {
-  homeBanner: BannerData;
-  footerBanner: BannerData;
-}
+// interface Banners {
+//   homeBanner: BannerData;
+//   footerBanner: BannerData;
+// }
 
-const HomePage = () => {
-  const [banners, setBanners] = useState<Banners | null>(null);
-  const [location, setLocation] = useState<Location | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeServiceNames, setActiveServiceNames] = useState<string[] | []>([]);
-  const [filterState, setFilterState] = useState<FilterSortState>({
-    priceSort: 'none',
-    category: '',
-    experienceSort: 'none',
-    ratingFilter: null,
-  });
+// const HomePage = () => {
+//   const [banners, setBanners] = useState<Banners | null>(null);
+//   const [location, setLocation] = useState<Location | null>(null);
+//   const [searchQuery, setSearchQuery] = useState('');
+//   const [activeServiceNames, setActiveServiceNames] = useState<string[] | []>([]);
+//   const [filterState, setFilterState] = useState<FilterSortState>({
+//     priceSort: 'none',
+//     category: '',
+//     experienceSort: 'none',
+//     ratingFilter: null,
+//   });
 
-  const [allServices, setAllServices] = useState<IServiceHome[]>([]);
-  const [categories, setCategories] = useState<{ id: string; category: string }[] | []>([]);
-  const [loading, setLoading] = useState(false);
-  const LIMIT = 3;
-  const [cursor, setCursor] = useState<string | null>(null);
-  const [hasMore, setHasMore] = useState(true);
+//   const [allServices, setAllServices] = useState<IServiceHome[]>([]);
+//   const [categories, setCategories] = useState<{ id: string; category: string }[] | []>([]);
+//   const [loading, setLoading] = useState(false);
+//   const LIMIT = 3;
+//   const [cursor, setCursor] = useState<string | null>(null);
+//   const [hasMore, setHasMore] = useState(true);
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+//   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  useEffect(() => {
-    setAllServices([]);
-    setCursor(null);
-    setHasMore(true);
-  }, [filterState, location, searchQuery]);
+//   useEffect(() => {
+//     setAllServices([]);
+//     setCursor(null);
+//     setHasMore(true);
+//   }, [filterState, location, searchQuery]);
 
-  useEffect(() => {
-    if (allServices.length === 0 && hasMore) {
-      fetchData();
-    }
-  }, [allServices.length, hasMore]);
+//   useEffect(() => {
+//     if (allServices.length === 0 && hasMore) {
+//       fetchData();
+//     }
+//   }, [allServices.length, hasMore]);
 
-  const fetchData = async () => {
-    if (!hasMore) return;
+//   const fetchData = async () => {
+//     if (!hasMore) return;
 
-    try {
-      setLoading(true);
-      const { priceSort, category, experienceSort } = filterState;
+//     try {
+//       setLoading(true);
+//       const { priceSort, category, experienceSort } = filterState;
 
-      const filters: Record<string, string> = {};
-      if (category?.trim()) filters.category = category;
-      if (experienceSort !== 'none') filters.experience = experienceSort.toString();
-      if (priceSort !== 'none') filters.priceSort = priceSort;
-      if (searchQuery?.trim()) filters.searchQuery = searchQuery;
+//       const filters: Record<string, string> = {};
+//       if (category?.trim()) filters.category = category;
+//       if (experienceSort !== 'none') filters.experience = experienceSort.toString();
+//       if (priceSort !== 'none') filters.priceSort = priceSort;
+//       if (searchQuery?.trim()) filters.searchQuery = searchQuery;
 
-      const params: Record<string, any> = {
-        filters,
-        limit: LIMIT,
-        cursor,
-      };
+//       const params: Record<string, any> = {
+//         filters,
+//         limit: LIMIT,
+//         cursor,
+//       };
 
-      if (location?.longitude != null && location?.latitude != null) {
-        params.longitude = location.longitude;
-        params.latitude = location.latitude;
-      }
+//       if (location?.longitude != null && location?.latitude != null) {
+//         params.longitude = location.longitude;
+//         params.latitude = location.latitude;
+//       }
 
-      const res = await axios.get(`${backendUrl}${apiEndPoint.getServices}/`, {
-        params,
-      });
-      console.log(res.data);
-      console.log(res.data.allFilterServices[0]);
-      setActiveServiceNames(res.data.activeServiceNames);
-      const data = res.data.allFilterServices?.services ?? [];
-      const nextCursor = res.data.allFilterServices.nextCursor;
+//       const res = await axios.get(`${backendUrl}${apiEndPoint.getServices}/`, {
+//         params,
+//       });
+//       console.log(res.data);
+//       console.log(res.data.allFilterServices[0]);
+//       setActiveServiceNames(res.data.activeServiceNames);
+//       const data = res.data.allFilterServices?.services ?? [];
+//       const nextCursor = res.data.allFilterServices.nextCursor;
 
-      setCursor(nextCursor);
+//       setCursor(nextCursor);
 
-      setAllServices(prev => [...prev, ...data]);
-      setHasMore(data.length === LIMIT);
+//       setAllServices(prev => [...prev, ...data]);
+//       setHasMore(data.length === LIMIT);
 
-      if (res.data.categories) {
-        setCategories(res.data.categories);
-      }
-    } catch (error) {
-      console.error('Error while fetching filtered services:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+//       if (res.data.categories) {
+//         setCategories(res.data.categories);
+//       }
+//     } catch (error) {
+//       console.error('Error while fetching filtered services:', error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
-  // const fetchBanners = async () => {
-  //   try {
-  //     const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  //     const res = await axios.get(backendUrl + apiEndPoint.getBanners);
-  //     setBanners(res.data);
-  //   } catch (error) {
-  //     console.error('Failed to fetch banners:', error);
-  //   }
-  // };
+//   // const fetchBanners = async () => {
+//   //   try {
+//   //     const backendUrl = import.meta.env.VITE_BACKEND_URL;
+//   //     const res = await axios.get(backendUrl + apiEndPoint.getBanners);
+//   //     setBanners(res.data);
+//   //   } catch (error) {
+//   //     console.error('Failed to fetch banners:', error);
+//   //   }
+//   // };
 
-  useEffect(() => {
-    // fetchBanners();
-  }, []);
+//   useEffect(() => {
+//     // fetchBanners();
+//   }, []);
 
-  return (
-    <div className="flex flex-col gap-10">
-      {/* Hero Banner */}
-      <section className="relative bg-base-200">
-        <img
-          className="object-cover w-full h-[450px]"
-          src={
-            banners?.homeBanner?.imageUrl ||
-            'https://www.apple.com/v/iphone-17-pro/d/images/overview/cameras/zoom/200mm__c8kya18imsqe_large.jpg'
-          }
-          alt={banners?.homeBanner?.title}
-        />
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-4 bg-base-100/60 backdrop-blur-sm">
-          <div className="text-center text-base-content">
-            <h1 className="text-[50px] font-bold">{banners?.homeBanner?.title || 'SERVEASY'}</h1>
-            <p className="mt-2 text-lg">
-              {banners?.homeBanner?.subtitle ||
-                'Find trusted service providers near you—fast, reliable, and effortless.'}
-            </p>
-          </div>
-          <div className="relative z-20 flex items-center w-full max-w-2xl overflow-visible border rounded-full shadow-xl border-base-100 bg-base-200">
-            <div className="relative z-30 flex items-center w-1/3 gap-2 px-4">
-              <LocationSearchBar onLocationSelect={setLocation} />
-            </div>
-            <div className="w-px h-6 mx-2 bg-gray-300" />
-            <div className="flex items-center w-2/3 gap-2 px-4 py-2">
-              <ServiceSearchBar onSearch={setSearchQuery} activeServiceNames={activeServiceNames} />
-            </div>
-          </div>
-        </div>
-      </section>
+//   return (
+//     <div className="flex flex-col gap-10">
+//       {/* Hero Banner */}
+//       <section className="relative bg-base-200">
+//         <img
+//           className="object-cover w-full h-[450px]"
+//           src={
+//             banners?.homeBanner?.imageUrl ||
+//             'https://www.apple.com/v/iphone-17-pro/d/images/overview/cameras/zoom/200mm__c8kya18imsqe_large.jpg'
+//           }
+//           alt={banners?.homeBanner?.title}
+//         />
+//         <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-4 bg-base-100/60 backdrop-blur-sm">
+//           <div className="text-center text-base-content">
+//             <h1 className="text-[50px] font-bold">{banners?.homeBanner?.title || 'SERVEASY'}</h1>
+//             <p className="mt-2 text-lg">
+//               {banners?.homeBanner?.subtitle ||
+//                 'Find trusted service providers near you—fast, reliable, and effortless.'}
+//             </p>
+//           </div>
+//           <div className="relative z-20 flex items-center w-full max-w-2xl overflow-visible border rounded-full shadow-xl border-base-100 bg-base-200">
+//             <div className="relative z-30 flex items-center w-1/3 gap-2 px-4">
+//               <LocationSearchBar onLocationSelect={setLocation} />
+//             </div>
+//             <div className="w-px h-6 mx-2 bg-gray-300" />
+//             <div className="flex items-center w-2/3 gap-2 px-4 py-2">
+//               <ServiceSearchBar onSearch={setSearchQuery} activeServiceNames={activeServiceNames} />
+//             </div>
+//           </div>
+//         </div>
+//       </section>
 
-      <section className="relative overflow-hidden bg-base bg-opacity-80 backdrop-blur-md">
-        <div className="absolute inset-0">
-          <div className="absolute rounded-full top-20 left-10 w-72 h-72 bg-primary/10 blur-3xl animate-pulse"></div>
-          <div className="absolute rounded-full bottom-20 right-10 w-72 h-72 bg-secondary/10 blur-3xl animate-pulse"></div>
-          <div className="absolute transform -translate-x-1/2 -translate-y-1/2 rounded-full top-1/2 left-1/2 w-96 h-96 bg-accent/5 blur-3xl"></div>
-        </div>
+//       <section className="relative overflow-hidden bg-base bg-opacity-80 backdrop-blur-md">
+//         <div className="absolute inset-0">
+//           <div className="absolute rounded-full top-20 left-10 w-72 h-72 bg-primary/10 blur-3xl animate-pulse"></div>
+//           <div className="absolute rounded-full bottom-20 right-10 w-72 h-72 bg-secondary/10 blur-3xl animate-pulse"></div>
+//           <div className="absolute transform -translate-x-1/2 -translate-y-1/2 rounded-full top-1/2 left-1/2 w-96 h-96 bg-accent/5 blur-3xl"></div>
+//         </div>
 
-        <div className="container px-4 pt-10 mx-auto min-h-[150vh]">
-          <h2 className="mb-6 text-3xl font-bold text-center">Services Near You</h2>
+//         <div className="container px-4 pt-10 mx-auto min-h-[150vh]">
+//           <h2 className="mb-6 text-3xl font-bold text-center">Services Near You</h2>
 
-          <InfiniteScroll
-            dataLength={allServices.length}
-            next={fetchData}
-            hasMore={hasMore}
-            scrollThreshold={0.85} // Trigger when 85% of page scrolled
-            loader={
-              <div className="flex items-center justify-center py-6">
-                <svg
-                  className="w-6 h-6 mr-2 animate-spin text-primary"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l4-4-4-4v4a8 8 0 00-8 8z" />
-                </svg>
-                <span className="text-sm text-gray-500">Loading more services...</span>
-              </div>
-            }
-            endMessage={<p className="py-4 text-center text-gray-500">No more services to show</p>}
-          >
-            {/* <FilterSortComponentSample setFilters={setFilterState} filters={filterState} categories={categories} /> */}
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-              {allServices.length === 0 ? (
-                loading ? (
-                  <>
-                    <SkeletonHomeCard />
-                    <SkeletonHomeCard />
+//           <InfiniteScroll
+//             dataLength={allServices.length}
+//             next={fetchData}
+//             hasMore={hasMore}
+//             scrollThreshold={0.85} // Trigger when 85% of page scrolled
+//             loader={
+//               <div className="flex items-center justify-center py-6">
+//                 <svg
+//                   className="w-6 h-6 mr-2 animate-spin text-primary"
+//                   xmlns="http://www.w3.org/2000/svg"
+//                   fill="none"
+//                   viewBox="0 0 24 24"
+//                 >
+//                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+//                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l4-4-4-4v4a8 8 0 00-8 8z" />
+//                 </svg>
+//                 <span className="text-sm text-gray-500">Loading more services...</span>
+//               </div>
+//             }
+//             endMessage={<p className="py-4 text-center text-gray-500">No more services to show</p>}
+//           >
+//             {/* <FilterSortComponentSample setFilters={setFilterState} filters={filterState} categories={categories} /> */}
+//             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+//               {allServices.length === 0 ? (
+//                 loading ? (
+//                   <>
+//                     <SkeletonHomeCard />
+//                     <SkeletonHomeCard />
 
-                    <SkeletonHomeCard />
+//                     <SkeletonHomeCard />
 
-                    <SkeletonHomeCard />
+//                     <SkeletonHomeCard />
 
-                    <SkeletonHomeCard />
-                  </>
-                ) : (
-                  <div className="card  w-full h-[500px] group  ">
-                    <p className="text-center text-gray-500">No services found.</p>
-                  </div>
-                )
-              ) : (
-                mockServices.map(service => <ServiceCard key={service._id} service={service} />)
-              )}
-            </div>
-          </InfiniteScroll>
-        </div>
-      </section>
+//                     <SkeletonHomeCard />
+//                   </>
+//                 ) : (
+//                   <div className="card  w-full h-[500px] group  ">
+//                     <p className="text-center text-gray-500">No services found.</p>
+//                   </div>
+//                 )
+//               ) : (
+//                 mockServices.map(service => <ServiceCard key={service._id} service={service} />)
+//               )}
+//             </div>
+//           </InfiniteScroll>
+//         </div>
+//       </section>
 
-      {hasMore && <div className="h-[200px]" />}
+//       {hasMore && <div className="h-[200px]" />}
 
-      {!hasMore && (
-        <>
-          <CustomerTestimonials />
-          <WhyChooseServEasy />
-          <HowItWorks />
-        </>
-      )}
+//       {!hasMore && (
+//         <>
+//           <CustomerTestimonials />
+//           <WhyChooseServEasy />
+//           <HowItWorks />
+//         </>
+//       )}
 
-      <LandingPage />
-    </div>
-  );
-};
+//       <LandingPage />
+//     </div>
+//   );
+// };

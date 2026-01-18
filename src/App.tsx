@@ -1,34 +1,21 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import AuthPage from './components/User/AuthModel/AuthPage.tsx';
-import Body from './layouts/user/UserLayout.tsx';
-import Otp from './components/User/AuthModel/Otp';
+
 import AdminSignIn from '../src/components/admin/auth/Sigin.tsx';
 import Dashboard from './components/ServiceProvider/Dashboard.tsx';
 import ServiceProviderLayout from './layouts/provider/ServiceProviderLayout.tsx';
 import ServiceManagement from './components/ServiceProvider/service/ServiceManagement.tsx';
-import SingleServiceCard from './components/User/bookService/ServiceDetailsPage.tsx';
-import BookService from './components/User/bookService/bookedServiceList/BookOfflineServicePage.tsx';
-import BookedService from './components/User/bookService/bookedServiceList/BookedServiceListPage.tsx';
-import ViewSIngleBookedService from './components/User/bookService/BookedOfflineServicePage.tsx';
+
 import BookedServiceServiceProvider from './components/ServiceProvider/booking/bookedServicesList.tsx';
 import ServiceBookingManage from './components/ServiceProvider/booking/offlineService/SingleBooking.tsx';
 import PaymentVerify from './components/ui/PaymentVerify.tsx';
 import PaymentManagement from './components/ServiceProvider/paymentManagement/paymentManagement.tsx';
-import Chat from './components/User/chat/ChatUser.tsx';
 import ChatServiceProvider from './components/User/chat/ChatServiceProvider.tsx';
 import ChatUI from './components/User/chat/AllChatsServiceProvider.tsx';
-import ChatsUser from './components/User/chat/AllchatsUser.tsx';
-import BookOnlineService from './components/User/bookService/BookOnlineServicePage.tsx';
-import ServiceBookingDetailsOnline from './components/User/bookService/bookedOnlineServicePage.tsx';
+
 import OnlineBookingManagement from './components/ServiceProvider/booking/onlineService/OnlineServiceBookingManagement.tsx';
 import { Toaster } from 'react-hot-toast';
-import VideoCall from './components/VideoCall/VideoCallUser.tsx';
 import ServiceProviderVideoCall from './components/VideoCall/ServiceProviderVideoCall.tsx';
-import SidebarLayout from './components/User/profile/SidebarLayout.tsx';
-import UserProfile from './components/User/profile/updateProfile.tsx';
-import Appearance from './components/User/profile/Appearance.tsx';
-import AboutUs from './components/User/profile/AboutUs.tsx';
-import HomePage from './components/User/home/HomePage.tsx';
+
 import Myprofile from './components/ServiceProvider/service/profile/Myprofile.tsx';
 import { useAuth } from './hooks/useAuth.tsx';
 import NotFound from './components/ui/NotFound.tsx';
@@ -38,17 +25,13 @@ import AdminRoutes from './routes/AdminRoutes.tsx';
 import Walletpage from './components/ServiceProvider/wallet/walletPage.tsx';
 import AiAssistancePage from './components/ServiceProvider/aiAssistance/AssistancePage.tsx';
 import SubscriptionFeaturesRoutes from './routes/SubscriptionFeaturesRoutes.tsx';
-import SubscriptionPlansPage from './components/admin/subscriptionsManagement/SubscriptionPlansPage.tsx';
 import AdsPage from './components/ServiceProvider/ads/AdsPage.tsx';
 import ServiceProviderLanding from './components/ui/Landing/serviceProviderLanding/ServiceProviderLandingPage.tsx';
-import Sample from './Sample.tsx';
 import { ROUTES } from './utils/constants/routes.ts';
-import ServiceProviderRegisterPage from './components/ServiceProvider/Register/ServiceProviderRegisterPage.tsx';
-import UserLandingPage from './components/ui/Landing/userLanding/UserLandingPage.tsx';
 import UserRoutes from './routes/UserRoutes.tsx';
 
 function App() {
-  const { userAccessToken = true, adminAccessToken } = useAuth();
+  const { adminAccessToken } = useAuth();
 
   return (
     <>

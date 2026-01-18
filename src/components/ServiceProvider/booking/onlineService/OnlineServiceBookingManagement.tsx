@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getRequest, patchRequest, putRequest } from '../../../../utils/makeRequestInstance';
 import { HotToastError, HotToastSuccess } from '../../../../utils/notificationToast';
-import { Toaster } from 'react-hot-toast';
 import CancelBookingModal from '../CancelBookingModal';
 import StatusUpdateModal from '../StatusUpdateModal';
 import ServiceCardCompact from '../ServiceCardCompact';

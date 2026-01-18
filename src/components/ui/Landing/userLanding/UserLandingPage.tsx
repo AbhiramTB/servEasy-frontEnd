@@ -1,14 +1,13 @@
-import React, { useState, ReactNode, useEffect } from 'react';
+import React, { ReactNode } from 'react';
 import { MapPin, ShieldCheck, Users, Wrench, Star, Briefcase, LogIn, FileText, CheckCircle, Clock } from 'lucide-react';
 
 // Import your image
 import img from '/images/landing/serveasy.jpeg';
 import LandingNavbar from '../LandingNavbar';
-import { replace, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import HowItWorks from '../../../User/home/HowItWorks';
 import WhyChooseServEasy from '../../../User/home/WhyCooseServEasy';
 import CustomerTestimonials from '../../../User/home/CustomerTestimonials';
-import { useAuth } from '../../../../hooks/useAuth';
 
 /* ---------- Interfaces ---------- */
 interface NavLink {
@@ -44,7 +43,6 @@ interface CategoryCardProps {
 
 const UserLandingPage: React.FC = () => {
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem('accessToken');
 
   const navigateLoginRoute = () => {
     navigate('/signin');

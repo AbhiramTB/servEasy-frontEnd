@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Bell, Calendar, LogOut, MessageCircle, User } from 'lucide-react';
+import {  Calendar, LogOut, MessageCircle, User } from 'lucide-react';
 import Notifications from '../../ui/Notifictions';
-import { INotification, ISavedNotification } from '../../../utils/types/INotification';
+import {  ISavedNotification } from '../../../utils/types/INotification';
 import InitialAvatar from '../../../utils/ui/InitialAvatar';
 import { UserState } from '../../../redux/slices/userSlice';
 import AppLogo from '../../ui/AppLogo';

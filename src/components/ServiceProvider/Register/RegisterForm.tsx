@@ -101,18 +101,15 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   addService,
   removeService,
 
-  skills,
   newSkill,
   newSkillLevel,
   setNewSkill,
   setNewSkillLevel,
   addSkill,
-  removeSkill,
 
   description,
   setDescription,
 
-  location,
   setLocation,
   locationError,
 

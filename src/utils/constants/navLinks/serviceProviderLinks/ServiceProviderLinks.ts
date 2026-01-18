@@ -1,15 +1,4 @@
-import {
-  Home,
-  LayoutGrid,
-  Calendar,
-  CreditCard,
-  MessageSquare,
-  Bell,
-  Wallet,
-  Sparkles,
-  Megaphone,
-  LogOut,
-} from 'lucide-react';
+import { Home, LayoutGrid, Calendar, CreditCard, MessageSquare, Bell, Wallet, Sparkles, Megaphone } from 'lucide-react';
 import { ROUTES } from '../../routes';
 
 export interface IServiceProviderLinks {

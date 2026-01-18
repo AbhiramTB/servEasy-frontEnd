@@ -8,7 +8,6 @@ import { RootState } from '../../../redux/store';
 import { MapPin, Edit, Eye } from 'lucide-react';
 import ServiceDetailsView from './ServiceDetailsView';
 import { HotToastSuccess } from '../../../utils/notificationToast';
-import { Toaster } from 'react-hot-toast';
 import EditService from './editService';
 import { Link } from 'react-router-dom';
 
