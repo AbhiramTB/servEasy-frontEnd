@@ -24,6 +24,7 @@ const ChatsUser: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       const res = await fetchAllChats({ userId });
+
       if (res?.status === 200 && Array.isArray(res.data)) {
         setChats(res.data);
       } else {

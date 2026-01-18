@@ -11,7 +11,7 @@ const AdminLogs: React.FC = () => {
   const fetchLogs = () => {
     setLoading(true);
     adminGetRequest('/admin/logs')
-      .then((res) => {
+      .then(res => {
         setLogs(res.data);
         setLoading(false);
       })
@@ -26,34 +26,27 @@ const AdminLogs: React.FC = () => {
   }, []);
 
   return (
-      <>
-
+    <>
       {loading ? (
-       <LoadingSpinner />
-) : error ? (
+        <LoadingSpinner />
+      ) : error ? (
         <p className="text-red-500">{error}</p>
-      ) : (<>
+      ) : (
+        <>
           <div className="p-4 rounded shadow">
-
-      <div className="flex items-center justify-between mb-4 ">
-        <h2 className="text-xl font-bold ">Server Logs</h2>
-        <button
-          onClick={fetchLogs}
-          className="p-2 transition rounded hover:bg-gray-200"
-          title="Refresh Logs"
-        >
-          <RefreshCcw className={`${loading ? 'animate-spin' : ''}`} />
-        </button>
-      </div>
-       <pre className=" p-4  bg-base-300 rounded text-sm text-base-content overflow-auto max-h-[550px] whitespace-pre-wrap">
-          {logs}
-        </pre>
+            <div className="flex items-center justify-between mb-4 ">
+              <h2 className="text-xl font-bold ">Server Logs</h2>
+              <button onClick={fetchLogs} className="p-2 transition rounded hover:bg-gray-200" title="Refresh Logs">
+                <RefreshCcw className={`${loading ? 'animate-spin' : ''}`} />
+              </button>
             </div>
-
-      </>
-       
+            <pre className=" p-4  bg-base-300 rounded text-sm text-base-content overflow-auto  whitespace-pre-wrap">
+              {logs}
+            </pre>
+          </div>
+        </>
       )}
-      </>
+    </>
   );
 };
 

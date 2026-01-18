@@ -56,7 +56,6 @@ function App() {
 
       <BrowserRouter>
         <Routes>
-          <Route path="cp" element={<SubscriptionPlansPage />} />
           {/* <Route path="/sample" element={<Sample />} /> */}
 
           <Route path="/payment/verify" element={<PaymentVerify />} />
@@ -168,7 +167,7 @@ function App() {
           </Route>
 
           <Route
-            path="admin/sigin"
+            path="admin/sign-in"
             element={adminAccessToken ? <Navigate to={'/admin/home'} replace /> : <AdminSignIn />}
           />
           {UserRoutes()}

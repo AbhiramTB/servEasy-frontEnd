@@ -7,7 +7,7 @@ const AdminLayout = () => {
   const adminToken = localStorage.getItem('adminToken');
 
   if (!adminToken) {
-    return <Navigate to="/admin/sigin" />;
+    return <Navigate to="/admin/sign-in" />;
   }
 
   return (

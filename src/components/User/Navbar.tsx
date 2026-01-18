@@ -88,7 +88,7 @@ const Navbar: React.FC<IProp> = ({ scrolled }) => {
       }
 
       return;
-    } else if (notification.type === 'notfication') {
+    } else if (notification.type === 'notification') {
       notificatioRingtune.currentTime = 0;
       notificatioRingtune.play();
       toast.dismiss();

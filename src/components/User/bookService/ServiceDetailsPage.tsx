@@ -11,6 +11,7 @@ import { IAdDTO } from '../../../utils/types/IAd';
 import AdCard from '../../ui/ad/AdCard';
 import ServiceDetailsSkeleton from '../../../Skeleton/ServiceDetailsSkeleton';
 import { IServiceServiceDetailsDTO } from '../../../utils/types/DTO/IServiceDetailsDTO';
+import { serviceBookingNotification } from '../../../utils/notificationToast';
 
 const SingleServiceCard = () => {
   const [service, setService] = useState<IServiceServiceDetailsDTO>();
@@ -25,7 +26,9 @@ const SingleServiceCard = () => {
         console.log(res.data);
         setAds(res.data.ads);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -37,10 +40,10 @@ const SingleServiceCard = () => {
       setLoading(true);
       const res = await getRequest(`${apiEndPoint.getSingleService}/${id}`);
 
-      console.log(res.data);
+      console.log(res.data.service);
       if (res.status == 200) {
-        setService(res.data.services[0] || null);
-        setReviews(res.data.review || []);
+        setService(res.data.service[0] || null);
+        setReviews(res.data.reviews || []);
       }
     } catch (error) {
       console.error('Error fetching service:', error);
@@ -51,7 +54,6 @@ const SingleServiceCard = () => {
   const navigate = useNavigate();
   const bookService = async (id: string) => {
     navigate(service?.serviceType === 'Online' ? '/bookService-online/' + id : '/bookService/' + id);
-    postRequest(serviceEndPoint.bookservice, { serviceId: id });
   };
 
   if (loading) {
@@ -118,19 +120,21 @@ const SingleServiceCard = () => {
           </div>
         </div>
 
-        <section className="mt-12 pt-8 border-t border-base-content">
-          <h2 className="text-xl font-bold mb-6 px-2 text-base-content text-center md:text-left">Sponsored Ads</h2>
+        {ads.length > 0 && (
+          <section className="mt-12 pt-8 border-t border-base-content">
+            <h2 className="text-xl font-bold mb-6 px-2 text-base-content text-center md:text-left">Sponsored Ads</h2>
 
-          <div
-            className={` flex gap-6 pb-4 px-2 overflow-x-auto snap-x snap-mandatory scrollbar-hide ${ads.length <= 3 ? 'justify-center' : 'justify-start'}`}
-          >
-            {ads.map(ad => (
-              <div key={ad._id} className="snap-center flex-shrink-0 w-full max-w-[320px]">
-                <AdCard ad={ad} />
-              </div>
-            ))}
-          </div>
-        </section>
+            <div
+              className={` flex gap-6 pb-4 px-2 overflow-x-auto snap-x snap-mandatory scrollbar-hide ${ads.length <= 3 ? 'justify-center' : 'justify-start'}`}
+            >
+              {ads.map(ad => (
+                <div key={ad._id} className="snap-center flex-shrink-0 w-full max-w-[320px]">
+                  <AdCard ad={ad} />
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );

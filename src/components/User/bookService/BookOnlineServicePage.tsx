@@ -61,11 +61,8 @@ const BookOnlineService = () => {
   const fetchService = async () => {
     try {
       const res = await getRequest(`${apiEndPoint.getSingleService}/${id}`);
-      // Assuming res.data.services is an array as per your console log
-      setService(res.data.services[0]);
-    } catch (error) {
-      HotToastError('Failed to load service details');
-    }
+      setService(res.data.service[0]);
+    } catch (error) {}
   };
 
   const fetchSlots = async () => {

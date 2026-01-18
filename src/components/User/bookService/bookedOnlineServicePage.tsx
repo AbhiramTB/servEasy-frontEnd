@@ -66,7 +66,6 @@ const ServiceBookingDetailsOnline = () => {
   const [error, setError] = useState<string | null>(null);
   const [showBills, setShowBills] = useState(false);
   const [showPaymentConfirm, setShowPaymentConfirm] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState<string>('');
   const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
@@ -74,49 +73,6 @@ const ServiceBookingDetailsOnline = () => {
       getBookedService(id);
     }
   }, [id]);
-
-  useEffect(() => {
-    if (bookingData?.bookedService?.estimatedServiceTime) {
-      const interval = setInterval(() => {
-        const now = new Date();
-        const appointmentTime = new Date(bookingData.bookedService.estimatedServiceTime);
-        const diff = appointmentTime.getTime() - now.getTime();
-
-        if (diff <= 0) {
-          setTimeRemaining('Session starting soon');
-          clearInterval(interval);
-        } else {
-          const hours = Math.floor(diff / (1000 * 60 * 60));
-          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-          if (hours > 0) {
-            setTimeRemaining(`${hours}h ${minutes}m remaining`);
-          } else {
-            setTimeRemaining(`${minutes}m remaining`);
-          }
-        }
-      }, 60000);
-
-      const now = new Date();
-      const appointmentTime = new Date(bookingData.bookedService.estimatedServiceTime);
-      const diff = appointmentTime.getTime() - now.getTime();
-
-      if (diff <= 0) {
-        setTimeRemaining('Session starting soon');
-      } else {
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-        if (hours > 0) {
-          setTimeRemaining(`${hours}h ${minutes}m remaining`);
-        } else {
-          setTimeRemaining(`${minutes}m remaining`);
-        }
-      }
-
-      return () => clearInterval(interval);
-    }
-  }, [bookingData]);
 
   const getBookedService = async (id: string) => {
     try {
@@ -196,7 +152,7 @@ const ServiceBookingDetailsOnline = () => {
       <div className="mb-4 text-sm breadcrumbs">
         <ul>
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/home">Home</Link>
           </li>
           <li>
             <Link to="/booked-services/">My Bookings</Link>
@@ -348,14 +304,13 @@ const ServiceBookingDetailsOnline = () => {
                 <div className="p-4 text-center rounded-lg bg-base-200">
                   <div className="text-sm text-base-content/70">Scheduled Time</div>
                   <div className="mt-1 font-medium text-base-content">
-                    {dayjs(bookedService.serviceSlot.date).format('DD MMM YYYY, hh:mm A')}
+                    {dayjs(bookedService.serviceSlot.startTime).format('DD MMM YYYY, hh:mm A')}
                     <br />
                     <span className="text-sm text-base-content/60">
-                      ({bookedService.serviceSlot.startTime} to {bookedService.serviceSlot.endTime})
+                      {dayjs(bookedService.serviceSlot.startTime).format('DD MMM YYYY, hh:mm A')}
+                      {' to '} {dayjs(bookedService.serviceSlot.startTime).format('DD MMM YYYY, hh:mm A')}
                     </span>
                   </div>
-
-                  <div className="mt-2 text-lg font-bold text-primary">⏳ {timeRemaining}</div>
                 </div>
 
                 <button className="w-full text-base font-semibold btn btn-primary">📹 Join Video Call</button>
@@ -363,7 +318,6 @@ const ServiceBookingDetailsOnline = () => {
             </div>
           )}
 
-          {/* Review Section */}
           {isCompleted && (
             <div className="shadow-xl card bg-base-100">
               <div className="card-body">
@@ -417,7 +371,6 @@ const ServiceBookingDetailsOnline = () => {
         </div>
       )}
 
-      {/* Bills Modal */}
       {showBills && bookedService.serviceBills && (
         <ShowBills
           close={() => setShowBills(false)}

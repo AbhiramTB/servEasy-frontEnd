@@ -17,7 +17,7 @@ export const ROUTES = {
     SERVICE_PROVIDER_WALLET_DETAIL: (id: string | number) => `/admin/service-provider-wallets/${id}`,
     SERVICE_PROVIDER_WALLETS: '/admin/service-provider-wallets',
     LOGS: '/admin/logs',
-    subscriptionManagement: 'subscription-management',
+    subscriptionManagement: '/admin/subscription-management',
     ADSMANAGEMENT: 'ads-management',
   },
   // USER: {

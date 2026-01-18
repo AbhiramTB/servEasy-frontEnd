@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HotToastSuccess } from '../../utils/notificationToast';
 import { adminGetRequest, adminPatchRequest } from '../../utils/AxiosAdmin';
 import AdCard from '../ServiceProvider/ads/AdCard';
@@ -7,11 +7,15 @@ import Pagination from '../ui/Pagination';
 
 const AdsPage = () => {
   const [ads, setAds] = useState<IAdminAd[] | []>([]);
-  const dataLimit = 1;
+  const dataLimit = 3;
 
   const [loading, setLoading] = useState(false);
   const [crrPage, setCrrPage] = useState<number>(0);
   const [totalData, setTotalData] = useState<number>(0);
+
+  useEffect(() => {
+    fetchAds(crrPage, dataLimit);
+  }, []);
 
   const fetchAds = async (page: number, limit: number) => {
     try {

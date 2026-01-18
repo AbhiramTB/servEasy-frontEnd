@@ -34,7 +34,7 @@ const NavBar = () => {
       const res = await adminGetRequest(apiEndPointAdmin.adminLogout);
       if (res.status == 200) {
         localStorage.removeItem('adminToken');
-        window.location.href = '/admin/sigin';
+        window.location.href = '/admin/sign-in';
       } else {
         console.error('Logout failed:', res.data.message);
       }

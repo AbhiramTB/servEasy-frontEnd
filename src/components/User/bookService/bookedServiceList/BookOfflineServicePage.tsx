@@ -6,7 +6,7 @@ import { deleteRequest, getRequest, postRequest, putRequest } from '../../../../
 import { apiEndPoint, serviceEndPoint } from '../../../../utils/constant';
 import { useParams } from 'react-router-dom';
 import { IAddress } from '../../../Address/IAddress';
-import { HotToastError, HotToastSuccess } from '../../../../utils/notificationToast';
+import { HotToastError, HotToastSuccess, serviceBookingNotification } from '../../../../utils/notificationToast';
 import BookingSuccess from '../../../ui/bookingSuccessCard';
 import { AddressEditModal } from '../../../Address/AddressEdit';
 import CurrentLocationFetcher from '../CurrentLocationFetcher';
@@ -57,7 +57,7 @@ const BookService = () => {
       const res = await getRequest(`${apiEndPoint.getSingleService}/${id}`);
       console.log(res);
 
-      setService(res.data.services[0]);
+      setService(res.data.service[0]);
     } catch (error) {
       handleRequestError(error);
     }
@@ -123,7 +123,31 @@ const BookService = () => {
         ...(currentLocation && { liveLocation: currentLocation }),
       };
 
-      const res = await postRequest(serviceEndPoint.bookservice, data);
+      // const res = await ;
+
+      const res = await serviceBookingNotification(postRequest(serviceEndPoint.bookservice, data), {
+        loading: 'Checking available slots & creating your booking…',
+        success: 'Booking confirmed! 🎉',
+        error: 'Unable to create booking. Please try again.',
+      });
+
+      // const bookService = async (id: string) => {
+      //   try {
+      //     const res = await serviceBookingNotification(postRequest(serviceEndPoint.bookservice, { serviceId: id }), {
+      //       loading: 'Checking available slots & creating your booking…',
+      //       success: 'Booking confirmed! 🎉',
+      //       error: 'Unable to create booking. Please try again.',
+      //     });
+
+      //     if (res.status === 201) {
+      //       navigate(
+      //         service?.serviceType === 'Online' ? '/myprofile/booked-services/' + id : '/myprofile/booked-services/' + id
+      //       );
+      //     }
+      //   } catch (error: any) {
+      //     console.log(error.response.data.message);
+      //   }
+      // };
 
       if (res.status === 201) {
         HotToastSuccess('Service booking successfully confirmed!');

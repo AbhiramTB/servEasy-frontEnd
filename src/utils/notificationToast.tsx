@@ -3,43 +3,44 @@ import { IChatNotification, IVideoCallNotification } from './types/INotification
 import InitialAvatar from './ui/InitialAvatar';
 import { Bell } from 'lucide-react';
 import dayjs from 'dayjs';
+import axios from 'axios';
 
-export function HotToastError(message: string, title?: string) {
-  toast.custom(t => (
-    <div
-      className={`${
-        t.visible ? 'animate-custom-enter' : 'animate-custom-leave'
-      } max-w-sm w-full bg-gradient-to-bl from-base-100 to-base-300 rounded-2xl shadow-lg pointer-events-auto flex ring-1 ring-primary ring-opacity-60 border border-primary/40 overflow-hidden`}
-    >
-      {/* Success Icon */}
-      <div className="flex items-center justify-center p-3 bg-error/50 text-error-content ">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-6 h-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      </div>
+export function HotToastError(message: string, _title?: string) {
+  // toast.custom(t => (
+  //   <div
+  //     className={`${
+  //       t.visible ? 'animate-custom-enter' : 'animate-custom-leave'
+  //     } max-w-sm w-full bg-gradient-to-bl from-base-100 to-base-300 rounded-2xl shadow-lg pointer-events-auto flex ring-1 ring-primary ring-opacity-60 border border-primary/40 overflow-hidden`}
+  //   >
+  //     {/* Success Icon */}
+  //     <div className="flex items-center justify-center p-3 bg-error/50 text-error-content ">
+  //       <svg
+  //         xmlns="http://www.w3.org/2000/svg"
+  //         className="w-6 h-6"
+  //         fill="none"
+  //         viewBox="0 0 24 24"
+  //         stroke="currentColor"
+  //         strokeWidth={2}
+  //       >
+  //         <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+  //       </svg>
+  //     </div>
+  //     {/* Message Content */}
+  //     <div className="flex-1 p-4">
+  //       <p className="text-sm font-semibold text-primary">{message}</p>
+  //       {title && <p className="mt-1 text-sm text-base-content/70">{title}</p>}
+  //     </div>
+  //     {/* Close Button */}
+  //     <button
+  //       onClick={() => toast.dismiss(t.id)}
+  //       className="flex items-center justify-center px-4 text-sm font-medium transition text-base-content hover:text-primary"
+  //     >
+  //       ✕
+  //     </button>
+  //   </div>
+  // ));
 
-      {/* Message Content */}
-      <div className="flex-1 p-4">
-        <p className="text-sm font-semibold text-primary">{message}</p>
-        {title && <p className="mt-1 text-sm text-base-content/70">{title}</p>}
-      </div>
-
-      {/* Close Button */}
-      <button
-        onClick={() => toast.dismiss(t.id)}
-        className="flex items-center justify-center px-4 text-sm font-medium transition text-base-content hover:text-primary"
-      >
-        ✕
-      </button>
-    </div>
-  ));
+  toast.error(message);
 }
 
 // export function HotToastSuccess(message: string, title?: string) {
@@ -84,42 +85,43 @@ export function HotToastError(message: string, title?: string) {
 //   ));
 // }
 
-export function HotToastSuccess(message: string, title?: string) {
-  toast.custom(t => (
-    <div
-      className={`${
-        t.visible ? 'animate-custom-enter' : 'animate-custom-leave'
-      } max-w-sm w-full bg-gradient-to-bl from-base-100 to-base-300 rounded-2xl shadow-lg pointer-events-auto flex ring-1 ring-primary ring-opacity-60 border border-primary/40 overflow-hidden`}
-    >
-      {/* Success Icon */}
-      <div className="flex items-center justify-center p-3 bg-success/50 text-success ">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-6 h-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      </div>
+export function HotToastSuccess(message: string, _title?: string) {
+  // toast.custom(t => (
+  //   <div
+  //     className={`${
+  //       t.visible ? 'animate-custom-enter' : 'animate-custom-leave'
+  //     } max-w-sm w-full bg-gradient-to-bl from-base-100 to-base-300 rounded-2xl shadow-lg pointer-events-auto flex ring-1 ring-primary ring-opacity-60 border border-primary/40 overflow-hidden`}
+  //   >
+  //     {/* Success Icon */}
+  //     <div className="flex items-center justify-center p-3 bg-success/50 text-success ">
+  //       <svg
+  //         xmlns="http://www.w3.org/2000/svg"
+  //         className="w-6 h-6"
+  //         fill="none"
+  //         viewBox="0 0 24 24"
+  //         stroke="currentColor"
+  //         strokeWidth={2}
+  //       >
+  //         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  //       </svg>
+  //     </div>
 
-      {/* Message Content */}
-      <div className="flex-1 p-4">
-        <p className="text-sm font-semibold text-primary">{message}</p>
-        {title && <p className="mt-1 text-sm text-base-content/70">{title}</p>}
-      </div>
+  //     {/* Message Content */}
+  //     <div className="flex-1 p-4">
+  //       <p className="text-sm font-semibold text-primary">{message}</p>
+  //       {title && <p className="mt-1 text-sm text-base-content/70">{title}</p>}
+  //     </div>
 
-      {/* Close Button */}
-      <button
-        onClick={() => toast.dismiss(t.id)}
-        className="flex items-center justify-center px-4 text-sm font-medium transition text-base-content hover:text-primary"
-      >
-        ✕
-      </button>
-    </div>
-  ));
+  //     {/* Close Button */}
+  //     <button
+  //       onClick={() => toast.dismiss(t.id)}
+  //       className="flex items-center justify-center px-4 text-sm font-medium transition text-base-content hover:text-primary"
+  //     >
+  //       ✕
+  //     </button>
+  //   </div>
+  // ));
+  toast.success(message);
 }
 
 export function HotTostVideoCall(
@@ -320,6 +322,39 @@ export async function HotToastPromise<T extends ApiResponse>(
       loading: messages.loading,
       success: messages.success,
       error: messages.error,
+    }
+  );
+}
+
+export async function serviceBookingNotification<T extends ApiResponse>(
+  promise: Promise<T>,
+  messages: ToastPromiseMessages
+): Promise<T> {
+  return toast.promise(
+    promise
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Unexpected response from server');
+        }
+        return res;
+      })
+      .catch((error: unknown) => {
+        if (axios.isAxiosError(error)) {
+          const serverMessage = error.response?.data?.message || error.response?.data?.error || 'Something went wrong';
+
+          throw new Error(serverMessage);
+        }
+
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+
+        throw new Error('Unknown error occurred');
+      }),
+    {
+      loading: messages.loading,
+      success: messages.success,
+      error: err => err.message,
     }
   );
 }
