@@ -102,7 +102,7 @@ const Sidebar: React.FC<SidebarProps> = ({ profile, isSidebarOpen, setIsSidebarO
     }
   };
 
-  useSocketNotifications(serviceProviderInfo.userId, handleSocketNotification);
+  useSocketNotifications(serviceProviderInfo._id, handleSocketNotification);
 
   useEffect(() => {
     getNotfication();
