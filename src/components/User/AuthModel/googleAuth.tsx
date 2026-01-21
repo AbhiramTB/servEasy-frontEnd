@@ -39,9 +39,9 @@ const GoogleAuthButton: React.FC = () => {
         useOneTap={false}
         theme="outline"
         size="large"
-        shape="square"
-        text="signin_with"
-        logo_alignment="left"
+        shape="rectangular"
+        text="continue_with"
+        logo_alignment="center"
         width="400"
       />
     </div>
