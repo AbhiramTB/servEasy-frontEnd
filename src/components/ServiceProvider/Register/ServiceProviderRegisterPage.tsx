@@ -8,7 +8,7 @@ import { getRequest, postRequest, putRequest } from '../../../utils/makeRequestI
 
 import { useNavigate } from 'react-router-dom';
 
-import { Location } from '../../User/Home1/location';
+import { Location } from '../../User/home/LocationSearchHome';
 import { BankDetails, IServiceProviderStatus } from '../../../utils/types/IServiceProvider';
 
 import RegisterForm, { FormData, Skill } from './RegisterForm';

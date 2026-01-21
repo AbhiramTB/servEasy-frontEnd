@@ -3,20 +3,17 @@ import { getRequest } from '../../utils/makeRequestInstance';
 import { apiEndPoint, apiEndPointServiceProvider } from '../../utils/constant';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { HotToastChatNotification, HotToastSuccess, HotToastSystemNotification } from '../../utils/notificationToast';
-import { MessageCircle, Bell, User, LogOut, Calendar } from 'lucide-react';
 import { useSocketNotifications } from '../../hooks/useNotifications';
 import toast from 'react-hot-toast';
 import { ISavedNotification, IVideoCallNotification } from '../../utils/types/INotification';
-import Notifications from '../ui/Notifictions';
 import { connectSocket } from '../../utils/socket';
 import VideoCallNotification from '../../utils/ui/VideoCallNotification';
 import { useFetchUserProfile } from '../../hooks/useFetchUserProfile';
 import { useTheme } from '../../hooks/useTheme';
 import MobileBottomNav from './MobileBottomNav';
-import InitialAvatar from '../../utils/ui/InitialAvatar';
-import MobileNavbar from './Navbar/MobileNavbar';
+import TopBar from './Navbar/Topbar';
 
 const ringtune = new Audio('/Ringtone Video call.mp3');
 const notificatioRingtune = new Audio('/Ringtone Notification.mp3');
@@ -97,8 +94,6 @@ const Navbar: React.FC<IProp> = ({ scrolled }) => {
       getNotfication();
       toast.dismiss();
     } else if (notification.type === 'chat') {
-      console.log(pathUrl);
-
       if (pathUrl == '/chats') {
         setChatNotificationCount(0);
         localStorage.setItem('chatNotificationCount', chatNotificationCount + 0 + '');
@@ -198,7 +193,7 @@ const Navbar: React.FC<IProp> = ({ scrolled }) => {
     <div>
       <div>
         <nav>
-          <MobileNavbar
+          <TopBar
             chatNotificationCount={chatNotificationCount}
             handleChatClick={handleChatClick}
             handleLogOut={handleLogOut}

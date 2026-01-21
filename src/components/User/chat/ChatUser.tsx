@@ -11,6 +11,7 @@ import { uploadImage } from './uploadImg';
 import { IMessage } from '../../../utils/types/IChat';
 import ChatMessage from '../../ui/chat/ChatMessage';
 import ChatInput from '../../ui/chat/ChatInput';
+import InitialAvatar from '../../../utils/ui/InitialAvatar';
 
 dayjs.extend(relativeTime);
 
@@ -244,38 +245,39 @@ const ChatUser = () => {
   if (!user?._id) return null;
 
   return (
-    <div className="max-w-5xl mx-auto ">
-      <div className="flex flex-col h-[90vh] rounded-xl shadow-lg overflow-hidden border border-base-300 bg-primary/10">
-        {/* Chat Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b bg-base-200">
-          <div className="flex items-center space-x-4">
+    <div className="flex flex-col w-full max-w-5xl mx-auto h-[calc(100dvh-64px-130px)]  md:h-[90vh] sm:px-4 sm:py-4">
+      <div className="flex flex-col flex-1 min-h-0 bg-base-100 sm:rounded-xl shadow-lg border-x sm:border border-base-300 overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-2 sm:py-3 border-b bg-base-200 shrink-0 z-10 shadow-sm">
+          <div className="flex items-center gap-3">
             <div className={`avatar ${isOnline ? 'online' : ''}`}>
-              <div className="w-12 rounded-full ring ring-primary ring-offset-2 ring-offset-base-100">
-                <img
-                  src={serviceProvider?.userAvatar || import.meta.env.VITE_IMAGE_PLACEHOLDER}
-                  alt={serviceProvider?.userName || 'Service Provider'}
+              <div className=" border-base-300">
+                <InitialAvatar
+                  name={serviceProvider?.userName || 'provider'}
+                  imageSrc={serviceProvider?.userAvatar}
+                  size={50}
                 />
               </div>
             </div>
 
-            <div>
-              <h3 className="text-lg font-bold">{serviceProvider?.userName || 'Service Provider'}</h3>
+            <div className="min-w-0">
+              <h3 className="text-sm sm:text-base font-bold truncate leading-tight">
+                {serviceProvider?.userName || 'Service Provider'}
+              </h3>
               {isOnline ? (
-                <p className="text-xs text-success">Online</p>
+                <p className="text-[10px] sm:text-xs text-success font-medium">Online</p>
               ) : (
-                <p className="text-xs opacity-70">{formatLastSeen(lastSeen)}</p>
+                <p className="text-[10px] sm:text-xs opacity-60 truncate">{formatLastSeen(lastSeen)}</p>
               )}
             </div>
           </div>
         </div>
 
-        <div className="flex-1 p-6 overflow-y-auto bg-gradient-to-b from-base-200/50 to-base-100">
+        <div className="flex-1 overflow-y-auto min-h-0 px-3 sm:px-6 py-4 bg-gradient-to-b from-base-200/30 to-base-100">
           {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-base-content/70">
-              <div className="max-w-xs p-6 text-center border shadow-md card bg-base-100 border-base-300">
-                <h3 className="mb-2 text-lg font-medium">Start your conversation</h3>
-                <p className="text-sm">
-                  Send a message to begin chatting with {serviceProvider?.userName || 'Service Provider'}
+            <div className="flex flex-col items-center justify-center h-full text-base-content/60">
+              <div className="max-w-[280px] p-5 text-center border shadow-sm rounded-2xl bg-base-100">
+                <p className="text-xs sm:text-sm italic">
+                  Start your conversation with {serviceProvider?.userName || 'Service Provider'}
                 </p>
               </div>
             </div>
@@ -295,15 +297,17 @@ const ChatUser = () => {
           )}
         </div>
 
-        <ChatInput
-          newMessage={newMessage}
-          setNewMessage={setNewMessage}
-          sendMessage={sendMessage}
-          handleImgUpload={handleImgUpload}
-          showEmojiPicker={showEmojiPicker}
-          setShowEmojiPicker={setShowEmojiPicker}
-          onEmojiClick={onEmojiClick}
-        />
+        <div className="shrink-0 border-t bg-base-100 p-2 sm:p-4">
+          <ChatInput
+            newMessage={newMessage}
+            setNewMessage={setNewMessage}
+            sendMessage={sendMessage}
+            handleImgUpload={handleImgUpload}
+            showEmojiPicker={showEmojiPicker}
+            setShowEmojiPicker={setShowEmojiPicker}
+            onEmojiClick={onEmojiClick}
+          />
+        </div>
       </div>
     </div>
   );

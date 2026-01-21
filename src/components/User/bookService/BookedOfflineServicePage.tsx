@@ -125,14 +125,14 @@ const ServiceBookingDetails = () => {
   const [cancelReason, setCancelReason] = useState<string>('');
   const user = useSelector((state: RootState) => state.user);
 
-  const handleApplyCoupon = async (coupon: string) => {
+  const handleApplyCoupon = async (coupon: string): Promise<boolean> => {
     try {
       const response = await postRequest(`/service/bookings/${id}/coupon/apply`, {
         couponCode: coupon.trim(),
       });
       if (response.status === 200) {
         HotToastSuccess(response.data.message);
-        if (!bookedService) return;
+        if (!bookedService) return false;
         setBookingData(prev =>
           prev
             ? {
@@ -144,9 +144,13 @@ const ServiceBookingDetails = () => {
               }
             : null
         );
+        return true;
+      } else {
+        return false;
       }
     } catch (error: any) {
       HotToastError(error?.response?.data?.message || 'Failed to apply coupon');
+      return false;
     } finally {
     }
   };
@@ -345,7 +349,6 @@ const ServiceBookingDetails = () => {
               <div className="divider"></div>
 
               <div className="">
-                {serviceProvider.userId}
                 <UserInfoCompact
                   profileImage={serviceProvider.profileImage}
                   userName={serviceProvider.serviceProviderName}

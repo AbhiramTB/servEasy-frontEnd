@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { IAd } from '../../../utils/types/IAd';
-import LocationSearch from '../../User/Home1/location';
+import LocationSearch from '../../User/home/LocationSearchHome';
 import { ILocation } from '../../../utils/types/ILocation';
 import { LocateIcon } from 'lucide-react';
 import { ICreateAdDTO } from '../../../utils/types/DTO/ICreateAdDTO';
