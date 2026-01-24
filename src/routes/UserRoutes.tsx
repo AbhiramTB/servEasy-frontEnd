@@ -20,6 +20,7 @@ import ServiceBookingDetails from '../components/User/bookService/BookedOfflineS
 import AuthPage from '../components/User/AuthModel/AuthPage';
 import Otp from '../components/User/AuthModel/Otp';
 import { useAuth } from '../hooks/useAuth';
+import CouponsPage from '../pages/user/CouponsPage';
 
 const UserRoutes = () => {
   const { userAccessToken = true } = useAuth();
@@ -56,6 +57,7 @@ const UserRoutes = () => {
         <Route path={ROUTES.USER.VIDEO_CALL} element={<VideoCall />} />
         <Route path={ROUTES.USER.BOOKED_SERVICE_DETAILS} element={<ServiceBookingDetails />} />
         <Route path={ROUTES.USER.BOOKED_SERVICE_ONLINE_DETAILS} element={<ServiceBookingDetailsOnline />} />
+        <Route path={'coupons'} element={<CouponsPage />} />
 
         {/* Chat */}
         <Route path={ROUTES.USER.CHAT_WITH_PROVIDER} element={<ChatUser />} />

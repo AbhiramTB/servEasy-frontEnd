@@ -157,7 +157,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      <main className="flex-grow bg-base-100">
+      <main className="flex-grow ">
         <div className="container px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12 mx-auto">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-3 sm:gap-4">
             <h2 className="text-2xl sm:text-3xl font-bold">Services Near You</h2>

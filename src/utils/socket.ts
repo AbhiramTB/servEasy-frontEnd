@@ -1,71 +1,24 @@
-// import { io, Socket } from "socket.io-client";
-
-// let socket: Socket | null = null;
-
-// /**
-//  * Connects to the Socket.IO server
-//  */
-// export const connectSocket = (): Socket => {
-//   if (!socket) {
-//     socket = io(import.meta.env.VITE_BACKEND_URL, {
-//       transports: ["websocket"],
-//     });
-
-//     socket.on("connect", () => {
-//       console.log("Socket connected ✅:", socket?.id);
-//     });
-
-//     socket.on("disconnect", () => {
-//       console.log("Socket disconnected ❌");
-//     });
-//   }
-//   return socket;
-// };
-
-
-// export const disconnectSocket = () => {
-//   if (socket) {
-//     socket.disconnect();
-//     socket = null;
-//   }
-// };
-
-
-// export const getSocket = (): Socket => {
-//   if (!socket) {
-//     throw new Error("Socket not connected yet. Call connectSocket() first.");
-//   }
-//   return socket;
-// };
-
-
-import { io, Socket } from "socket.io-client";
+import { io, Socket } from 'socket.io-client';
 
 let socket: Socket | null = null;
 
-/**
- * Connects to the Socket.IO server
- */
 export const connectSocket = (): Socket => {
   if (!socket) {
     socket = io(import.meta.env.VITE_BACKEND_URL, {
-      transports: ["websocket"],
+      transports: ['websocket'],
     });
 
-    socket.on("connect", () => {
-      console.log("Socket connected ✅:", socket?.id);
+    socket.on('connect', () => {
+      console.log('Socket connected ✅:', socket?.id);
     });
 
-    socket.on("disconnect", () => {
-      console.log("Socket disconnected ❌");
+    socket.on('disconnect', () => {
+      console.log('Socket disconnected ❌');
     });
   }
   return socket;
 };
 
-/**
- * Disconnect the Socket.IO connection
- */
 export const disconnectSocket = () => {
   if (socket) {
     socket.disconnect();
@@ -73,19 +26,13 @@ export const disconnectSocket = () => {
   }
 };
 
-/**
- * Get the current socket instance
- */
 export const getSocket = (): Socket => {
   if (!socket) {
-    throw new Error("Socket not connected yet. Call connectSocket() first.");
+    throw new Error('Socket not connected yet. Call connectSocket() first.');
   }
   return socket;
 };
 
-/**
- * Check if the socket is connected
- */
 export const isSocketConnected = (): boolean => {
   return socket?.connected ?? false;
 };

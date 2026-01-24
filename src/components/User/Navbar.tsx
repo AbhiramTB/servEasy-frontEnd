@@ -48,70 +48,72 @@ const Navbar: React.FC<IProp> = ({ scrolled }) => {
   }, [location.pathname]);
 
   const handleNotification = (notification: any) => {
-    console.log('Received Notification:', notification);
+    if (notification.targetRole === 'USER') {
+      console.log('Received Notification:', notification);
 
-    if (notification.type === 'video_call') {
-      ringtune.currentTime = 0;
-      ringtune.play();
-
-      const socket = connectSocket();
-      toast.dismiss();
-
-      const handleReject = () => {
+      if (notification.type === 'video_call') {
         ringtune.currentTime = 0;
-        ringtune.pause();
-        socket.emit('reject_videoCall', {
-          callRoomId: notification.callerId,
-          user2: notification.callerId,
-        });
-      };
+        ringtune.play();
 
-      setRejectFn(() => handleReject);
+        const socket = connectSocket();
+        toast.dismiss();
 
-      const acceptCall = () => {
-        ringtune.pause();
-        ringtune.currentTime = 0;
-        if (notification.user) {
-          navigate('/video-call/' + notification.callerId);
-        } else {
-          navigate('/service-provider/video-call/' + notification.callerId);
+        const handleReject = () => {
+          ringtune.currentTime = 0;
+          ringtune.pause();
+          socket.emit('reject_videoCall', {
+            callRoomId: notification.callerId,
+            user2: notification.callerId,
+          });
+        };
+
+        setRejectFn(() => handleReject);
+
+        const acceptCall = () => {
+          ringtune.pause();
+          ringtune.currentTime = 0;
+          if (notification.user) {
+            navigate('/video-call/' + notification.callerId);
+          } else {
+            navigate('/service-provider/video-call/' + notification.callerId);
+          }
+        };
+
+        setAcceptFn(() => acceptCall);
+
+        if (!videoCallNotification) {
+          setVideoCallNotification(notification);
         }
-      };
 
-      setAcceptFn(() => acceptCall);
+        return;
+      } else if (notification.type === 'notification') {
+        notificatioRingtune.currentTime = 0;
+        notificatioRingtune.play();
+        toast.dismiss();
 
-      if (!videoCallNotification) {
-        setVideoCallNotification(notification);
+        HotToastSystemNotification(notification);
+        getNotfication();
+        toast.dismiss();
+      } else if (notification.type === 'chat') {
+        if (pathUrl == '/chats') {
+          setChatNotificationCount(0);
+          localStorage.setItem('chatNotificationCount', chatNotificationCount + 0 + '');
+        }
+
+        if (pathUrl !== '/chats') {
+          setChatNotificationCount(chatNotificationCount + 1);
+          localStorage.setItem('chatNotificationCount', chatNotificationCount + 1 + '');
+        }
+
+        notificatioRingtune.currentTime = 0;
+        notificatioRingtune.play();
+
+        HotToastChatNotification(notification, () => {
+          navigate('/chat/' + notification.senderId);
+          setChatNotificationCount(0);
+        });
+        toast.dismiss();
       }
-
-      return;
-    } else if (notification.type === 'notification') {
-      notificatioRingtune.currentTime = 0;
-      notificatioRingtune.play();
-      toast.dismiss();
-
-      HotToastSystemNotification(notification);
-      getNotfication();
-      toast.dismiss();
-    } else if (notification.type === 'chat') {
-      if (pathUrl == '/chats') {
-        setChatNotificationCount(0);
-        localStorage.setItem('chatNotificationCount', chatNotificationCount + 0 + '');
-      }
-
-      if (pathUrl !== '/chats') {
-        setChatNotificationCount(chatNotificationCount + 1);
-        localStorage.setItem('chatNotificationCount', chatNotificationCount + 1 + '');
-      }
-
-      notificatioRingtune.currentTime = 0;
-      notificatioRingtune.play();
-
-      HotToastChatNotification(notification, () => {
-        navigate('/chat/' + notification.senderId);
-        setChatNotificationCount(0);
-      });
-      toast.dismiss();
     }
   };
 
@@ -147,8 +149,9 @@ const Navbar: React.FC<IProp> = ({ scrolled }) => {
   const getNotfication = async () => {
     try {
       const res = await getRequest('/notification');
+      console.log(res);
       setNotifications(res.data.notifications);
-      setNotificationCount(res.data.unreadedNotification);
+      setNotificationCount(res.data.unreadCount);
     } catch (error) {
       console.log(error);
     }

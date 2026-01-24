@@ -157,6 +157,7 @@ const ChatServiceProvider = () => {
       senderId: serviceProvider.userId,
       receiverId: userid,
       message: message,
+      targetRole: 'USER',
       senderInfo: { senderName: serviceProvider.serviceProviderName, senderProfile: serviceProvider.profileImage },
     });
 
