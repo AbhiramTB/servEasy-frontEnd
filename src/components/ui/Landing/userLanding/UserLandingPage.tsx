@@ -8,7 +8,6 @@ import { replace, useNavigate } from 'react-router-dom';
 import HowItWorks from '../../../User/home/HowItWorks';
 import WhyChooseServEasy from '../../../User/home/WhyCooseServEasy';
 import CustomerTestimonials from '../../../User/home/CustomerTestimonials';
-import { useAuth } from '../../../../hooks/useAuth';
 
 /* ---------- Interfaces ---------- */
 interface NavLink {

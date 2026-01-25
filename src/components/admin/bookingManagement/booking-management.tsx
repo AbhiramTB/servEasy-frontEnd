@@ -47,8 +47,6 @@ const BookingManagement: React.FC = () => {
     }
   };
 
-
-
   if (error) {
     return (
       <div className="px-4 py-3 mt-4 text-red-700 bg-red-100 border border-red-400 rounded-md">
@@ -64,7 +62,7 @@ const BookingManagement: React.FC = () => {
   }
 
   return (
-    <div className="p-2">
+    <div className="p-2 ">
       <div className="flex flex-col justify-end gap-3 pb-4 mb-6 border-b md:flex-row md:items-center">
         {/* Search Box */}
         <div className="w-full md:w-64">

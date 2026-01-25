@@ -53,7 +53,6 @@ const UserLayout = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  console.log(hideBanner + '   banner state');
   return (
     <div className="relative flex flex-col min-h-screen">
       {!scrolled && !hideBanner && coupon && (
@@ -71,7 +70,7 @@ const UserLayout = () => {
         <Navbar scrolled={scrolled} />
       </div>
 
-      <div className="flex-grow  bg-base-100 bg-grid-pattern">
+      <div className="flex-grow  bg-base-100 bg-diagonal-grid">
         <Outlet />
       </div>
 

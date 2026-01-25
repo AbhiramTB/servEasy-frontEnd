@@ -6,7 +6,6 @@ import { addServices } from '../../../redux/slices/adminSlice';
 import { RootState } from '../../../redux/store';
 import ServiceDetails from './ServiceDetails';
 import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
-import { Toaster } from 'react-hot-toast';
 import Pagination from '../../../utils/ui/pagination';
 import SearchComponent from '../../ui/SearchComponent';
 
@@ -20,17 +19,16 @@ const Allservices = () => {
   const dataLimit = 6;
   const [details, setDetails] = useState<null | object>();
   const getServices = useCallback(
-    async (page: number,searchVal?:string) => {
+    async (page: number, searchVal?: string) => {
       try {
-          const param: Record<string, any> = { page, limit: dataLimit };
+        const param: Record<string, any> = { page, limit: dataLimit };
         if (searchVal) {
           param.search = searchVal;
         }
-        const res = await adminGetRequest(apiEndPointAdmin.getAllservices,{params:param});
+        const res = await adminGetRequest(apiEndPointAdmin.getAllservices, { params: param });
 
         setCrrPage(page);
         if (res.status === 200) {
-
           dispatch(addServices(res.data.allServices));
           setTotalData(res.data.count);
         }
@@ -42,13 +40,12 @@ const Allservices = () => {
   );
 
   useEffect(() => {
-    getServices(crrPage,searchQuery);
+    getServices(crrPage, searchQuery);
   }, [getServices]);
 
   useEffect(() => {
-    getServices(0,searchQuery);
+    getServices(0, searchQuery);
   }, [searchQuery]);
-
 
   const handleToggleBlock = async (serviceId: string, isBlocked: boolean) => {
     try {
@@ -77,12 +74,11 @@ const Allservices = () => {
     dispatch(addServices(services.map(i => (i._id == serviceId ? { ...i, isActive: !i.isActive } : i))));
   };
   return (
-    <div>
-      <Toaster />
-              <h1 className='mt-4 text-xl font-bold ml-14 text-start'>Service Managment</h1>
+    <div className="">
+      <h1 className=" text-xl font-bold pt-4 ml-14 text-start">Service Managment</h1>
 
       <div className="flex justify-end mr-7 align-end">
-        <div >
+        <div>
           <SearchComponent setSearch={setSearchQuery} searchVal={searchQuery} />
         </div>
       </div>
@@ -274,7 +270,7 @@ const Allservices = () => {
         crrPage={crrPage}
         dataLimit={dataLimit}
         totaldata={totalData}
-        fetchData={(p: number) => getServices(p,searchQuery)}
+        fetchData={(p: number) => getServices(p, searchQuery)}
       />
     </div>
   );

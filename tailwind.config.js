@@ -12,6 +12,50 @@ export default {
 'grid-pattern': `repeating-linear-gradient(to right, oklch(var(--p) / 0.05) 0 1px, transparent 1px 50px),
                    repeating-linear-gradient(to bottom, oklch(var(--p) / 0.05) 0 1px, transparent 1px 50px)`,
 
+'diagonal-grid': `
+  repeating-linear-gradient(
+    45deg,
+    oklch(var(--p) / 0.04) 0 1px,
+    transparent 1px 40px
+  ),
+  repeating-linear-gradient(
+    -45deg,
+    oklch(var(--p) / 0.04) 0 1px,
+    transparent 1px 40px
+  )
+`,
+
+'hex-pattern': `
+  linear-gradient(
+    60deg,
+    oklch(var(--p) / 0.04) 25%,
+    transparent 25% 75%,
+    oklch(var(--p) / 0.04) 75%
+  ),
+  linear-gradient(
+    -60deg,
+    oklch(var(--p) / 0.04) 25%,
+    transparent 25% 75%,
+    oklch(var(--p) / 0.04) 75%
+  )
+`,
+
+
+
+'magenta-orb-grid': `
+          linear-gradient(to right, rgba(71,85,105,0.15) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(71,85,105,0.15) 1px, transparent 1px),
+          radial-gradient(
+            circle at 50% 60%,
+            rgba(236,72,153,0.15) 0%,
+            rgba(168,85,247,0.05) 40%,
+            transparent 70%
+          )
+        `,
+      
+
+
+
     }
     }
     

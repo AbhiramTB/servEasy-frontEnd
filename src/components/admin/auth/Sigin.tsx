@@ -204,7 +204,7 @@ const AdminSignIn: React.FC = () => {
   // );
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4  bg-grid-pattern">
+    <div className="flex items-center justify-center min-h-screen px-4  bg-hex-pattern">
       <div className="flex flex-col md:flex-row w-full max-w-6xl overflow-hidden border shadow-2xl rounded-3xl bg-base-100 border-base-300 min-h-[750px]">
         {' '}
         <div className="hidden md:block md:w-1/2 relative">
