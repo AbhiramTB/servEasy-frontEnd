@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Bell, Calendar, LogOut, MessageCircle, User } from 'lucide-react';
+import { Bell, Calendar, Home, LogOut, MessageCircle, User } from 'lucide-react';
 import Notifications from '../../ui/Notifictions';
 import { ISavedNotification } from '../../../utils/types/INotification';
 import InitialAvatar from '../../../utils/ui/InitialAvatar';
@@ -42,6 +42,29 @@ const Navbar = ({
     navigate(ROUTES.SERVICEPROVIDER.DASHBOARD);
   };
 
+  const tabs = [
+    { icon: <Home />, label: 'Home', path: ROUTES.USER.HOME },
+    // {
+    //   label: 'Chats',
+    //   path: '/chats',
+    //   // badge: chatCount,
+    // },
+    {
+      label: 'Bookings',
+      path: '/myprofile/booked-services/',
+    },
+
+    {
+      label: 'Apperance',
+      path: '/myprofile/appearance',
+    },
+    {
+      icon: <User size={20} />,
+      label: 'Profile',
+      path: '/myprofile',
+    },
+  ];
+
   const navigate = useNavigate();
   return (
     <div
@@ -54,7 +77,21 @@ const Navbar = ({
         <AppLogo to={ROUTES.USER.HOME} />
       </div>
 
-      <div className="navbar-end mr-0  lg:mr-10">
+      <div className="navbar-end mr-0 ml-0 md:ml-56 lg:ml-0 lg:mr-10">
+        {!mobileMenuOpen && (
+          <div className="flex items-center gap-4 ml-5  mr-5 ">
+            {tabs.map(i => (
+              <Link
+                key={i.path}
+                to={i.path}
+                className=" font-medium text-base-content hover:text-primary transition-colors hover:underline  whitespace-nowrap"
+              >
+                <span className="px-2 py-1">{i.label}</span>
+              </Link>
+            ))}
+          </div>
+        )}
+
         {!mobileMenuOpen && (
           <div className="relative hidden md:flex">
             <button onClick={handleChatClick} className="btn btn-ghost btn-circle">

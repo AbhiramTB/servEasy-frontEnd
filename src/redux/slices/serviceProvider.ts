@@ -32,8 +32,8 @@ const initialState: IServiceProvider = {
   },
   experience: 0,
   profileImage: '',
-  document: '',
-  isVerified: 'idle',
+  document: [''],
+  isVerified: 'pending',
   userId: '',
   isBlocked: false,
   createdAt: '',
@@ -51,10 +51,6 @@ export interface Location {
   latitude: number;
   longitude: number;
 }
-
-
-
-
 
 const serviceProviderSlice = createSlice({
   name: 'serviceProvider',

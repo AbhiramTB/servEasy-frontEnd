@@ -1,7 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import Navbar from '../../components/admin/NavBar';
 import { useTheme } from '../../hooks/useTheme';
-import Footer from '../../components/ui/Footer';
 
 const AdminLayout = () => {
   useTheme();
@@ -16,7 +15,7 @@ const AdminLayout = () => {
       <Navbar />
       <div className="min-h-screen bg-base-100 bg-hex-pattern ">
         <Outlet />
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </>
   );

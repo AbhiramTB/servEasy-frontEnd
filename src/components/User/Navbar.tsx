@@ -193,7 +193,7 @@ const Navbar: React.FC<IProp> = ({ scrolled }) => {
   };
 
   return (
-    <div>
+    <div className="bg-hex-pattern">
       <div>
         <nav>
           <TopBar
