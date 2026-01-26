@@ -1,10 +1,14 @@
+import AppLogo from '../../ui/AppLogo';
+
 const MiniDashboardPreview = () => {
   return (
     <div className="h-64 overflow-hidden transition-all duration-200 border rounded-lg shadow-lg bg-base-100 bg-grid-pattern border-base-300   md:w-96 w-90  hover:shadow-xl">
       {/* Top bar */}
-      <div className="flex items-center justify-between px-3 py-2 border-b bg-base-200 border-base-300">
+      <div className="flex items-center justify-between px-3 py-2 border-b bg-base-200 bg-hex-pattern border-base-300">
         <div className="w-16 h-2 rounded-full bg-base-300"></div>
-        <span className="text-xs font-medium text-base-content opacity-80">serveasy</span>
+        <div className="h-3 mt-[-6%]">
+          <AppLogo />
+        </div>{' '}
         <div className="flex gap-1">
           <div className="w-2 h-2 rounded-full bg-accent"></div>
           <div className="w-2 h-2 rounded-full bg-primary"></div>
@@ -13,7 +17,7 @@ const MiniDashboardPreview = () => {
       </div>
 
       <div className="flex h-full">
-        <div className="w-1/4 p-2 space-y-2 border-r bg-base-200 border-base-300">
+        <div className="w-1/4 p-2 space-y-2 border-r bg-base-200  border-base-300">
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
