@@ -20,6 +20,8 @@ import CouponInput from '../../ui/CouponInput';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
+import { ReloadButton } from './ReloadButton';
+import { ROUTES } from '../../../utils/constants/routes';
 
 interface Address {
   name: string;
@@ -277,20 +279,23 @@ const ServiceBookingDetails = () => {
   return (
     <div className="container min-h-screen px-4 py-4 mx-auto bg-base-200">
       <Toaster></Toaster>
-      {/* Breadcrumb */}
       <div className="mb-4 text-sm breadcrumbs text-base-content">
         <ul>
           <li>
-            <Link to="/">Home</Link>
-          </li>
-          {/* <li>
-            <Link to="/account">My Account</Link>
-          </li> */}
-          <li>
-            <Link to="/booked-services/">My Bookings</Link>
+            <Link to={ROUTES.USER.HOME}>Home</Link>
           </li>
 
-          <li>{bookedService._id}</li>
+          <li>
+            <Link to={`/myprofile${ROUTES.USER.BOOKED_SERVICES}`}>My Bookings</Link>
+          </li>
+
+          <li>{bookedService._id.slice(0, 4) + '...'}</li>
+
+          {id && (
+            <li>
+              <ReloadButton reloadAction={() => getBookedService(id)} />{' '}
+            </li>
+          )}
         </ul>
       </div>
 

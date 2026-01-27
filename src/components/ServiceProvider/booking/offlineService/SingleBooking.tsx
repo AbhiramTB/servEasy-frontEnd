@@ -23,6 +23,7 @@ import RescheduleBookingModal from '../rescheduleBooking';
 import { IReview } from '../../../../utils/types/IReview';
 import StarRating from '../../../ui/StarRating';
 import dayjs from 'dayjs';
+import { ReloadButton } from '../../../User/bookService/ReloadButton';
 interface IliveLocation {
   lat: number;
   lng: number;
@@ -471,6 +472,12 @@ const ServiceProviderBookingManage = () => {
   return (
     <div className="container mx-auto min-h-screen p-4 md:p-6 bg-gradient-to-br from-primary/5 to-base-100">
       <StatusAlert status={bookedService.serviceStatus} cancellationReason={bookedService.cancelReason} />
+
+      {id && (
+        <div className="  md:ml-[90%]">
+          <ReloadButton reloadAction={() => getBookedService(id)} />
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3 animate-fadeIn">
         <div className="md:col-span-2 bg-base-100 rounded-2xl shadow-lg border border-base-200 p-5 space-y-6">

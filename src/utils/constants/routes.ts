@@ -54,6 +54,7 @@ export const ROUTES = {
 
     CHAT_WITH_PROVIDER: '/chat/:serviceProviderId',
     CHATS: '/chats',
+    COUPON: '/coupons',
   },
 
   SERVICEPROVIDER: {
