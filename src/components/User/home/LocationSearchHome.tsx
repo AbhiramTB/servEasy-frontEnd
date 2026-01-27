@@ -15,7 +15,7 @@ interface LocationSearchProps {
   initialLocation?: string;
 }
 
-const LocationSearch: React.FC<LocationSearchProps> = ({ onLocationSelect, initialLocation }) => {
+const LocationSearchHomePage: React.FC<LocationSearchProps> = ({ onLocationSelect, initialLocation }) => {
   const [query, setQuery] = useState<string>(initialLocation ? initialLocation : '');
   const [results, setResults] = useState<Location[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -132,4 +132,4 @@ const LocationSearch: React.FC<LocationSearchProps> = ({ onLocationSelect, initi
   );
 };
 
-export default LocationSearch;
+export default LocationSearchHomePage;

@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { RootState } from '../../redux/store';
 import { useSelector } from 'react-redux';
 import SubscriptionModal from '../../components/ServiceProvider/subscriptionPlan/subscriptionPlan';
@@ -8,12 +8,9 @@ import useFetchServiceProviderProfile from '../../hooks/useFetchServiceProviderP
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { getRequest } from '../../utils/makeRequestInstance';
 import { apiEndPointServiceProvider } from '../../utils/constant';
-import { IServiceProviderStatus } from '../../utils/types/IServiceProvider';
 import ServiceProviderLanding from '../../components/ui/Landing/serviceProviderLanding/ServiceProviderLandingPage';
 
 const ServiceProviderLayout = () => {
-  const navigate = useNavigate();
-
   // const [status, setStatus] = useState<
   //   { hasProvider: false } | { hasProvider: true; status: IServiceProviderStatus }
   // >();
@@ -71,7 +68,7 @@ const ServiceProviderLayout = () => {
   }
 
   return (
-    <div className="min-h-screen bg-base-100">
+    <div className="min-h-screen bg-base-100 bg-grid-pattern ">
       <Sidebar
         profile={serviceProviderInfo.profileImage}
         isSidebarOpen={isSidebarOpen}

@@ -1,6 +1,7 @@
 import { MessageCircle, User, Home, CalendarClock } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import React from 'react';
+import { ROUTES } from '../../utils/constants/routes';
 
 interface IProp {
   chatCount: number;
@@ -13,7 +14,7 @@ const MobileBottomNav: React.FC<IProp> = ({ chatCount }) => {
     {
       icon: <Home size={20} />,
       label: 'Home',
-      path: '/',
+      path: ROUTES.USER.HOME,
     },
     {
       icon: <MessageCircle size={20} />,

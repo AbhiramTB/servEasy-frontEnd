@@ -3,6 +3,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { apiEndPoint } from '../../../utils/constant';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../../utils/constants/routes';
 
 const GoogleAuthButton: React.FC = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const GoogleAuthButton: React.FC = () => {
       if (res.status === 200) {
         localStorage.setItem('accessToken', res.data.accessToken);
 
-        navigate('/');
+        navigate(ROUTES.USER.HOME);
       }
     } catch (error) {
       console.error('Google Auth Failed', error);
@@ -39,9 +40,9 @@ const GoogleAuthButton: React.FC = () => {
         useOneTap={false}
         theme="outline"
         size="large"
-        shape="square"
-        text="signin_with"
-        logo_alignment="left"
+        shape="rectangular"
+        text="continue_with"
+        logo_alignment="center"
         width="400"
       />
     </div>

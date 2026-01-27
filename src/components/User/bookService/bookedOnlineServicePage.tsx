@@ -8,6 +8,7 @@ import ServiceCardCompact from '../../ServiceProvider/booking/ServiceCardCompact
 import { HotToastError } from '../../../utils/notificationToast';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
+import { ReloadButton } from './ReloadButton';
 
 interface BookingData {
   bookedService: {
@@ -158,6 +159,12 @@ const ServiceBookingDetailsOnline = () => {
             <Link to="/booked-services/">My Bookings</Link>
           </li>
           <li>{bookedService._id}</li>
+
+          {id && (
+            <li>
+              <ReloadButton reloadAction={() => getBookedService(id)} />{' '}
+            </li>
+          )}
         </ul>
       </div>
 

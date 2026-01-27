@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { makeRequest } from '../../../utils/makeRequest';
-import { ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { apiEndPoint } from '../../../utils/constant';
 import { validateEmail, validatePhone } from '../../../utils/validate';
 import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
+import { ROUTES } from '../../../utils/constants/routes';
 const Otp = () => {
   const OtpTimer = 60;
   const otpLength = 6;
@@ -79,17 +79,19 @@ const Otp = () => {
         sender: emilOrPhone,
       };
       const res = await makeRequest('/verify-otp', 'POST', data);
-
       if (res?.status === 200) {
         HotToastSuccess(res.data.message);
         localStorage.setItem('accessToken', res.data.accessToken);
 
-        navigate('/', { replace: true });
+        navigate(ROUTES.USER.HOME, { replace: true });
       } else {
         console.log(res?.data?.errorMessage);
+        console.log(res.data.error);
       }
     } catch (error: any) {
-      HotToastError(error?.response?.data.errorMessage + ' ');
+      console.log();
+
+      HotToastError(error?.response?.data?.error || 'Invalid or Expired Otp');
     } finally {
       setLoading(false);
     }
@@ -124,69 +126,73 @@ const Otp = () => {
       setOtpLoading(false);
     }
   };
-
   return (
-    <div className="relative w-full h-full min-h-screen bg-base-100 bg-grid-pattern">
-      <div className="relative z-10 flex justify-center pt-24">
-        <div className="card bg-base-100 w-[500px] border border-primary shadow-2xl">
-          <div className="mt-3 text-center">
-            <h2 className="font-mono text-xl font-bold">OTP Verification!</h2>
-            <p className="mt-3 font-sans">An OTP has already been sent to your {emilOrPhone}.</p>
+    <div className="min-h-[100dvh] w-full bg-grid-pattern flex items-center justify-center p-4">
+      <div className="relative z-10 card w-full max-w-md bg-base-100 shadow-2xl border border-base-300">
+        <div className="card-body p-6 sm:p-10">
+          <div className="text-center space-y-2">
+            <h2 className="text-2xl sm:text-3xl font-bold text-primary">OTP Verification!</h2>
+            <p className="text-sm sm:text-base text-base-content/70">
+              An OTP has already been sent to your <span className="font-medium text-base-content">{emilOrPhone}</span>.
+            </p>
           </div>
-          <figure className="px-16 pt-5">
-            <div className="flex justify-evenly">
+
+          <div className="py-8">
+            <div className="flex justify-center gap-2 sm:gap-4">
               {otp.map((value, index) => (
                 <input
+                  key={index}
                   type="text"
                   ref={el => {
                     otpInputRef.current[index] = el;
                   }}
-                  key={index}
                   value={value}
                   maxLength={1}
+                  inputMode="numeric"
                   onChange={e => handleChange(e, index)}
-                  className="m-3 text-2xl text-center border rounded-md border-primary bg-base-200 textarea-primary w-14 h-14"
+                  className="w-10 h-12 sm:w-14 sm:h-16 text-2xl font-semibold text-center border-2 rounded-xl border-primary bg-base-100 focus:outline-primary focus:ring-2 focus:ring-primary/20 transition-all"
                 />
               ))}
             </div>
-          </figure>
+          </div>
 
-          <div className="flex justify-end">
+          <div className="flex justify-center mb-6">
             {timer <= 0 ? (
-              <div>
+              <div className="h-6">
                 {!resendOtpLoading ? (
-                  <h1 className="mt-3 mr-10 font-mono cursor-pointer opacity-90 hover:text-primary" onClick={resendOtp}>
-                    resend Otp
-                  </h1>
+                  <button
+                    onClick={resendOtp}
+                    className="text-sm font-medium text-primary hover:text-primary-focus transition-all"
+                  >
+                    Resend OTP
+                  </button>
                 ) : (
-                  <span className="mt-3 mr-10 font-mono cursor-pointer opacity-90 hover:text-primary loading loading-dots loading-sm"></span>
+                  <span className="loading loading-dots loading-sm text-primary"></span>
                 )}
               </div>
             ) : (
-              <div>
-                <h1 className="mt-3 mr-10 font-mono opacity-90">
-                  OTP expires in{' '}
-                  {timer > 5 ? (
-                    <span className="text-primary">{timer}</span>
-                  ) : (
-                    <span className="text-red-600">{timer}</span>
-                  )}
-                </h1>
+              <div className="text-sm text-base-content/60">
+                OTP expires in{' '}
+                <span className={`font-semibold ${timer > 5 ? 'text-primary' : 'text-error'}`}>{timer}s</span>
               </div>
             )}
           </div>
 
-          <div className="items-center text-center card-body">
-            <div className="card-actions">
-              {loading ? (
-                <span className="loading loading-bars loading-lg bg-primary"></span>
-              ) : (
-                <button ref={sumbitRef} onClick={sumbitOtp} className="btn btn-primary">
-                  verify Otp
-                </button>
-              )}
-            </div>
-            <ToastContainer />
+          <div className="card-actions">
+            {loading ? (
+              <button className="btn btn-primary btn-block">
+                <span className="loading loading-spinner"></span>
+                Verifying...
+              </button>
+            ) : (
+              <button
+                ref={sumbitRef}
+                onClick={sumbitOtp}
+                className="btn btn-primary btn-block text-base font-medium shadow-md"
+              >
+                Verify OTP
+              </button>
+            )}
           </div>
         </div>
       </div>

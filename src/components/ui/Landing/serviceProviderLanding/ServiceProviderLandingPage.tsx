@@ -14,6 +14,7 @@ const ServiceProviderLanding = () => {
     { label: 'Solutions', href: '#problems' },
     { label: 'Why Us', href: '#why-us' },
     { label: ' Register Now', href: '#register' },
+    { label: 'Back to home', href: '/home' },
   ];
   const navigate = useNavigate();
   const navigateFn = () => {

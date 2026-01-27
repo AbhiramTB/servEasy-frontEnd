@@ -23,7 +23,7 @@ const TransactionsSection: React.FC<Props> = ({ transactions, onTransfer, onReje
               <th>Type</th>
               <th>Amount</th>
               <th>Status</th>
-              <th>Booking</th>
+              {/* <th>Booking</th> */}
               <th>Note</th>
               <th>Action</th>
             </tr>
@@ -51,7 +51,7 @@ const TransactionsSection: React.FC<Props> = ({ transactions, onTransfer, onReje
                   </span>
                 </td>
 
-                <td>
+                {/* <td>
                   {tx.refBookingId ? (
                     <Link to={tx.refBookingId} className="link link-primary">
                       View
@@ -59,7 +59,7 @@ const TransactionsSection: React.FC<Props> = ({ transactions, onTransfer, onReje
                   ) : (
                     '-'
                   )}
-                </td>
+                </td> */}
 
                 <td className="max-w-[150px] truncate">{tx.note || '-'}</td>
 

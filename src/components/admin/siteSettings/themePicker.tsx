@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTheme } from '../../../hooks/useTheme';
- const themeSwitchSound = new Audio("/sounds/themeSwitch.mp3")
-
+const themeSwitchSound = new Audio('/sounds/themeSwitch.mp3');
 
 interface ThemePickerProps {
   themes: string[];
@@ -13,11 +12,9 @@ const ThemePicker: React.FC<ThemePickerProps> = ({ themes }) => {
     <div className="flex flex-wrap gap-2 p-4">
       {(!themes || themes.length === 0) && (
         <>
-          {Array(20)
-            .fill(9)
-            .map((i, id) => (
-              <div key={i + id} className="h-10 skeleton w-28"></div>
-            ))}
+          {Array.from({ length: 20 }).map((_, index) => (
+            <div key={`theme-skeleton-${index}`} className="h-10 w-28 skeleton" />
+          ))}
         </>
       )}
 
@@ -26,10 +23,11 @@ const ThemePicker: React.FC<ThemePickerProps> = ({ themes }) => {
         return (
           <button
             key={trimmed}
-            onClick={() => {setTheme(trimmed)
-              themeSwitchSound.volume=0.5
+            onClick={() => {
+              setTheme(trimmed);
+              themeSwitchSound.volume = 0.5;
               themeSwitchSound.play();
-              themeSwitchSound.currentTime=0
+              themeSwitchSound.currentTime = 0;
             }}
             className={`px-4 py-2 rounded-full border transition ${
               theme === trimmed

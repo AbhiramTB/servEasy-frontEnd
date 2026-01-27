@@ -1,6 +1,6 @@
 import React from 'react';
 import { UseFormRegister, FieldErrors, UseFormHandleSubmit } from 'react-hook-form';
-import LocationSearch, { Location } from '../../User/Home1/location';
+import LocationSearch, { Location } from '../../User/home/LocationSearchHome';
 import { BankDetails } from '../../../utils/types/IServiceProvider';
 import BankDetailsForm from './BankDetailsForm';
 import DocumentUpload from './DocumentUpload';
@@ -101,18 +101,15 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   addService,
   removeService,
 
-  skills,
   newSkill,
   newSkillLevel,
   setNewSkill,
   setNewSkillLevel,
   addSkill,
-  removeSkill,
 
   description,
   setDescription,
 
-  location,
   setLocation,
   locationError,
 

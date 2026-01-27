@@ -5,14 +5,15 @@ import { getRequest, putRequest } from '../../../utils/makeRequestInstance';
 import { apiEndPoint } from '../../../utils/constant';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
-import { validateEmail, validatePhone } from '../../../utils/validate';
+import { validateEmail, validatePassword, validatePhone } from '../../../utils/validate';
 import { addUser } from '../../../redux/slices/userSlice';
 import { useDispatch } from 'react-redux';
 import UpdateProfileOTP from './UpdateProfileOtp';
+import InitialAvatar from '../../../utils/ui/InitialAvatar';
 
 const UserProfile = () => {
   const user = useSelector((state: RootState) => state.user);
-
+  const [isLoading, setLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [newEmail, setNewEmail] = useState(user.email || '');
   const [newUserName, setNewUserName] = useState(user.userName || '');
@@ -20,6 +21,9 @@ const UserProfile = () => {
   const [profileImage, setProfileImage] = useState(user.profileImage || null);
   const [newImage, setNewImage] = useState('');
   const [contactType, setContactType] = useState(user.email ? 'email' : 'phone');
+  const [newPassword, setNewPassword] = useState('');
+  const [oldPassword, setOldPassword] = useState('');
+
   const [isOtpVerify, setOtpVerify] = useState<string | null>(null);
   const dispatch = useDispatch();
   const toggleEditMode = () => {
@@ -66,6 +70,19 @@ const UserProfile = () => {
       }
     }
 
+    if (newPassword) {
+      if (!oldPassword?.trim()) {
+        HotToastError('Enter your current password');
+        hasValidationError = true;
+      } else if (!validatePassword(newPassword)) {
+        HotToastError('Password must contain at least 6 characters, including one special character.');
+        hasValidationError = true;
+      } else {
+        data.newPassword = newPassword;
+        data.oldPassword = oldPassword;
+      }
+    }
+
     if (newPhone) {
       if (!validatePhone(newPhone)) {
         HotToastError('Enter a 10-digit phone number');
@@ -90,33 +107,39 @@ const UserProfile = () => {
 
     if (Object.keys(data).length > 0) {
       try {
+        setLoading(true);
+
         const res: any = await putRequest(`${apiEndPoint.updateProfile}/${user._id}`, data);
+
         if (res.status === 200) {
           HotToastSuccess(res.data.message);
-
           getUserProfile();
           setIsEditMode(false);
         }
-
         if (res.status == 203) {
           HotToastSuccess(res.data.message);
           setOtpVerify(res.data.auth);
         }
-      } catch (error) {
-        HotToastError('Failed to update profile');
+      } catch (error: any) {
+        HotToastError(error.response.data.message ?? 'Failed to update profile');
         console.error('Error saving changes:', error);
+      } finally {
+        setLoading(false);
       }
     } else {
+      setLoading(false);
       HotToastSuccess('No changes to save');
       setIsEditMode(false);
     }
   };
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === 'newEmail') setNewEmail(value);
     else if (name === 'newPhone') setNewPhone(value);
     else if (name === 'newUserName') setNewUserName(value);
+    else if (name === 'newPassword') setNewPassword(value);
+    else if (name === 'oldPassword') setOldPassword(value);
   };
 
   const handleImageUpload = (e: any) => {
@@ -139,7 +162,6 @@ const UserProfile = () => {
     return (
       <div className="min-h-screen p-4">
         <div className="max-w-2xl mx-auto shadow bg-base-300 rounded-xl">
-          {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-base-300">
             <h2 className="text-xl font-semibold">Profile</h2>
             <button onClick={toggleEditMode} className="btn btn-primary">
@@ -151,13 +173,15 @@ const UserProfile = () => {
           <div className="p-6">
             <div className="flex items-center gap-6 mb-8">
               <div className="relative">
-                {user.profileImage && (
+                {/* {user.profileImage && (
                   <img
                     src={user.profileImage}
                     alt="Profile"
                     className="object-cover w-24 h-24 border-4 border-gray-100 rounded-full"
                   />
-                )}
+                )} */}
+
+                <InitialAvatar name={user.userName} bgColor="bg-base-100" size={100} imageSrc={user.profileImage} />
               </div>
               <div>
                 <h3 className="text-2xl font-bold">{user.userName}</h3>
@@ -315,6 +339,36 @@ const UserProfile = () => {
                 />
               </div>
             )}
+
+            <div className="flex">
+              <div className="p-2">
+                <label className="label">
+                  <span className="label-text">old password</span>
+                </label>
+                <input
+                  type="search"
+                  name="oldPassword"
+                  value={oldPassword}
+                  onChange={handleChange}
+                  className="w-full input input-bordered"
+                  placeholder="Old password"
+                />
+              </div>
+
+              <div className="p-4">
+                <label className="label">
+                  <span className="label-text">newPassword</span>
+                </label>
+                <input
+                  type="email"
+                  name="newPassword"
+                  value={newPassword}
+                  onChange={handleChange}
+                  className="w-full input input-bordered"
+                  placeholder="New Password"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Form Actions */}
@@ -322,7 +376,7 @@ const UserProfile = () => {
             <button onClick={cancelEdit} className="flex-1 btn btn-outline">
               Cancel
             </button>
-            <button onClick={saveChanges} className="flex-1 btn btn-primary">
+            <button onClick={saveChanges} disabled={isLoading} className="flex-1 btn btn-primary">
               <Save size={16} />
               Save Changes
             </button>

@@ -13,8 +13,9 @@ const AdminLayout = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-base-100 bg-grid-pattern">
+      <div className="min-h-screen bg-base-100 bg-hex-pattern ">
         <Outlet />
+        {/* <Footer /> */}
       </div>
     </>
   );

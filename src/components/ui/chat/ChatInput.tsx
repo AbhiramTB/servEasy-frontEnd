@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Send, Smile } from 'lucide-react';
 import EmojiPicker from 'emoji-picker-react';
-import ChatImageUploadModal from '../ChatImageUploadModal'; 
+import ChatImageUploadModal from '../ChatImageUploadModal';
 
 interface ChatInputProps {
   newMessage: string;
@@ -20,7 +20,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   handleImgUpload,
   showEmojiPicker,
   setShowEmojiPicker,
-  onEmojiClick
+  onEmojiClick,
 }) => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const pickerRef = useRef<HTMLDivElement>(null);
@@ -38,9 +38,9 @@ const ChatInput: React.FC<ChatInputProps> = ({
   }, [showEmojiPicker, setShowEmojiPicker]);
 
   return (
-    <div className="p-4 border-t border-base-300 bg-base-200">
+    <div className=" border-t relative px-2 pt-2 pb-safe ">
       <div className="relative flex items-center w-full">
-        <div className="absolute left-4 "  >
+        <div className="absolute left-4 ">
           <ChatImageUploadModal uploadImg={handleImgUpload} />
         </div>
 
@@ -54,24 +54,24 @@ const ChatInput: React.FC<ChatInputProps> = ({
           onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
         /> */}
         <textarea
-  ref={inputRef}
-  className="w-full py-3 rounded-2xl px-14 input input-bordered resize-none overflow-y-auto max-h-48 min-h-[3rem] focus:border-primary"
-  placeholder="Type a message..."
-  value={newMessage}
-  onChange={(e) => setNewMessage(e.target.value)}
-  onKeyDown={(e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault(); // Prevent newline on Enter
-      sendMessage();
-    }
-  }}
-/>
+          ref={inputRef}
+          className="w-full py-3 rounded-2xl px-14 input input-bordered resize-none overflow-y-auto max-h-48 min-h-[3rem] focus:border-primary"
+          placeholder="Type a message..."
+          value={newMessage}
+          onChange={e => setNewMessage(e.target.value)}
+          onKeyDown={e => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault(); // Prevent newline on Enter
+              sendMessage();
+            }
+          }}
+        />
 
-        <div className="absolute flex items-center space-x-2 right-4 tooltip tooltip-left tooltip-secondary"  data-tip="Add Emoji">
-          <button
-            className="btn btn-circle btn-ghost btn-sm"
-            onClick={() => setShowEmojiPicker((prev) => !prev)}
-          >
+        <div
+          className="absolute flex items-center space-x-2 right-4 tooltip tooltip-left tooltip-secondary"
+          data-tip="Add Emoji"
+        >
+          <button className="btn btn-circle btn-ghost btn-sm" onClick={() => setShowEmojiPicker(prev => !prev)}>
             <Smile size={20} />
           </button>
 
@@ -88,7 +88,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
       </div>
 
       {showEmojiPicker && (
-        <div ref={pickerRef} className="absolute z-20 bottom-20 right-4" >
+        <div ref={pickerRef} className="absolute z-20 bottom-20 right-4">
           <EmojiPicker onEmojiClick={onEmojiClick} height={350} width={320} />
         </div>
       )}

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { ISubscriptionPlan } from '../../../utils/types/ISubscriptionPlan';
 import AddPlanModal from './AddPlanModal';
 import EditPlanModal from './EditPlanModal';
@@ -76,7 +75,6 @@ const SubscriptionPlansPage: React.FC = () => {
 
   return (
     <div className="p-6 space-y-6">
-      {/* ======= Header ======= */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Subscription Plans</h1>
 

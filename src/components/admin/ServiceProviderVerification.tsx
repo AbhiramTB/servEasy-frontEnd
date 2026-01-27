@@ -147,10 +147,9 @@ const ServiceProviderVerification: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-base-100 text-base-content">
+    <div className="min-h-screen  text-base-content">
       <Toaster position="top-center" reverseOrder={false} />
 
-      {/* Image Preview Modal */}
       {imagePreview.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
           <div className="relative max-w-4xl max-h-screen p-4">
@@ -170,7 +169,6 @@ const ServiceProviderVerification: React.FC = () => {
         </div>
       )}
 
-      {/* Reject Modal */}
       <RejectModal isOpen={isRejectModalOpen} onClose={() => setIsRejectModalOpen(false)} onSubmit={handleReject} />
 
       <main className="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -253,7 +251,6 @@ const ServiceProviderVerification: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Contact info */}
                       <div className="mt-4 md:mt-0 md:w-1/3">
                         <div className="space-y-2 text-sm">
                           <p className="flex items-center">
@@ -310,7 +307,6 @@ const ServiceProviderVerification: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Actions */}
                       <div className="flex flex-col gap-2 mt-4 md:mt-0 md:w-1/3 md:items-end">
                         {provider.isVerified === 'rejected' && (
                           <button
@@ -345,7 +341,6 @@ const ServiceProviderVerification: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Expanded details */}
                     {expandedId === provider._id && (
                       <div className="pt-4 mt-6 border-t border-base-300">
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -382,13 +377,11 @@ const ServiceProviderVerification: React.FC = () => {
                             </div>
                           </div>
 
-                          {/* Description */}
                           <div>
                             <h4 className="mb-2 text-lg font-medium">Description</h4>
                             <p className="text-sm">{provider.description || 'No description provided.'}</p>
                           </div>
 
-                          {/* Documents - Using the new DocumentViewer component */}
                           <div>
                             <h4 className="mb-2 text-lg font-medium">Verification Documents</h4>
                             <DocumentViewer documents={provider.document} onImagePreview={handleImagePreview} />

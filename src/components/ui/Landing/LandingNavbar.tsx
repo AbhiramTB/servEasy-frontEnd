@@ -8,7 +8,7 @@ const LandingNavbar: React.FC<INavbarProps> = ({
   loginText = 'Sign-in',
 }) => {
   return (
-    <div className="navbar bg-base-100 px-6 lg:px-10 sticky top-0 z-50 shadow-sm">
+    <div className="navbar bg-base-100 px-6 lg:px-10 sticky top-0 z-50 shadow-sm bg-hex-pattern">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">

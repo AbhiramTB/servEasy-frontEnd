@@ -5,6 +5,7 @@ import { ServiceProviderLinks } from '../../../utils/constants/navLinks/serviceP
 import { HotToastError } from '../../../utils/notificationToast';
 import AppLogo from '../../ui/AppLogo';
 import { ROUTES } from '../../../utils/constants/routes';
+import { IServiceProvider } from '../../../utils/types/IServiceProvider';
 
 interface Props {
   profile: string;
@@ -13,7 +14,7 @@ interface Props {
   toggleNotifications: (e?: React.MouseEvent) => void;
   notificationCount: number;
   location: Location;
-  serviceProviderInfo: any;
+  serviceProviderInfo: IServiceProvider;
 }
 
 const DesktopSidebar: React.FC<Props> = ({
@@ -27,7 +28,7 @@ const DesktopSidebar: React.FC<Props> = ({
 }) => {
   return (
     <aside
-      className={`hidden lg:flex flex-col fixed top-0 left-0 h-screen bg-base-200 border-r border-base-300 transition-all duration-300 z-30 ${
+      className={`hidden lg:flex flex-col fixed top-0 left-0 h-screen bg-base-200 bg-hex-pattern border-r border-base-300 transition-all duration-300 z-30 ${
         isSidebarOpen ? 'w-64' : 'w-20'
       }`}
     >
@@ -59,7 +60,7 @@ const DesktopSidebar: React.FC<Props> = ({
                   to={item.path}
                   onClick={e => {
                     if (locked) {
-                      HotToastError('Upgrade to PRO 👑');
+                      HotToastError('Upgrade Plan');
                     }
                     if (item.isNotification) toggleNotifications(e);
                   }}
