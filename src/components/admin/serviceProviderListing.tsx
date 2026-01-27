@@ -81,7 +81,7 @@ const ServiceProviderListing = () => {
   };
 
   return (
-    <div className="container px-4 py-8 mx-auto ">
+    <div className="container px-4 py-8 mx-auto  ">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-base-content">Service Providers</h1>
         <SearchComponent setSearch={setSearchQuery} searchVal={searchQuery} />
@@ -100,14 +100,10 @@ const ServiceProviderListing = () => {
               key={provider._id}
               className="relative card bg-base-100 shadow-md hover:shadow-xl transition duration-300 border border-base-200 rounded-2xl overflow-hidden"
             >
-              {/* Subscription Icon (absolute to avoid breaking layout) */}
-              {provider.subscriptions?.length && provider.subscriptions?.length > 0 && (
-                <div className="absolute top-3 left-3 z-20">
-                  <SubscriptionIcon subscriptions={provider.subscriptions} />
-                </div>
-              )}
+              <div className="absolute top-3 left-3 z-20">
+                <SubscriptionIcon subscriptions={provider.subscriptions} />
+              </div>
 
-              {/* IMAGE SECTION */}
               <figure className="relative h-40 w-full ">
                 <ImagePreview
                   src={provider.profileImage || '/default-profile.png'}

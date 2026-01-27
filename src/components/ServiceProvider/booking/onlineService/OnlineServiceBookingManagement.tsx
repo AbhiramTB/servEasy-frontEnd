@@ -273,7 +273,7 @@ const OnlineBookingManagement = () => {
                 {/* <button className="btn btn-secondary btn-sm">Contact Customer</button> */}
 
                 {isInProgress && bookedService.isOnlineService && (
-                  <Link to={`/video-call/${bookedService.userId}`}>
+                  <Link to={`/video-call/${bookedService.serviceProviderId}`}>
                     <button className="btn btn-accent btn-sm" onClick={handleStartVideoCall}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

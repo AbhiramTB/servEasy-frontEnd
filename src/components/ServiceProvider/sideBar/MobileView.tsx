@@ -26,7 +26,7 @@ const MobileView: React.FC<Props> = ({
 }) => {
   return (
     <>
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-base-200 border-b border-base-300">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-base-200 bg-hex-pattern border-b border-base-300">
         <div className="flex items-center justify-between px-4 py-3">
           <button onClick={() => setIsMobileMenuOpen(true)} className="btn btn-ghost btn-sm p-2">
             <Menu size={22} className="text-base-content" />

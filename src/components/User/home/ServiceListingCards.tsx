@@ -8,7 +8,7 @@ interface HomePageCardProps {
 
 const ServiceCard: React.FC<HomePageCardProps> = ({ service }) => {
   return (
-    <div className="w-[400px] h-[600px] bg-base-100 rounded-xl shadow-xl overflow-hidden flex flex-col border border-base-200">
+    <div className="w-full max-w-sm min-h-[600px] bg-base-100 rounded-xl shadow-xl overflow-hidden flex flex-col border border-base-200">
       <div className="p-6 flex items-start justify-between h-40">
         <div className="flex-1 min-w-0">
           {' '}

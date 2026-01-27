@@ -6,7 +6,7 @@ import { deleteRequest, getRequest, postRequest, putRequest } from '../../../../
 import { apiEndPoint, serviceEndPoint } from '../../../../utils/constant';
 import { useParams } from 'react-router-dom';
 import { IAddress } from '../../../Address/IAddress';
-import { HotToastError, HotToastSuccess, serviceBookingNotification } from '../../../../utils/notificationToast';
+import { HotToastError, serviceBookingNotification } from '../../../../utils/notificationToast';
 import BookingSuccess from '../../../ui/bookingSuccessCard';
 import { AddressEditModal } from '../../../Address/AddressEdit';
 import CurrentLocationFetcher from '../CurrentLocationFetcher';
@@ -150,14 +150,14 @@ const BookService = () => {
       // };
 
       if (res.status === 201) {
-        HotToastSuccess('Service booking successfully confirmed!');
+        // HotToastSuccess('Service booking successfully confirmed!');
 
         setConformCard(true);
       }
       console.log(res);
     } catch (error: any) {
       console.log(error?.response?.data.message);
-      HotToastError(error?.response?.data.message);
+      // HotToastError(error?.response?.data.message);
     } finally {
       setIsBookingConfirmLoading(false);
     }

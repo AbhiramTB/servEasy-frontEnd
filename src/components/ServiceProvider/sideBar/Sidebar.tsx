@@ -4,7 +4,11 @@ import { useSelector } from 'react-redux';
 
 import { RootState } from '../../../redux/store';
 import { useSocketNotifications } from '../../../hooks/useNotifications';
-import { HotToastChatNotification, HotToastPromise } from '../../../utils/notificationToast';
+import {
+  HotToastChatNotification,
+  HotToastPromise,
+  HotToastSystemNotification,
+} from '../../../utils/notificationToast';
 import { connectSocket } from '../../../utils/socket';
 
 import MobileView from './MobileView';
@@ -14,6 +18,7 @@ import NotificationPanel from './NotificationPanel';
 import VideoCallNotification from '../../../utils/ui/VideoCallNotification';
 import { ISavedNotification, IVideoCallNotification } from '../../../utils/types/INotification';
 import { getRequest, patchRequest } from '../../../utils/makeRequestInstance';
+import toast from 'react-hot-toast';
 
 interface SidebarProps {
   profile: string;
@@ -50,7 +55,7 @@ const Sidebar: React.FC<SidebarProps> = ({ profile, isSidebarOpen, setIsSidebarO
       const res = await getRequest('/service-providers/notification');
       console.log(res);
       setNotifications(res.data.notifications);
-      setNotificationCount(res.data.unreadedNotification);
+      setNotificationCount(res.data.unreadCount);
     } catch (error) {
       console.log(error);
     }
@@ -73,32 +78,42 @@ const Sidebar: React.FC<SidebarProps> = ({ profile, isSidebarOpen, setIsSidebarO
   };
 
   const handleSocketNotification = (notification: any) => {
-    if (notification.type === 'video_call') {
-      ringtone.currentTime = 0;
-      ringtone.play();
+    console.log('notification');
+    console.log(notification);
+    if (notification.targetRole === 'SERVICE_PROVIDER') {
+      if (notification.type === 'video_call') {
+        ringtone.currentTime = 0;
+        ringtone.play();
 
-      const socket = connectSocket();
+        const socket = connectSocket();
 
-      const reject = () => {
-        ringtone.pause();
-        socket.emit('reject_videoCall', {
-          callRoomId: notification.callerId,
-          user2: notification.callerId,
-        });
-      };
+        const reject = () => {
+          ringtone.pause();
+          socket.emit('reject_videoCall', {
+            callRoomId: notification.callerId,
+            user2: notification.callerId,
+          });
+        };
 
-      const accept = () => {
-        ringtone.pause();
-        navigate('/service-provider/video-call/' + notification.callerId);
-      };
+        const accept = () => {
+          ringtone.pause();
+          navigate('/service-provider/video-call/' + notification.callerId);
+        };
 
-      setAcceptFn(() => accept);
-      setRejectFn(() => reject);
-      setVideoCallNotification(notification);
-    }
+        setAcceptFn(() => accept);
+        setRejectFn(() => reject);
+        setVideoCallNotification(notification);
+      } else if (notification.type === 'notification') {
+        // notificatioRingtune.currentTime = 0;
+        // notificatioRingtune.play();
+        toast.dismiss();
 
-    if (notification.type === 'chat') {
-      HotToastChatNotification(notification, () => {});
+        HotToastSystemNotification(notification);
+        getNotfication();
+        toast.dismiss();
+      } else if (notification.type === 'chat') {
+        HotToastChatNotification(notification, () => {});
+      }
     }
   };
 

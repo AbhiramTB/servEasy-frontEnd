@@ -17,7 +17,7 @@
 import { useEffect } from 'react';
 import { connectSocket, isSocketConnected } from '../utils/socket'; // Assuming socket utilities are defined here
 
-interface NotificationPayload {
+export interface NotificationPayload {
   title: string;
   body: string;
   from: string;

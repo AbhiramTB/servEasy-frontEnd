@@ -8,7 +8,11 @@ import { RootState } from '../../../redux/store';
 import { MapPin, Edit, Eye } from 'lucide-react';
 import ServiceDetailsView from './ServiceDetailsView';
 import { HotToastSuccess } from '../../../utils/notificationToast';
+<<<<<<< HEAD
 import EditService from './editService';
+=======
+import EditService from './EditService';
+>>>>>>> refactor/ui
 import { Link } from 'react-router-dom';
 
 const ServiceManagement = () => {

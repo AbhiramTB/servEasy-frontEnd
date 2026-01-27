@@ -28,6 +28,7 @@ import SubscriptionFeaturesRoutes from './routes/SubscriptionFeaturesRoutes.tsx'
 import AdsPage from './components/ServiceProvider/ads/AdsPage.tsx';
 import ServiceProviderLanding from './components/ui/Landing/serviceProviderLanding/ServiceProviderLandingPage.tsx';
 import { ROUTES } from './utils/constants/routes.ts';
+
 import UserRoutes from './routes/UserRoutes.tsx';
 
 function App() {

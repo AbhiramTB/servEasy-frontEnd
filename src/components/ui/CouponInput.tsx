@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { HotToastError, } from '../../utils/notificationToast';
+import { HotToastError } from '../../utils/notificationToast';
 
 interface CouponInputProps {
   bookingId: string;
-  handleApply: (code: string) => void;
-  currentCoupon:string|null
-  handleRemoveCoupon:()=>void;
+  handleApply: (code: string) => Promise<boolean>;
+  currentCoupon: string | null;
+  handleRemoveCoupon: () => void;
 }
 
-const CouponInput: React.FC<CouponInputProps> = ({  handleApply,currentCoupon ,handleRemoveCoupon}) => {
+const CouponInput: React.FC<CouponInputProps> = ({ handleApply, currentCoupon, handleRemoveCoupon }) => {
   const [coupon, setCoupon] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>(currentCoupon);
 
@@ -18,20 +18,18 @@ const CouponInput: React.FC<CouponInputProps> = ({  handleApply,currentCoupon ,h
       return;
     }
 
-    handleApply(coupon);
-
-    setAppliedCoupon(coupon.trim());
+    const res = await handleApply(coupon);
+    if (res) {
+      setAppliedCoupon(coupon.trim());
+    }
   };
 
+  const handleRemove = async () => {
+    handleRemoveCoupon();
 
-  const handleRemove =async ()=>{
-     
-       handleRemoveCoupon()
-
-      setAppliedCoupon(null);
-      setCoupon('');
-  }
- 
+    setAppliedCoupon(null);
+    setCoupon('');
+  };
 
   return (
     <div className="w-full max-w-md mx-auto mt-4">
@@ -41,17 +39,17 @@ const CouponInput: React.FC<CouponInputProps> = ({  handleApply,currentCoupon ,h
           value={coupon}
           onChange={e => setCoupon(e.target.value)}
           placeholder="Enter coupon code"
-          disabled={!!appliedCoupon }
+          disabled={!!appliedCoupon}
           className="flex-1 input input-bordered"
         />
         {appliedCoupon ? (
-          <button onClick={handleRemove} className="text-white bg-red-500 btn hover:bg-red-600" >
+          <button onClick={handleRemove} className="text-white bg-red-500 btn hover:bg-red-600">
             Remove
           </button>
         ) : (
           <button
             onClick={handleApplyCoupon}
-            disabled={!coupon.trim() }
+            disabled={!coupon.trim()}
             className="text-white btn bg-success hover:bg-success/90 disabled:opacity-50"
           >
             Apply

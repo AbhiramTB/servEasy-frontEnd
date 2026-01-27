@@ -23,8 +23,12 @@ const AuthPage = () => {
   }, [isBlocked]);
 
   return (
-    <div className="relative w-full overflow-x-hidden bg-base-200 bg-grid-pattern">
-      <LandingNavbar loginFunction={() => setIsSignIn(!isSignIn)} loginText={isSignIn ? 'Sign-up' : 'Sign-in'} />
+    <div className="relative w-full overflow-x-hidden bg-base-200 bg-hex-pattern">
+      <LandingNavbar
+        loginFunction={() => setIsSignIn(!isSignIn)}
+        links={[{ label: 'landing', href: '/' }]}
+        loginText={isSignIn ? 'Sign-up' : 'Sign-in'}
+      />
       <section className="relative z-10 flex items-center justify-center px-4 py-20  min-h-screen">
         {isForgotPassword ? (
           <ForgotPassword setForget={setForgotPassword} />

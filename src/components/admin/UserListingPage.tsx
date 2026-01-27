@@ -74,7 +74,7 @@ const UserListingPage: React.FC = () => {
   const selectedUser = users.find(user => user._id === selectedUserId);
 
   return (
-    <div className="min-h-screen bg-base-100 text-base-content">
+    <div className="min-h-screen  text-base-content">
       <Toaster position="top-center" reverseOrder={false} />
 
       <main className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -104,8 +104,6 @@ const UserListingPage: React.FC = () => {
             {users.length > 0 &&
               users.map(user => (
                 <div key={user._id} className="overflow-hidden border rounded-lg shadow-md bg-base-200 border-base-300">
-              
-
                   <div className="p-5">
                     <div className="flex items-center mb-4">
                       <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary">
@@ -137,7 +135,7 @@ const UserListingPage: React.FC = () => {
                       View Profile
                     </button>
                     <button
-                      onClick={() => handleBlockUser(user._id, user.isBlocked ? 'Unblock' : 'Block') }
+                      onClick={() => handleBlockUser(user._id, user.isBlocked ? 'Unblock' : 'Block')}
                       className="flex items-center justify-center flex-1 py-3 text-sm font-medium text-error hover:bg-base-300"
                     >
                       {user.isBlocked ? 'Unblock' : 'Block'}
@@ -156,8 +154,6 @@ const UserListingPage: React.FC = () => {
         totaldata={totalData}
         fetchData={(p: number) => getAllUser(p, searchQuery)}
       />
-
-      
     </div>
   );
 };

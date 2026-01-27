@@ -1,4 +1,5 @@
-/** @type {import('tailwindcss').Config} */
+// @type {import('tailwindcss').Config} 
+
 import daisyui from 'daisyui'
 export default {
   content: [
@@ -10,9 +11,17 @@ export default {
       backgroundImage: {
 
 'grid-pattern': `repeating-linear-gradient(to right, oklch(var(--p) / 0.05) 0 1px, transparent 1px 50px),
-                   repeating-linear-gradient(to bottom, oklch(var(--p) / 0.05) 0 1px, transparent 1px 50px)`,
+                 repeating-linear-gradient(to bottom, oklch(var(--p) / 0.05) 0 1px, transparent 1px 50px)`,
 
-    }
+'diagonal-grid': `
+  repeating-linear-gradient(45deg,oklch(var(--p) / 0.04) 0 1px, transparent 1px 40px),
+  repeating-linear-gradient(-45deg,oklch(var(--p) / 0.04) 0 1px,transparent 1px 40px)`,
+
+'hex-pattern': `
+  linear-gradient(60deg, oklch(var(--p) / 0.04) 25%,transparent 25% 75%,oklch(var(--p) / 0.04) 75%),
+  linear-gradient(-60deg,oklch(var(--p) / 0.04) 25%,transparent 25% 75%,oklch(var(--p) / 0.04) 75%)`,
+
+}
     }
     
   },
@@ -30,6 +39,21 @@ export default {
     ]
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // {

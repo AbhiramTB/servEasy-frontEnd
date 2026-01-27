@@ -68,7 +68,7 @@ const ServiceProviderLayout = () => {
   }
 
   return (
-    <div className="min-h-screen bg-base-100">
+    <div className="min-h-screen bg-base-100 bg-grid-pattern ">
       <Sidebar
         profile={serviceProviderInfo.profileImage}
         isSidebarOpen={isSidebarOpen}
