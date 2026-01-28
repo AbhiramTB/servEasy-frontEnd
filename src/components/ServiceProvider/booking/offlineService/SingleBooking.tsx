@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getRequest, patchRequest, postRequest } from '../../../../utils/makeRequestInstance';
-import { HotToastError, HotToastSuccess } from '../../../../utils/notificationToast';
+import { HotToastError, HotToastPromise, HotToastSuccess } from '../../../../utils/notificationToast';
 import PaymentModal from '../paymentModal';
 import { Ipayment } from '../../../../utils/types/Ipayment';
 import { getMinMaxDateTime } from '../../../../utils/getMinMaxDateTime';
@@ -24,6 +24,7 @@ import { IReview } from '../../../../utils/types/IReview';
 import StarRating from '../../../ui/StarRating';
 import dayjs from 'dayjs';
 import { ReloadButton } from '../../../User/bookService/ReloadButton';
+import ShowBills from '../../../ui/ShowBills';
 interface IliveLocation {
   lat: number;
   lng: number;
@@ -86,8 +87,11 @@ const ServiceProviderBookingManage = () => {
   const [estimatedTime, setEstimatedTime] = useState<string>('');
   const [cancelReason, setCancelReason] = useState<string>('');
   const [newStatus, setNewStatus] = useState<string>('');
+  const [isBillsUploadLoading, setBillsUploadLoading] = useState(false);
   const [invoiceFiles, setInvoiceFiles] = useState<File[]>([]);
   const [reason, setReason] = useState('');
+  const [showBills, setShowBills] = useState(false);
+
   const [payment, setPayment] = useState<Ipayment>({
     serviceCost: 0,
     materialCost: 0,
@@ -238,6 +242,7 @@ const ServiceProviderBookingManage = () => {
 
   const handleInvoiceUpload = async () => {
     try {
+      setBillsUploadLoading(true);
       if (!invoiceFiles || invoiceFiles.length === 0) {
         HotToastError('Please select at least one invoice image to upload');
         return;
@@ -261,18 +266,23 @@ const ServiceProviderBookingManage = () => {
       };
 
       // Send request using postRequest
-      const response = await postRequest(`service/service-provider/uploadbills/${id}/`, formData);
-
+      const response = await HotToastPromise(postRequest(`service/service-provider/uploadbills/${id}/`, formData), {
+        loading: 'Uploading your bills…',
+        success: 'Bills uploaded successfully',
+        error: 'Failed to upload bills. Please try again',
+      });
       if (response.status === 201) {
-        HotToastSuccess(`Successfully uploaded ${invoiceFiles.length} invoice image(s)`);
+        // HotToastSuccess(`Successfully uploaded ${invoiceFiles.length} invoice image(s)`);
         getBookedService(id as string);
       }
 
       setShowInvoiceModal(false);
       setInvoiceFiles([]);
     } catch (err) {
-      HotToastError('Failed to upload invoice images');
+      // HotToastError('Failed to upload invoice images');
       console.error(err);
+    } finally {
+      setBillsUploadLoading(false);
     }
   };
 
@@ -542,10 +552,20 @@ const ServiceProviderBookingManage = () => {
                 Reschedule Booking
               </button>
             )}
+            {/* <button className="btn btn-info  hover:scale-105 transition" onClick={() => setShowInvoiceModal(true)}>
+              Upload Bills
+            </button> */}
 
-            {(isInProgress || isPaymentRequested || isCompleted) && !bookedService.serviceBills && (
-              <button className="btn btn-info  hover:scale-105 transition" onClick={() => setShowInvoiceModal(true)}>
-                Upload Bills
+            {(isInProgress || isPaymentRequested || isCompleted) &&
+              (!bookingData.bookedService.serviceBills || !bookingData.bookedService.serviceBills.length) && (
+                <button className="btn btn-info hover:scale-105 transition" onClick={() => setShowInvoiceModal(true)}>
+                  Upload Bills
+                </button>
+              )}
+
+            {bookingData.bookedService.serviceBills && bookingData.bookedService.serviceBills?.length > 0 && (
+              <button onClick={() => setShowBills(true)} className="btn btn-primary">
+                show bills
               </button>
             )}
 
@@ -641,7 +661,16 @@ const ServiceProviderBookingManage = () => {
         invoiceFiles={invoiceFiles}
         setInvoiceFiles={setInvoiceFiles}
         onUpload={handleInvoiceUpload}
+        isBillsUploadLoading={isBillsUploadLoading}
       />
+
+      {showBills && bookingData.bookedService.serviceBills && (
+        <ShowBills
+          close={() => setShowBills(false)}
+          serviceName={bookingData.service.serviceName}
+          bills={bookingData.bookedService.serviceBills}
+        ></ShowBills>
+      )}
     </div>
   );
 };
