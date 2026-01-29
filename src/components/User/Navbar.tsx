@@ -14,6 +14,7 @@ import { useFetchUserProfile } from '../../hooks/useFetchUserProfile';
 import { useTheme } from '../../hooks/useTheme';
 import MobileBottomNav from './MobileBottomNav';
 import TopBar from './Navbar/Topbar';
+import { ROUTES } from '../../utils/constants/routes';
 
 const ringtune = new Audio('/Ringtone Video call.mp3');
 const notificatioRingtune = new Audio('/Ringtone Notification.mp3');
@@ -162,7 +163,7 @@ const Navbar: React.FC<IProp> = ({ scrolled }) => {
       const res = await getRequest(apiEndPoint.logOutUser);
       if (res.status === 200) {
         localStorage.removeItem('accessToken');
-        window.location.href = '/';
+        window.location.replace(ROUTES.USER.ROOT);
       } else {
         console.error('Logout failed:', res.data.message);
       }

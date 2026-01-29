@@ -85,8 +85,9 @@ export const handleAuth = async (
           if (res?.status === 200) {
             HotToastSuccess('login successful');
             localStorage.setItem('accessToken', res.data.accessToken);
+            window.location.replace(ROUTES.USER.HOME);
 
-            navigate(ROUTES.USER.HOME, { replace: true });
+            // navigate(ROUTES.USER.HOME, { replace: true });
           }
         } else if (submissionData.email) {
           localStorage.setItem('registerEmailorPhone', submissionData.email);
@@ -100,8 +101,9 @@ export const handleAuth = async (
           HotToastSuccess('login successful');
 
           localStorage.setItem('accessToken', res.data.accessToken);
+          window.location.replace(ROUTES.USER.HOME);
 
-          navigate(ROUTES.USER.HOME, { replace: true });
+          // navigate(ROUTES.USER.HOME, { replace: true });
         } else {
           setError(res.data.message || 'An error occurred. Please try again.');
         }
@@ -122,10 +124,16 @@ export const handleAuth = async (
       }
     } else {
       if (!isValidateEmailOrPhone) {
+        HotToastError('Please enter a valid email or phone number');
+
         setError('Please enter a valid email or phone number.');
       } else if (!isSignIn && !isValidateUserName) {
+        HotToastError('Username must contain at least 3 characters.');
+
         setError('Username must contain at least 3 characters.');
       } else {
+        HotToastError('Password must contain at least 6 characters, including one special character');
+
         setError('Password must contain at least 6 characters, including one special character.');
       }
     }

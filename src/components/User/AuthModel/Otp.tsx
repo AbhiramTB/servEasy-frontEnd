@@ -83,7 +83,7 @@ const Otp = () => {
         HotToastSuccess(res.data.message);
         localStorage.setItem('accessToken', res.data.accessToken);
 
-        navigate(ROUTES.USER.HOME, { replace: true });
+        window.location.replace(ROUTES.USER.HOME);
       } else {
         console.log(res?.data?.errorMessage);
         console.log(res.data.error);

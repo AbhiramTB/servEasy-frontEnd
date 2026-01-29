@@ -19,16 +19,11 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
   const [isEmail, setIsEmail] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  /**
-   * Centralized Request Handler
-   * Handles loading states and global error Toasting
-   */
   async function sendData(url: string, data: object) {
     try {
       setIsLoading(true);
       const res = await makeRequest(url, 'POST', data);
 
-      // Standardizing response check (adjust based on your makeRequest return type)
       if (res && (res.status === 200 || res.status === 201)) {
         return true;
       }
@@ -69,7 +64,7 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
 
     const payload = {
       otp,
-      [isEmail ? 'email' : 'phone']: key,
+      key,
     };
 
     const success = await sendData(apiEndPoint.forgotPasswordVerifyOtp, payload);
@@ -220,7 +215,6 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
             </form>
           )}
 
-          {/* STEP 3: Password Reset */}
           {step === 3 && (
             <form onSubmit={handlePasswordSubmit}>
               <div className="space-y-4">
@@ -236,7 +230,7 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
                       disabled={isLoading}
                     />
                     <span className="cursor-pointer" onClick={() => setShowPassword(!showPassword)}>
-                      {showPassword ? '🙈' : '👁️'}
+                      {showPassword ? '⊘' : '⊙'}
                     </span>
                   </label>
                 </div>
@@ -252,7 +246,7 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
                       disabled={isLoading}
                     />
                     <span className="cursor-pointer" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
-                      {showConfirmPassword ? '🙈' : '👁️'}
+                      {showConfirmPassword ? '⊘' : '⊙'}
                     </span>
                   </label>
                 </div>
@@ -267,7 +261,6 @@ const ForgotPassword: React.FC<Props> = ({ setForget }) => {
             </form>
           )}
 
-          {/* STEP 4: Success Message */}
           {step === 4 && (
             <div className="text-center animate-in fade-in zoom-in">
               <div className="flex justify-center mb-4 text-success">
