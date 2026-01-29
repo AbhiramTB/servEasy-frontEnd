@@ -559,7 +559,7 @@ const ServiceBookingDetails = () => {
                       Cancel Booking
                     </button>
                   ))}
-                {bookingData.bookedService.serviceBills && bookingData.bookedService.serviceBills?.length > 1 && (
+                {bookingData.bookedService.serviceBills && bookingData.bookedService.serviceBills?.length > 0 && (
                   <button onClick={() => setShowBills(true)} className="btn btn-primary">
                     show bills
                   </button>

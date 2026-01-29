@@ -97,7 +97,7 @@ const MobileView: React.FC<Props> = ({
                     className="text-error "
                     onClick={() => {
                       localStorage.removeItem('accessToken');
-                      window.location.href = '/signin';
+                      window.location.replace(ROUTES.USER.ROOT);
                     }}
                   >
                     <LogOut size={20} />
