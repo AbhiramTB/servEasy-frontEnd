@@ -23,7 +23,6 @@ type DesktopNavbarProps = {
 };
 
 const DesktopNavbar = ({
-  scrolled,
   mobileMenuOpen,
   user,
   chatNotificationCount,

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import PendingVerificationCard from './pendingVerification';
 
 import FilterSection from '../Chart/FilterSection';
 import StatsSection from '../Chart/StatsSection';
@@ -9,8 +8,6 @@ import PaymentChartSection from '../Chart/PaymentChartSection';
 import PaymentTable from '../Chart/PaymentTable';
 
 import { apiEndPointServiceProvider } from '../../utils/constant';
-import RejectedRequestPage from './service/RejectedRequestPage';
-import BlockedUserMessage from './service/BlockedMessage';
 import { getRequest } from '../../utils/makeRequestInstance';
 import PaymentSummaryDownloader from '../ui/PaymentSummaryDownloader';
 

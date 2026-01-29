@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { postRequest } from '../../../utils/makeRequestInstance';
 import { HotToastSuccess, HotToastError } from '../../../utils/notificationToast';
-import { Toaster } from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { IReview } from '../../../utils/types/IReview';

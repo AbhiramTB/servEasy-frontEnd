@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { ISubscriptionPlan } from '../../../utils/types/ISubscriptionPlan';
 import AddPlanModal from './AddPlanModal';
 import EditPlanModal from './EditPlanModal';

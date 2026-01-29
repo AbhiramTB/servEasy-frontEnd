@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getRequest, postRequest } from '../../../utils/makeRequestInstance';
-import { apiEndPoint, serviceEndPoint } from '../../../utils/constant';
+import { getRequest } from '../../../utils/makeRequestInstance';
+import { apiEndPoint } from '../../../utils/constant';
 import Card from '../../ui/Card';
 import ServiceDetailsCard from '../../ui/ServiceDetailsCard';
 import { IReview } from '../../../utils/types/IReview';
@@ -11,7 +11,6 @@ import { IAdDTO } from '../../../utils/types/IAd';
 import AdCard from '../../ui/ad/AdCard';
 import ServiceDetailsSkeleton from '../../../Skeleton/ServiceDetailsSkeleton';
 import { IServiceServiceDetailsDTO } from '../../../utils/types/DTO/IServiceDetailsDTO';
-import { serviceBookingNotification } from '../../../utils/notificationToast';
 
 const SingleServiceCard = () => {
   const [service, setService] = useState<IServiceServiceDetailsDTO>();
@@ -56,11 +55,11 @@ const SingleServiceCard = () => {
     navigate(service?.serviceType === 'Online' ? '/bookService-online/' + id : '/bookService/' + id);
   };
 
-  const handleVideoCall = () => {
-    if (!service || !service.serviceProviderDetails._id) return;
+  // const handleVideoCall = () => {
+  //   if (!service || !service.serviceProviderDetails._id) return;
 
-    navigate(`/video-call/${service.serviceProviderDetails._id}`);
-  };
+  //   navigate(`/video-call/${service.serviceProviderDetails._id}`);
+  // };
 
   if (loading) {
     return <ServiceDetailsSkeleton />;
