@@ -6,7 +6,6 @@ import { apiEndPointAdmin } from '../../utils/constant';
 import { RootState } from '../../redux/store';
 import UserProfileView from './showProfile';
 import { HotToastSuccess } from '../../utils/notificationToast';
-import { Toaster } from 'react-hot-toast';
 import Pagination from '../../utils/ui/pagination';
 import SearchComponent from '../ui/SearchComponent';
 import { UserCardSkeleton } from '../../Skeleton/admin/UserCardSkeleton';

@@ -55,11 +55,11 @@ const SingleServiceCard = () => {
     navigate(service?.serviceType === 'Online' ? '/bookService-online/' + id : '/bookService/' + id);
   };
 
-  const handleVideoCall = () => {
-    if (!service || !service.serviceProviderDetails._id) return;
+  // const handleVideoCall = () => {
+  //   if (!service || !service.serviceProviderDetails._id) return;
 
-    navigate(`/video-call/${service.serviceProviderDetails._id}`);
-  };
+  //   navigate(`/video-call/${service.serviceProviderDetails._id}`);
+  // };
 
   if (loading) {
     return <ServiceDetailsSkeleton />;
