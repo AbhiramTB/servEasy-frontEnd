@@ -23,7 +23,7 @@ import { useAuth } from '../hooks/useAuth';
 import CouponsPage from '../pages/user/CouponsPage';
 
 const UserRoutes = () => {
-  const { userAccessToken = true } = useAuth();
+  const { userAccessToken } = useAuth();
 
   return (
     <Route>

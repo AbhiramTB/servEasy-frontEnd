@@ -1,11 +1,12 @@
-import React from "react"
+import React from 'react';
 
 interface UploadDocumentsModalProps {
-  showModal: boolean
-  setShowModal: (value: boolean) => void
-  invoiceFiles: File[]
-  setInvoiceFiles: (files: File[]) => void
-  onUpload: () => void
+  showModal: boolean;
+  setShowModal: (value: boolean) => void;
+  invoiceFiles: File[];
+  setInvoiceFiles: (files: File[]) => void;
+  onUpload: () => void;
+  isBillsUploadLoading: boolean;
 }
 
 const UploadDocumentsModal: React.FC<UploadDocumentsModalProps> = ({
@@ -14,20 +15,21 @@ const UploadDocumentsModal: React.FC<UploadDocumentsModalProps> = ({
   invoiceFiles,
   setInvoiceFiles,
   onUpload,
+  isBillsUploadLoading,
 }) => {
-  if (!showModal) return null
+  if (!showModal) return null;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setInvoiceFiles(Array.from(e.target.files))
+      setInvoiceFiles(Array.from(e.target.files));
     }
-  }
+  };
 
   const handleRemoveFile = (index: number) => {
-    const updatedFiles = [...invoiceFiles]
-    updatedFiles.splice(index, 1)
-    setInvoiceFiles(updatedFiles)
-  }
+    const updatedFiles = [...invoiceFiles];
+    updatedFiles.splice(index, 1);
+    setInvoiceFiles(updatedFiles);
+  };
 
   return (
     <div className="modal modal-open">
@@ -52,23 +54,16 @@ const UploadDocumentsModal: React.FC<UploadDocumentsModalProps> = ({
 
         {invoiceFiles.length > 0 && (
           <div className="mt-4">
-            <p className="font-medium">
-              Selected Files ({invoiceFiles.length}):
-            </p>
+            <p className="font-medium">Selected Files ({invoiceFiles.length}):</p>
             <div className="grid grid-cols-3 gap-2 mt-2">
               {invoiceFiles.map((file, index) => (
-                <div
-                  key={index}
-                  className="relative p-2 border rounded"
-                >
+                <div key={index} className="relative p-2 border rounded">
                   <div className="flex items-center justify-center h-16 mb-1">
                     <img
                       src={URL.createObjectURL(file)}
                       alt={file.name}
                       className="object-contain max-w-full max-h-full"
-                      onLoad={() =>
-                        URL.revokeObjectURL(URL.createObjectURL(file))
-                      }
+                      onLoad={() => URL.revokeObjectURL(URL.createObjectURL(file))}
                     />
                   </div>
                   <div className="text-xs truncate">{file.name}</div>
@@ -91,15 +86,14 @@ const UploadDocumentsModal: React.FC<UploadDocumentsModalProps> = ({
           <button
             className="btn btn-info"
             onClick={onUpload}
-            disabled={invoiceFiles.length === 0}
+            disabled={invoiceFiles.length === 0 || isBillsUploadLoading}
           >
-            Upload{" "}
-            {invoiceFiles.length > 0 ? `(${invoiceFiles.length})` : ""}
+            Upload {invoiceFiles.length > 0 ? `(${invoiceFiles.length})` : ''}
           </button>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default UploadDocumentsModal
+export default UploadDocumentsModal;

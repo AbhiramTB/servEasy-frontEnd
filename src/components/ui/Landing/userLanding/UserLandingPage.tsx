@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import HowItWorks from '../../../User/home/HowItWorks';
 import WhyChooseServEasy from '../../../User/home/WhyCooseServEasy';
 import CustomerTestimonials from '../../../User/home/CustomerTestimonials';
+import { ROUTES } from '../../../../utils/constants/routes';
 
 /* ---------- Interfaces ---------- */
 interface NavLink {
@@ -45,7 +46,7 @@ const UserLandingPage: React.FC = () => {
   const navigate = useNavigate();
 
   const navigateLoginRoute = () => {
-    navigate('/signin');
+    navigate(ROUTES.USER.SIGN_IN);
   };
 
   const navLinks = [

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import CouponBanner from '../../components/ui/CouponBanner';
 import { getRequest } from '../../utils/makeRequestInstance';
 import { IBannerCoupon } from '../../utils/types/ICoupon';
+import { ROUTES } from '../../utils/constants/routes';
 
 const UserLayout = () => {
   const location = useLocation();
@@ -42,7 +43,7 @@ const UserLayout = () => {
   }, []);
 
   useEffect(() => {
-    if (!accessToken) navigate('/', { replace: true });
+    if (!accessToken) navigate(ROUTES.USER.ROOT, { replace: true });
   }, [accessToken, navigate]);
 
   useEffect(() => {
