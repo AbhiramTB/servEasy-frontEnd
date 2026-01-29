@@ -1,67 +1,51 @@
-
 const SkeletonHomeCard = () => {
-    return (
-    <div className="card bg-base-200 w-80 h-[500px] shadow-md border border-base-300 rounded-xl overflow-hidden">
-      
-      {/* Image Shimmer */}
-      <figure className="relative h-40 overflow-hidden">
-        <div className="w-full h-full bg-gradient-to-r from-base-300 via-base-100 to-base-300 animate-pulse bg-[length:200%_100%] animate-[shimmer_2s_infinite]"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
-        <div className="absolute top-2 left-2">
-          <div className="w-16 h-5 bg-gradient-to-r from-base-300 via-base-100 to-base-300 rounded-full animate-pulse bg-[length:200%_100%] animate-[shimmer_2s_infinite]"></div>
-        </div>
-      </figure>
+  return (
+    <div className="w-full max-w-sm min-h-[600px] bg-base-100 rounded-xl shadow-xl overflow-hidden flex flex-col border border-base-200 animate-pulse">
+      {/* Header Section */}
+      <div className="p-6 flex items-start justify-between h-40">
+        <div className="flex-1 min-w-0">
+          <div className="h-8 bg-base-300 rounded-md w-3/4 mb-3"></div>
 
-      {/* Card Body Shimmer */}
-      <div className="p-4 space-y-3 card-body">
-        {/* Title */}
-        <div className="flex items-start justify-between">
-          <div className="w-40 h-5 bg-gradient-to-r from-base-300 via-base-100 to-base-300 rounded animate-pulse bg-[length:200%_100%] animate-[shimmer_2s_infinite]"></div>
-        </div>
-
-        {/* Category Badge */}
-        <div className="w-20 h-4 bg-gradient-to-r from-base-300 via-base-100 to-base-300 rounded-full animate-pulse bg-[length:200%_100%] animate-[shimmer_2s_infinite]"></div>
-
-        {/* Location */}
-        <div className="flex items-center">
-          <div className="w-4 h-4 bg-gradient-to-r from-base-300 via-base-100 to-base-300 rounded animate-pulse bg-[length:200%_100%] animate-[shimmer_2s_infinite] mr-1"></div>
-          <div className="w-32 h-3 bg-gradient-to-r from-base-300 via-base-100 to-base-300 rounded animate-pulse bg-[length:200%_100%] animate-[shimmer_2s_infinite]"></div>
-        </div>
-
-        {/* Price */}
-        <div className="text-center">
-          <div className="w-24 h-6 bg-gradient-to-r from-base-300 via-base-100 to-base-300 rounded mx-auto animate-pulse bg-[length:200%_100%] animate-[shimmer_2s_infinite]"></div>
-          <div className="w-16 h-3 bg-gradient-to-r from-base-300 via-base-100 to-base-300 rounded mx-auto mt-1 animate-pulse bg-[length:200%_100%] animate-[shimmer_2s_infinite]"></div>
-        </div>
-
-        {/* Date */}
-        <div className="flex items-center">
-          <div className="w-4 h-4 bg-gradient-to-r from-base-300 via-base-100 to-base-300 rounded animate-pulse bg-[length:200%_100%] animate-[shimmer_2s_infinite] mr-1"></div>
-          <div className="w-20 h-3 bg-gradient-to-r from-base-300 via-base-100 to-base-300 rounded animate-pulse bg-[length:200%_100%] animate-[shimmer_2s_infinite]"></div>
-        </div>
-
-        {/* Provider Info */}
-        <div className="flex items-center mt-2">
-          <div className="avatar">
-            <div className="w-8 h-8 bg-gradient-to-r from-base-300 via-base-100 to-base-300 rounded-full animate-pulse bg-[length:200%_100%] animate-[shimmer_2s_infinite]"></div>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="h-6 w-16 bg-base-300 rounded-lg"></div>
           </div>
-          <div className="ml-2 space-y-1">
-            <div className="w-24 h-3 bg-gradient-to-r from-base-300 via-base-100 to-base-300 rounded animate-pulse bg-[length:200%_100%] animate-[shimmer_2s_infinite]"></div>
-            <div className="w-20 h-2 bg-gradient-to-r from-base-300 via-base-100 to-base-300 rounded animate-pulse bg-[length:200%_100%] animate-[shimmer_2s_infinite]"></div>
+
+          <div className="flex items-center gap-3">
+            <div className="avatar">
+              <div className="w-12 h-12 rounded-full bg-base-300"></div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="h-4 w-24 bg-base-300 rounded"></div>
+              <div className="h-4 w-16 bg-base-300 rounded-lg"></div>
+            </div>
           </div>
+        </div>
+
+        <div className="text-right flex-shrink-0 ml-2">
+          <div className="h-3 w-16 bg-base-300 rounded mb-2 ml-auto"></div>
+          <div className="h-6 w-20 bg-base-300 rounded"></div>
         </div>
       </div>
 
-      <style >{`
-        @keyframes shimmer {
-          0% {
-            background-position: -200% 0;
-          }
-          100% {
-            background-position: 200% 0;
-          }
-        }
-      `}</style>
+      <div className="relative h-64 w-full bg-base-300"></div>
+
+      <div className="p-4 flex-grow space-y-2">
+        <div className="h-3 bg-base-300 rounded w-full"></div>
+        <div className="h-3 bg-base-300 rounded w-5/6"></div>
+        <div className="h-3 bg-base-300 rounded w-4/6"></div>
+      </div>
+
+      <div className="p-5 flex flex-col gap-3 bg-base-200/50 mt-auto">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 w-1/2">
+            <div className="w-4 h-4 rounded-full bg-base-300"></div>
+            <div className="h-4 bg-base-300 rounded w-full"></div>
+          </div>
+          <div className="h-6 w-20 bg-base-300 rounded-lg"></div>
+        </div>
+
+        <div className="h-3 w-24 bg-base-300 rounded"></div>
+      </div>
     </div>
   );
 };
