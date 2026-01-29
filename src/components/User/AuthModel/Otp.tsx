@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { makeRequest } from '../../../utils/makeRequest';
-import { useNavigate } from 'react-router-dom';
 import { apiEndPoint } from '../../../utils/constant';
 import { validateEmail, validatePhone } from '../../../utils/validate';
 import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
@@ -12,7 +11,6 @@ const Otp = () => {
   const sumbitRef = useRef<HTMLButtonElement | null>(null);
   const [emilOrPhone, setEmailOrphone] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const navigate = useNavigate();
   const [timer, setTimer] = useState<number>(() => {
     const savedTimer = localStorage.getItem('otpTimer');
 
