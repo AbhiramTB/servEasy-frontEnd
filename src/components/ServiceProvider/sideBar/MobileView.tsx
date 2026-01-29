@@ -13,6 +13,7 @@ interface Props {
   notificationCount: number;
   location: Location;
   profile: string;
+  handleLogOut: () => void;
 }
 
 const MobileView: React.FC<Props> = ({
@@ -23,6 +24,7 @@ const MobileView: React.FC<Props> = ({
   notificationCount,
   location,
   profile,
+  handleLogOut,
 }) => {
   return (
     <>
@@ -93,13 +95,7 @@ const MobileView: React.FC<Props> = ({
                 <li>
                   <div className="divider divider-error"></div>
 
-                  <button
-                    className="text-error "
-                    onClick={() => {
-                      localStorage.removeItem('accessToken');
-                      window.location.replace(ROUTES.USER.ROOT);
-                    }}
-                  >
+                  <button className="text-error " onClick={() => handleLogOut()}>
                     <LogOut size={20} />
                     <span>Logout</span>
                   </button>

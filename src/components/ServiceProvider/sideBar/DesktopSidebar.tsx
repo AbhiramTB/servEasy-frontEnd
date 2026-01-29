@@ -15,6 +15,7 @@ interface Props {
   notificationCount: number;
   location: Location;
   serviceProviderInfo: IServiceProvider;
+  handleLogOut: () => void;
 }
 
 const DesktopSidebar: React.FC<Props> = ({
@@ -25,6 +26,7 @@ const DesktopSidebar: React.FC<Props> = ({
   notificationCount,
   location,
   serviceProviderInfo,
+  handleLogOut,
 }) => {
   return (
     <aside
@@ -112,10 +114,7 @@ const DesktopSidebar: React.FC<Props> = ({
           className={`btn btn-ghost btn-sm w-full ${
             isSidebarOpen ? 'justify-start' : 'justify-center'
           } gap-4 text-error`}
-          onClick={() => {
-            localStorage.removeItem('accessToken');
-            window.location.replace(ROUTES.USER.ROOT);
-          }}
+          onClick={() => handleLogOut()}
         >
           <LogOut size={20} />
           {isSidebarOpen && <span>Logout</span>}

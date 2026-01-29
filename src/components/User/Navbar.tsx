@@ -15,6 +15,7 @@ import { useTheme } from '../../hooks/useTheme';
 import MobileBottomNav from './MobileBottomNav';
 import TopBar from './Navbar/Topbar';
 import { ROUTES } from '../../utils/constants/routes';
+import ConfirmModal from '../ui/modal/ConfirmModal';
 
 const ringtune = new Audio('/Ringtone Video call.mp3');
 const notificatioRingtune = new Audio('/Ringtone Notification.mp3');
@@ -33,6 +34,7 @@ const Navbar: React.FC<IProp> = ({ scrolled }) => {
   const [videoCallNotification, setVideoCallNotification] = useState<IVideoCallNotification | null>(null);
   const [rejectFn, setRejectFn] = useState<() => void>(() => () => {});
   const [acceptFn, setAcceptFn] = useState<() => void>(() => () => {});
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   useTheme();
 
@@ -200,7 +202,7 @@ const Navbar: React.FC<IProp> = ({ scrolled }) => {
           <TopBar
             chatNotificationCount={chatNotificationCount}
             handleChatClick={handleChatClick}
-            handleLogOut={handleLogOut}
+            handleLogOut={() => setShowLogoutModal(true)}
             mobileMenuOpen={mobileMenuOpen}
             notificationCount={notificationCount}
             notifications={notifications}
@@ -255,6 +257,16 @@ const Navbar: React.FC<IProp> = ({ scrolled }) => {
             onClose={() => setVideoCallNotification(null)}
           />
         )}
+
+        <ConfirmModal
+          isOpen={showLogoutModal}
+          title="Log Out?"
+          message="Are you sure you want to log out? You can sign back in anytime to continue using the app."
+          onClose={() => setShowLogoutModal(false)}
+          onConfirm={handleLogOut}
+          cancelText="No"
+          confirmText="Yes, Log Out"
+        />
 
         {/* Spacer for fixed navbar */}
         <div className="h-16"></div>
