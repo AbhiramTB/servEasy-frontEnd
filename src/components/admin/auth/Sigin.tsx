@@ -205,10 +205,10 @@ const AdminSignIn: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen px-4  bg-hex-pattern">
-      <div className="flex flex-col md:flex-row w-full max-w-6xl overflow-hidden border shadow-2xl rounded-3xl bg-base-100 border-base-300 min-h-[750px]">
+      <div className="flex flex-col md:flex-row w-full max-w-6xl overflow-hidden border shadow-2xl rounded-3xl bg-base-100 border-base-300 min-h-[600px]">
         {' '}
         <div className="hidden md:block md:w-1/2 relative">
-          <img src="/images/admin-signin.png" alt="Admin Sign In" className="absolute inset-0  " />
+          <img src="/images/admin-signin.avif" alt="Admin Sign In" className="absolute inset-0  " />
           <div className="absolute inset-0 bg-primary/10"></div>
         </div>
         <div className="flex flex-col justify-center w-full p-8 md:w-1/2 lg:p-12">

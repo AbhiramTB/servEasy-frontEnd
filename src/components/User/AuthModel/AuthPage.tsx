@@ -34,7 +34,7 @@ const AuthPage = () => {
           <ForgotPassword setForget={setForgotPassword} />
         ) : (
           <div className="flex w-full max-w-6xl overflow-hidden shadow-2xl rounded-2xl">
-            <div className="relative hidden w-1/2 lg:flex bg-[url('/loginImage.png')] bg-no-repeat bg-center bg-cover">
+            <div className="relative hidden w-1/2 lg:flex bg-[url('/loginImage.avif')] bg-no-repeat bg-center bg-cover">
               <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-primary/5" />
 
               <div className="relative z-10 flex flex-col items-center justify-center w-full h-full p-10">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronDown, Star, Briefcase, Tag, ArrowUpDown, Filter, RotateCcw, Check } from 'lucide-react';
+import { ChevronDown, Briefcase, Tag, ArrowUpDown, Filter, RotateCcw, Check } from 'lucide-react';
 
 export interface FilterSortState {
   priceSort: 'none' | 'gtToLow' | 'lowTogt';
@@ -150,14 +150,14 @@ const FilterSortComponent: React.FC<Props> = ({ filters, setFilters, categories 
         </ul>
       </div>
 
-      <button
+      {/* <button
         onClick={() => updateFilters({ ratingFilter: filters.ratingFilter === 4 ? null : 4 })}
         className={`btn btn-sm rounded-full btn-ghost border-base-300 border font-medium gap-2 transition-all
           ${filters.ratingFilter === 4 ? 'bg-primary/10 text-primary border-primary' : 'bg-base-100 hover:bg-base-200'}`}
       >
         <Star className={`w-4 h-4 ${filters.ratingFilter === 4 ? 'fill-primary text-primary' : 'text-gray-400'}`} />
         4+ Rating
-      </button>
+      </button> */}
 
       {hasActiveFilters && (
         <button onClick={clearFilters} className="btn btn-ghost btn-sm text-error hover:bg-error/10 ml-2">

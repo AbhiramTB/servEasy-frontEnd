@@ -167,9 +167,9 @@ export const CouponForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
             )}
 
             {isLoading && (
-              <button className="w-full btn btn-primary">
+              <div className="w-full btn btn-primary">
                 <span className="loading loading-bars loading-xl"></span>
-              </button>
+              </div>
             )}
           </div>
         </form>

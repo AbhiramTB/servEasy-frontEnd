@@ -47,7 +47,6 @@ const ReviewCard: React.FC<IReviewCardProp> = ({ bookedServiceId, serviceId, rev
 
   return (
     <div className="mt-6 shadow-xl card bg-base-100">
-      <Toaster />
       <div className="card-body">
         {submitted || review ? (
           <div className="space-y-4">
