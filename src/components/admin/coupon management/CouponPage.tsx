@@ -4,7 +4,6 @@ import { CouponForm } from './CouponForm';
 import { CouponCard } from './CouponCard';
 import { adminGetRequest, adminPatchRequest, adminPostRequest } from '../../../utils/AxiosAdmin';
 import { HotToastSuccess } from '../../../utils/notificationToast';
-import { Toaster } from 'react-hot-toast';
 
 export const CouponListPage: React.FC = () => {
   const [addNewCoupon, setNewCoupon] = useState<boolean>(false);
