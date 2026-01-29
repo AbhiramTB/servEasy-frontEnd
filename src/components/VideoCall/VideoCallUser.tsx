@@ -77,8 +77,6 @@ const VideoCall: React.FC<Prop> = ({ firstLetter = ' ' }) => {
 
   return (
     <div className="relative w-full  overflow-hidden bg-gray-900 ">
-      <Toaster />
-
       <dialog id="rejected_modal" className="modal">
         <div className="space-y-4 text-center modal-box animate__animated animate__fadeInDown">
           <div className="flex justify-center text-6xl text-red-500">

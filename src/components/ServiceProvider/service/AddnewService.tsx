@@ -8,7 +8,6 @@ import { RootState } from '../../../redux/store';
 import { useSelector } from 'react-redux';
 import { addServiceProvider } from '../../../redux/slices/serviceProvider';
 import { useDispatch } from 'react-redux';
-import { Toaster } from 'react-hot-toast';
 
 export interface IService {
   _id: string;
@@ -184,7 +183,6 @@ const AddNewService: React.FC<AddNewServiceProps> = ({ setNewService }) => {
 
   return (
     <div className="max-w-3xl p-6 mx-auto mt-10 transition-colors duration-200 border rounded-lg shadow-lg bg-base-400 border-primary">
-      <Toaster />
       <h2 className="mb-6 text-2xl font-semibold text-center text-base-content">Add New Service</h2>
 
       <form className="space-y-6" onSubmit={handleSubmit}>

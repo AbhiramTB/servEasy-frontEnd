@@ -14,7 +14,6 @@ import { validateEmail, validatePhone } from "../../utils/validate";
 import { HotToastError, HotToastSuccess } from "../../utils/notificationToast";
 import { postRequest, putRequest } from "../../utils/makeRequestInstance";
 import { apiEndPoint } from "../../utils/constant";
-import { Toaster } from "react-hot-toast";
 interface UserProfileProps {
   user: UserState;
   IsCloss: () => void;
@@ -153,7 +152,6 @@ const UserProfileModal: React.FC<UserProfileProps> = ({
 
   return (
     <div className="font-sans">
-      <Toaster />
       {!isOtpVerify && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-opacity-50 bg-base-300">
           <div className="w-full max-w-md overflow-hidden rounded-lg shadow-xl bg-base-100">
@@ -377,7 +375,6 @@ const OTP: React.FC<OtpProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 ">
       <div className="p-12 border bg-base-200 border-primary">
         <form onSubmit={handleOtpSubmit}>
-          <Toaster />
           <div className="relative z-10 my-auto w-96 form-control">
             <label className="label">
               <span className="label-text">Enter OTP</span>

@@ -8,7 +8,6 @@ import { RootState } from '../../../redux/store';
 import { useSelector } from 'react-redux';
 import { addServiceProvider } from '../../../redux/slices/serviceProvider';
 import { useDispatch } from 'react-redux';
-import { Toaster } from 'react-hot-toast';
 
 export interface IService {
   _id: string;
@@ -215,7 +214,6 @@ const EditService: React.FC<EditServiceProps> = ({ onClose, serviceId, getAllSer
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 mt-20 overflow-auto bg-base-200 bg-opacity-80">
       <div className="relative w-full max-w-2xl p-6 rounded-lg shadow-xl mt-[300px] bg-base-100">
-        <Toaster />
         <h2 className="mb-6 text-2xl font-semibold text-center text-base-content">Edit Service</h2>
         <button className="absolute btn btn-sm btn-circle top-4 right-4 btn-neutral" onClick={onClose}>
           <X size={16} />

@@ -75,8 +75,6 @@ const UserListingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen  text-base-content">
-      <Toaster position="top-center" reverseOrder={false} />
-
       <main className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="flex flex-col mb-6 md:flex-row md:items-center md:justify-between">
           <div>

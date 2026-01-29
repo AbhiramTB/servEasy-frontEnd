@@ -98,7 +98,6 @@ const BookingManagement: React.FC = () => {
             </label>
           </div>
 
-          {/* Dropdown for status filter */}
           <select
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value)}
