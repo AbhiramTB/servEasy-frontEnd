@@ -3,9 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useVideoCall } from '../../hooks/useVideoCall';
 import { RootState } from '../../redux/store';
-import { Toaster } from 'react-hot-toast';
 import VideoCallUI from './VideoCallUi';
 import { ROUTES } from '../../utils/constants/routes';
+import ErrorModal from './ErrorModal';
 
 interface Prop {
   firstLetter?: string;
@@ -21,6 +21,11 @@ const VideoCall: React.FC<Prop> = ({ firstLetter = ' ' }) => {
   const [isMicMuted, setIsMicMuted] = useState(false);
   const [isCameraOff, setIsCameraOff] = useState(false);
   const [isRemoteStreamAvailable, setIsRemoteStreamAvailable] = useState(false);
+  const [videoCallErrorMessage, setVideoCallErrorMessage] = useState<{ message: string; title: string }>({
+    message: '',
+    title: '',
+  });
+
   const handleEndCall = () => {
     endCall();
     navigate(ROUTES.USER.HOME);
@@ -34,6 +39,19 @@ const VideoCall: React.FC<Prop> = ({ firstLetter = ' ' }) => {
     }
   };
 
+  const openErrorModal = (message: string, title: string) => {
+    setVideoCallErrorMessage({ message, title });
+
+    const modal = document.getElementById('error_modal') as HTMLDialogElement;
+    modal?.showModal();
+  };
+
+  const closeErrorModal = () => {
+    const modal = document.getElementById('error_modal') as HTMLDialogElement;
+    modal?.close();
+    handleEndCall();
+  };
+
   const { localStream, endCall } = useVideoCall(
     currentUser._id + '',
     userId!,
@@ -43,7 +61,8 @@ const VideoCall: React.FC<Prop> = ({ firstLetter = ' ' }) => {
     currentUser.profileImage + '',
     localVideoRef,
     remoteVideoRef,
-    openRejectedModal
+    openRejectedModal,
+    openErrorModal
   );
 
   useEffect(() => {
@@ -96,6 +115,13 @@ const VideoCall: React.FC<Prop> = ({ firstLetter = ' ' }) => {
           </div>
         </div>
       </dialog>
+
+      <ErrorModal
+        onClose={closeErrorModal}
+        message={videoCallErrorMessage.message}
+        title={videoCallErrorMessage.title}
+      />
+
       <div className="h-[calc(100dvh-64px-130px)] bg-base-300   md:h-[100vh]">
         <VideoCallUI
           localVideoRef={localVideoRef}
