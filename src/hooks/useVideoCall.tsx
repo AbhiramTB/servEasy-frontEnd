@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { getSocket } from '../utils/socket';
+import { HotToastError } from '../utils/notificationToast';
 
 export const useVideoCall = (
   user1: string,
@@ -10,7 +11,8 @@ export const useVideoCall = (
   callerProfile: string,
   localVideoRef: React.RefObject<HTMLVideoElement | null>,
   remoteVideoRef: React.RefObject<HTMLVideoElement | null>,
-  openModal: () => void
+  openModal: () => void,
+  openErrorModal: (message: string, title: string) => void
 ) => {
   const peerConnection = useRef<RTCPeerConnection | null>(null);
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
@@ -89,8 +91,39 @@ export const useVideoCall = (
           endCall();
           openModal();
         });
-      } catch (err) {
-        console.log(err);
+      } catch (err: unknown) {
+        if (err instanceof DOMException) {
+          if (err.name === 'NotAllowedError') {
+            HotToastError('Camera or microphone permission denied');
+
+            openErrorModal(
+              'Please allow camera and microphone access in your browser settings to continue the video call.',
+              'Permission Required'
+            );
+          } else if (err.name === 'NotFoundError') {
+            HotToastError('No camera or microphone found');
+
+            openErrorModal(
+              'We couldn’t detect a camera or microphone on your device. Please connect one and try again.',
+              'Device Not Found'
+            );
+          } else {
+            HotToastError(err.message);
+
+            openErrorModal(
+              'Something went wrong while accessing your camera or microphone. Please try again.',
+              'Video Call Error'
+            );
+          }
+        } else {
+          HotToastError('Failed to start video call');
+
+          openErrorModal(
+            'The video call could not be started at this moment. Please check your connection and try again.',
+            'Connection Error'
+          );
+        }
+
         console.error('Failed to initialize video call:', err);
       }
     };

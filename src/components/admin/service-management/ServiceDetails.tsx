@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { Toaster } from "react-hot-toast";
+import React, { useEffect } from 'react';
 interface ServiceDetails {
   _id: string;
   serviceName: string;
@@ -33,26 +32,17 @@ interface ServiceDetailsProps {
   onUnblock: (id: string) => void;
 }
 
-const ServiceDetails: React.FC<ServiceDetailsProps> = ({
-  service,
-  onClose,
-  onBlock,
-  onUnblock,
-}) => {
-  
-
+const ServiceDetails: React.FC<ServiceDetailsProps> = ({ service, onClose, onBlock, onUnblock }) => {
   useEffect(() => {
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = 'auto';
     };
   }, []);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <Toaster />
       <div className="relative w-full h-full overflow-y-auto shadow-xl md:h-screen bg-base-100 animate-fadeIn">
-        {/* Close button absolute positioned */}
         <button
           onClick={onClose}
           className="absolute z-10 p-2 transition-colors rounded-full shadow-md text-base-content/70 hover:text-error bg-base-100 right-4 top-4 hover:bg-base-200"
@@ -64,12 +54,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
 
@@ -82,9 +67,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
           />
           <div className="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-black/80 to-transparent">
             <div className="flex items-center justify-between">
-              <h3 className="text-3xl font-bold text-white">
-                {service.serviceName}
-              </h3>
+              <h3 className="text-3xl font-bold text-white">{service.serviceName}</h3>
               <span className="px-3 py-1 text-sm font-medium rounded-full bg-primary text-primary-content">
                 {service.serviceType}
               </span>
@@ -99,11 +82,11 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
             <span
               className={`px-4 py-2 text-sm font-medium rounded-full ${
                 service.isBlocked
-                  ? "bg-error/10 text-error border border-error/20"
-                  : "bg-success/10 text-success border border-success/20"
+                  ? 'bg-error/10 text-error border border-error/20'
+                  : 'bg-success/10 text-success border border-success/20'
               }`}
             >
-              {service.isBlocked ? "Service Blocked" : "Service Active"}
+              {service.isBlocked ? 'Service Blocked' : 'Service Active'}
             </span>
           </div>
 
@@ -129,9 +112,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
                   About this Service
                 </h4>
                 <div className="p-4 rounded-lg bg-base-200/50">
-                  <p className="leading-relaxed text-base-content/80">
-                    {service.description}
-                  </p>
+                  <p className="leading-relaxed text-base-content/80">{service.description}</p>
                 </div>
               </div>
 
@@ -172,12 +153,8 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
               {/* Price card */}
               <div className="p-4 mb-6 border rounded-lg shadow-sm bg-base-100 border-base-200">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm font-medium text-base-content/70">
-                    Estimated Price
-                  </span>
-                  <div className="text-2xl font-bold text-primary">
-                    ₹{service.estimatedPrice}
-                  </div>
+                  <span className="text-sm font-medium text-base-content/70">Estimated Price</span>
+                  <div className="text-2xl font-bold text-primary">₹{service.estimatedPrice}</div>
                 </div>
 
                 <div className="my-2 divider"></div>
@@ -197,9 +174,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
                       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  <span className="text-sm text-base-content/80">
-                    Professional Service
-                  </span>
+                  <span className="text-sm text-base-content/80">Professional Service</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg
@@ -216,18 +191,14 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
                       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  <span className="text-sm text-base-content/80">
-                    Qualified Provider
-                  </span>
+                  <span className="text-sm text-base-content/80">Qualified Provider</span>
                 </div>
               </div>
 
               {/* Service provider card */}
               <div className="overflow-hidden border rounded-lg shadow-sm bg-base-100 border-base-200">
                 <div className="p-4 bg-primary/5">
-                  <h4 className="font-semibold text-base-content">
-                    Service Provider
-                  </h4>
+                  <h4 className="font-semibold text-base-content">Service Provider</h4>
                 </div>
 
                 <div className="p-4">
@@ -376,12 +347,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
                 Unblock
               </button>
@@ -398,12 +364,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
               Close
             </button>

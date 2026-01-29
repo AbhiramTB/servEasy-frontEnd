@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { validateEmail, validatePhone } from '../../../utils/validate';
-import { Toaster } from 'react-hot-toast';
 import { HotToastError, HotToastPromise } from '../../../utils/notificationToast';
 import { apiEndPointServiceProvider } from '../../../utils/constant';
 import { getRequest, postRequest, putRequest } from '../../../utils/makeRequestInstance';
@@ -131,6 +130,9 @@ const ServiceProviderRegisterPage: React.FC<RegisterFormProps> = () => {
       if (data.serviceProviderEmail && !validateEmail(data.serviceProviderEmail)) {
         HotToastError('Please enter a valid email');
         return;
+      }
+      if (!data.serviceMode) {
+        HotToastError('Please enter a service type');
       }
 
       if (!validatePhone(data.serviceProviderPhone)) {
@@ -362,8 +364,6 @@ const ServiceProviderRegisterPage: React.FC<RegisterFormProps> = () => {
 
   return (
     <div className="w-full max-w-3xl mx-auto mt-4 shadow-xl card bg-base-200">
-      <Toaster position="top-center" reverseOrder={false} />
-
       <div className="card-body">
         <h2 className="mx-auto mb-6 text-3xl font-bold text-center card-title text-primary">
           Service Provider Registration

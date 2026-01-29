@@ -9,7 +9,6 @@ import ServeasyInvoiceDownloader from './bookedServiceList/InvoiceDownloader';
 import { IBookingHistory, IServiceDateTime } from '../../../utils/types/booking';
 import ServiceDateTime from './ServiceTimeInfo';
 import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
-import { Toaster } from 'react-hot-toast';
 import BookingHistoryList from '../../ui/BookingHistoryList';
 import ServiceAddressCard from '../../ServiceProvider/booking/ServiceAddressCard';
 import BookingStepper from '../../ServiceProvider/booking/BookingStepper';
@@ -278,7 +277,6 @@ const ServiceBookingDetails = () => {
   const isConfirmed = bookedService.serviceStatus === 'confirmed';
   return (
     <div className="container min-h-screen px-4 py-4 mx-auto bg-base-200">
-      <Toaster></Toaster>
       <div className="mb-4 text-sm breadcrumbs text-base-content">
         <ul>
           <li>

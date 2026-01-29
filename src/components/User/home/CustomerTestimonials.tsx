@@ -3,25 +3,25 @@ import { Star } from 'lucide-react';
 const CustomerTestimonials = () => {
   const testimonials = [
     {
-      name: 'Sarah Johnson',
-      service: 'Home Cleaning',
+      name: 'Aadhil Shibu',
+      service: 'electrical engineer ',
       rating: 5,
       comment: 'Exceptional service! My home has never been cleaner. Highly recommended!',
-      avatar: 'SJ',
+      avatar: 'Aa',
     },
     {
-      name: 'Mike Chen',
+      name: 'Abhiram',
       service: 'Plumbing Repair',
       rating: 5,
       comment: 'Quick response and professional work. Fixed my issue in no time.',
-      avatar: 'MC',
+      avatar: 'Atb',
     },
     {
-      name: 'Emily Davis',
+      name: 'Gayathri Davis',
       service: 'Interior Design',
       rating: 5,
       comment: 'Transformed my space beautifully. Amazing attention to detail!',
-      avatar: 'ED',
+      avatar: 'GD',
     },
   ];
 

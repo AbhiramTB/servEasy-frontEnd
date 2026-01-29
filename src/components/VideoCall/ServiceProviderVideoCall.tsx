@@ -5,6 +5,7 @@ import { useVideoCall } from '../../hooks/useVideoCall';
 import { RootState } from '../../redux/store';
 import EndCallModal from './EndCallModal';
 import VideoCallUI from './VideoCallUi';
+import ErrorModal from './ErrorModal';
 interface Prop {
   firstLetter?: string;
 }
@@ -19,6 +20,10 @@ const ServiceProviderVideoCall: React.FC<Prop> = ({ firstLetter = ' ' }) => {
   const [isMicMuted, setIsMicMuted] = useState(false);
   const [isCameraOff, setIsCameraOff] = useState(false);
   const [isRemoteStreamAvailable, setIsRemoteStreamAvailable] = useState(false);
+  const [videoCallErrorMessage, setVideoCallErrorMessage] = useState<{ message: string; title: string }>({
+    message: '',
+    title: '',
+  });
 
   const handleEndCall = () => {
     endCall();
@@ -33,6 +38,18 @@ const ServiceProviderVideoCall: React.FC<Prop> = ({ firstLetter = ' ' }) => {
     }
   };
 
+  const openErrorModal = (message: string, title: string) => {
+    setVideoCallErrorMessage({ message, title });
+
+    const modal = document.getElementById('error_modal') as HTMLDialogElement;
+    modal?.showModal();
+  };
+
+  const closeErrorModal = () => {
+    const modal = document.getElementById('error_modal') as HTMLDialogElement;
+    modal?.close();
+  };
+
   const { localStream, endCall } = useVideoCall(
     currentUser.userId + '',
     userId!,
@@ -42,7 +59,8 @@ const ServiceProviderVideoCall: React.FC<Prop> = ({ firstLetter = ' ' }) => {
     currentUser.profileImage,
     localVideoRef,
     remoteVideoRef,
-    openRejectedModal
+    openRejectedModal,
+    openErrorModal
   );
 
   useEffect(() => {
@@ -78,6 +96,11 @@ const ServiceProviderVideoCall: React.FC<Prop> = ({ firstLetter = ' ' }) => {
     <div className="relative w-full  overflow-hidden bg-gray-900">
       <EndCallModal handleEndCall={handleEndCall} />
 
+      <ErrorModal
+        onClose={closeErrorModal}
+        message={videoCallErrorMessage.message}
+        title={videoCallErrorMessage.title}
+      />
       <div className="h-[calc(100dvh-64px-25px)] bg-base-300   md:h-[100vh]">
         <VideoCallUI
           localVideoRef={localVideoRef}

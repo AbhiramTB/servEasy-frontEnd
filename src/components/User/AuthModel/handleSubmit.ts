@@ -105,6 +105,7 @@ export const handleAuth = async (
 
           // navigate(ROUTES.USER.HOME, { replace: true });
         } else {
+          HotToastError(res.data.message);
           setError(res.data.message || 'An error occurred. Please try again.');
         }
       } else {
@@ -117,7 +118,7 @@ export const handleAuth = async (
           localStorage.removeItem('otpTimer');
           navigate('/otp');
         } else {
-          console.log(res.status);
+          HotToastError(res.data.message);
 
           setError(res.data.message || 'An error occurred. Please try again.');
         }

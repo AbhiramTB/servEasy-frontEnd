@@ -4,7 +4,6 @@ import { ServiceProvider } from '../../redux/slices/adminSlice';
 import { adminGetRequest, adminPatchRequest } from '../../utils/AxiosAdmin';
 import { apiEndPointAdmin } from '../../utils/constant';
 import { HotToastSuccess } from '../../utils/notificationToast';
-import { Toaster } from 'react-hot-toast';
 import DocumentViewer from './DocumentViewer';
 
 export interface Location {
@@ -148,8 +147,6 @@ const ServiceProviderVerification: React.FC = () => {
 
   return (
     <div className="min-h-screen  text-base-content">
-      <Toaster position="top-center" reverseOrder={false} />
-
       {imagePreview.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
           <div className="relative max-w-4xl max-h-screen p-4">

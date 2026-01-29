@@ -19,6 +19,9 @@ import VideoCallNotification from '../../../utils/ui/VideoCallNotification';
 import { ISavedNotification, IVideoCallNotification } from '../../../utils/types/INotification';
 import { getRequest, patchRequest } from '../../../utils/makeRequestInstance';
 import toast from 'react-hot-toast';
+import { apiEndPoint } from '../../../utils/constant';
+import { ROUTES } from '../../../utils/constants/routes';
+import ConfirmModal from '../../ui/modal/ConfirmModal';
 
 interface SidebarProps {
   profile: string;
@@ -44,6 +47,7 @@ const Sidebar: React.FC<SidebarProps> = ({ profile, isSidebarOpen, setIsSidebarO
   const [videoCallNotification, setVideoCallNotification] = useState<IVideoCallNotification | null>(null);
   const [acceptFn, setAcceptFn] = useState<(() => void) | null>(null);
   const [rejectFn, setRejectFn] = useState<(() => void) | null>(null);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const toggleNotifications = (e?: React.MouseEvent) => {
     e?.preventDefault();
@@ -139,6 +143,20 @@ const Sidebar: React.FC<SidebarProps> = ({ profile, isSidebarOpen, setIsSidebarO
     return () => document.removeEventListener('mousedown', handler);
   }, [showNotifications]);
 
+  const handleLogOut = async () => {
+    try {
+      const res = await getRequest(apiEndPoint.logOutUser);
+      if (res.status === 200) {
+        localStorage.removeItem('accessToken');
+        window.location.replace(ROUTES.USER.ROOT);
+      } else {
+        console.error('Logout failed:', res.data.message);
+      }
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   return (
     <>
       <MobileView
@@ -149,6 +167,7 @@ const Sidebar: React.FC<SidebarProps> = ({ profile, isSidebarOpen, setIsSidebarO
         notificationCount={notificationCount}
         location={location}
         profile={profile}
+        handleLogOut={() => setShowLogoutModal(true)}
       />
 
       <DesktopSidebar
@@ -159,6 +178,7 @@ const Sidebar: React.FC<SidebarProps> = ({ profile, isSidebarOpen, setIsSidebarO
         notificationCount={notificationCount}
         location={location}
         serviceProviderInfo={serviceProviderInfo}
+        handleLogOut={() => setShowLogoutModal(true)}
       />
 
       {showNotifications && (
@@ -171,6 +191,16 @@ const Sidebar: React.FC<SidebarProps> = ({ profile, isSidebarOpen, setIsSidebarO
           onMarkAsRead={(id: string) => markAsRead(id)}
         />
       )}
+
+      <ConfirmModal
+        isOpen={showLogoutModal}
+        title="Log Out?"
+        message="Are you sure you want to log out? You can sign back in anytime to continue using the app."
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={handleLogOut}
+        cancelText="No"
+        confirmText="Yes, Log Out"
+      />
 
       {videoCallNotification && (
         <VideoCallNotification

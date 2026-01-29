@@ -12,6 +12,7 @@ import FilterSortComponent, { FilterSortState } from './FilterCard';
 import SkeletonHomeCard from '../../../Skeleton/SkeletonHome';
 import BecomeAServiceProviderBanner from '../../ui/BecomeAServiceProviderBanner';
 import { getRequest } from '../../../utils/makeRequestInstance';
+import EmptyState from '../../ui/EmptyState';
 
 interface Location {
   address: string;
@@ -62,7 +63,7 @@ const HomePage = () => {
   }, [filterState, location, searchQuery]);
 
   const fetchData = useCallback(async () => {
-    if (loading || !hasMore) return;
+    if (loading || (page > 1 && !hasMore)) return;
 
     const requestId = ++requestIdRef.current;
 
@@ -183,10 +184,13 @@ const HomePage = () => {
               ))}
             </div>
           ) : allServices.length === 0 ? (
-            <div className="flex flex-col items-center py-12 sm:py-16 lg:py-20">
-              <div className="text-5xl sm:text-6xl mb-4">🔍</div>
-              <h3 className="text-lg sm:text-xl font-semibold">No services found</h3>
-              <p className="text-gray-500 text-sm sm:text-base">Try adjusting filters or location.</p>
+            <div>
+              <EmptyState
+                title="No services found"
+                icon="random"
+                message="Try adjusting filters or location."
+                showBorder={false}
+              />
             </div>
           ) : (
             <>

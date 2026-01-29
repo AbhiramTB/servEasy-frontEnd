@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import ServiceSlotCard from './ServiceSlotCard';
 import { deleteRequest, getRequest, postRequest } from '../../../utils/makeRequestInstance';
 import { HotToastSuccess } from '../../../utils/notificationToast';
-import { Toaster } from 'react-hot-toast';
 
 export interface ISlot {
   _id: string;
@@ -86,8 +85,6 @@ const SlotPage = () => {
       </div>
 
       <div className="px-4 pb-10 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <Toaster />
-
         {!service ? (
           <div className="flex items-center justify-center h-64 text-gray-500">Loading service...</div>
         ) : (
