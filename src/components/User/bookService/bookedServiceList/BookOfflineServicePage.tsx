@@ -65,6 +65,14 @@ const BookService = () => {
 
   const handleDeleteAddress = async (id: string) => {
     try {
+      if (addresses.length === 1) {
+        HotToastError('At least one address is required.');
+        return;
+      } else if (selectedAddress?._id === id) {
+        HotToastError('Please select a different address before deleting this one.');
+        return;
+      }
+
       await deleteRequest(`${apiEndPoint.deleteAddress}${id}`);
       setAddresses(addresses.filter(address => address._id !== id));
     } catch (error) {
@@ -250,7 +258,7 @@ const BookService = () => {
                   <ServiceDateTimePicker value={serviceDateTime} setValue={setServiceDateTime} />
                 </div>
 
-                {selectedAddress && (
+                {selectedAddress ? (
                   <div className="w-full md:w-1/3 bg-base-100 rounded-xl p-4 order-4 md:order-none">
                     <div className="space-y-4">
                       <div>
@@ -293,9 +301,7 @@ const BookService = () => {
                             </p>
                           )}
 
-                          <p className="mt-2 text-xs text-warning">
-                            Note: Provider must confirm before service starts.
-                          </p>
+                          <p className="mt-2 text-xs text-error">Note: Provider must confirm before service starts.</p>
                         </div>
                       )}
 
@@ -308,6 +314,8 @@ const BookService = () => {
                       </button>
                     </div>
                   </div>
+                ) : (
+                  <div className=""> select an address to continue.</div>
                 )}
               </div>
             </div>

@@ -34,7 +34,10 @@ const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions, 
       const res = await postRequest('/service-providers/wallet', { amount: withdrawAmount });
       if (res.status === 200) {
         HotToastSuccess('Withdrawal request confirmed');
-        if (refreshData) refreshData();
+        if (refreshData) {
+          handleWithdrawClick();
+          refreshData();
+        }
       }
     } catch (error) {}
   };

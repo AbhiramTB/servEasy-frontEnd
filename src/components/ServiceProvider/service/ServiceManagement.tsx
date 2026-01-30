@@ -94,76 +94,78 @@ const ServiceManagement = () => {
       {addService && <AddNewService setNewService={setService} />}
 
       {/* Services Grid */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {filteredServices.map(service => (
-          <div key={service._id} className="overflow-hidden rounded-lg shadow-md bg-base-100">
-            {/* Service Image */}
-            <div className="relative h-40">
-              <img src={service.serviceImage} alt={service.serviceName} className="object-cover w-full h-full" />
-              <span
-                className={`absolute top-2 right-2 px-2 py-1 text-xs font-bold rounded-full text-white ${
-                  service.isActive ? 'bg-success' : 'bg-error'
-                }`}
-              >
-                {service.isActive ? 'Active' : 'Inactive'}
-              </span>
-            </div>
-
-            {/* Service Details */}
-            <div className="p-3">
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="text-lg font-bold">{service.serviceName}</h3>
-                <p className="font-semibold text-primary">₹{service.estimatedPrice}</p>
+      {!addService && (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredServices.map(service => (
+            <div key={service._id} className="overflow-hidden rounded-lg shadow-md bg-base-100">
+              {/* Service Image */}
+              <div className="relative h-40">
+                <img src={service.serviceImage} alt={service.serviceName} className="object-cover w-full h-full" />
+                <span
+                  className={`absolute top-2 right-2 px-2 py-1 text-xs font-bold rounded-full text-white ${
+                    service.isActive ? 'bg-success' : 'bg-error'
+                  }`}
+                >
+                  {service.isActive ? 'Active' : 'Inactive'}
+                </span>
               </div>
 
-              <p className="mb-2 text-sm text-gray-600 line-clamp-2">{service.description}</p>
+              {/* Service Details */}
+              <div className="p-3">
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="text-lg font-bold">{service.serviceName}</h3>
+                  <p className="font-semibold text-primary">₹{service.estimatedPrice}</p>
+                </div>
 
-              <div className="flex items-center gap-1 text-sm text-gray-500">
-                <MapPin size={14} />
-                <span className="truncate">{service.location.address}</span>
+                <p className="mb-2 text-sm text-gray-600 line-clamp-2">{service.description}</p>
+
+                <div className="flex items-center gap-1 text-sm text-gray-500">
+                  <MapPin size={14} />
+                  <span className="truncate">{service.location.address}</span>
+                </div>
               </div>
-            </div>
 
-            {/* Action Buttons */}
-            <div className="flex justify-between p-2 border-t">
-              <button className="btn btn-xs btn-primary" onClick={() => handleViewMore(service._id)}>
-                View
-              </button>
-
-              {service.serviceType == 'Online' && (
-                <Link to={`/service-provider/slot-management/${service._id}`}>
-                  {' '}
-                  <button className="btn btn-xs btn-primary">slot</button>
-                </Link>
-              )}
-
-              <div className="flex gap-1">
-                <button className="btn btn-xs tooltip " data-tip="Edit" onClick={() => setEdit(service._id)}>
-                  <Edit size={14} />
+              {/* Action Buttons */}
+              <div className="flex justify-between p-2 border-t">
+                <button className="btn btn-xs btn-primary" onClick={() => handleViewMore(service._id)}>
+                  View
                 </button>
-                {service.isActive && (
-                  <button
-                    className="btn btn-xs btn-ghost tooltip "
-                    data-tip="Block"
-                    onClick={() => handleBlock(service._id, 'Block')}
-                  >
-                    <Eye size={14} />
-                  </button>
+
+                {service.serviceType == 'Online' && (
+                  <Link to={`/service-provider/slot-management/${service._id}`}>
+                    {' '}
+                    <button className="btn btn-xs btn-primary">slot</button>
+                  </Link>
                 )}
-                {!service.isActive && (
-                  <button
-                    className="btn btn-xs tooltip tooltip-left"
-                    data-tip="UnBlock"
-                    onClick={() => handleBlock(service._id, 'Unblock')}
-                  >
-                    <Eye size={14} />
+
+                <div className="flex gap-1">
+                  <button className="btn btn-xs tooltip " data-tip="Edit" onClick={() => setEdit(service._id)}>
+                    <Edit size={14} />
                   </button>
-                )}
+                  {service.isActive && (
+                    <button
+                      className="btn btn-xs btn-ghost tooltip "
+                      data-tip="Block"
+                      onClick={() => handleBlock(service._id, 'Block')}
+                    >
+                      <Eye size={14} />
+                    </button>
+                  )}
+                  {!service.isActive && (
+                    <button
+                      className="btn btn-xs tooltip tooltip-left"
+                      data-tip="UnBlock"
+                      onClick={() => handleBlock(service._id, 'Unblock')}
+                    >
+                      <Eye size={14} />
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {viewMore && <ServiceDetailsView serviceId={viewMore} onClose={() => setViewMore(null)} />}
 

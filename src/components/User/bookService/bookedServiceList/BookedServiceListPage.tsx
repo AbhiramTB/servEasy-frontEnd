@@ -69,35 +69,31 @@ const BookedService = () => {
     <div className="px-4 bg-base-100">
       <h1 className="mb-4 text-xl font-bold">Booked Services</h1>
 
-      {isLoading && (
-        <div className="grid gap-4 ">
-          <BookingCardSkeleton />
-          <BookingCardSkeleton />
-          <BookingCardSkeleton />
+      {isLoading ? (
+        <div className="grid gap-4">
+          {[...Array(3)].map((_, i) => (
+            <BookingCardSkeleton key={i} />
+          ))}
         </div>
-      )}
-
-      {bookedServices && bookedServices.length > 0 ? (
-        <div className="grid gap-4 ">
+      ) : bookedServices && bookedServices.length > 0 ? (
+        <div className="grid gap-4">
           {bookedServices.map(service => (
             <Link
+              key={service._id}
               to={
                 service.serviceType === 'Online'
                   ? `/booked-service-online/${service._id}`
                   : `/booked-service/${service._id}`
               }
             >
-              <ServiceBookingCard booking={service} key={service._id} />
+              <ServiceBookingCard booking={service} />
             </Link>
           ))}
         </div>
       ) : (
-        <EmptyState
-          title="No bookings yet"
-          icon="deep-search"
-          message="Once you book a service, it will appear here "
-        />
+        <EmptyState title="No bookings yet" icon="deep-search" message="Once you book a service, it will appear here" />
       )}
+
       <Pagination
         crrPage={crrPage}
         dataLimit={dataLimit}

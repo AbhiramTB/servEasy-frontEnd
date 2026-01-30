@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { getRequest } from '../../../utils/makeRequestInstance';
 import { paymentRoutes } from '../../../utils/constant';
 import PaymentInfoTable from '../../ui/PaymentInfoTable';
-import PaymentInfoModal from '../../ui/paymentInfoModal';
 import EmptyState from '../../ui/EmptyState';
 
 interface PaymentDetails {
@@ -43,8 +42,8 @@ const PaymentManagement = () => {
   const [paymentData, setPaymentData] = useState<ServiceBooking[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedBooking, setSelectedBooking] = useState<ServiceBooking | null>(null);
-  const [showDetailsModal, setShowDetailsModal] = useState<boolean>(false);
+  // const [selectedBooking, setSelectedBooking] = useState<ServiceBooking | null>(null);
+  // const [showDetailsModal, setShowDetailsModal] = useState<boolean>(false);
 
   useEffect(() => {
     getPaymentInfo();
@@ -71,21 +70,21 @@ const PaymentManagement = () => {
     }).format(amount);
   };
 
-  const handleViewDetails = (booking: ServiceBooking) => {
-    setSelectedBooking(booking);
-    setShowDetailsModal(true);
-  };
+  // const handleViewDetails = (booking: ServiceBooking) => {
+  //   setSelectedBooking(booking);
+  //   setShowDetailsModal(true);
+  // };
 
-  const closeDetailsModal = () => {
-    setShowDetailsModal(false);
-    setSelectedBooking(null);
-  };
+  // const closeDetailsModal = () => {
+  //   setShowDetailsModal(false);
+  //   setSelectedBooking(null);
+  // };
 
-  const handlePrintReceipt = () => {
-    if (selectedBooking) {
-      console.log(`Printing receipt for booking: ${selectedBooking._id}`);
-    }
-  };
+  // const handlePrintReceipt = () => {
+  //   if (selectedBooking) {
+  //     console.log(`Printing receipt for booking: ${selectedBooking._id}`);
+  //   }
+  // };
 
   if (loading) {
     return (
@@ -160,29 +159,25 @@ const PaymentManagement = () => {
               <th>Payment Type</th>
               <th>Service Cost</th>
               <th>Total</th>
-              <th>Actions</th>
+              {/* <th>Actions</th> */}
             </tr>
           </thead>
           <tbody>
             {paymentData.map(booking => (
-              <PaymentInfoTable
-                key={booking._id}
-                booking={booking}
-                handleViewDetails={() => handleViewDetails(booking)}
-              />
+              <PaymentInfoTable key={booking._id} booking={booking} handleViewDetails={() => {}} />
             ))}
           </tbody>
         </table>
       </div>
 
-      {selectedBooking && (
+      {/* {selectedBooking && (
         <PaymentInfoModal
           isOpen={showDetailsModal}
           selectedBooking={selectedBooking}
           closeDetailsModal={closeDetailsModal}
           onPrintReceipt={handlePrintReceipt}
         />
-      )}
+      )} */}
     </div>
   );
 };

@@ -153,8 +153,8 @@ const OnlineBookingManagement = () => {
 
   const handleStatusUpdate = async () => {
     try {
-      const res = await putRequest(`service/service-provider/bookings/${id}/status`, {
-        serviceStatus: newStatus,
+      const res = await patchRequest(`service/service-provider/booking/${id}/status`, {
+        serviceStatus: 'completed',
       });
 
       if (res.status === 200) {
@@ -257,7 +257,7 @@ const OnlineBookingManagement = () => {
           />
 
           <div className="flex flex-wrap justify-end gap-2 mt-4">
-            {!isCancelled && !isPending && (
+            {!isCancelled && !isPending && bookedService.serviceStatus !== 'completed' && (
               <>
                 <button className="btn btn-primary btn-sm" onClick={() => setShowStatusModal(true)}>
                   Update Status
@@ -269,8 +269,6 @@ const OnlineBookingManagement = () => {
                 <button className="btn btn-sm btn-outline" onClick={handleOpenReschedule}>
                   Reschedule
                 </button>
-
-                {/* <button className="btn btn-secondary btn-sm">Contact Customer</button> */}
 
                 {isInProgress && bookedService.isOnlineService && (
                   <Link to={`/video-call/${bookedService.serviceProviderId}`}>
@@ -295,39 +293,48 @@ const OnlineBookingManagement = () => {
                 )}
               </>
             )}
+
+            <Link to={`/service-provider/chat/${user._id}`}>
+              <button className="btn btn-secondary btn-sm">Contact Customer</button>
+            </Link>
           </div>
         </div>
 
         <div className="md:col-span-1">
-          {bookedService.isOnlineService && (
-            <div className="mb-4 shadow card bg-base-100">
-              <div className="p-4 card-body">
-                <h3 className="text-base card-title">Online Service</h3>
-                <div className="text-sm">
-                  <p className="mb-2">This service will be delivered online via video call.</p>
-                  {isInProgress && (
-                    <button className="mt-2 btn btn-accent btn-block" onClick={handleStartVideoCall}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-5 h-5 mr-1"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                        />
-                      </svg>
-                      Start Video Call
-                    </button>
-                  )}
+          {bookedService.paymentStatus === 'completed' &&
+            bookedService.serviceStatus !== 'completed' &&
+            !isCancelled &&
+            bookedService.isOnlineService && (
+              <div className="mb-4 shadow card bg-base-100">
+                <div className="p-4 card-body">
+                  <h3 className="text-base card-title">Online Service</h3>
+                  <div className="text-sm">
+                    <p className="mb-2">Start video call.</p>
+                    {bookedService.paymentStatus === 'completed' && (
+                      <Link to={`/service-provider/video-call/${user._id}`}>
+                        <button className="mt-2 btn btn-accent btn-block" onClick={handleStartVideoCall}>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-5 h-5 mr-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                            />
+                          </svg>
+                          Start Video Call
+                        </button>
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
       </div>
 
@@ -345,7 +352,7 @@ const OnlineBookingManagement = () => {
         show={showStatusModal}
         onClose={() => setShowStatusModal(false)}
         onUpdate={handleStatusUpdate}
-        statusList={['completed', '']}
+        statusList={['completed']}
         selectedStatus={newStatus}
         setSelectedStatus={setNewStatus}
       />
