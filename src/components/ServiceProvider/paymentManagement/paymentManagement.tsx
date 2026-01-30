@@ -54,7 +54,6 @@ const PaymentManagement = () => {
       setLoading(true);
       const response = await getRequest(paymentRoutes.getServiceProviderPayments);
       setPaymentData(response.data || []);
-      console.log(response.data);
     } catch (error) {
       setError('Failed to fetch payment information');
       console.error(error);

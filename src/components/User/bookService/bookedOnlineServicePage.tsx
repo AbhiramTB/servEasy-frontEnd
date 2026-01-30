@@ -136,7 +136,7 @@ const ServiceBookingDetailsOnline = () => {
 
   const isCancelled = bookedService.serviceStatus === 'cancelled';
   const isCompleted = bookedService.serviceStatus === 'completed';
-  const isInProgress = bookedService.serviceStatus === 'in-progress';
+  // const isInProgress = bookedService.serviceStatus === 'in-progress';
 
   const handlePaymentClick = () => {
     setShowPaymentConfirm(true);

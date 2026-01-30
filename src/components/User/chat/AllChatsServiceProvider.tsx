@@ -25,7 +25,6 @@ const ChatUI: React.FC = () => {
   useEffect(() => {
     async function fetchData() {
       const res = await fetchAllChats({ serviceProviderId });
-      console.log(res);
 
       if (res?.status === 200 && Array.isArray(res.data)) {
         setChats(res.data);

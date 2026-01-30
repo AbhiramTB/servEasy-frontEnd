@@ -181,7 +181,6 @@ const EditService: React.FC<EditServiceProps> = ({ onClose, serviceId, getAllSer
     }
 
     try {
-      console.log(`${serviceEndPoint.updateService}${serviceId}`);
 
       const data = {
         serviceName,
@@ -194,7 +193,6 @@ const EditService: React.FC<EditServiceProps> = ({ onClose, serviceId, getAllSer
         serviceProviderId: serviceProviderInfo._id,
       };
 
-      console.log(data);
 
       const res = await putRequest(`${serviceEndPoint.updateService}${serviceId}`, data);
 

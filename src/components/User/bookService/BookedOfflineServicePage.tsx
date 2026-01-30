@@ -215,7 +215,6 @@ const ServiceBookingDetails = () => {
       const res = await getRequest(`service/bookings${id}`);
 
       if (res.status === 200) {
-        console.log(res.data.service);
 
         setBookingData(res.data.service);
         setReview(res.data.service.review);

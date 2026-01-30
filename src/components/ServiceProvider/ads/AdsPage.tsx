@@ -115,12 +115,10 @@ const AdsPage = () => {
       if (!validateAdData(formData)) return;
       if (id) {
         if (formData.caption) if (formData.description) if (formData.radiusKm) HotToastSuccess('edited');
-        console.log(formData);
 
         await putRequest(`service-providers/ads/${id}`, formData);
       } else {
         HotToastSuccess('created');
-        console.log(formData);
         await postRequest(`service-providers/ads/`, { data: formData });
       }
 
