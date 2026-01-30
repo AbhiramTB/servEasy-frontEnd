@@ -160,7 +160,7 @@ const PaymentManagement = () => {
               <th>Payment Type</th>
               <th>Service Cost</th>
               <th>Total</th>
-              <th>Actions</th>
+              {/* <th>Actions</th> */}
             </tr>
           </thead>
           <tbody>
@@ -175,14 +175,14 @@ const PaymentManagement = () => {
         </table>
       </div>
 
-      {selectedBooking && (
+      {/* {selectedBooking && (
         <PaymentInfoModal
           isOpen={showDetailsModal}
           selectedBooking={selectedBooking}
           closeDetailsModal={closeDetailsModal}
           onPrintReceipt={handlePrintReceipt}
         />
-      )}
+      )} */}
     </div>
   );
 };
