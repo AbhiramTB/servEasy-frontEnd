@@ -42,7 +42,7 @@ const getStatusColor = (status: string): string => {
   }
 };
 
-const PaymentInfoTable: React.FC<PropsServiceBooking> = ({ booking, handleViewDetails }) => {
+const PaymentInfoTable: React.FC<PropsServiceBooking> = ({ booking }) => {
   console.log(booking);
 
   return (

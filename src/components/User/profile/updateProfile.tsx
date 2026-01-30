@@ -5,7 +5,7 @@ import { getRequest, putRequest } from '../../../utils/makeRequestInstance';
 import { apiEndPoint } from '../../../utils/constant';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
-import { validateEmail, validatePassword, validatePhone } from '../../../utils/validate';
+import { validateEmail, validatePassword, validatePhone, validateUserName } from '../../../utils/validate';
 import { addUser } from '../../../redux/slices/userSlice';
 import { useDispatch } from 'react-redux';
 import UpdateProfileOTP from './UpdateProfileOtp';
@@ -92,8 +92,10 @@ const UserProfile = () => {
       }
     }
 
-    if (newUserName.length < 3) {
-      HotToastError('Username must have at least 3 characters');
+    if (!validateUserName(newUserName)) {
+      HotToastError(
+        'Username should be 3–20 characters and can include letters, numbers, dots, underscores, and hyphens.'
+      );
       hasValidationError = true;
     } else if (newUserName !== user.userName) {
       data.newUserName = newUserName;
@@ -264,7 +266,7 @@ const UserProfile = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="label">
-                  <span className="label-text">First Name</span>
+                  <span className="label-text">User Name</span>
                 </label>
                 <input
                   type="text"
