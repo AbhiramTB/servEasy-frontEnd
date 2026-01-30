@@ -54,7 +54,6 @@ const BookedService = () => {
       setLoading(true);
       const res = await getRequest(`${serviceEndPoint.getUserBookService}?page=${page}&limit=${dataLimit}`);
       if (res.status === 200) {
-        console.log(res.data.services);
         setBookedServices(res.data.services);
         setPage(page);
       }

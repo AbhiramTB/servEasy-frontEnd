@@ -22,7 +22,6 @@ const SingleServiceCard = () => {
     try {
       const res = await getRequest('/ads/recommend?count=4');
       if (res.status === 200) {
-        console.log(res.data);
         setAds(res.data.ads);
       }
     } catch (error) {

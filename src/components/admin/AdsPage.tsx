@@ -21,7 +21,6 @@ const AdsPage = () => {
     try {
       setLoading(true);
       const { data } = await adminGetRequest(`/admin/ads?page=${page}&limit=${limit}`);
-      console.log(data);
       setCrrPage(page);
       if (data.ads?.length) {
         setAds(data.ads);

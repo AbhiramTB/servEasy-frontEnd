@@ -34,7 +34,6 @@ const ServiceProviderLayout = () => {
   const verifyServiceProvider = async () => {
     try {
       const res = await getRequest(apiEndPointServiceProvider.verifyServiceProvider);
-      console.log(res);
       if (res.status === 200) {
         setIsVerified(true);
         await getProfile();

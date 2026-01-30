@@ -27,7 +27,6 @@ const ServiceManagement = () => {
   const getAllServices = async () => {
     try {
       const res = await getRequest(serviceEndPoint.getAllService);
-      console.log(res);
 
       dispatch(addServices(res.data.allServices));
     } catch (error) {
@@ -47,8 +46,6 @@ const ServiceManagement = () => {
 
   const handleBlock = async (serviceId: string, action: string) => {
     try {
-      console.log(action);
-
       const res = await patchRequest(serviceEndPoint.blockUnblock, {
         serviceId,
         action,

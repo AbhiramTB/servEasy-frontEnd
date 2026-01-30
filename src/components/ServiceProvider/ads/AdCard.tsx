@@ -15,8 +15,7 @@ const AdCard: React.FC<Props> = ({ ad, onEdit, onActiveInactive, onViewDetails }
   const isAdmin = 'serviceProviderName' in ad;
 
   const nextAction: IAdStatus = ad.status === 'active' ? 'inactive' : 'active';
-  console.log('afd');
-  console.log(ad);
+
   return (
     <div className="card bg-base-100 shadow-md border relative">
       {isAdmin && (

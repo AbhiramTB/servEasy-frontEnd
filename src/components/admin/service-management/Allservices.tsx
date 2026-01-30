@@ -53,7 +53,6 @@ const Allservices = () => {
         serviceId,
         action: isBlocked ? 'Unblock' : 'Block',
       });
-      console.log(res);
       if (res.status === 200) {
         blockUnblock(serviceId);
         HotToastSuccess(res.data.message);

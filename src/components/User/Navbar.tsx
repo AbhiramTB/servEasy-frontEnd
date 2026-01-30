@@ -152,7 +152,6 @@ const Navbar: React.FC<IProp> = ({ scrolled }) => {
   const getNotfication = async () => {
     try {
       const res = await getRequest('/notification');
-      console.log(res);
       setNotifications(res.data.notifications);
       setNotificationCount(res.data.unreadCount);
     } catch (error) {

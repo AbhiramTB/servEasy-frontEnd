@@ -61,7 +61,6 @@ const AdminSignIn: React.FC = () => {
       setIsLoading(true);
       setError(null);
 
-      console.log(identifierType);
 
       console.log('Authentication attempt with:', {
         [identifierType]: credentials.identifier,
@@ -71,11 +70,9 @@ const AdminSignIn: React.FC = () => {
         [identifierType]: credentials.identifier,
         password: credentials.password,
       };
-      console.log(identifierType);
 
       const res = await postRequest(apiEndPointAdmin.AdminSignIn, data);
       if (res.status == 200) {
-        console.log(res.data.accessToken);
 
         localStorage.setItem('adminToken', res.data.accessToken);
 

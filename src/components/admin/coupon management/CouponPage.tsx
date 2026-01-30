@@ -33,7 +33,6 @@ export const CouponListPage: React.FC = () => {
   const handleCreateCoupon = async (data: ICoupon) => {
     try {
       setLoading(true);
-      console.log(data);
       const res = await adminPostRequest('/admin/coupons', { data: data });
       if (res.status === 201) {
         HotToastSuccess('coupon has been successfully added');

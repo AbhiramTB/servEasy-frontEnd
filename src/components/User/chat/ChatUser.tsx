@@ -39,8 +39,6 @@ const ChatUser = () => {
         try {
           const userRes: any = await getServiceProviderProfile(serviceProviderId);
           if (userRes.status === 200) {
-            console.log(userRes);
-
             setServiceProvider(userRes.data);
           }
         } catch (error) {

@@ -24,7 +24,6 @@ const ServiceProviderAvailability: React.FC<Props> = ({ serviceProviderId }) => 
       setError(null);
       try {
         const res = await getRequest(`/service-providers/availability/${serviceProviderId}`);
-        console.log(res);
         if (res.status === 200) {
           setAvailability(res.data.availability);
         } else {

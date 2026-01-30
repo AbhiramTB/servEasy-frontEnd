@@ -64,7 +64,6 @@ const AddNewService: React.FC<AddNewServiceProps> = ({ setNewService }) => {
   const getServices = async () => {
     try {
       const res = await getRequest(apiEndPointServiceProvider.getCategories);
-      console.log(res.data);
       if (res.status === 200) {
         setCategory(res.data);
       }
@@ -83,7 +82,6 @@ const AddNewService: React.FC<AddNewServiceProps> = ({ setNewService }) => {
   const getServiceProvider = async () => {
     try {
       const res = await getRequest(apiEndPointServiceProvider.getServiceProvider);
-      console.log(res.data.serviceProvider);
       dispatch(addServiceProvider(res.data.serviceProvider));
     } catch (error) {
       console.error('Error fetching service provider:', error);
@@ -167,7 +165,6 @@ const AddNewService: React.FC<AddNewServiceProps> = ({ setNewService }) => {
       };
 
       const res = await postRequest(serviceEndPoint.addNewService, data);
-      console.log(res);
 
       if (res.status === 201) {
         HotToastSuccess('Service added successfully!');

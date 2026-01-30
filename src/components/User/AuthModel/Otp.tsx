@@ -105,7 +105,6 @@ const Otp = () => {
       };
       const data: data = {};
       const sender = localStorage.getItem('registerEmailorPhone');
-      console.log(sender);
       if (sender) {
         if (validateEmail(sender)) {
           data.email = sender;

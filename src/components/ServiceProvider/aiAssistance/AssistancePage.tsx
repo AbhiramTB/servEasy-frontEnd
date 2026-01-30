@@ -33,7 +33,6 @@ export default function AssistancePage() {
       } else {
         getRequest('/service-providers/ai-assistance/chats/' + chatId).then(res => {
           if (res.status == 200) {
-            console.log(res);
             setActiveChat(res.data);
           }
         });
@@ -71,15 +70,11 @@ export default function AssistancePage() {
     setAllChats(prev => prev.map(c => (c._id === activeChat._id ? updatedChat : c)));
     setActiveChat(updatedChat);
 
-    console.log(activeChat._id);
-    console.log(activeChat._id);
-
     const res = await postRequest(`/service-providers/ai-assistance/chats/`, {
       message: text,
       ...(chatId != 'undefined' && chatId ? { activeChatId: chatId } : {}),
     });
     if (res.status == 200) {
-      console.log(res.data);
       const updatedWithReply = {
         ...updatedChat,
         messages: [...updatedChat.messages, res.data],
@@ -96,8 +91,6 @@ export default function AssistancePage() {
       navigate(`/service-provider/assistance/${res.data.id}`);
     }
   };
-
-  console.log(activeChat);
 
   return (
     <div className="overflow-hidden">
