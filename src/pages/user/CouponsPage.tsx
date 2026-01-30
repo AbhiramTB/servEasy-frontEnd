@@ -14,9 +14,6 @@ const CouponsPage: React.FC = () => {
       try {
         setLoading(true);
         const response = await getRequest('/coupons/');
-        console.log(response);
-        console.log(response.data.data);
-        console.log(response.status);
 
         if (response.status == 200) {
           setCoupons(response.data.data);

@@ -90,9 +90,8 @@ const ServiceProviderVerification: React.FC = () => {
   const handleVerify = async (providerId: string) => {
     try {
       const data = { serviceProviderId: providerId, action: 'verify' };
-      const res = await adminPatchRequest(apiEndPointAdmin.serviceProviderVerify, data);
-      console.log(res.data.data);
-
+      await adminPatchRequest(apiEndPointAdmin.serviceProviderVerify, data);
+      // const res =
       HotToastSuccess('Service provider verified successfully');
       getAllServiceProviders();
     } catch (error) {

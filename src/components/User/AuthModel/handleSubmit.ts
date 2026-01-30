@@ -129,9 +129,15 @@ export const handleAuth = async (
 
         setError('Please enter a valid email or phone number.');
       } else if (!isSignIn && !isValidateUserName) {
-        HotToastError('Username must contain at least 3 characters.');
+        HotToastError(
+          'Username should be 3–20 characters and can include letters, numbers, dots, underscores, and hyphens.'
+        );
 
-        setError('Username must contain at least 3 characters.');
+        // HotToastError('Username must contain at least 3 characters.');
+
+        setError(
+          'Username should be 3–20 characters and can include letters, numbers, dots, underscores, and hyphens.'
+        );
       } else {
         HotToastError('Password must contain at least 6 characters, including one special character');
 

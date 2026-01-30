@@ -11,6 +11,7 @@ interface PaymentProps {
   onError: () => void;
   verifyApi: string;
   setLoading?: (state: boolean) => void;
+  onBeforePayment?: () => void;
 }
 
 const RazorpayButton = ({
@@ -22,14 +23,19 @@ const RazorpayButton = ({
   payload,
   createOrderApi,
   setLoading,
+  onBeforePayment,
 }: PaymentProps) => {
   const handlePayment = async () => {
+    if (onBeforePayment) {
+      onBeforePayment();
+    }
+
     const isLoaded = await loadRazorpayScript();
     if (!isLoaded) {
       alert('Razorpay SDK failed to load.');
       return;
     }
-          if (setLoading) setLoading(true);
+    if (setLoading) setLoading(true);
 
     try {
       const { data: order } = await postRequest(createOrderApi, {
@@ -44,7 +50,6 @@ const RazorpayButton = ({
         description: 'Payment for your booking',
         order_id: order.order.id,
         handler: async function (response: any) {
-
           try {
             const verificationRes = await postRequest(verifyApi, {
               ...payload,
@@ -60,7 +65,7 @@ const RazorpayButton = ({
             }
           } catch (err) {
             console.error('Verification error:', err);
-         
+
             HotToastError('❌ Something went wrong during verification.');
           }
         },
@@ -84,10 +89,10 @@ const RazorpayButton = ({
       if (error.response.data.message) {
         HotToastError(error.response.data.message);
       }
-    }finally{
-   if (setLoading) {
-              setLoading(false);
-            }
+    } finally {
+      if (setLoading) {
+        setLoading(false);
+      }
     }
   };
 

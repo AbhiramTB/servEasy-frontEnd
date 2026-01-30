@@ -42,7 +42,7 @@ const getStatusColor = (status: string): string => {
   }
 };
 
-const PaymentInfoTable: React.FC<PropsServiceBooking> = ({ booking, handleViewDetails }) => {
+const PaymentInfoTable: React.FC<PropsServiceBooking> = ({ booking }) => {
   console.log(booking);
 
   return (
@@ -76,7 +76,7 @@ const PaymentInfoTable: React.FC<PropsServiceBooking> = ({ booking, handleViewDe
       <td>{booking.payment.serviceCost}</td>
       <td>{booking.payment.total}</td>
 
-      <td>
+      {/* <td>
         <div className="dropdown dropdown-end">
           <label tabIndex={0} className="btn btn-ghost btn-xs">
             <svg
@@ -97,7 +97,7 @@ const PaymentInfoTable: React.FC<PropsServiceBooking> = ({ booking, handleViewDe
             <li onClick={handleViewDetails}> View Details</li>
           </ul>
         </div>
-      </td>
+      </td> */}
     </tr>
   );
 };

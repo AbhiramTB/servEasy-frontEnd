@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface PaymentDetails {
   convenienceFee?: number;
@@ -39,9 +39,8 @@ interface PaymentInfoModalProps {
   selectedBooking: ServiceBooking | BookingData;
   closeDetailsModal?: () => void;
   onPrintReceipt?: () => void;
-  payment?:number
+  payment?: number;
 }
-
 
 interface ServiceAddress {
   description: string;
@@ -53,8 +52,6 @@ interface ServiceAddress {
   state: string;
   _id: string;
 }
-
-
 
 interface BookingData {
   _id: string;
@@ -76,32 +73,26 @@ interface BookingData {
   userProfile: string;
 }
 
-
 // Helper functions
 const getStatusColor = (status: string): string => {
   switch (status.toLowerCase()) {
-    case "completed":
-      return "badge-success";
-    case "pending":
-      return "badge-warning";
-    case "cancelled":
-      return "badge-error";
+    case 'completed':
+      return 'badge-success';
+    case 'pending':
+      return 'badge-warning';
+    case 'cancelled':
+      return 'badge-error';
     default:
-      return "badge-info";
+      return 'badge-info';
   }
 };
-
-
 
 const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
   isOpen,
   selectedBooking,
   closeDetailsModal,
-  onPrintReceipt = () => console.log("Print receipt clicked"),
-
+  onPrintReceipt = () => {},
 }) => {
-
-
   if (!isOpen) return null;
 
   return (
@@ -115,136 +106,109 @@ const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
                 <div className="avatar">
                   <div className="w-16 h-16 mask mask-squircle">
                     <img
-                      src={
-                        selectedBooking.serviceImage ||
-                        "https://via.placeholder.com/64"
-                      }
+                      src={selectedBooking.serviceImage || 'https://via.placeholder.com/64'}
                       alt={selectedBooking.serviceName}
                     />
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold">
-                    {selectedBooking.serviceName}
-                  </h3>
-                  <p className="text-sm opacity-70">
-                    {selectedBooking.serviceType}
-                  </p>
-                  <div
-                    className={`badge ${getStatusColor(selectedBooking.serviceStatus)} mt-2`}
-                  >
+                  <h3 className="text-xl font-bold">{selectedBooking.serviceName}</h3>
+                  <p className="text-sm opacity-70">{selectedBooking.serviceType}</p>
+                  <div className={`badge ${getStatusColor(selectedBooking.serviceStatus)} mt-2`}>
                     {selectedBooking.serviceStatus}
                   </div>
                 </div>
               </div>
             )}
 
-            { 
-              (selectedBooking.userName && (
-                <>
-                  <div className="divider">Customer Information</div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <div className="avatar">
-                        <div className="w-12">
-                          <img src={selectedBooking.userProfile} />
-                        </div>
-                      </div>
-
-                      <p>{selectedBooking.userName}</p>
-                    </div>
-                    <div>
-                      <p className="font-semibold">Email:</p>
-                      <p>{selectedBooking.userEmail}</p>
-                    </div>
-                  </div>
-                </>
-              ))}
-
-           {selectedBooking.serviceBookedAddress.name &&
-            <>
-             <div className="divider">Service Address</div>
-             <div className="p-4 card bg-base-200">
-               <p>
-                 <span className="font-semibold">Name:</span>{" "}
-                 {selectedBooking.serviceBookedAddress.name}
-               </p>
-               <p>
-                 <span className="font-semibold">Phone:</span>{" "}
-                 {selectedBooking.serviceBookedAddress.phone}
-               </p>
-               <p>
-                 <span className="font-semibold">House:</span>{" "}
-                 {selectedBooking.serviceBookedAddress.houseName}
-               </p>
-               <p>
-                 <span className="font-semibold">Landmark:</span>{" "}
-                 {selectedBooking.serviceBookedAddress.landmark}
-               </p>
-               <p>
-                 <span className="font-semibold">State:</span>{" "}
-                 {selectedBooking.serviceBookedAddress.state}
-               </p>
-               <p>
-                 <span className="font-semibold">Pincode:</span>{" "}
-                 {selectedBooking.serviceBookedAddress.pincode}
-               </p>
-               <p>
-                 <span className="font-semibold">Description:</span>{" "}
-                 {selectedBooking.serviceBookedAddress.description}
-               </p>
-             </div></>
-           }
-
-            {selectedBooking.payment &&
+            {selectedBooking.userName && (
               <>
-              <div className="divider">Payment Breakdown</div>
-              <div className="p-4 card bg-base-200">
-                <table className="table w-full table-compact">
-                  <tbody>
-                    <tr>
-                      <td className="font-semibold">Service Cost</td>
-                      <td className="text-right">
-                        ₹{selectedBooking?.payment?.serviceCost ?? 0}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="font-semibold">Inspection Cost</td>
-                      <td className="text-right">
-                        ₹{selectedBooking?.payment?.inspectionCost ?? 0}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="font-semibold">Travel Cost</td>
-                      <td className="text-right">
-                        ₹{selectedBooking?.payment?.travelCost ?? 0}
-                      </td>
-                    </tr>
-                    {
-                      selectedBooking.payment.materialCost&&
+                <div className="divider">Customer Information</div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="avatar">
+                      <div className="w-12">
+                        <img src={selectedBooking.userProfile} />
+                      </div>
+                    </div>
+
+                    <p>{selectedBooking.userName}</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold">Email:</p>
+                    <p>{selectedBooking.userEmail}</p>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {selectedBooking.serviceBookedAddress.name && (
+              <>
+                <div className="divider">Service Address</div>
+                <div className="p-4 card bg-base-200">
+                  <p>
+                    <span className="font-semibold">Name:</span> {selectedBooking.serviceBookedAddress.name}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Phone:</span> {selectedBooking.serviceBookedAddress.phone}
+                  </p>
+                  <p>
+                    <span className="font-semibold">House:</span> {selectedBooking.serviceBookedAddress.houseName}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Landmark:</span> {selectedBooking.serviceBookedAddress.landmark}
+                  </p>
+                  <p>
+                    <span className="font-semibold">State:</span> {selectedBooking.serviceBookedAddress.state}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Pincode:</span> {selectedBooking.serviceBookedAddress.pincode}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Description:</span>{' '}
+                    {selectedBooking.serviceBookedAddress.description}
+                  </p>
+                </div>
+              </>
+            )}
+
+            {selectedBooking.payment && (
+              <>
+                <div className="divider">Payment Breakdown</div>
+                <div className="p-4 card bg-base-200">
+                  <table className="table w-full table-compact">
+                    <tbody>
                       <tr>
-                      <td className="font-semibold">Material Cost</td>
-                      <td className="text-right">
-                        ₹{selectedBooking?.payment?.materialCost ?? 0}
-                      </td>
-                    </tr>
-                    }
-                    <tr>
-                      <td className="font-semibold">Convenience Fee</td>
-                      <td className="text-right">
-                        ₹{selectedBooking?.payment?.convenienceFee ?? 0}
-                      </td>
-                    </tr>
-                    <tr className="text-lg font-bold">
-                      <td>Total</td>
-                      <td className="text-right">
-                        ₹{selectedBooking?.payment?.total ?? 0}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div></>
-            }
+                        <td className="font-semibold">Service Cost</td>
+                        <td className="text-right">₹{selectedBooking?.payment?.serviceCost ?? 0}</td>
+                      </tr>
+                      <tr>
+                        <td className="font-semibold">Inspection Cost</td>
+                        <td className="text-right">₹{selectedBooking?.payment?.inspectionCost ?? 0}</td>
+                      </tr>
+                      <tr>
+                        <td className="font-semibold">Travel Cost</td>
+                        <td className="text-right">₹{selectedBooking?.payment?.travelCost ?? 0}</td>
+                      </tr>
+                      {selectedBooking.payment.materialCost && (
+                        <tr>
+                          <td className="font-semibold">Material Cost</td>
+                          <td className="text-right">₹{selectedBooking?.payment?.materialCost ?? 0}</td>
+                        </tr>
+                      )}
+                      <tr>
+                        <td className="font-semibold">Convenience Fee</td>
+                        <td className="text-right">₹{selectedBooking?.payment?.convenienceFee ?? 0}</td>
+                      </tr>
+                      <tr className="text-lg font-bold">
+                        <td>Total</td>
+                        <td className="text-right">₹{selectedBooking?.payment?.total ?? 0}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
 
             <div className="p-4 card bg-base-200">
               <p className="font-semibold">Payment Method:</p>

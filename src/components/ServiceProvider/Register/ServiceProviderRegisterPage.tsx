@@ -151,8 +151,6 @@ const ServiceProviderRegisterPage: React.FC<RegisterFormProps> = () => {
         data.documentImg2 = documentImg2;
       }
 
-      console.log('Submitting data:', data);
-
       if (isReapplyMode) {
         await handleReapply(data);
       } else {
@@ -174,7 +172,6 @@ const ServiceProviderRegisterPage: React.FC<RegisterFormProps> = () => {
         success: 'Registration submitted successfully! Our team will review your application shortly.',
       }
     );
-    console.log(res);
 
     if (res.status === 201) {
       handleSuccess();

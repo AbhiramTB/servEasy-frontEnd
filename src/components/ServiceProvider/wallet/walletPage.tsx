@@ -4,11 +4,13 @@ import { useEffect, useState } from 'react';
 import { getRequest } from '../../../utils/makeRequestInstance';
 import { ProviderWalletProps } from '../../../utils/types/IServiceProviderWallet';
 import EmptyState from '../../ui/EmptyState';
+import WalletShimmer from '../../../Skeleton/Pages/WalletShimmer';
 
 const Walletpage = () => {
   const [crrPage, setPage] = useState<number>(0);
   const [totalData, setTotalData] = useState<number>(0);
   const [wallet, setWallet] = useState<ProviderWalletProps | null>(null);
+  const [loading, setLoading] = useState(false);
   const dataLimit = 5;
 
   useEffect(() => {
@@ -17,6 +19,7 @@ const Walletpage = () => {
 
   async function getData(page: number) {
     try {
+      setLoading(true);
       const params: Record<string, any> = {};
       params.limit = dataLimit;
       params.skip = page;
@@ -28,12 +31,16 @@ const Walletpage = () => {
       setPage(page || 0);
     } catch (e) {
       console.log(e);
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
     <div>
-      {!wallet && (
+      {loading && <WalletShimmer />}
+
+      {!wallet && !loading && (
         <div>
           {' '}
           <div className="mb-8 text-center">
@@ -41,7 +48,7 @@ const Walletpage = () => {
             <p className="text-base-content/70">Manage your earnings and withdrawals</p>
           </div>{' '}
           <EmptyState
-            icon="system-error"
+            icon="no-data"
             message="Once you receive a service payment, your wallet will appear here."
             title="Wallet not found"
           />{' '}

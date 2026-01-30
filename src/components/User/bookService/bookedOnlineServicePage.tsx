@@ -136,7 +136,7 @@ const ServiceBookingDetailsOnline = () => {
 
   const isCancelled = bookedService.serviceStatus === 'cancelled';
   const isCompleted = bookedService.serviceStatus === 'completed';
-  const isInProgress = bookedService.serviceStatus === 'in-progress';
+  // const isInProgress = bookedService.serviceStatus === 'in-progress';
 
   const handlePaymentClick = () => {
     setShowPaymentConfirm(true);
@@ -303,27 +303,32 @@ const ServiceBookingDetailsOnline = () => {
             )}
 
           {/* Video Call Area with Countdown */}
-          {isInProgress && bookedService.isOnlineService && (
-            <div className="w-full max-w-md mx-auto border shadow-lg rounded-xl bg-base-100 border-base-300">
-              <div className="space-y-4 card-body">
-                <h3 className="text-lg font-semibold text-primary">🧑‍💻 Online Session</h3>
+          {bookedService.paymentStatus === 'completed' &&
+            !isCompleted &&
+            !isCancelled &&
+            bookedService.isOnlineService && (
+              <div className="w-full max-w-md mx-auto border shadow-lg rounded-xl bg-base-100 border-base-300">
+                <div className="space-y-4 card-body">
+                  <h3 className="text-lg font-semibold text-primary">🧑‍💻 Online Session</h3>
 
-                <div className="p-4 text-center rounded-lg bg-base-200">
-                  <div className="text-sm text-base-content/70">Scheduled Time</div>
-                  <div className="mt-1 font-medium text-base-content">
-                    {dayjs(bookedService.serviceSlot.startTime).format('DD MMM YYYY, hh:mm A')}
-                    <br />
-                    <span className="text-sm text-base-content/60">
+                  <div className="p-4 text-center rounded-lg bg-base-200">
+                    <div className="text-sm text-base-content/70">Scheduled Time</div>
+                    <div className="mt-1 font-medium text-base-content">
                       {dayjs(bookedService.serviceSlot.startTime).format('DD MMM YYYY, hh:mm A')}
-                      {' to '} {dayjs(bookedService.serviceSlot.startTime).format('DD MMM YYYY, hh:mm A')}
-                    </span>
+                      <br />
+                      <span className="text-sm text-base-content/60">
+                        {dayjs(bookedService.serviceSlot.startTime).format('DD MMM YYYY, hh:mm A')}
+                        {' to '} {dayjs(bookedService.serviceSlot.startTime).format('DD MMM YYYY, hh:mm A')}
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                <button className="w-full text-base font-semibold btn btn-primary">📹 Join Video Call</button>
+                  <span className="text-base-content ">
+                    The service provider will connect with you via video call at the scheduled time.
+                  </span>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
           {isCompleted && (
             <div className="shadow-xl card bg-base-100">
@@ -360,7 +365,9 @@ const ServiceBookingDetailsOnline = () => {
 
               {id && (
                 <RazorpayButton
-                  onSuccess={() => getBookedService(id)}
+                  onSuccess={() => {
+                    getBookedService(id);
+                  }}
                   buttonStyle={{
                     className: 'p-3 text-base font-bold rounded-md hover:bg-opacity-45 bg-primary',
                     buttonText: 'Pay Now',
@@ -371,6 +378,7 @@ const ServiceBookingDetailsOnline = () => {
                   payload={{ serviceId: id }}
                   total={bookedService.payment.total - 100}
                   verifyApi={'/payment/verify'}
+                  onBeforePayment={() => setShowPaymentConfirm(false)}
                 />
               )}
             </div>

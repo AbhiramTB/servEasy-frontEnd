@@ -118,7 +118,6 @@ const ServiceSlotCard: React.FC<ServiceSlotCardProps> = ({ service, onCreateSlot
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [error, setError] = useState('');
-  console.log(service);
 
   const validateTimeSlot = (start: string, end: string) => {
     if (!start || !end) return 'Please select both times';
@@ -131,17 +130,14 @@ const ServiceSlotCard: React.FC<ServiceSlotCardProps> = ({ service, onCreateSlot
 
     const nowIST = dayjs().tz(IST_TIMEZONE);
 
-    /* ❌ Past time validation */
     if (selectedStartIST.isSameOrBefore(nowIST)) {
       return 'Please select a future time';
     }
 
-    /* ❌ End before start */
     if (selectedEndIST.isSameOrBefore(selectedStartIST)) {
       return 'End time must be after start time';
     }
 
-    /* ❌ Overlap validation */
     const hasOverlap = service.slots.some(slot => {
       const slotStartIST = dayjs(slot.startTime).tz(IST_TIMEZONE);
       const slotEndIST = dayjs(slot.endTime).tz(IST_TIMEZONE);
@@ -149,7 +145,7 @@ const ServiceSlotCard: React.FC<ServiceSlotCardProps> = ({ service, onCreateSlot
       return selectedStartIST.isBefore(slotEndIST) && selectedEndIST.isAfter(slotStartIST);
     });
 
-    console.log('[SLOT VALIDATION]', {
+    console.log('[Slot VALIDATION]', {
       start,
       end,
       selectedStartIST: selectedStartIST.format(),
@@ -173,7 +169,7 @@ const ServiceSlotCard: React.FC<ServiceSlotCardProps> = ({ service, onCreateSlot
     const startDate = timeStringToDate(startTime);
     const endDate = timeStringToDate(endTime);
 
-    console.log('[CREATE SLOT]', {
+    console.log('CREATE SLOT', {
       startTime,
       endTime,
       startDate,

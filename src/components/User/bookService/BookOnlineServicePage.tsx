@@ -197,7 +197,7 @@ const BookOnlineService = () => {
                   onClick={handleBooking}
                   disabled={!selectedSlotId || bookingLoading}
                 >
-                  {bookingLoading ? 'Processing...' : 'Confirm & Pay'}
+                  {bookingLoading ? 'Processing...' : 'Confirm'}
                 </button>
 
                 <p className="text-[10px] text-center text-gray-400 mt-4 px-4">

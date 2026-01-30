@@ -114,13 +114,9 @@ const ServiceProviderBookingManage = () => {
     try {
       setLoading(true);
       const res = await getRequest(`/service/bookings/serviceProvider/${id}`);
-      console.log(res.data.service);
       if (res.status === 200) {
-        console.log('--------------------------------------------_________-------------');
-        console.log(res.data);
 
         setBookingData(res.data.service);
-        console.log('--------------------------------------------_________-------------');
         if (res.data.service.bookedService.serviceStatus) {
           // setNewStatus(res.data.service.bookedService.serviceStatus);
         }
@@ -169,9 +165,7 @@ const ServiceProviderBookingManage = () => {
         getBookedService(id as string);
       }
 
-      console.log(res);
     } catch (err: any) {
-      console.log(err.response.data.error);
       if (err.response.data.error) {
         HotToastError(err.response.data.error);
       } else {
@@ -202,7 +196,6 @@ const ServiceProviderBookingManage = () => {
       console.error(err);
     }
   };
-  console.log(bookingData?.review);
 
   const handleStatusUpdate = async () => {
     try {
@@ -223,7 +216,6 @@ const ServiceProviderBookingManage = () => {
 
   const handlePaymentRequest = async (): Promise<void> => {
     try {
-      console.log(payment);
 
       const res = await patchRequest(`service/service-provider/booking/${id}/payment-request`, {
         payment,

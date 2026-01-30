@@ -57,7 +57,6 @@ const Sidebar: React.FC<SidebarProps> = ({ profile, isSidebarOpen, setIsSidebarO
   const getNotfication = async () => {
     try {
       const res = await getRequest('/service-providers/notification');
-      console.log(res);
       setNotifications(res.data.notifications);
       setNotificationCount(res.data.unreadCount);
     } catch (error) {
@@ -82,7 +81,6 @@ const Sidebar: React.FC<SidebarProps> = ({ profile, isSidebarOpen, setIsSidebarO
   };
 
   const handleSocketNotification = (notification: any) => {
-    console.log('notification');
     console.log(notification);
     if (notification.targetRole === 'SERVICE_PROVIDER') {
       if (notification.type === 'video_call') {
