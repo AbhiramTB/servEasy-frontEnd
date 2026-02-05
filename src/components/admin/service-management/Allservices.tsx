@@ -4,10 +4,34 @@ import { adminGetRequest, adminPatchRequest } from '../../../utils/AxiosAdmin';
 import { useDispatch, useSelector } from 'react-redux';
 import { addServices } from '../../../redux/slices/adminSlice';
 import { RootState } from '../../../redux/store';
-import ServiceDetails from './ServiceDetails';
 import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
 import Pagination from '../../../utils/ui/pagination';
 import SearchComponent from '../../ui/SearchComponent';
+
+interface IServiceDetails {
+  _id: string;
+  serviceName: string;
+  serviceType: string;
+  description: string;
+  estimatedPrice: number;
+  category: string;
+  location: {
+    address: string;
+  };
+  serviceImage: string;
+  isBlocked: boolean;
+  serviceProviderDetails: {
+    serviceProviderName: string;
+    profileImage: string;
+    experience: number;
+    createdAt: string;
+    location: {
+      address: string;
+    };
+    serviceProviderEmail: string;
+    serviceProviderPhone: string;
+  };
+}
 
 const Allservices = () => {
   const dispatch = useDispatch();
@@ -17,7 +41,7 @@ const Allservices = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const dataLimit = 6;
-  const [details, setDetails] = useState<null | object>();
+
   const getServices = useCallback(
     async (page: number, searchVal?: string) => {
       try {
@@ -60,13 +84,6 @@ const Allservices = () => {
         HotToastError(res.data.message);
       }
     } catch (error) {}
-  };
-
-  const block = (serviceId: string) => {
-    handleToggleBlock(serviceId.toString(), false);
-  };
-  const unBlock = (serviceId: string) => {
-    handleToggleBlock(serviceId.toString(), true);
   };
 
   const blockUnblock = (serviceId: string) => {
@@ -148,6 +165,7 @@ const Allservices = () => {
                       <p className="text-sm font-medium text-base-content">
                         {service.serviceProviderDetails.serviceProviderName}
                       </p>
+                      <p className="text-xs text-base-content/70">{service.serviceProviderDetails.email}</p>
                       <p className="text-xs text-base-content/70">
                         {service.serviceProviderDetails.experience} yrs exp
                       </p>
@@ -221,48 +239,11 @@ const Allservices = () => {
                       Unblock
                     </button>
                   )}
-
-                  <button
-                    onClick={() => setDetails(service)}
-                    className="flex items-center justify-center px-4 py-2 text-sm font-medium rounded text-base-content bg-base-300 hover:bg-base-200"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-4 h-4 mr-1"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                      />
-                    </svg>
-                    Details
-                  </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
-      )}
-
-      {details && (
-        <ServiceDetails
-          service={details}
-          onEdit={() => alert('clicked the ')}
-          onBlock={block}
-          onUnblock={unBlock}
-          onClose={() => setDetails(null)}
-        />
       )}
 
       <Pagination
