@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { HotToastSuccess } from '../../utils/notificationToast';
-import { adminGetRequest, adminPatchRequest } from '../../utils/AxiosAdmin';
-import AdCard from '../ServiceProvider/ads/AdCard';
-import { IAdminAd, IAdStatus } from '../../utils/types/IAdminAd';
-import Pagination from '../ui/Pagination';
+import { HotToastSuccess } from '../../../utils/notificationToast';
+import { adminGetRequest, adminPatchRequest } from '../../../utils/AxiosAdmin';
+import AdCard from '../../../components/ServiceProvider/ads/AdCard';
+import { IAdminAd, IAdStatus } from '../../../utils/types/IAdminAd';
+import Pagination from '../../../utils/ui/pagination';
 
 const AdsPage = () => {
   const [ads, setAds] = useState<IAdminAd[] | []>([]);

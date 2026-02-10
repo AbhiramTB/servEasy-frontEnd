@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { adminGetRequest, adminPatchRequest } from '../../../utils/AxiosAdmin';
-import { apiEndPointAdmin } from '../../../utils/constant';
-import { HotToastSuccess } from '../../../utils/notificationToast';
-import RejectionReasonModal from './RejectionReasonModal';
-import { IProviderWalletDetailsView } from '../../../utils/types/Iwallet';
-import TransactionsSection from './TransactionsSection';
-import WalletHeaderSection from './WalletHeaderSection';
+import { adminGetRequest, adminPatchRequest } from '../../../../../utils/AxiosAdmin';
+import { apiEndPointAdmin } from '../../../../../utils/constant';
+import { HotToastSuccess } from '../../../../../utils/notificationToast';
+import RejectionReasonModal from '../../../../components/admin/wallet/RejectionReasonModal';
+import { IProviderWalletDetailsView } from '../../../../../utils/types/Iwallet';
+import TransactionsSection from '../../../../components/admin/wallet/TransactionsSection';
+import WalletHeaderSection from '../../../../components/admin/wallet/WalletHeaderSection';
 
 const AdminProviderWallet: React.FC = () => {
   const { id } = useParams<{ id: string }>();

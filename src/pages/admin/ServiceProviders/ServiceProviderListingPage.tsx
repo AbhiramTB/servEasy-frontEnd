@@ -1,13 +1,13 @@
 import { useEffect, useState, useCallback } from 'react';
-import { adminGetRequest, adminPatchRequest } from '../../utils/AxiosAdmin';
-import { apiEndPointAdmin } from '../../utils/constant';
-import { HotToastSuccess } from '../../utils/notificationToast';
-import Pagination from '../../utils/ui/pagination';
-import SearchComponent from '../ui/SearchComponent';
-import { IServiceProvider } from '../../utils/types/IServiceProvider';
-import SubscriptionInfoServiceProvider from '../ServiceProvider/service/profile/SubscriptionInfoServiceProvider';
-import ImagePreview from '../ui/ImagePreview';
-import SubscriptionIcon from '../../utils/ui/SubscriptionIcon';
+import { adminGetRequest, adminPatchRequest } from '../../../../utils/AxiosAdmin';
+import { apiEndPointAdmin } from '../../../../utils/constant';
+import { HotToastSuccess } from '../../../../utils/notificationToast';
+import Pagination from '../../../../utils/ui/pagination';
+import SearchComponent from '../../../components/ui/SearchComponent';
+import { IServiceProvider } from '../../../../utils/types/IServiceProvider';
+import SubscriptionInfoServiceProvider from '../../../components/ServiceProvider/service/profile/SubscriptionInfoServiceProvider';
+import ImagePreview from '../../../components/ui/ImagePreview';
+import SubscriptionIcon from '../../../../utils/ui/SubscriptionIcon';
 
 export interface Location {
   address: string;

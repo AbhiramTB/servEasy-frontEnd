@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import HomeBannerForm from './HomeBannerForm';
+import HomeBannerForm from '../../../components/admin/siteSettings/HomeBannerForm';
 import { adminGetRequest, adminDeleteRequest, adminPutRequest } from '../../../utils/AxiosAdmin';
 import { apiEndPointAdmin } from '../../../utils/constant';
-import BannerCarousel, { IFooterBanner } from './FooterBannerList';
-import MiniDashboardPreview from './MiniDashboardPreview';
-import ThemePicker from './themePicker';
-import ThemeForm from './ThemeForm';
+import BannerCarousel, { IFooterBanner } from '../../../components/admin/siteSettings/FooterBannerList';
+import MiniDashboardPreview from '../../../components/admin/siteSettings/MiniDashboardPreview';
+import ThemePicker from '../../../components/admin/siteSettings/themePicker';
+import ThemeForm from '../../../components/admin/siteSettings/ThemeForm';
 const SiteSettingsPage = () => {
   const [homeBanners, setHomeBanners] = useState<IFooterBanner[]>([]);
   const [themes, setThemes] = useState<string[]>([]);

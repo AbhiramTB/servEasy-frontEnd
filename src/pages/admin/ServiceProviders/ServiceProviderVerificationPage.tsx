@@ -1,10 +1,10 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { ServiceProvider } from '../../redux/slices/adminSlice';
-import { adminGetRequest, adminPatchRequest } from '../../utils/AxiosAdmin';
-import { apiEndPointAdmin } from '../../utils/constant';
-import { HotToastSuccess } from '../../utils/notificationToast';
-import DocumentViewer from './DocumentViewer';
+import { ServiceProvider } from '../../../../redux/slices/adminSlice';
+import { adminGetRequest, adminPatchRequest } from '../../../../utils/AxiosAdmin';
+import { apiEndPointAdmin } from '../../../../utils/constant';
+import { HotToastSuccess } from '../../../../utils/notificationToast';
+import DocumentViewer from '../../../components/admin/DocumentViewer';
 
 export interface Location {
   address: string;

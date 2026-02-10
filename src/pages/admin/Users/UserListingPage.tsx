@@ -1,14 +1,15 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addUsers } from '../../redux/slices/adminSlice';
-import { adminGetRequest, adminPatchRequest } from '../../utils/AxiosAdmin';
-import { apiEndPointAdmin } from '../../utils/constant';
-import { RootState } from '../../redux/store';
-import UserProfileView from './showProfile';
-import { HotToastSuccess } from '../../utils/notificationToast';
-import Pagination from '../../utils/ui/pagination';
-import SearchComponent from '../ui/SearchComponent';
-import { UserCardSkeleton } from '../../Skeleton/admin/UserCardSkeleton';
+import { adminGetRequest, adminPatchRequest } from '../../../utils/AxiosAdmin';
+import { addUsers } from '../../../redux/slices/adminSlice';
+import { apiEndPointAdmin } from '../../../utils/constant';
+import { RootState } from '../../../redux/store';
+import { HotToastSuccess } from '../../../utils/notificationToast';
+import SearchComponent from '../../../components/ui/SearchComponent';
+import UserProfileView from '../../../components/admin/showProfile';
+import { UserCardSkeleton } from '../../../Skeleton/admin/UserCardSkeleton';
+import Pagination from '../../../components/ui/Pagination';
+
 
 const UserListingPage: React.FC = () => {
   const dispatch = useDispatch();

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { ICoupon } from '../../../utils/types/ICoupon';
-import { CouponForm } from './CouponForm';
-import { CouponCard } from './CouponCard';
 import { adminGetRequest, adminPatchRequest, adminPostRequest } from '../../../utils/AxiosAdmin';
 import { HotToastSuccess } from '../../../utils/notificationToast';
+import { CouponForm } from '../../../components/admin/coupon management/CouponForm';
+import { CouponCard } from '../../../components/admin/coupon management/CouponCard';
 
 export const CouponListPage: React.FC = () => {
   const [addNewCoupon, setNewCoupon] = useState<boolean>(false);

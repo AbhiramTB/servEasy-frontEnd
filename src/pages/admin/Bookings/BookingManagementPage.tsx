@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { paymentRoutes } from '../../../utils/constant';
-import Bookings from '../../ui/Bookings';
+import Bookings from '../../../components/ui/Bookings';
 import { BookingData } from '../../../utils/types/booking';
-import SearchComponent from '../../ui/SearchComponent';
+import SearchComponent from '../../../components/ui/SearchComponent';
 import { adminGetRequest } from '../../../utils/AxiosAdmin';
 
 type ActiveTabType = 'bookings' | 'payments';

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { ISubscriptionPlan } from '../../../utils/types/ISubscriptionPlan';
-import AddPlanModal from './AddPlanModal';
-import EditPlanModal from './EditPlanModal';
-import PlanCard from './PlanCard';
+import AddPlanModal from '../../../components/admin/Subscriptions/AddPlanModal';
+import EditPlanModal from '../../../components/admin/Subscriptions/EditPlanModal';
+import PlanCard from '../../../components/admin/Subscriptions/PlanCard';
 import { adminGetRequest, adminPatchRequest, adminPostRequest } from '../../../utils/AxiosAdmin';
 
 const SubscriptionPlansPage: React.FC = () => {

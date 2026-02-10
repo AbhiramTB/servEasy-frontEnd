@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { adminGetRequest } from '../../utils/AxiosAdmin';
+import { adminGetRequest } from '../../../../utils/AxiosAdmin';
 import { RefreshCcw } from 'lucide-react';
-import LoadingSpinner from '../ui/LoadingSpinner';
+import LoadingSpinner from '../../../../components/ui/LoadingSpinner';
 
 const AdminLogs: React.FC = () => {
   const [logs, setLogs] = useState<string>('');

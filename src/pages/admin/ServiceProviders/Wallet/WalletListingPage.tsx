@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import { adminGetRequest } from '../../../utils/AxiosAdmin';
-import { apiEndPointAdmin } from '../../../utils/constant';
-import Pagination from '../../ui/Pagination';
-import { UserCardSkeleton } from '../../../Skeleton/admin/UserCardSkeleton';
+import { adminGetRequest } from '../../../../../utils/AxiosAdmin';
+import { apiEndPointAdmin } from '../../../../../utils/constant';
+import Pagination from '../../../../../utils/ui/pagination';
+import { UserCardSkeleton } from '../../../../../Skeleton/admin/UserCardSkeleton';
 
-import WalletCard from './WalletCard';
+import WalletCard from '../../../../components/admin/wallet/WalletCard';
 
 const WalletListing = () => {
   interface IProviderWalletListing {

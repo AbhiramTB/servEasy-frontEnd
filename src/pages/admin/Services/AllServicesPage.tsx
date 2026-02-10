@@ -6,7 +6,7 @@ import { addServices } from '../../../redux/slices/adminSlice';
 import { RootState } from '../../../redux/store';
 import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
 import Pagination from '../../../utils/ui/pagination';
-import SearchComponent from '../../ui/SearchComponent';
+import SearchComponent from '../../../components/ui/SearchComponent';
 
 interface IServiceDetails {
   _id: string;
