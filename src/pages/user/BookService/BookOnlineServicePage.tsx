@@ -32,11 +32,11 @@ export interface IBookingService {
   serviceProviderDetails: IServiceProviderDetails;
 }
 // UI Components
-import BookingSuccess from '../../ui/bookingSuccessCard';
-import SlotSelector from '../../ui/SlotSelector';
-import ServiceProviderCard from '../../ui/ServiceProviderCard';
-import ServiceCardCompact from '../../ServiceProvider/booking/ServiceCardCompact';
-import EmptyState from '../../ui/EmptyState';
+import BookingSuccess from '../../../components/ui/bookingSuccessCard';
+import SlotSelector from '../../../components/ui/SlotSelector';
+import ServiceProviderCard from '../../../components/ui/ServiceProviderCard';
+import ServiceCardCompact from '../../../components/ServiceProvider/booking/ServiceCardCompact';
+import EmptyState from '../../../components/ui/EmptyState';
 
 const BookOnlineService = () => {
   const { id } = useParams<{ id: string }>();

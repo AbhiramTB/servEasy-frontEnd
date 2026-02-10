@@ -3,12 +3,12 @@ import { MapPin, ShieldCheck, Users, Wrench, Star, Briefcase, LogIn, FileText, C
 
 // Import your image
 import img from '/images/landing/serveasy.jpeg';
-import LandingNavbar from '../LandingNavbar';
+import LandingNavbar from '../../../components/ui/Landing/LandingNavbar';
 import { useNavigate } from 'react-router-dom';
-import HowItWorks from '../../../User/home/HowItWorks';
-import WhyChooseServEasy from '../../../User/home/WhyCooseServEasy';
-import CustomerTestimonials from '../../../User/home/CustomerTestimonials';
-import { ROUTES } from '../../../../utils/constants/routes';
+import HowItWorks from '../../../components/User/home/HowItWorks';
+import WhyChooseServEasy from '../../../components/User/home/WhyCooseServEasy';
+import CustomerTestimonials from '../../../components/User/home/CustomerTestimonials';
+import { ROUTES } from '../../../utils/constants/routes';
 
 /* ---------- Interfaces ---------- */
 interface NavLink {

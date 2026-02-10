@@ -1,11 +1,11 @@
 import { useRef, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { useVideoCall } from '../../hooks/useVideoCall';
-import { RootState } from '../../redux/store';
-import VideoCallUI from './VideoCallUi';
-import { ROUTES } from '../../utils/constants/routes';
-import ErrorModal from './ErrorModal';
+import { useVideoCall } from '../../../hooks/useVideoCall';
+import { RootState } from '../../../redux/store';
+import VideoCallUI from '../../../components/VideoCall/VideoCallUi';
+import { ROUTES } from '../../../utils/constants/routes';
+import ErrorModal from '../../../components/VideoCall/ErrorModal';
 
 interface Prop {
   firstLetter?: string;

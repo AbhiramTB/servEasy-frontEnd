@@ -8,7 +8,7 @@ import { RootState } from '../../../redux/store';
 import { validateEmail, validatePassword, validatePhone, validateUserName } from '../../../utils/validate';
 import { addUser } from '../../../redux/slices/userSlice';
 import { useDispatch } from 'react-redux';
-import UpdateProfileOTP from './UpdateProfileOtp';
+import UpdateProfileOTP from '../../../components/User/profile/UpdateProfileOtp';
 import InitialAvatar from '../../../utils/ui/InitialAvatar';
 
 const UserProfile = () => {

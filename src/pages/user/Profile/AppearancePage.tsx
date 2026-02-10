@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { getRequest } from '../../../utils/makeRequestInstance';
 import { apiEndPoint } from '../../../utils/constant';
-import ThemePicker from '../../admin/siteSettings/themePicker';
-import MiniDashboardPreview from '../../admin/siteSettings/MiniDashboardPreview';
+import ThemePicker from '../../../components/admin/siteSettings/themePicker';
+import MiniDashboardPreview from '../../../components/admin/siteSettings/MiniDashboardPreview';
 
 const Appearance = () => {
   const [themes, setThemes] = useState<string[] | []>([]);

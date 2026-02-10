@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchAllChats } from './getAllchats';
+import { fetchAllChats } from '../../../components/User/chat/getAllchats';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { Link } from 'react-router-dom';

@@ -6,11 +6,11 @@ import { RootState } from '../../../redux/store';
 import { EmojiClickData } from 'emoji-picker-react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { getAllchats, getServiceProviderProfile } from './getAllchats';
-import { uploadImage } from './uploadImg';
+import { getAllchats, getServiceProviderProfile } from '../../../components/User/chat/getAllchats';
+import { uploadImage } from '../../../components/User/chat/uploadImg';
 import { IMessage } from '../../../utils/types/IChat';
-import ChatMessage from '../../ui/chat/ChatMessage';
-import ChatInput from '../../ui/chat/ChatInput';
+import ChatMessage from '../../../components/ui/chat/ChatMessage';
+import ChatInput from '../../../components/ui/chat/ChatInput';
 import InitialAvatar from '../../../utils/ui/InitialAvatar';
 
 dayjs.extend(relativeTime);

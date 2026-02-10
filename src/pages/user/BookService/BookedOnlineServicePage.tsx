@@ -1,14 +1,14 @@
 import { useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getRequest } from '../../../utils/makeRequestInstance';
-import RazorpayButton from '../../ui/PaymentButton';
-import ShowBills from '../../ui/ShowBills';
+import RazorpayButton from '../../../components/ui/PaymentButton';
+import ShowBills from '../../../components/ui/ShowBills';
 import dayjs from 'dayjs';
-import ServiceCardCompact from '../../ServiceProvider/booking/ServiceCardCompact';
+import ServiceCardCompact from '../../../components/ServiceProvider/booking/ServiceCardCompact';
 import { HotToastError } from '../../../utils/notificationToast';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
-import { ReloadButton } from './ReloadButton';
+import { ReloadButton } from '../../../components/User/bookService/ReloadButton';
 
 interface BookingData {
   bookedService: {

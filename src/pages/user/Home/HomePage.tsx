@@ -1,18 +1,18 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { apiEndPoint } from '../../../utils/constant';
-import LocationSearchBar from './LocationSearchBar';
-import ServiceSearchBar from './ServiceSearch';
-import ServiceListingCards from './ServiceListingCards';
+import LocationSearchBar from '../../../components/User/home/LocationSearchBar';
+import ServiceSearchBar from '../../../components/User/home/ServiceSearch';
+import ServiceListingCards from '../../../components/User/home/ServiceListingCards';
 import { IServiceHome } from '../../../utils/types/IserviceHome';
 import { Link } from 'react-router-dom';
-import CustomerTestimonials from './CustomerTestimonials';
-import WhyCooseServEasy from './WhyCooseServEasy';
-import HowItWorks from './HowItWorks';
-import FilterSortComponent, { FilterSortState } from './FilterCard';
+import CustomerTestimonials from '../../../components/User/home/CustomerTestimonials';
+import WhyCooseServEasy from '../../../components/User/home/WhyCooseServEasy';
+import HowItWorks from '../../../components/User/home/HowItWorks';
+import FilterSortComponent, { FilterSortState } from '../../../components/User/home/FilterCard';
 import SkeletonHomeCard from '../../../Skeleton/SkeletonHome';
-import BecomeAServiceProviderBanner from '../../ui/BecomeAServiceProviderBanner';
+import BecomeAServiceProviderBanner from '../../../components/ui/BecomeAServiceProviderBanner';
 import { getRequest } from '../../../utils/makeRequestInstance';
-import EmptyState from '../../ui/EmptyState';
+import EmptyState from '../../../components/ui/EmptyState';
 
 interface Location {
   address: string;
