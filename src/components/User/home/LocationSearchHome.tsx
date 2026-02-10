@@ -30,7 +30,7 @@ const LocationSearchHomePage: React.FC<LocationSearchProps> = ({ onLocationSelec
     setIsLoading(true);
     try {
       const response = await getRequest(`${apiEndPoint.locationAutocomplete}?query=${searchTerm}`);
-      setResults(response.data);
+      setResults(response.data.suggestions);
     } catch (error) {
       console.error('Error fetching locations:', error);
     } finally {
