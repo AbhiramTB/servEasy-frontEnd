@@ -22,9 +22,6 @@ export const getServiceProviderProfile=async (id:string)=>{
 
 export const fetchAllChats= async (data:{serviceProviderId?:string ,userId?:string})=>{
 try {
-    alert('hey')
-    console.log('fetch chat called ,')
-    console.log(data)
 
     return await postRequest(apiEndPoint.getChats,data)
 

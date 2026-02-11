@@ -21,12 +21,15 @@ import AuthPage from '../pages/user/Auth/AuthPage';
 import Otp from '../pages/user/Auth/OtpPage';
 import { useAuth } from '../hooks/useAuth';
 import CouponsPage from '../pages/user/CouponsPage';
+import PaymentVerify from '../components/ui/PaymentVerify';
 
 const UserRoutes = () => {
   const { userAccessToken } = useAuth();
 
   return (
     <Route>
+
+
       <Route path={ROUTES.USER.OTP} element={<Otp />} />
 
       <Route
@@ -65,6 +68,8 @@ const UserRoutes = () => {
 
       {/* -------- Service Provider -------- */}
       <Route path={ROUTES.SERVICEPROVIDER.REGISTER} element={<ServiceProviderRegisterPage />} />
+      <Route path="/payment/verify" element={<PaymentVerify />} />
+
     </Route>
   );
 };
