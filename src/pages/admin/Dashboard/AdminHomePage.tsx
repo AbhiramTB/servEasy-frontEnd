@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {  useSelector } from 'react-redux';
-import { RootState } from '../../../../redux/store';
-import { adminGetRequest } from '../../../../utils/AxiosAdmin';
-import { apiEndPointAdmin } from '../../../../utils/constant';
-import FilterSection from '../../../components/admin/Chart/FilterSection';
-import StatsSection from '../../../components/admin/Chart/StatsSection';
-import PaymentChartSection from '../../../components/admin/Chart/PaymentChartSection';
-import PaymentTable from '../../../components/admin/Chart/PaymentTable';
+import { RootState } from '../../../redux/store';
+import { apiEndPointAdmin } from '../../../utils/constant';
+import { adminGetRequest } from '../../../utils/AxiosAdmin';
+import FilterSection from '../../../components/Chart/FilterSection';
+import StatsSection from '../../../components/Chart/StatsSection';
+import PaymentChartSection from '../../../components/Chart/PaymentChartSection';
+import PaymentTable from '../../../components/Chart/PaymentTable';
+
 
 
 interface PaymentData {

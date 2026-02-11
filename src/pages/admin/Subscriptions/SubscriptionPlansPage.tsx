@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ISubscriptionPlan } from '../../../utils/types/ISubscriptionPlan';
-import AddPlanModal from '../../../components/admin/Subscriptions/AddPlanModal';
-import EditPlanModal from '../../../components/admin/Subscriptions/EditPlanModal';
-import PlanCard from '../../../components/admin/Subscriptions/PlanCard';
+
 import { adminGetRequest, adminPatchRequest, adminPostRequest } from '../../../utils/AxiosAdmin';
+import AddPlanModal from '../../../components/admin/subscriptionsManagement/AddPlanModal';
+import EditPlanModal from '../../../components/admin/subscriptionsManagement/EditPlanModal';
+import PlanCard from '../../../components/admin/subscriptionsManagement/PlanCard';
 
 const SubscriptionPlansPage: React.FC = () => {
   //   const [plans, setPlans] = useState<ISubscriptionPlan[]>([
@@ -28,7 +29,6 @@ const SubscriptionPlansPage: React.FC = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<ISubscriptionPlan | null>(null);
 
-  // ================= FETCH PLANS =================
   const fetchPlans = async () => {
     try {
       setLoading(true);
@@ -47,7 +47,6 @@ const SubscriptionPlansPage: React.FC = () => {
     fetchPlans();
   }, []);
 
-  // ================= CREATE PLAN =================
   const handleCreatePlan = async (data: any) => {
     try {
       await adminPostRequest('/admin/subscriptions', data);
@@ -57,7 +56,6 @@ const SubscriptionPlansPage: React.FC = () => {
     }
   };
 
-  // ================= UPDATE PLAN =================
   const handleUpdatePlan = async (id: string, data: any) => {
     try {
       await adminPatchRequest(`/admin/subscriptions/${id}`, data);
@@ -67,7 +65,6 @@ const SubscriptionPlansPage: React.FC = () => {
     }
   };
 
-  // ================= OPEN EDIT =================
   const openEditModal = (plan: ISubscriptionPlan) => {
     setSelectedPlan(plan);
     setShowEditModal(true);
@@ -83,17 +80,14 @@ const SubscriptionPlansPage: React.FC = () => {
         </button>
       </div>
 
-      {/* ======= Loading ======= */}
       {loading && <div className="text-center">Loading...</div>}
 
-      {/* ======= Plans Grid ======= */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {plans.map(plan => (
           <PlanCard key={plan._id} plan={plan} onEdit={openEditModal} />
         ))}
       </div>
 
-      {/* ======= Modals ======= */}
       <AddPlanModal isOpen={showAddModal} onClose={() => setShowAddModal(false)} onSubmit={handleCreatePlan} />
 
       <EditPlanModal
