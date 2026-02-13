@@ -56,8 +56,8 @@ const LocationSearchBar: React.FC<Props> = ({ onLocationSelect }) => {
 
     try {
       const response = await getRequest(`${apiEndPoint.locationAutocomplete}?query=${searchTerm}`);
-
-      const normalized: Location[] = (response.data || [])
+     
+      const normalized: Location[] = (response.data.suggestions || [])
         .map((place: any) => {
           const latitude = Number(place.latitude ?? place.lat ?? place.coordinates?.[1]);
 
@@ -66,7 +66,7 @@ const LocationSearchBar: React.FC<Props> = ({ onLocationSelect }) => {
           if (Number.isNaN(latitude) || Number.isNaN(longitude)) return null;
 
           return {
-            address: place.address ?? place.display_name ?? '',
+            address: place.address ?? place.display_name ??"",
             latitude,
             longitude,
           };

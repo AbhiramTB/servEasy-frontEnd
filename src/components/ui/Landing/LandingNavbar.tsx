@@ -1,5 +1,5 @@
 import React from 'react';
-import { INavbarProps } from './userLanding/UserLandingPage';
+import { INavbarProps } from '../../../pages/user/Landing/UserLandingPage';
 
 const LandingNavbar: React.FC<INavbarProps> = ({
   links = [],

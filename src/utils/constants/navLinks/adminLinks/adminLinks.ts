@@ -7,7 +7,6 @@ import {
   CalendarCheck,
   FolderCog,
   Settings,
-  FileText,
   Wallet,
   CalendarCog,
   Receipt,
@@ -60,5 +59,5 @@ export const adminLinks = [
   },
 
   { to: ROUTES.ADMIN.SITE_SETTINGS, icon: Settings, label: 'Site Settings' },
-  { to: ROUTES.ADMIN.LOGS, icon: FileText, label: 'Server Logs' },
+  // { to: ROUTES.ADMIN.LOGS, icon: FileText, label: 'Server Logs' },
 ];

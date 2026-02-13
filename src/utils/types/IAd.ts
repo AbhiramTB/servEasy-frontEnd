@@ -11,21 +11,17 @@ export interface IAd {
   description: string;
   image?: string;
 
-  // Location targeting
   targetLocation?: ILocation;
 
   radiusKm?: number;
 
   planType: 'basic' | 'pro' | 'premium';
 
-  // Stats
   views?: number;
   clicks?: number;
 
-  // Status
   status?: IAdStatus;
 
-  // Dates (stored as ISO strings on frontend)
   startDate?: string;
   endDate?: string;
 
