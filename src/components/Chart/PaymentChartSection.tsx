@@ -5,10 +5,7 @@ import {
   PieChart,
   Pie,
   Cell,
-  AreaChart,
-  Area,
-  LineChart,
-  Line,
+
   CartesianGrid,
   XAxis,
   YAxis,

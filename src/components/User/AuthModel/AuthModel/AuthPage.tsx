@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
-import ForgotPassword from '../ForgotPassword/forgotPassword';
 import ErrorAlertInfo from './ErrorAlertInfo';
 import GoogleAuthButton from './googleAuth';
 import { MapPinned } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
-import { HotToastError } from '../../../utils/notificationToast';
-import LandingNavbar from '../../ui/Landing/LandingNavbar';
+import { HotToastError } from '../../../../utils/notificationToast';
+import LandingNavbar from '../../../ui/Landing/LandingNavbar';
+import ForgotPassword from '../../ForgotPassword/forgotPassword';
 const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [isForgotPassword, setForgotPassword] = useState(false);

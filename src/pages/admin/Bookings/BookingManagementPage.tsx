@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { paymentRoutes } from '../../../utils/constant';
 import Bookings from '../../../components/ui/Bookings';
 import { BookingData } from '../../../utils/types/booking';
 import SearchComponent from '../../../components/ui/SearchComponent';

@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { X, Edit, Save, Camera } from 'lucide-react';
-import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
-import { getRequest, putRequest } from '../../../utils/makeRequestInstance';
-import { apiEndPoint } from '../../../utils/constant';
+import { HotToastError, HotToastSuccess } from '../../../../utils/notificationToast';
+import { getRequest, putRequest } from '../../../../utils/makeRequestInstance';
+import { apiEndPoint } from '../../../../utils/constant';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
-import { validateEmail, validatePassword, validatePhone, validateUserName } from '../../../utils/validate';
-import { addUser } from '../../../redux/slices/userSlice';
+import { RootState } from '../../../../redux/store';
+import { validateEmail, validatePassword, validatePhone, validateUserName } from '../../../../utils/validate';
+import { addUser } from '../../../../redux/slices/userSlice';
 import { useDispatch } from 'react-redux';
 import UpdateProfileOTP from './UpdateProfileOtp';
-import InitialAvatar from '../../../utils/ui/InitialAvatar';
+import InitialAvatar from '../../../../utils/ui/InitialAvatar';
 
 const UserProfile = () => {
   const user = useSelector((state: RootState) => state.user);

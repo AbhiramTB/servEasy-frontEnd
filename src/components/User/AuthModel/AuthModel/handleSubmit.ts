@@ -1,11 +1,11 @@
-import { validateEmail, validatePhone, validatePassword, validateUserName } from '../../../utils/validate';
-import { makeRequest } from '../../../utils/makeRequest';
-import { apiEndPoint } from '../../../utils/constant';
 import axios from 'axios';
-import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
 import { Dispatch, SetStateAction } from 'react';
 import { NavigateFunction } from 'react-router-dom';
-import { ROUTES } from '../../../utils/constants/routes';
+import { makeRequest } from '../../../../utils/makeRequest';
+import { apiEndPoint } from '../../../../utils/constant';
+import { HotToastError, HotToastSuccess } from '../../../../utils/notificationToast';
+import { ROUTES } from '../../../../utils/constants/routes';
+import { validateEmail, validatePassword, validatePhone, validateUserName } from '../../../../utils/validate';
 
 interface FormData {
   email?: string;

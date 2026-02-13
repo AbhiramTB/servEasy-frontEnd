@@ -1,5 +1,5 @@
 import React from 'react';
-import { IServiceDateTime, ITimeSlot } from '../../../utils/types/booking';
+import { IServiceDateTime, ITimeSlot } from '../../../../utils/types/booking';
 import dayjs from 'dayjs';
 
 interface ServiceDateTimeProps {

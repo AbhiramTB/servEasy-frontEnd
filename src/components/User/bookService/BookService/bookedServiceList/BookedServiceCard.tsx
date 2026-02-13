@@ -1,7 +1,7 @@
 import React from 'react';
 import { Briefcase, Home, Phone, Timer, CircleUserRound } from 'lucide-react';
 import dayjs from 'dayjs';
-import { IServiceDateTime } from '../../../../utils/types/booking';
+import { IServiceDateTime } from '../../../../../utils/types/booking';
 
 type Address = {
   name: string;

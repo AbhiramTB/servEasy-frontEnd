@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { getRequest } from '../../../../utils/makeRequestInstance';
-import { serviceEndPoint } from '../../../../utils/constant';
+import { getRequest } from '../../../../../utils/makeRequestInstance';
+import { serviceEndPoint } from '../../../../../utils/constant';
 import ServiceBookingCard from './BookedServiceCard';
 import { Link } from 'react-router-dom';
-import Pagination from '../../../ui/Pagination';
-import BookingCardSkeleton from '../../../../Skeleton/BookingListingCardSkeleton';
-import EmptyState from '../../../ui/EmptyState';
+import Pagination from '../../../../ui/Pagination';
+import BookingCardSkeleton from '../../../../../Skeleton/BookingListingCardSkeleton';
+import EmptyState from '../../../../ui/EmptyState';
 
 interface Address {
   name: string;

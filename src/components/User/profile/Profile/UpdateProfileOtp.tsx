@@ -1,6 +1,6 @@
-import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
-import { postRequest } from '../../../utils/makeRequestInstance';
-import { apiEndPoint } from '../../../utils/constant';
+import { HotToastError, HotToastSuccess } from '../../../../utils/notificationToast';
+import { postRequest } from '../../../../utils/makeRequestInstance';
+import { apiEndPoint } from '../../../../utils/constant';
 import { useState } from 'react';
 
 interface OtpProps {

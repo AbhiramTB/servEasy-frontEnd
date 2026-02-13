@@ -1,17 +1,17 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { connectSocket, getSocket, disconnectSocket } from '../../../utils/socket';
+import { connectSocket, getSocket, disconnectSocket } from '../../../../utils/socket';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
+import { RootState } from '../../../../redux/store'; 
 import { EmojiClickData } from 'emoji-picker-react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { getAllchats, getServiceProviderProfile } from './getAllchats';
 import { uploadImage } from './uploadImg';
-import { IMessage } from '../../../utils/types/IChat';
-import ChatMessage from '../../ui/chat/ChatMessage';
-import ChatInput from '../../ui/chat/ChatInput';
-import InitialAvatar from '../../../utils/ui/InitialAvatar';
+import { IMessage } from '../../../../utils/types/IChat';
+import ChatMessage from '../../../ui/chat/ChatMessage';
+import ChatInput from '../../../ui/chat/ChatInput';
+import InitialAvatar from '../../../../utils/ui/InitialAvatar';
 
 dayjs.extend(relativeTime);
 

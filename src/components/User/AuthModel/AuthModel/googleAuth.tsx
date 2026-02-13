@@ -1,9 +1,9 @@
 import React from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
-import { apiEndPoint } from '../../../utils/constant';
 import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../../utils/constants/routes';
+import { apiEndPoint } from '../../../../utils/constant';
+import { ROUTES } from '../../../../utils/constants/routes';
 
 const GoogleAuthButton: React.FC = () => {
   const navigate = useNavigate();

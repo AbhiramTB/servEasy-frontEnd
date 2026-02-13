@@ -1,8 +1,8 @@
 import { useState, useCallback, useEffect } from 'react';
 import lodash from 'lodash';
 import { MapPin, Loader2, X } from 'lucide-react';
-import { getRequest } from '../../../utils/makeRequestInstance';
-import { apiEndPoint } from '../../../utils/constant';
+import { getRequest } from '../../../../utils/makeRequestInstance';
+import { apiEndPoint } from '../../../../utils/constant';
 
 export interface Location {
   address: string;

@@ -7,7 +7,6 @@ import {
   CalendarCheck,
   FolderCog,
   Settings,
-  FileText,
   Wallet,
   CalendarCog,
   Receipt,

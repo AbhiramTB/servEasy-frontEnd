@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { postRequest } from '../../../utils/makeRequestInstance';
-import { HotToastSuccess, HotToastError } from '../../../utils/notificationToast';
+import { postRequest } from '../../../../utils/makeRequestInstance';
+import { HotToastSuccess, HotToastError } from '../../../../utils/notificationToast';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
-import { IReview } from '../../../utils/types/IReview';
+import { RootState } from '../../../../redux/store';
+import { IReview } from '../../../../utils/types/IReview';
 
 interface IReviewCardProp {
   bookedServiceId: string;

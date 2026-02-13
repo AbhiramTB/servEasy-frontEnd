@@ -1,5 +1,5 @@
-import { apiEndPoint } from "../../../utils/constant"
-import { getRequest, postRequest } from "../../../utils/makeRequestInstance"
+import { apiEndPoint } from "../../../../utils/constant"
+import { getRequest, postRequest } from "../../../../utils/makeRequestInstance"
 
 export const getAllchats =async (sender:string,reciver:string) => {
   try {

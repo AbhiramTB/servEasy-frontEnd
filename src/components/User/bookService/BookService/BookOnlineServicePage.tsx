@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getRequest, postRequest } from '../../../utils/makeRequestInstance';
-import { apiEndPoint, serviceEndPoint } from '../../../utils/constant';
-import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
-import { ISlot } from '../../../utils/types/ISlot';
+
+import { ISlot } from '../../../../utils/types/ISlot'; 
 export interface IServiceProviderDetails {
   _id: string;
   serviceProviderName: string;
@@ -32,11 +30,14 @@ export interface IBookingService {
   serviceProviderDetails: IServiceProviderDetails;
 }
 // UI Components
-import BookingSuccess from '../../ui/bookingSuccessCard';
-import SlotSelector from '../../ui/SlotSelector';
-import ServiceProviderCard from '../../ui/ServiceProviderCard';
-import ServiceCardCompact from '../../ServiceProvider/booking/ServiceCardCompact';
-import EmptyState from '../../ui/EmptyState';
+import BookingSuccess from '../../../ui/bookingSuccessCard';
+import SlotSelector from '../../../ui/SlotSelector';
+import ServiceProviderCard from '../../../ui/ServiceProviderCard'; 
+import ServiceCardCompact from '../../../ServiceProvider/booking/ServiceCardCompact';
+import EmptyState from '../../../ui/EmptyState';
+import { HotToastError, HotToastSuccess } from '../../../../utils/notificationToast';
+import { getRequest, postRequest } from '../../../../utils/makeRequestInstance';
+import { apiEndPoint, serviceEndPoint } from '../../../../utils/constant';
 
 const BookOnlineService = () => {
   const { id } = useParams<{ id: string }>();

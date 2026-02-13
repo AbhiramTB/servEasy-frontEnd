@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import lodash from 'lodash';
-import { apiEndPoint } from '../../../utils/constant';
-import { getRequest } from '../../../utils/makeRequestInstance';
+import { apiEndPoint } from '../../../../utils/constant';
+import { getRequest } from '../../../../utils/makeRequestInstance';
 import { MapPin, Search, Loader2 } from 'lucide-react';
 
 export interface Location {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { IServiceHome } from '../../../utils/types/IserviceHome';
+import { IServiceHome } from '../../../../utils/types/IserviceHome'; 
 import { MapPin, Star } from 'lucide-react';
 
 interface HomePageCardProps {

@@ -1,4 +1,4 @@
-import { postRequest } from "../../../utils/makeRequestInstance";
+import { postRequest } from "../../../../utils/makeRequestInstance";
 
 export  async function uploadImage (img: string) {
 try {

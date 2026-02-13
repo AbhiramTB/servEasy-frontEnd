@@ -1,16 +1,16 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getRequest } from '../../../utils/makeRequestInstance';
-import { apiEndPoint } from '../../../utils/constant';
-import Card from '../../ui/Card';
-import ServiceDetailsCard from '../../ui/ServiceDetailsCard';
-import { IReview } from '../../../utils/types/IReview';
-import ReviewList from '../../ui/review/ReviewList';
-import EmptyState from '../../ui/EmptyState';
-import { IAdDTO } from '../../../utils/types/IAd';
-import AdCard from '../../ui/ad/AdCard';
-import ServiceDetailsSkeleton from '../../../Skeleton/ServiceDetailsSkeleton';
-import { IServiceServiceDetailsDTO } from '../../../utils/types/DTO/IServiceDetailsDTO';
+import { getRequest } from '../../../../utils/makeRequestInstance';
+import { apiEndPoint } from '../../../../utils/constant';
+import Card from '../../../ui/Card';
+import ServiceDetailsCard from '../../../ui/ServiceDetailsCard';
+import { IReview } from '../../../../utils/types/IReview';
+import ReviewList from '../../../ui/review/ReviewList';
+import EmptyState from '../../../ui/EmptyState';
+import { IAdDTO } from '../../../../utils/types/IAd';
+import AdCard from '../../../ui/ad/AdCard';
+import ServiceDetailsSkeleton from '../../../../Skeleton/ServiceDetailsSkeleton';
+import { IServiceServiceDetailsDTO } from '../../../../utils/types/DTO/IServiceDetailsDTO';
 
 const SingleServiceCard = () => {
   const [service, setService] = useState<IServiceServiceDetailsDTO>();

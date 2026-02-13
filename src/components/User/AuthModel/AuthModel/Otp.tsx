@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { makeRequest } from '../../../utils/makeRequest';
-import { apiEndPoint } from '../../../utils/constant';
-import { validateEmail, validatePhone } from '../../../utils/validate';
-import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
-import { ROUTES } from '../../../utils/constants/routes';
+import { HotToastError, HotToastSuccess } from '../../../../utils/notificationToast';
+import { makeRequest } from '../../../../utils/makeRequest';
+import { ROUTES } from '../../../../utils/constants/routes';
+import { validateEmail, validatePhone } from '../../../../utils/validate';
+import { apiEndPoint } from '../../../../utils/constant';
 const Otp = () => {
   const OtpTimer = 60;
   const otpLength = 6;

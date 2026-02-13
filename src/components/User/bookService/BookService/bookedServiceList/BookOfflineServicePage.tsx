@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
 import { MapPin, CheckCircle, PlusCircle } from 'lucide-react';
-import { AddressCard } from '../../../Address/AddressCard';
 
-import { deleteRequest, getRequest, postRequest, putRequest } from '../../../../utils/makeRequestInstance';
-import { apiEndPoint, serviceEndPoint } from '../../../../utils/constant';
+import { deleteRequest, getRequest, postRequest, putRequest } from '../../../../../utils/makeRequestInstance';
+import { apiEndPoint, serviceEndPoint } from '../../../../../utils/constant';
 import { useParams } from 'react-router-dom';
-import { IAddress } from '../../../Address/IAddress';
-import { HotToastError, serviceBookingNotification } from '../../../../utils/notificationToast';
-import BookingSuccess from '../../../ui/bookingSuccessCard';
-import { AddressEditModal } from '../../../Address/AddressEdit';
+import { HotToastError, serviceBookingNotification } from '../../../../../utils/notificationToast';
+import BookingSuccess from '../../../../ui/bookingSuccessCard';
+import { AddressEditModal } from '../../../../Address/AddressEdit';
 import CurrentLocationFetcher from '../CurrentLocationFetcher';
 import ServiceDateTimePicker from '../ServiceDateTimePicker';
-import { IServiceDateTime } from '../../../../utils/types/booking';
-import ServiceProviderCard from '../../../ui/ServiceProviderCard';
-import ServiceCardCompact from '../../../ServiceProvider/booking/ServiceCardCompact';
-import BookingPageSkeleton from '../../../../Skeleton/Pages/BookingPageSkeleton';
+import { IServiceDateTime } from '../../../../../utils/types/booking';
+import ServiceProviderCard from '../../../../ui/ServiceProviderCard';
+import ServiceCardCompact from '../../../../ServiceProvider/booking/ServiceCardCompact';
+import BookingPageSkeleton from '../../../../../Skeleton/Pages/BookingPageSkeleton';
+import { AddressCard } from '../../../../Address/AddressCard';
+import { IAddress } from '../../../../Address/IAddress';
 
 const BookService = () => {
   const [addresses, setAddresses] = useState<IAddress[]>([]);

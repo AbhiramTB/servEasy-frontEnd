@@ -8,30 +8,7 @@ import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast
 import Pagination from '../../../utils/ui/pagination';
 import SearchComponent from '../../../components/ui/SearchComponent';
 
-interface IServiceDetails {
-  _id: string;
-  serviceName: string;
-  serviceType: string;
-  description: string;
-  estimatedPrice: number;
-  category: string;
-  location: {
-    address: string;
-  };
-  serviceImage: string;
-  isBlocked: boolean;
-  serviceProviderDetails: {
-    serviceProviderName: string;
-    profileImage: string;
-    experience: number;
-    createdAt: string;
-    location: {
-      address: string;
-    };
-    serviceProviderEmail: string;
-    serviceProviderPhone: string;
-  };
-}
+
 
 const Allservices = () => {
   const dispatch = useDispatch();

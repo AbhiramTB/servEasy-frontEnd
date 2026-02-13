@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import { getMinMaxDateTime } from '../../../utils/getMinMaxDateTime';
-import { IServiceDateTime, ITimeSlot } from '../../../utils/types/booking';
+import { getMinMaxDateTime } from '../../../../utils/getMinMaxDateTime';
+import { IServiceDateTime, ITimeSlot } from '../../../../utils/types/booking';
 
 export interface ProviderWorkingTime {
   start: string;

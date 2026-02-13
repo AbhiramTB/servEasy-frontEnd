@@ -1,19 +1,18 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { apiEndPoint } from '../../../utils/constant';
+import { apiEndPoint } from '../../../../utils/constant';
 import LocationSearchBar from './LocationSearchBar';
 import ServiceSearchBar from './ServiceSearch';
 import ServiceListingCards from './ServiceListingCards';
-import { IServiceHome } from '../../../utils/types/IserviceHome';
+import { IServiceHome } from '../../../../utils/types/IserviceHome';
 import { Link } from 'react-router-dom';
 import CustomerTestimonials from './CustomerTestimonials';
 import WhyCooseServEasy from './WhyCooseServEasy';
 import HowItWorks from './HowItWorks';
 import FilterSortComponent, { FilterSortState } from './FilterCard';
-import SkeletonHomeCard from '../../../Skeleton/SkeletonHome';
-import BecomeAServiceProviderBanner from '../../ui/BecomeAServiceProviderBanner';
-import { getRequest } from '../../../utils/makeRequestInstance';
-import EmptyState from '../../ui/EmptyState';
-
+import SkeletonHomeCard from '../../../../Skeleton/SkeletonHome';
+import BecomeAServiceProviderBanner from '../../../ui/BecomeAServiceProviderBanner'; 
+import { getRequest } from '../../../../utils/makeRequestInstance';
+import EmptyState from '../../../ui/EmptyState'; 
 interface Location {
   address: string;
   latitude: number;
