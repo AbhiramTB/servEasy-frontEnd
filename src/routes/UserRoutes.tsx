@@ -1,32 +1,35 @@
 import { Route, Navigate } from 'react-router-dom';
 import { ROUTES } from '../utils/constants/routes';
-import UserLandingPage from '../components/ui/Landing/userLanding/UserLandingPage';
+import UserLandingPage from '../pages/user/Landing/UserLandingPage';
 import UserLayout from '../layouts/user/UserLayout';
-import HomePage from '../components/User/home/HomePage';
-import SidebarLayout from '../components/User/profile/SidebarLayout';
-import UserProfile from '../components/User/profile/updateProfile';
-import Appearance from '../components/User/profile/Appearance';
-import BookedService from '../components/User/bookService/bookedServiceList/BookedServiceListPage';
-import AboutUs from '../components/User/profile/AboutUs';
-import SingleServiceCard from '../components/User/bookService/ServiceDetailsPage';
-import BookService from '../components/User/bookService/bookedServiceList/BookOfflineServicePage';
-import BookOnlineService from '../components/User/bookService/BookOnlineServicePage';
-import VideoCall from '../components/VideoCall/VideoCallUser';
-import ServiceBookingDetailsOnline from '../components/User/bookService/bookedOnlineServicePage';
-import ChatUser from '../components/User/chat/ChatUser';
-import ChatsUser from '../components/User/chat/AllchatsUser';
+import HomePage from '../pages/user/Home/HomePage';
+import SidebarLayout from '../pages/user/Profile/ProfileLayoutPage';
+import UserProfile from '../pages/user/Profile/UserProfilePage';
+import Appearance from '../pages/user/Profile/AppearancePage';
+import BookedService from '../pages/user/BookService/BookedServiceListPage';
+import AboutUs from '../pages/user/Profile/AboutUsPage';
+import SingleServiceCard from '../pages/user/BookService/ServiceDetailsPage';
+import BookService from '../pages/user/BookService/BookOfflineServicePage';
+import BookOnlineService from '../pages/user/BookService/BookOnlineServicePage';
+import VideoCall from '../pages/user/VideoCall/VideoCallPage';
+import ServiceBookingDetailsOnline from '../pages/user/BookService/BookedOnlineServicePage';
+import ChatUser from '../pages/user/Chat/ChatUserPage';
+import ChatsUser from '../pages/user/Chat/AllChatsUserPage';
 import ServiceProviderRegisterPage from '../components/ServiceProvider/Register/ServiceProviderRegisterPage';
-import ServiceBookingDetails from '../components/User/bookService/BookedOfflineServicePage';
-import AuthPage from '../components/User/AuthModel/AuthPage';
-import Otp from '../components/User/AuthModel/Otp';
+import ServiceBookingDetails from '../pages/user/BookService/BookedOfflineServicePage';
+import AuthPage from '../pages/user/Auth/AuthPage';
+import Otp from '../pages/user/Auth/OtpPage';
 import { useAuth } from '../hooks/useAuth';
-import CouponsPage from '../pages/user/CouponsPage';
+import PaymentVerify from '../components/ui/PaymentVerify';
+
 
 const UserRoutes = () => {
   const { userAccessToken } = useAuth();
 
   return (
     <Route>
+
+
       <Route path={ROUTES.USER.OTP} element={<Otp />} />
 
       <Route
@@ -56,7 +59,7 @@ const UserRoutes = () => {
         <Route path={ROUTES.USER.VIDEO_CALL} element={<VideoCall />} />
         <Route path={ROUTES.USER.BOOKED_SERVICE_DETAILS} element={<ServiceBookingDetails />} />
         <Route path={ROUTES.USER.BOOKED_SERVICE_ONLINE_DETAILS} element={<ServiceBookingDetailsOnline />} />
-        <Route path={ROUTES.USER.COUPON} element={<CouponsPage />} />
+
 
         {/* Chat */}
         <Route path={ROUTES.USER.CHAT_WITH_PROVIDER} element={<ChatUser />} />
@@ -65,6 +68,8 @@ const UserRoutes = () => {
 
       {/* -------- Service Provider -------- */}
       <Route path={ROUTES.SERVICEPROVIDER.REGISTER} element={<ServiceProviderRegisterPage />} />
+      <Route path="/payment/verify" element={<PaymentVerify />} />
+
     </Route>
   );
 };

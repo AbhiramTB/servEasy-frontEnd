@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { getRequest } from '../../../utils/makeRequestInstance';
-import { paymentRoutes } from '../../../utils/constant';
 import PaymentInfoTable from '../../ui/PaymentInfoTable';
 import EmptyState from '../../ui/EmptyState';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 interface PaymentDetails {
   convenienceFee: number;
   inspectionCost: number;
@@ -42,8 +42,7 @@ const PaymentManagement = () => {
   const [paymentData, setPaymentData] = useState<ServiceBooking[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  // const [selectedBooking, setSelectedBooking] = useState<ServiceBooking | null>(null);
-  // const [showDetailsModal, setShowDetailsModal] = useState<boolean>(false);
+  const serviceProviderId = useSelector((state: RootState) => state.serviceProvider._id);
 
   useEffect(() => {
     getPaymentInfo();
@@ -52,8 +51,9 @@ const PaymentManagement = () => {
   const getPaymentInfo = async () => {
     try {
       setLoading(true);
-      const response = await getRequest(paymentRoutes.getServiceProviderPayments);
-      setPaymentData(response.data || []);
+      const response = await getRequest('/service/bookings/serviceProvider/payment-summary/' + serviceProviderId);
+      console.log(response.data);
+      setPaymentData(response.data.data || []);
     } catch (error) {
       setError('Failed to fetch payment information');
       console.error(error);
@@ -68,22 +68,6 @@ const PaymentManagement = () => {
       currency: 'INR',
     }).format(amount);
   };
-
-  // const handleViewDetails = (booking: ServiceBooking) => {
-  //   setSelectedBooking(booking);
-  //   setShowDetailsModal(true);
-  // };
-
-  // const closeDetailsModal = () => {
-  //   setShowDetailsModal(false);
-  //   setSelectedBooking(null);
-  // };
-
-  // const handlePrintReceipt = () => {
-  //   if (selectedBooking) {
-  //     console.log(`Printing receipt for booking: ${selectedBooking._id}`);
-  //   }
-  // };
 
   if (loading) {
     return (

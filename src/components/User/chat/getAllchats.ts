@@ -22,6 +22,7 @@ export const getServiceProviderProfile=async (id:string)=>{
 
 export const fetchAllChats= async (data:{serviceProviderId?:string ,userId?:string})=>{
 try {
+
     return await postRequest(apiEndPoint.getChats,data)
 
 } catch (error) {

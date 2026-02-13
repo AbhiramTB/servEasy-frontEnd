@@ -25,9 +25,10 @@ const Walletpage = () => {
       params.skip = page;
 
       const res = await getRequest('/service-providers/wallet', params);
-      setWallet(res.data.data);
-      setTotalData(res.data.count);
-
+      console.log(res.data.data);
+      setWallet(res.data.data.wallet);
+      setTotalData(res.data.data.count);
+      console.log(wallet);
       setPage(page || 0);
     } catch (e) {
       console.log(e);
@@ -36,6 +37,7 @@ const Walletpage = () => {
     }
   }
 
+  console.log(wallet);
   return (
     <div>
       {loading && <WalletShimmer />}
@@ -58,9 +60,9 @@ const Walletpage = () => {
       {wallet && (
         <div>
           <ProviderWallet
-            balance={wallet.balance}
-            transactions={wallet.transactions}
-            serviceProviderId={wallet.serviceProviderId}
+            balance={wallet.balance || 0}
+            transactions={wallet.transactions || []}
+            serviceProviderId={wallet.serviceProviderId || 'dfdf'}
             bankDetails={wallet.bankDetails}
             refreshData={() => getData(crrPage)}
           />

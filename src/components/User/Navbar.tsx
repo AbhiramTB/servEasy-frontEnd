@@ -18,7 +18,8 @@ import { ROUTES } from '../../utils/constants/routes';
 import ConfirmModal from '../ui/modal/ConfirmModal';
 
 const ringtune = new Audio('/Ringtone Video call.mp3');
-const notificatioRingtune = new Audio('/Ringtone Notification.mp3');
+const notificationRingtone = new Audio('/sounds/notification.mp3');
+
 interface IProp {
   scrolled: boolean;
 }
@@ -90,8 +91,8 @@ const Navbar: React.FC<IProp> = ({ scrolled }) => {
 
         return;
       } else if (notification.type === 'notification') {
-        notificatioRingtune.currentTime = 0;
-        notificatioRingtune.play();
+        notificationRingtone.currentTime = 0;
+        notificationRingtone.play();
         toast.dismiss();
 
         HotToastSystemNotification(notification);
@@ -108,8 +109,8 @@ const Navbar: React.FC<IProp> = ({ scrolled }) => {
           localStorage.setItem('chatNotificationCount', chatNotificationCount + 1 + '');
         }
 
-        notificatioRingtune.currentTime = 0;
-        notificatioRingtune.play();
+        notificationRingtone.currentTime = 0;
+        notificationRingtone.play();
 
         HotToastChatNotification(notification, () => {
           navigate('/chat/' + notification.senderId);

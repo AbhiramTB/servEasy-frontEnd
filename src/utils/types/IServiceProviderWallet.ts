@@ -4,13 +4,13 @@ export interface IBankDetailsWallet {
   ifscCode: string;
 }
 type WalletTransaction = {
-  _id: string;
+  _id?: string;
   amount: number;
   type: 'credit' | 'debit';
   status: string;
   date: string;
   refBookingId: string;
-  note: string | null;
+  note?: string | null;
 };
 
 export type ProviderWalletProps = {

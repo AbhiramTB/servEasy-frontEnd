@@ -27,9 +27,9 @@ export interface IServiceProvider {
   createdAt: string;
   updatedAt: string;
   isProServiceProvider: boolean;
+  subscriptions?: ISubscription[];
   bankDetails?: BankDetails;
   allServices: IService[];
-  subscriptions?: ISubscription[];
 }
 
 export interface BankDetails {

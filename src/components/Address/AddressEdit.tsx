@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { IAddress } from "./IAddress";
-import { HotToastError } from "../../utils/notificationToast";
+import { useState } from 'react';
+import { IAddress } from './IAddress';
+import { HotToastError } from '../../utils/notificationToast';
 
 interface AddressEditModalProps {
   address: Partial<IAddress>;
@@ -9,51 +9,40 @@ interface AddressEditModalProps {
   isNew?: boolean;
 }
 
-export const AddressEditModal: React.FC<AddressEditModalProps> = ({
-  address,
-  onSave,
-  onCancel,
-  isNew = false,
-}) => {
-  const [editedAddress, setEditedAddress] =
-    useState<Partial<IAddress>>(address);
+export const AddressEditModal: React.FC<AddressEditModalProps> = ({ address, onSave, onCancel, isNew = false }) => {
+  const [editedAddress, setEditedAddress] = useState<Partial<IAddress>>(address);
 
   const handleSave = () => {
-    if (
-      !editedAddress.name ||
-      !editedAddress.houseName ||
-      !editedAddress.pincode ||
-      !editedAddress.state
-    ) {
-      alert("Please fill in required fields");
+    if (!editedAddress.name || !editedAddress.houseName || !editedAddress.pincode || !editedAddress.state) {
+      alert('Please fill in required fields');
       return;
     }
 
     if (editedAddress.phone && !/^[6-9]\d{9}$/.test(editedAddress.phone)) {
-     
-      HotToastError("Please enter a valid 10-digit Indian mobile number")
+      HotToastError('Please enter a valid 10-digit Indian mobile number');
       return;
     }
 
+    console.log('edit address');
+    console.log(address);
     onSave({
       ...editedAddress,
+      _id: address._id,
     } as IAddress);
   };
 
   return (
     <div className="modal modal-open">
       <div className="modal-box">
-        <h3 className="font-bold text-lg mb-4">
-          {isNew ? "Add New Address" : "Edit Address"}
-        </h3>
+        <h3 className="font-bold text-lg mb-4">{isNew ? 'Add New Address' : 'Edit Address'}</h3>
 
         <div className="space-y-4">
           <input
             type="text"
             placeholder="Name*"
             className="input input-bordered w-full"
-            value={editedAddress.name || ""}
-            onChange={(e) =>
+            value={editedAddress.name || ''}
+            onChange={e =>
               setEditedAddress({
                 ...editedAddress,
                 name: e.target.value,
@@ -65,8 +54,8 @@ export const AddressEditModal: React.FC<AddressEditModalProps> = ({
             type="text"
             placeholder="House Name*"
             className="input input-bordered w-full"
-            value={editedAddress.houseName || ""}
-            onChange={(e) =>
+            value={editedAddress.houseName || ''}
+            onChange={e =>
               setEditedAddress({
                 ...editedAddress,
                 houseName: e.target.value,
@@ -78,8 +67,8 @@ export const AddressEditModal: React.FC<AddressEditModalProps> = ({
             type="text"
             placeholder="Pincode*"
             className="input input-bordered w-full"
-            value={editedAddress.pincode || ""}
-            onChange={(e) =>
+            value={editedAddress.pincode || ''}
+            onChange={e =>
               setEditedAddress({
                 ...editedAddress,
                 pincode: e.target.value,
@@ -91,8 +80,8 @@ export const AddressEditModal: React.FC<AddressEditModalProps> = ({
             type="text"
             placeholder="Landmark"
             className="input input-bordered w-full"
-            value={editedAddress.landmark || ""}
-            onChange={(e) =>
+            value={editedAddress.landmark || ''}
+            onChange={e =>
               setEditedAddress({
                 ...editedAddress,
                 landmark: e.target.value,
@@ -103,8 +92,8 @@ export const AddressEditModal: React.FC<AddressEditModalProps> = ({
             type="text"
             placeholder="State*"
             className="input input-bordered w-full"
-            value={editedAddress.state || ""}
-            onChange={(e) =>
+            value={editedAddress.state || ''}
+            onChange={e =>
               setEditedAddress({
                 ...editedAddress,
                 state: e.target.value,
@@ -117,8 +106,8 @@ export const AddressEditModal: React.FC<AddressEditModalProps> = ({
             type="tel"
             placeholder="Contact Number (10 digits)"
             className="input input-bordered w-full"
-            value={editedAddress.phone || ""}
-            onChange={(e) =>
+            value={editedAddress.phone || ''}
+            onChange={e =>
               setEditedAddress({
                 ...editedAddress,
                 phone: e.target.value,
@@ -131,8 +120,8 @@ export const AddressEditModal: React.FC<AddressEditModalProps> = ({
           <textarea
             placeholder="Description"
             className="textarea textarea-bordered w-full"
-            value={editedAddress.description || ""}
-            onChange={(e) =>
+            value={editedAddress.description || ''}
+            onChange={e =>
               setEditedAddress({
                 ...editedAddress,
                 description: e.target.value,

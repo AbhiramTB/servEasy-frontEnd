@@ -20,19 +20,19 @@ const ChatUI: React.FC = () => {
   const [chats, setChats] = useState<ChatItem[] | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const serviceProviderId = useSelector((state: RootState) => state.serviceProvider.userId);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
       const res = await fetchAllChats({ serviceProviderId });
-
       if (res?.status === 200 && Array.isArray(res.data)) {
         setChats(res.data);
       } else {
         setChats([]);
       }
     }
-
+          
     if (serviceProviderId) fetchData();
   }, [serviceProviderId]);
 
@@ -62,7 +62,7 @@ const ChatUI: React.FC = () => {
             </div>
           ) : filteredChats?.length === 0 ? (
             <div className="p-8 text-center">
-              <p className="text-sm text-base-content/60">No chats found</p>
+              <p className="text-sm text-base-content/60">No chats found{serviceProviderId}</p>
             </div>
           ) : (
             <div className="space-y-1 p-2">
