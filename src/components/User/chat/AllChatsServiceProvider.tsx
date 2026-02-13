@@ -20,23 +20,20 @@ const ChatUI: React.FC = () => {
   const [chats, setChats] = useState<ChatItem[] | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const serviceProviderId = useSelector((state: RootState) => state.serviceProvider.userId);
-    const serviceProvider = useSelector((state: RootState) => state);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(serviceProvider)
     async function fetchData() {
       const res = await fetchAllChats({ serviceProviderId });
-         console.log(res?.data)
       if (res?.status === 200 && Array.isArray(res.data)) {
         setChats(res.data);
       } else {
         setChats([]);
       }
     }
-          fetchData();
-    // if (serviceProviderId) 
+          
+    if (serviceProviderId) fetchData();
   }, [serviceProviderId]);
 
   const filteredChats = chats?.filter(chat => chat.userName.toLowerCase().includes(searchTerm.toLowerCase()));

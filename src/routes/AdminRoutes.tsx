@@ -1,25 +1,32 @@
-import { Route } from 'react-router-dom';
+import { Navigate, Route } from 'react-router-dom';
 // import AdminProtectedRoute from '../pages/AdminProtectedRoute';
 import AdminLayout from '../layouts/admin/AdminLayout.tsx';
-import UserListingPage from '../components/admin/UserListingPage';
-import ServiceProviderVerification from '../components/admin/ServiceProviderVerification';
-import ServiceProviderListing from '../components/admin/serviceProviderListing';
-import Allservices from '../components/admin/service-management/Allservices';
-import BookingManagement from '../components/admin/bookingManagement/booking-management';
-import CategoryList from '../components/admin/service-management/CategoryManagement';
-import SiteSettingsPage from '../components/admin/siteSettings/SiteSettingsPage';
-import CouponListPage from '../components/admin/coupon management/CouponPage';
-import AdminLogs from '../components/admin/AdminLogs';
-import AdminHome from '../components/admin/Home.tsx';
-import AdminProviderWallet from '../components/admin/wallet/AdminProviderWallet.tsx';
-import WalletListing from '../components/admin/wallet/WalletListing.tsx';
+import UserListingPage from '../pages/admin/Users/UserListingPage';
+import ServiceProviderVerification from '../pages/admin/ServiceProviders/ServiceProviderVerificationPage';
+import ServiceProviderListing from '../pages/admin/ServiceProviders/ServiceProviderListingPage';
+import Allservices from '../pages/admin/Services/AllServicesPage';
+import BookingManagement from '../pages/admin/Bookings/BookingManagementPage';
+import CategoryList from '../pages/admin/Services/CategoryManagementPage';
+import SiteSettingsPage from '../pages/admin/Settings/SiteSettingsPage';
+import CouponListPage from '../pages/admin/Coupons/CouponListPage';
+import AdminLogs from '../pages/admin/Logs/AdminLogsPage';
+import AdminHome from '../pages/admin/Dashboard/AdminHomePage';
+import AdminProviderWallet from '../pages/admin/ServiceProviders/Wallet/AdminProviderWalletPage';
+import WalletListing from '../pages/admin/ServiceProviders/Wallet/WalletListingPage';
 import { ROUTES } from '../utils/constants/routes.ts';
-import SubscriptionPlansPage from '../components/admin/subscriptionsManagement/SubscriptionPlansPage.tsx';
-import AdsPage from '../components/admin/AdsPage.tsx';
+import SubscriptionPlansPage from '../pages/admin/Subscriptions/SubscriptionPlansPage';
+import AdsPage from '../pages/admin/Ads/AdsPage';
+import { useAuth } from '../hooks/useAuth.tsx';
+import AdminSignIn from '../components/admin/auth/Sigin.tsx';
 
 const AdminRoutes = () => {
+  const { adminAccessToken } = useAuth();
   return (
     <Route>
+        <Route
+            path={ROUTES.ADMIN.SIGNIN}
+            element={adminAccessToken ? <Navigate to={ROUTES.ADMIN.HOME} replace /> : <AdminSignIn />}
+          />
       <Route path={ROUTES.ADMIN.ROOT} element={<AdminLayout />}>
         <Route path={ROUTES.ADMIN.HOME} element={<AdminHome />} />
         <Route path={ROUTES.ADMIN.USERS} element={<UserListingPage />} />

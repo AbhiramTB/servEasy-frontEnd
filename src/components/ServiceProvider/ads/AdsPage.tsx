@@ -9,7 +9,8 @@ import { IAdStatus } from '../../../utils/types/IAdminAd';
 import Pagination from '../../ui/Pagination';
 import AdsCardSkelteon from '../../../Skeleton/AdsCardSkelteon';
 import EmptyState from '../../ui/EmptyState';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 const AdsPage = () => {
   const [ads, setAds] = useState<IAd[] | []>([]);
 
@@ -19,9 +20,8 @@ const AdsPage = () => {
   const [crrPage, setCrrPage] = useState<number>(0);
   const [totalData, setTotalData] = useState<number>(0);
   const dataLimit = 3;
-
+  const serviceProviderId = useSelector((state: RootState) => state.serviceProvider._id);
   const validateAdData = (data: ICreateAdDTO): boolean => {
-    // 1. Basic Field Validation
     if (!data.caption?.trim()) {
       HotToastError('Caption is required');
       return false;
@@ -69,7 +69,7 @@ const AdsPage = () => {
     try {
       setLoading(true);
       const res = await getRequest(
-        `service-providers/ads/provider/6912e29c0048a5bae03d4fc8/?page=${page}&limit=${dataLimit}`
+        `service-providers/ads/provider/${serviceProviderId}/?page=${page}&limit=${dataLimit}`
       );
       setCrrPage(page);
       setTotalData(res.data.count);
@@ -119,7 +119,7 @@ const AdsPage = () => {
         await putRequest(`service-providers/ads/${id}`, formData);
       } else {
         HotToastSuccess('created');
-        await postRequest(`service-providers/ads/`, { data: formData });
+        await postRequest(`service-providers/ads/`, { data: { ...formData, serviceProviderId } });
       }
 
       setOpen(false);

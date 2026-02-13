@@ -80,7 +80,7 @@ const ServiceProviderDashboard: React.FC = () => {
   // }
 
   return (
-    <div className="min-h-screen bg-white text-base-content">
+    <div className="min-h-screen  text-base-content">
       <main className="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <header className="mb-6">
           <h1 className="text-3xl font-bold">Service Provider Dashboard</h1>

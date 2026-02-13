@@ -86,41 +86,10 @@ export function HotToastError(message: string, _title?: string) {
 // }
 
 export function HotToastSuccess(message: string, _title?: string) {
-  // toast.custom(t => (
-  //   <div
-  //     className={`${
-  //       t.visible ? 'animate-custom-enter' : 'animate-custom-leave'
-  //     } max-w-sm w-full bg-gradient-to-bl from-base-100 to-base-300 rounded-2xl shadow-lg pointer-events-auto flex ring-1 ring-primary ring-opacity-60 border border-primary/40 overflow-hidden`}
-  //   >
-  //     {/* Success Icon */}
-  //     <div className="flex items-center justify-center p-3 bg-success/50 text-success ">
-  //       <svg
-  //         xmlns="http://www.w3.org/2000/svg"
-  //         className="w-6 h-6"
-  //         fill="none"
-  //         viewBox="0 0 24 24"
-  //         stroke="currentColor"
-  //         strokeWidth={2}
-  //       >
-  //         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-  //       </svg>
-  //     </div>
+  const notificationRingtone = new Audio('/sounds/toast-success.mp3');
+  notificationRingtone.currentTime = 0;
+  notificationRingtone.play();
 
-  //     {/* Message Content */}
-  //     <div className="flex-1 p-4">
-  //       <p className="text-sm font-semibold text-primary">{message}</p>
-  //       {title && <p className="mt-1 text-sm text-base-content/70">{title}</p>}
-  //     </div>
-
-  //     {/* Close Button */}
-  //     <button
-  //       onClick={() => toast.dismiss(t.id)}
-  //       className="flex items-center justify-center px-4 text-sm font-medium transition text-base-content hover:text-primary"
-  //     >
-  //       ✕
-  //     </button>
-  //   </div>
-  // ));
   toast.success(message);
 }
 
