@@ -21,6 +21,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { ReloadButton } from '../../../components/User/bookService/ReloadButton';
 import { ROUTES } from '../../../utils/constants/routes';
+import useDataRefresh from '../../../hooks/useDataRefresh';
 
 interface Address {
   name: string;
@@ -32,7 +33,7 @@ interface Address {
 
 export interface IPayment {
   serviceCost?: number;
-  metaialCost: number;
+  materialCost: number;
   travelCost: number;
   inspectionCost: number;
   convenienceFee: number;
@@ -126,26 +127,43 @@ const ServiceBookingDetails = () => {
   const [cancelReason, setCancelReason] = useState<string>('');
   const user = useSelector((state: RootState) => state.user);
 
+  useDataRefresh(() => fetchData(id));
+
   const handleApplyCoupon = async (coupon: string): Promise<boolean> => {
     try {
       const response = await postRequest(`/service/bookings/${id}/coupon/apply`, {
         couponCode: coupon.trim(),
       });
       if (response.status === 200) {
-        HotToastSuccess(response.data.message);
-        if (!bookedService) return false;
-        setBookingData(prev =>
-          prev
-            ? {
-                ...prev,
-                bookedService: {
-                  ...prev.bookedService,
-                  payment: response.data.payment,
-                },
-              }
-            : null
-        );
-        return true;
+        console.log(response.data.data);
+
+        if (response.data.data.success) {
+          HotToastSuccess('🎉 Coupon applied! You saved successfully.');
+          if (!bookedService) return false;
+
+          setBookingData(prev => {
+            if (!prev) return null;
+
+            return {
+              ...prev,
+              bookedService: {
+                ...prev.bookedService,
+                payment: prev.bookedService.payment
+                  ? {
+                      ...prev.bookedService.payment,
+                      finalTotal: response.data.data.finalAmount as number,
+                      discountAmount: response.data.data.discountAmount as number,
+                    }
+                  : prev.bookedService.payment,
+              },
+            };
+          });
+          return true;
+        } else {
+          HotToastError(response.data.data.message);
+
+          return false;
+        }
       } else {
         return false;
       }
@@ -184,16 +202,27 @@ const ServiceBookingDetails = () => {
       setLoading(true);
       const res = await deleteRequest(`/service/bookings/${id}/coupon/remove `);
       if (res.status == 200) {
-        HotToastSuccess(`Coupon removed`);
-        if (res.data.updatedBooking) {
-          setBookingData(prev =>
-            prev
-              ? {
-                  ...prev,
-                  bookedService: res.data.updatedBooking,
-                }
-              : null
-          );
+        if (res?.data?.data?.success) {
+          setBookingData(prev => {
+            if (!prev) return null;
+
+            return {
+              ...prev,
+              bookedService: {
+                ...prev.bookedService,
+                payment: prev.bookedService.payment
+                  ? {
+                      ...prev.bookedService.payment,
+                      finalTotal: res.data.data.finalAmount as number,
+                      discountAmount: res.data.data.discountAmount as number,
+                    }
+                  : prev.bookedService.payment,
+              },
+            };
+          });
+
+          HotToastSuccess(res?.data?.data?.message || `Coupon removed successfully!!`);
+        } else {
         }
       }
     } catch (error: any) {
@@ -204,10 +233,14 @@ const ServiceBookingDetails = () => {
   };
 
   useEffect(() => {
+    fetchData(id);
+  }, [id]);
+
+  const fetchData = (id?: string) => {
     if (id) {
       getBookedService(id);
     }
-  }, [id]);
+  };
 
   const getBookedService = async (id: string) => {
     try {
@@ -215,7 +248,6 @@ const ServiceBookingDetails = () => {
       const res = await getRequest(`service/bookings${id}`);
 
       if (res.status === 200) {
-
         setBookingData(res.data.service);
         setReview(res.data.service.review);
       }
@@ -645,7 +677,7 @@ const ServiceBookingDetails = () => {
                   </div>
                   <div className="flex justify-between">
                     <span>Material Cost</span>
-                    <span>₹{bookedService.payment.metaialCost}</span>
+                    <span>₹{bookedService.payment.materialCost}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Travel Cost</span>

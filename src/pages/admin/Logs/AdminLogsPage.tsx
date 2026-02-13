@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { RefreshCcw } from 'lucide-react';
 import { adminGetRequest } from '../../../utils/AxiosAdmin';
 import LoadingSpinner from '../../../components/ui/LoadingSpinner';
+import EmptyState from '../../../components/ui/EmptyState';
 
 const AdminLogs: React.FC = () => {
   const [logs, setLogs] = useState<string>('');
@@ -30,7 +31,11 @@ const AdminLogs: React.FC = () => {
       {loading ? (
         <LoadingSpinner />
       ) : error ? (
-        <p className="text-red-500">{error}</p>
+        <EmptyState
+          icon="system-error"
+          title="Access denied"
+          message="You do not have the required permissions to view this content. Please contact the development team for assistance."
+        />
       ) : (
         <>
           <div className="p-4 rounded shadow">

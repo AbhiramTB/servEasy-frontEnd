@@ -30,6 +30,7 @@ interface SidebarProps {
 }
 
 const ringtone = new Audio('/Ringtone Video call.mp3');
+const notificationRingtone = new Audio('/sounds/notification.mp3');
 
 const Sidebar: React.FC<SidebarProps> = ({ profile, isSidebarOpen, setIsSidebarOpen }) => {
   const navigate = useNavigate();
@@ -81,7 +82,6 @@ const Sidebar: React.FC<SidebarProps> = ({ profile, isSidebarOpen, setIsSidebarO
   };
 
   const handleSocketNotification = (notification: any) => {
-    console.log(notification);
     if (notification.targetRole === 'SERVICE_PROVIDER') {
       if (notification.type === 'video_call') {
         ringtone.currentTime = 0;
@@ -106,14 +106,17 @@ const Sidebar: React.FC<SidebarProps> = ({ profile, isSidebarOpen, setIsSidebarO
         setRejectFn(() => reject);
         setVideoCallNotification(notification);
       } else if (notification.type === 'notification') {
-        // notificatioRingtune.currentTime = 0;
-        // notificatioRingtune.play();
+        notificationRingtone.currentTime = 0;
+        notificationRingtone.play();
+
         toast.dismiss();
 
         HotToastSystemNotification(notification);
         getNotfication();
         toast.dismiss();
       } else if (notification.type === 'chat') {
+        notificationRingtone.currentTime = 0;
+        notificationRingtone.play();
         HotToastChatNotification(notification, () => {});
       }
     }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {  useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { apiEndPointAdmin } from '../../../utils/constant';
 import { adminGetRequest } from '../../../utils/AxiosAdmin';
@@ -7,8 +7,6 @@ import FilterSection from '../../../components/Chart/FilterSection';
 import StatsSection from '../../../components/Chart/StatsSection';
 import PaymentChartSection from '../../../components/Chart/PaymentChartSection';
 import PaymentTable from '../../../components/Chart/PaymentTable';
-
-
 
 interface PaymentData {
   totalRevenue: number;
@@ -28,17 +26,19 @@ const AdminDashboard: React.FC = () => {
     fetchPaymentInfo();
   }, []);
 
-
- 
   const fetchPaymentInfo = async () => {
     setLoading(true);
     try {
-      const url = startDate && endDate
-        ? `${apiEndPointAdmin.gtPaymentInfo}?startDate=${startDate}&endDate=${endDate}`
-        : apiEndPointAdmin.gtPaymentInfo;
+      const url =
+        startDate && endDate
+          ? `${apiEndPointAdmin.gtPaymentInfo}?startDate=${startDate}&endDate=${endDate}`
+          : apiEndPointAdmin.gtPaymentInfo;
 
       const res = await adminGetRequest(url);
-      if (res.data?.paymentData) setPaymentData(res.data.paymentData);
+      if (res.status == 200) {
+        if (res.data?.paymentData) setPaymentData([res.data.paymentData]);
+        console.log(paymentData);
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -51,7 +51,7 @@ const AdminDashboard: React.FC = () => {
     totalRevenue: item.totalRevenue,
     totalConvenienceFee: item.totalConvenienceFee,
     count: item.count,
-    netRevenue: item.totalRevenue - item.totalConvenienceFee
+    netRevenue: item.totalRevenue - item.totalConvenienceFee,
   }));
 
   return (

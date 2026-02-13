@@ -12,7 +12,7 @@ export const CouponListPage: React.FC = () => {
 
   const fetchCoupons = async () => {
     const res = await adminGetRequest('/admin/coupons');
-
+    console.log(res);
     setCoupons(res.data);
   };
 
@@ -36,6 +36,7 @@ export const CouponListPage: React.FC = () => {
       const res = await adminPostRequest('/admin/coupons', { data: data });
       if (res.status === 201) {
         HotToastSuccess('coupon has been successfully added');
+        setNewCoupon(false);
         fetchCoupons();
       }
     } catch (e) {

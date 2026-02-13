@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { RootState } from '../../redux/store';
 import { useSelector } from 'react-redux';
 import { adminGetRequest } from '../../utils/AxiosAdmin';
@@ -16,7 +16,7 @@ const NavBar = () => {
   const dispatch = useDispatch();
   const admin = useSelector((state: RootState) => state.admin);
   const [isLogout, setisLogout] = useState<boolean>(false);
-
+  const location = useLocation();
   useEffect(() => {
     getUserProfile();
   }, []);
@@ -55,7 +55,7 @@ const NavBar = () => {
         confirmText="Log Out"
       />
 
-      <div className="sticky top-0 z-10 border-b shadow-lg sm:px-20 navbar bg-base-200 border-base-content/10">
+      <div className="sticky top-0 z-10 border-b shadow-lg sm:px-20 navbar bg-base-200 border-base-content/10 bg-diagonal-grid">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -73,7 +73,7 @@ const NavBar = () => {
               tabIndex={0}
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-60"
             >
-              <NavLinks isMobile={true} />
+              <NavLinks isMobile={true} crrPath={location.pathname} />
             </ul>
           </div>
 
@@ -90,7 +90,7 @@ const NavBar = () => {
 
         <div className="hidden lg:flex navbar-center">
           <ul className="px-1 menu menu-horizontal">
-            <NavLinks isMobile={false} />
+            <NavLinks isMobile={false} crrPath={location.pathname} />
           </ul>
         </div>
 
@@ -127,27 +127,44 @@ const NavBar = () => {
   );
 };
 
-function NavLinks({ isMobile }: { isMobile: boolean }) {
+function NavLinks({ isMobile, crrPath }: { isMobile: boolean; crrPath: string }) {
   return (
     <>
-      {adminLinks.map(({ to, icon: Icon, label }) => (
-        <li key={to}>
-          {isMobile ? (
-            <div className="">
-              <Link to={to} className="flex items-center gap-1 px-2 py-1 ">
+      {adminLinks.map(({ to, icon: Icon, label }) => {
+        const isActive = crrPath === to;
+
+        return (
+          <li key={to}>
+            {isMobile ? (
+              <Link
+                to={to}
+                className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-200 ${
+                  isActive ? 'bg-primary/10 text-primary font-semibold' : 'text-base-content/70 hover:bg-base-300'
+                }`}
+              >
                 <Icon size={18} />
                 <p>{label}</p>
               </Link>
-            </div>
-          ) : (
-            <div className="tooltip tooltip-bottom " data-tip={label}>
-              <Link to={to} className="flex items-center gap-1 px-2 py-1 ">
-                <Icon size={18} />
-              </Link>
-            </div>
-          )}
-        </li>
-      ))}
+            ) : (
+              <div className="tooltip tooltip-bottom" data-tip={label}>
+                <Link
+                  to={to}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all duration-300 group ${
+                    isActive
+                      ? 'bg-primary text-primary-content shadow-md'
+                      : 'text-base-content/60  hover:text-base-content'
+                  }`}
+                >
+                  <Icon
+                    size={18}
+                    className={`${isActive ? 'scale-110' : 'group-hover:scale-110'} transition-transform`}
+                  />
+                </Link>
+              </div>
+            )}
+          </li>
+        );
+      })}
     </>
   );
 }

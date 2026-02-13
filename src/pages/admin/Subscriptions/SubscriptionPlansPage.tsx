@@ -5,6 +5,7 @@ import { adminGetRequest, adminPatchRequest, adminPostRequest } from '../../../u
 import AddPlanModal from '../../../components/admin/subscriptionsManagement/AddPlanModal';
 import EditPlanModal from '../../../components/admin/subscriptionsManagement/EditPlanModal';
 import PlanCard from '../../../components/admin/subscriptionsManagement/PlanCard';
+import EmptyState from '../../../components/ui/EmptyState';
 
 const SubscriptionPlansPage: React.FC = () => {
   //   const [plans, setPlans] = useState<ISubscriptionPlan[]>([
@@ -81,6 +82,10 @@ const SubscriptionPlansPage: React.FC = () => {
       </div>
 
       {loading && <div className="text-center">Loading...</div>}
+
+      {plans.length === 0 && (
+        <EmptyState actionText="Subscription Plans" message=" " title="No subscription plan found" icon="no-data" />
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {plans.map(plan => (

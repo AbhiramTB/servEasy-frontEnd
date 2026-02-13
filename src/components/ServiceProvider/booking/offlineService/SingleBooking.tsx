@@ -25,6 +25,7 @@ import StarRating from '../../../ui/StarRating';
 import dayjs from 'dayjs';
 import { ReloadButton } from '../../../User/bookService/ReloadButton';
 import ShowBills from '../../../ui/ShowBills';
+import useDataRefresh from '../../../../hooks/useDataRefresh';
 interface IliveLocation {
   lat: number;
   lng: number;
@@ -91,6 +92,7 @@ const ServiceProviderBookingManage = () => {
   const [invoiceFiles, setInvoiceFiles] = useState<File[]>([]);
   const [reason, setReason] = useState('');
   const [showBills, setShowBills] = useState(false);
+  useDataRefresh(() => fetchData(id));
 
   const [payment, setPayment] = useState<Ipayment>({
     serviceCost: 0,
@@ -105,17 +107,20 @@ const ServiceProviderBookingManage = () => {
 
   const [paymentForm, setPaymentForm] = useState<boolean>(false);
   useEffect(() => {
+    fetchData(id);
+  }, [id]);
+
+  const fetchData = (id?: string) => {
     if (id) {
       getBookedService(id);
     }
-  }, [id]);
+  };
 
   const getBookedService = async (id: string) => {
     try {
       setLoading(true);
       const res = await getRequest(`/service/bookings/serviceProvider/${id}`);
       if (res.status === 200) {
-
         setBookingData(res.data.service);
         if (res.data.service.bookedService.serviceStatus) {
           // setNewStatus(res.data.service.bookedService.serviceStatus);
@@ -164,7 +169,6 @@ const ServiceProviderBookingManage = () => {
         setShowAcceptModal(false);
         getBookedService(id as string);
       }
-
     } catch (err: any) {
       if (err.response.data.error) {
         HotToastError(err.response.data.error);
@@ -216,7 +220,6 @@ const ServiceProviderBookingManage = () => {
 
   const handlePaymentRequest = async (): Promise<void> => {
     try {
-
       const res = await patchRequest(`service/service-provider/booking/${id}/payment-request`, {
         payment,
         paymentStatus: 'requested',

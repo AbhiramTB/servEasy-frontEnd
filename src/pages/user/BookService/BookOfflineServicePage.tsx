@@ -82,6 +82,7 @@ const BookService = () => {
 
   const handleSaveAddress = async (address: IAddress) => {
     try {
+      console.log(address);
       if (address?._id) {
         await putRequest(apiEndPoint.addNewAddress, { address });
       } else {

@@ -4,6 +4,7 @@ import { adminGetRequest, adminPatchRequest } from '../../../utils/AxiosAdmin';
 import AdCard from '../../../components/ServiceProvider/ads/AdCard';
 import { IAdminAd, IAdStatus } from '../../../utils/types/IAdminAd';
 import Pagination from '../../../utils/ui/pagination';
+import EmptyState from '../../../components/ui/EmptyState';
 
 const AdsPage = () => {
   const [ads, setAds] = useState<IAdminAd[] | []>([]);
@@ -56,7 +57,7 @@ const AdsPage = () => {
 
       {loading && <p className="text-sm text-gray-500">Loading ads...</p>}
 
-      {!loading && ads.length === 0 && <div className="text-center text-gray-400 mt-10">No ads created yet</div>}
+      {!loading && ads.length === 0 && <EmptyState icon="product-empty" title="No ads created yet" message=" " />}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {ads.map(ad => (

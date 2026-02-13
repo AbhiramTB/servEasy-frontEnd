@@ -183,6 +183,7 @@ const ChatUser = () => {
     socket.emit('send_message', {
       senderId: user._id,
       receiverId: serviceProviderId,
+      content: message.content,
       message,
       targetRole: 'SERVICE_PROVIDER',
 

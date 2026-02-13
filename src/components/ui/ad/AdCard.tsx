@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { IAdDTO } from '../../../utils/types/IAd';
 import { patchRequest } from '../../../utils/makeRequestInstance';
+import { Link } from 'react-router-dom';
 
 interface AdCardProps {
   ad: IAdDTO | null;
@@ -60,21 +61,22 @@ const AdCard: React.FC<AdCardProps> = ({ ad }) => {
             <span className="badge badge-secondary badge-sm">Sponsored</span>
           </div>
         </div>
-
-        {/* CTA */}
-        <button
-          onClick={e => {
-            e.stopPropagation();
-            handleAdClick();
-          }}
-          disabled={loading}
-          className="btn btn-primary btn-sm rounded-full"
-        >
-          {loading ? 'Opening...' : 'Visit'}
-        </button>
+        <Link to={`/service-details/${ad.serviceId}`}>
+          <div className="tooltip  tooltip-left" data-tip="view service details">
+            <button
+              onClick={e => {
+                e.stopPropagation();
+                handleAdClick();
+              }}
+              disabled={loading}
+              className="btn btn-primary btn-sm rounded-full"
+            >
+              {loading ? 'Opening...' : 'Visit'}
+            </button>
+          </div>
+        </Link>
       </div>
 
-      {/* Bottom Text */}
       <div className="absolute bottom-4 left-4 right-4 z-10">
         <p className="text-base-100 text-sm line-clamp-2">{ad.description}</p>
       </div>

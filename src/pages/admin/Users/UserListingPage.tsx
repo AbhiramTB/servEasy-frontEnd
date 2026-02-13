@@ -10,7 +10,6 @@ import UserProfileView from '../../../components/admin/showProfile';
 import { UserCardSkeleton } from '../../../Skeleton/admin/UserCardSkeleton';
 import Pagination from '../../../components/ui/Pagination';
 
-
 const UserListingPage: React.FC = () => {
   const dispatch = useDispatch();
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -93,8 +92,8 @@ const UserListingPage: React.FC = () => {
           <div className="flex flex-wrap ">
             {Array(dataLimit)
               .fill(0)
-              .map((d, i) => (
-                <UserCardSkeleton key={d + i} />
+              .map((_, i) => (
+                <UserCardSkeleton key={i} />
               ))}
           </div>
         ) : (

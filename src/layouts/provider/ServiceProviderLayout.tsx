@@ -24,7 +24,7 @@ const ServiceProviderLayout = () => {
   // };
 
   const serviceProviderInfo = useSelector((state: RootState) => state.serviceProvider);
-
+  console.log(serviceProviderInfo);
   const [isLoading, setLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isVerified, setIsVerified] = useState<boolean | null>(null);

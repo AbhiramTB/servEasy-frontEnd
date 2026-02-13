@@ -19,7 +19,7 @@ export const ROUTES = {
     SERVICE_PROVIDER_WALLETS: '/admin/service-provider-wallets',
     LOGS: '/admin/logs',
     subscriptionManagement: '/admin/subscription-management',
-    ADSMANAGEMENT: 'ads-management',
+    ADSMANAGEMENT: '/admin/ads-management',
   },
   // USER: {
   //   HOME: '/',
@@ -89,42 +89,32 @@ export const ROUTES = {
   //   AI_ASSISTANCE_CHAT: (chatId: string) => `/service-provider/assistance/${chatId}`,
   // },
 
-
-
-
- SERVICEPROVIDER: {
-    ROOT: "/service-provider",
+  SERVICEPROVIDER: {
+    ROOT: '/service-provider',
     REGISTER: '/service-provider/register',
 
-   DASHBOARD: "dashboard",
-    BOOKED_SERVICES: "booked-services",
-    BOOKED_SERVICE_DETAIL: "booked-services/:id",
-    BOOKED_SERVICE_ONLINE: "booked-services-online/:id",
+    DASHBOARD: 'dashboard',
+    BOOKED_SERVICES: 'booked-services',
+    BOOKED_SERVICE_DETAIL: 'booked-services/:id',
+    BOOKED_SERVICE_ONLINE: 'booked-services-online/:id',
 
-    CHATS: "chats",
-    CHAT_DETAIL: "chat/:userid",
+    CHATS: 'chats',
+    CHAT_DETAIL: 'chat/:userid',
 
-    VIDEO_CALL: "video-call/:userId",
+    VIDEO_CALL: 'video-call/:userId',
 
-    PROFILE: "myprofile",
+    PROFILE: 'myprofile',
 
-    SERVICE_MANAGEMENT: "service-management",
-    PAYMENT_MANAGEMENT: "payment-management",
+    SERVICE_MANAGEMENT: 'service-management',
+    PAYMENT_MANAGEMENT: 'payment-management',
 
-    SLOT_MANAGEMENT: "slot-management/:serviceId",
+    SLOT_MANAGEMENT: 'slot-management/:serviceId',
 
-    WALLET: "wallet",
+    WALLET: 'wallet',
 
-    ASSISTANCE: "assistance",
-    ASSISTANCE_CHAT: "assistance/:chatId",
+    ASSISTANCE: 'assistance',
+    ASSISTANCE_CHAT: 'assistance/:chatId',
 
-    ADS: "ads",
+    ADS: 'ads',
   },
-
-
-
-
-
 };
-
-

@@ -26,7 +26,7 @@ interface BookingData {
     serviceSlot: IServiceSlot;
     payment: {
       serviceCost?: number;
-      metaialCost?: number;
+      materialCost?: number;
       travelCost?: number;
       inspectionCost?: number;
       total: number;
