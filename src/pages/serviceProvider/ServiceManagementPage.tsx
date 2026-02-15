@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
-import AddNewService from './AddnewService';
-import { serviceEndPoint } from '../../../utils/constant';
+import AddNewService from '../../components/ServiceProvider/service/AddnewService';
+import { serviceEndPoint } from '../../utils/constant';
 import { useDispatch, useSelector } from 'react-redux';
-import { getRequest, patchRequest } from '../../../utils/makeRequestInstance';
-import { addServices } from '../../../redux/slices/serviceProvider';
-import { RootState } from '../../../redux/store';
+import { getRequest, patchRequest } from '../../utils/makeRequestInstance';
+import { addServices } from '../../redux/slices/serviceProvider';
+import { RootState } from '../../redux/store';
 import { MapPin, Edit, Eye } from 'lucide-react';
-import ServiceDetailsView from './ServiceDetailsView';
-import { HotToastSuccess } from '../../../utils/notificationToast';
-import EditService from './EditService';
+import ServiceDetailsView from '../../components/ServiceProvider/service/ServiceDetailsView';
+import { HotToastSuccess } from '../../utils/notificationToast';
+import EditService from '../../components/ServiceProvider/service/EditService';
 import { Link } from 'react-router-dom';
 
 const ServiceManagement = () => {

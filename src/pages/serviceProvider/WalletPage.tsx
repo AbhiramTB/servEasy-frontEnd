@@ -1,10 +1,10 @@
-import ProviderWallet from './WalletCards';
-import Pagination from '../../ui/Pagination';
+import ProviderWallet from '../../components/ServiceProvider/wallet/WalletCards';
+import Pagination from '../../components/ui/Pagination';
 import { useEffect, useState } from 'react';
-import { getRequest } from '../../../utils/makeRequestInstance';
-import { ProviderWalletProps } from '../../../utils/types/IServiceProviderWallet';
-import EmptyState from '../../ui/EmptyState';
-import WalletShimmer from '../../../Skeleton/Pages/WalletShimmer';
+import { getRequest } from '../../utils/makeRequestInstance';
+import { ProviderWalletProps } from '../../utils/types/IServiceProviderWallet';
+import EmptyState from '../../components/ui/EmptyState';
+import WalletShimmer from '../../Skeleton/Pages/WalletShimmer';
 
 const Walletpage = () => {
   const [crrPage, setPage] = useState<number>(0);

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import ServiceSlotCard from './ServiceSlotCard';
-import { deleteRequest, getRequest, postRequest } from '../../../utils/makeRequestInstance';
-import { HotToastSuccess } from '../../../utils/notificationToast';
+import ServiceSlotCard from '../../components/ServiceProvider/SlotManagement/ServiceSlotCard';
+import { deleteRequest, getRequest, postRequest } from '../../utils/makeRequestInstance';
+import { HotToastSuccess } from '../../utils/notificationToast';
 
 export interface ISlot {
   _id: string;

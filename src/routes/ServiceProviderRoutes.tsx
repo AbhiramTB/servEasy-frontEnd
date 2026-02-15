@@ -2,21 +2,22 @@ import { Route } from 'react-router-dom';
 
 import { ROUTES } from '../utils/constants/routes';
 import ServiceProviderLayout from '../layouts/provider/ServiceProviderLayout';
-import AdsPage from '../components/ServiceProvider/ads/AdsPage';
-import BookedServiceServiceProvider from '../components/ServiceProvider/booking/bookedServicesList';
-import OnlineBookingManagement from '../components/ServiceProvider/booking/onlineService/OnlineServiceBookingManagement';
-import ChatUI from '../components/User/chat/AllChatsServiceProvider';
-import ChatServiceProvider from '../components/User/chat/ChatServiceProvider';
-import ServiceProviderVideoCall from '../components/VideoCall/ServiceProviderVideoCall';
-import Myprofile from '../components/ServiceProvider/service/profile/Myprofile';
-import ServiceManagement from '../components/ServiceProvider/service/ServiceManagement';
-import PaymentManagement from '../components/ServiceProvider/paymentManagement/paymentManagement';
-import SlotPage from '../components/ServiceProvider/SlotManagement/SlotPage';
-import Walletpage from '../components/ServiceProvider/wallet/walletPage';
 import SubscriptionFeaturesRoutes from './SubscriptionFeaturesRoutes';
-import ServiceProviderBookingManage from '../components/ServiceProvider/booking/offlineService/SingleBooking';
-import ServiceProviderDashboard from '../components/ServiceProvider/Dashboard';
-import AssistancePage from '../components/ServiceProvider/aiAssistance/AssistancePage';
+
+import ServiceProviderDashboard from '../pages/serviceProvider/DashboardPage';
+import BookedServiceServiceProvider from '../pages/serviceProvider/BookedServicesPage';
+import OnlineBookingManagement from '../pages/serviceProvider/OnlineBookingPage';
+import ServiceProviderBookingManage from '../pages/serviceProvider/BookingManagePage';
+import ChatUI from '../pages/serviceProvider/ChatsPage';
+import ChatServiceProvider from '../pages/serviceProvider/ChatDetailPage';
+import ServiceProviderVideoCall from '../pages/serviceProvider/VideoCallPage';
+import Myprofile from '../pages/serviceProvider/ProfilePage';
+import ServiceManagement from '../pages/serviceProvider/ServiceManagementPage';
+import PaymentManagement from '../pages/serviceProvider/PaymentManagementPage';
+import SlotPage from '../pages/serviceProvider/SlotManagementPage';
+import Walletpage from '../pages/serviceProvider/WalletPage';
+import AssistancePage from '../pages/serviceProvider/AssistancePage';
+import AdsPage from '../pages/serviceProvider/AdsPage';
 
 const ServiceProviderRoutes = () => {
   return (

@@ -1,19 +1,19 @@
 import { useEffect, useState, useRef } from 'react';
 import { Video } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { connectSocket, getSocket, disconnectSocket } from '../../../utils/socket';
+import { connectSocket, getSocket, disconnectSocket } from '../../utils/socket';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
+import { RootState } from '../../redux/store';
 import { EmojiClickData } from 'emoji-picker-react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { getAllchats } from './getAllchats';
-import { getRequest } from '../../../utils/makeRequestInstance';
-import { IMessage } from '../../../utils/types/IChat';
-import { uploadImage } from './uploadImg';
-import ChatMessage from '../../ui/chat/ChatMessage';
-import ChatInput from '../../ui/chat/ChatInput';
-import InitialAvatar from '../../../utils/ui/InitialAvatar';
+import { getAllchats } from '../../components/User/chat/getAllchats';
+import { getRequest } from '../../utils/makeRequestInstance';
+import { IMessage } from '../../utils/types/IChat';
+import { uploadImage } from '../../components/User/chat/uploadImg';
+import ChatMessage from '../../components/ui/chat/ChatMessage';
+import ChatInput from '../../components/ui/chat/ChatInput';
+import InitialAvatar from '../../utils/ui/InitialAvatar';
 
 dayjs.extend(relativeTime);
 

@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-import { IAd } from '../../../utils/types/IAd';
-import AdModal from './AdModal';
-import AdCard from './AdCard';
-import { HotToastError, HotToastSuccess } from '../../../utils/notificationToast';
-import { getRequest, patchRequest, postRequest, putRequest } from '../../../utils/makeRequestInstance';
-import { ICreateAdDTO } from '../../../utils/types/DTO/ICreateAdDTO';
-import { IAdStatus } from '../../../utils/types/IAdminAd';
-import Pagination from '../../ui/Pagination';
-import AdsCardSkelteon from '../../../Skeleton/AdsCardSkelteon';
-import EmptyState from '../../ui/EmptyState';
+import { IAd } from '../../utils/types/IAd';
+import AdModal from '../../components/ServiceProvider/ads/AdModal';
+import AdCard from '../../components/ServiceProvider/ads/AdCard';
+import { HotToastError, HotToastSuccess } from '../../utils/notificationToast';
+import { getRequest, patchRequest, postRequest, putRequest } from '../../utils/makeRequestInstance';
+import { ICreateAdDTO } from '../../utils/types/DTO/ICreateAdDTO';
+import { IAdStatus } from '../../utils/types/IAdminAd';
+import Pagination from '../../components/ui/Pagination';
+import AdsCardSkelteon from '../../Skeleton/AdsCardSkelteon';
+import EmptyState from '../../components/ui/EmptyState';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
+import { RootState } from '../../redux/store';
 const AdsPage = () => {
   const [ads, setAds] = useState<IAd[] | []>([]);
 
