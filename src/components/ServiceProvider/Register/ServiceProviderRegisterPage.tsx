@@ -70,7 +70,7 @@ const ServiceProviderRegisterPage: React.FC<RegisterFormProps> = () => {
         serviceProviderPhone: serviceProvider.serviceProviderPhone,
         serviceProviderEmail: serviceProvider.serviceProviderEmail,
         experience: serviceProvider.experience,
-        serviceMode: serviceProvider.serviceMode,
+        serviceMode: serviceProvider.serviceMode||"Offline",
         SocialMedia: serviceProvider.SocialMedia,
       });
 

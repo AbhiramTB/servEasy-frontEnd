@@ -84,14 +84,12 @@ const AdsPage = () => {
   };
 
   const handleCreate = () => {
-    HotToastSuccess('done');
     dataLimit;
     setEditAd(null);
     setOpen(true);
   };
 
   const handleEdit = (ad: IAd) => {
-    HotToastSuccess('Edit');
 
     setEditAd(ad);
     setOpen(true);
@@ -118,11 +116,12 @@ const AdsPage = () => {
 
         await putRequest(`service-providers/ads/${id}`, formData);
       } else {
-        HotToastSuccess('created');
         await postRequest(`service-providers/ads/`, { data: { ...formData, serviceProviderId } });
       }
 
       setOpen(false);
+              HotToastSuccess('created');
+
       fetchAds(crrPage);
     } catch (err) {
       console.error(err);

@@ -209,9 +209,9 @@ const ProviderWallet: React.FC<ProviderWalletProps> = ({ balance, transactions, 
             </div>
           ) : (
             <div className="space-y-4">
-              {transactions.map(txn => (
+              {transactions.map((txn,i) => (
                 <div
-                  key={txn._id}
+                  key={i}
                   className="flex items-center justify-between p-1 border border-base-300 bg-base-100 rounded-2xl "
                 >
                   <div className="flex items-center gap-4">
