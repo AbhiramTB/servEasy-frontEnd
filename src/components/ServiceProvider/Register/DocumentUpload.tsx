@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { HotToastError } from "../../../utils/notificationToast";
 
 interface DocumentUploadProps {
   label: string;
@@ -19,13 +20,14 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) {
+      if (file.size > 2 * 1024 * 1024) {
+        HotToastError('File size exceeds 2MB limit');
         return;
       }
 
       const reader = new FileReader();
       reader.onloadend = () => {
-        setDocumentImg(reader.result as string); // base64
+        setDocumentImg(reader.result as string); 
       };
       reader.readAsDataURL(file);
     }
@@ -72,7 +74,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({
               Drag and drop or{" "}
               <span className="font-medium text-primary">browse files</span>
             </p>
-            <p className="text-xs opacity-70">PNG, JPG or PDF up to 5MB</p>
+            <p className="text-xs opacity-70">PNG, JPG or PDF up to 2MB</p>
           </div>
         </div>
       ) : (

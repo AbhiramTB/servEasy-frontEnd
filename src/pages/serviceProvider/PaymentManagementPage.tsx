@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { getRequest } from '../../../utils/makeRequestInstance';
-import PaymentInfoTable from '../../ui/PaymentInfoTable';
-import EmptyState from '../../ui/EmptyState';
+import { getRequest } from '../../utils/makeRequestInstance';
+import PaymentInfoTable from '../../components/ui/PaymentInfoTable';
+import EmptyState from '../../components/ui/EmptyState';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
+import { RootState } from '../../redux/store';
 interface PaymentDetails {
   convenienceFee: number;
   inspectionCost: number;

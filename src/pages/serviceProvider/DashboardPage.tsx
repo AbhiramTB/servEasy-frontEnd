@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 
-import FilterSection from '../Chart/FilterSection';
-import StatsSection from '../Chart/StatsSection';
-import PaymentChartSection from '../Chart/PaymentChartSection';
-import PaymentTable from '../Chart/PaymentTable';
+import FilterSection from '../../components/Chart/FilterSection';
+import StatsSection from '../../components/Chart/StatsSection';
+import PaymentChartSection from '../../components/Chart/PaymentChartSection';
+import PaymentTable from '../../components/Chart/PaymentTable';
 
 import { apiEndPointServiceProvider } from '../../utils/constant';
 
 import { getRequest } from '../../utils/makeRequestInstance';
-import PaymentSummaryDownloader from '../ui/PaymentSummaryDownloader';
+import PaymentSummaryDownloader from '../../components/ui/PaymentSummaryDownloader';
 
 interface PaymentData {
   totalRevenue: number;

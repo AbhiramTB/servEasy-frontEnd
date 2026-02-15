@@ -1,16 +1,19 @@
-import ProviderWallet from './WalletCards';
-import Pagination from '../../ui/Pagination';
+import ProviderWallet from '../../components/ServiceProvider/wallet/WalletCards';
+import Pagination from '../../components/ui/Pagination';
 import { useEffect, useState } from 'react';
-import { getRequest } from '../../../utils/makeRequestInstance';
-import { ProviderWalletProps } from '../../../utils/types/IServiceProviderWallet';
-import EmptyState from '../../ui/EmptyState';
-import WalletShimmer from '../../../Skeleton/Pages/WalletShimmer';
+import { getRequest } from '../../utils/makeRequestInstance';
+import { ProviderWalletProps } from '../../utils/types/IServiceProviderWallet';
+import EmptyState from '../../components/ui/EmptyState';
+import WalletShimmer from '../../Skeleton/Pages/WalletShimmer';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 const Walletpage = () => {
   const [crrPage, setPage] = useState<number>(0);
   const [totalData, setTotalData] = useState<number>(0);
   const [wallet, setWallet] = useState<ProviderWalletProps | null>(null);
   const [loading, setLoading] = useState(false);
+  const bankDetails=useSelector((state:RootState)=>state.serviceProvider.bankDetails)
   const dataLimit = 5;
 
   useEffect(() => {
@@ -25,10 +28,8 @@ const Walletpage = () => {
       params.skip = page;
 
       const res = await getRequest('/service-providers/wallet', params);
-      console.log(res.data.data);
       setWallet(res.data.data.wallet);
       setTotalData(res.data.data.count);
-      console.log(wallet);
       setPage(page || 0);
     } catch (e) {
       console.log(e);
@@ -37,7 +38,6 @@ const Walletpage = () => {
     }
   }
 
-  console.log(wallet);
   return (
     <div>
       {loading && <WalletShimmer />}
@@ -63,7 +63,7 @@ const Walletpage = () => {
             balance={wallet.balance || 0}
             transactions={wallet.transactions || []}
             serviceProviderId={wallet.serviceProviderId || 'dfdf'}
-            bankDetails={wallet.bankDetails}
+            bankDetails={bankDetails}
             refreshData={() => getData(crrPage)}
           />
           <Pagination

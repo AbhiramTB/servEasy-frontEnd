@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getRequest, patchRequest, putRequest } from '../../../../utils/makeRequestInstance';
-import { HotToastError, HotToastSuccess } from '../../../../utils/notificationToast';
-import CancelBookingModal from '../CancelBookingModal';
-import StatusUpdateModal from '../StatusUpdateModal';
-import ServiceCardCompact from '../ServiceCardCompact';
-import UserInfoCompact from '../UserInfoCompact';
-import ScheduleAndPaymentInfo from '../ScheduleAndPaymentInfo';
-import StatusAlert from '../StatusAlert';
+import { getRequest, patchRequest, putRequest } from '../../utils/makeRequestInstance';
+import { HotToastError, HotToastSuccess } from '../../utils/notificationToast';
+import CancelBookingModal from '../../components/ServiceProvider/booking/CancelBookingModal';
+import StatusUpdateModal from '../../components/ServiceProvider/booking/StatusUpdateModal';
+import ServiceCardCompact from '../../components/ServiceProvider/booking/ServiceCardCompact';
+import UserInfoCompact from '../../components/ServiceProvider/booking/UserInfoCompact';
+import ScheduleAndPaymentInfo from '../../components/ServiceProvider/booking/ScheduleAndPaymentInfo';
+import StatusAlert from '../../components/ServiceProvider/booking/StatusAlert';
 import dayjs from 'dayjs';
-import RescheduleSlotModal from './RescheduleSlotModal';
+import RescheduleSlotModal from '../../components/ServiceProvider/booking/onlineService/RescheduleSlotModal';
 
 interface BookingData {
   bookedService: {

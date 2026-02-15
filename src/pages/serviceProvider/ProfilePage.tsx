@@ -1,11 +1,11 @@
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { RootState } from '../../../../redux/store';
-import { IServiceProvider } from '../../../../utils/types/IServiceProvider';
-import { putRequest } from '../../../../utils/makeRequestInstance';
-import { apiEndPointServiceProvider } from '../../../../utils/constant';
-import SubscriptionInfoServiceProvider from './SubscriptionInfoServiceProvider';
-import UpgradePlanButton from '../../../ui/UpgradePlanButton';
+import { RootState } from '../../redux/store';
+import { IServiceProvider } from '../../utils/types/IServiceProvider';
+import { putRequest } from '../../utils/makeRequestInstance';
+import { apiEndPointServiceProvider } from '../../utils/constant';
+import SubscriptionInfoServiceProvider from '../../components/ServiceProvider/service/profile/SubscriptionInfoServiceProvider';
+import UpgradePlanButton from '../../components/ui/UpgradePlanButton';
 import { Crown, Edit, Save } from 'lucide-react';
 
 const Myprofile = () => {
