@@ -32,7 +32,7 @@ const ChatUI: React.FC = () => {
         setChats([]);
       }
     }
-          
+
     if (serviceProviderId) fetchData();
   }, [serviceProviderId]);
 
@@ -62,7 +62,7 @@ const ChatUI: React.FC = () => {
             </div>
           ) : filteredChats?.length === 0 ? (
             <div className="p-8 text-center">
-              <p className="text-sm text-base-content/60">No chats found{serviceProviderId}</p>
+              <p className="text-sm text-base-content/60">No chats found</p>
             </div>
           ) : (
             <div className="space-y-1 p-2">
