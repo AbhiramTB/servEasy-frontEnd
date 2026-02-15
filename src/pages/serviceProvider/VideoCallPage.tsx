@@ -3,9 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useVideoCall } from '../../hooks/useVideoCall';
 import { RootState } from '../../redux/store';
-import EndCallModal from './EndCallModal';
-import VideoCallUI from './VideoCallUi';
-import ErrorModal from './ErrorModal';
+import EndCallModal from '../../components/VideoCall/EndCallModal';
+import VideoCallUI from '../../components/VideoCall/VideoCallUi';
+import ErrorModal from '../../components/VideoCall/ErrorModal';
 interface Prop {
   firstLetter?: string;
 }

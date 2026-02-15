@@ -50,7 +50,7 @@ export const apiEndPointAdmin = {
   blockUnblockUser: '/admin/users/block-unblock',
   serviceProvider: '/admin/serviceProvider',
   serviceProviderReject: '/admin/serviceProvider/reject',
-  serviceProviderVerify: '/admin/serviceProvider/verify',
+  serviceProviderVerify: '/admin/service-provider/verify',
   getAllservices: '/admin/service',
   blockUnblokServices: '/admin/service',
   blockUnblockServiceProvider: '/admin/serviceprovider',

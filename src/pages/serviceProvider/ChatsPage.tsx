@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { fetchAllChats } from './getAllchats';
+import { fetchAllChats } from '../../components/User/chat/getAllchats';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
+import { RootState } from '../../redux/store';
 import { Link, useNavigate } from 'react-router-dom';
 import { Image, Video } from 'lucide-react';
-import { IMessage } from '../../../utils/types/IChat';
-import InitialAvatar from '../../../utils/ui/InitialAvatar';
+import { IMessage } from '../../utils/types/IChat';
+import InitialAvatar from '../../utils/ui/InitialAvatar';
 
 interface ChatItem {
   _id: string;

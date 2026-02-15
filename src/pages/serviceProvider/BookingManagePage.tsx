@@ -1,31 +1,31 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getRequest, patchRequest, postRequest } from '../../../../utils/makeRequestInstance';
-import { HotToastError, HotToastPromise, HotToastSuccess } from '../../../../utils/notificationToast';
-import PaymentModal from '../paymentModal';
-import { Ipayment } from '../../../../utils/types/Ipayment';
-import { getMinMaxDateTime } from '../../../../utils/getMinMaxDateTime';
-import ServiceDateTime from '../../../User/bookService/ServiceTimeInfo';
-import { IServiceDateTime } from '../../../../utils/types/booking';
-import AcceptServiceModal from '../ShowAcceptModal';
-import CancelBookingModal from '../CancelBookingModal';
-import PriceDetailsCard from '../PriceDetailsCard';
-import UploadDocumentsModal from '../UploadDocumentsModal';
-import StatusUpdateModal from '../StatusUpdateModal';
-import StatusAlert from '../StatusAlert';
-import BookingStepper from '../BookingStepper';
-import ServiceCardCompact from '../ServiceCardCompact';
-import UserInfoCompact from '../UserInfoCompact';
-import ServiceAddressCard from '../ServiceAddressCard';
-import { getServiceStatusFlags } from '../../../../utils/getServiceStatusFlags';
-import ScheduleAndPaymentInfo from '../ScheduleAndPaymentInfo';
-import RescheduleBookingModal from '../rescheduleBooking';
-import { IReview } from '../../../../utils/types/IReview';
-import StarRating from '../../../ui/StarRating';
+import { getRequest, patchRequest, postRequest } from '../../utils/makeRequestInstance';
+import { HotToastError, HotToastPromise, HotToastSuccess } from '../../utils/notificationToast';
+import PaymentModal from '../../components/ServiceProvider/booking/paymentModal';
+import { Ipayment } from '../../utils/types/Ipayment';
+import { getMinMaxDateTime } from '../../utils/getMinMaxDateTime';
+import ServiceDateTime from '../../components/User/bookService/ServiceTimeInfo';
+import { IServiceDateTime } from '../../utils/types/booking';
+import AcceptServiceModal from '../../components/ServiceProvider/booking/ShowAcceptModal';
+import CancelBookingModal from '../../components/ServiceProvider/booking/CancelBookingModal';
+import PriceDetailsCard from '../../components/ServiceProvider/booking/PriceDetailsCard';
+import UploadDocumentsModal from '../../components/ServiceProvider/booking/UploadDocumentsModal';
+import StatusUpdateModal from '../../components/ServiceProvider/booking/StatusUpdateModal';
+import StatusAlert from '../../components/ServiceProvider/booking/StatusAlert';
+import BookingStepper from '../../components/ServiceProvider/booking/BookingStepper';
+import ServiceCardCompact from '../../components/ServiceProvider/booking/ServiceCardCompact';
+import UserInfoCompact from '../../components/ServiceProvider/booking/UserInfoCompact';
+import ServiceAddressCard from '../../components/ServiceProvider/booking/ServiceAddressCard';
+import { getServiceStatusFlags } from '../../utils/getServiceStatusFlags';
+import ScheduleAndPaymentInfo from '../../components/ServiceProvider/booking/ScheduleAndPaymentInfo';
+import RescheduleBookingModal from '../../components/ServiceProvider/booking/rescheduleBooking';
+import { IReview } from '../../utils/types/IReview';
+import StarRating from '../../components/ui/StarRating';
 import dayjs from 'dayjs';
-import { ReloadButton } from '../../../User/bookService/ReloadButton';
-import ShowBills from '../../../ui/ShowBills';
-import useDataRefresh from '../../../../hooks/useDataRefresh';
+import { ReloadButton } from '../../components/User/bookService/ReloadButton';
+import ShowBills from '../../components/ui/ShowBills';
+import useDataRefresh from '../../hooks/useDataRefresh';
 interface IliveLocation {
   lat: number;
   lng: number;
@@ -313,166 +313,6 @@ const ServiceProviderBookingManage = () => {
   const { isPending, isConfirmed, isInProgress, isCompleted, isCancelled, isPaymentRequested } = getServiceStatusFlags(
     bookedService.serviceStatus
   );
-
-  // return (
-  //   <div className="container min-h-screen p-2 mx-auto border border-primary/20 bg-primary/5">
-  //     <StatusAlert status={bookedService.serviceStatus} cancellationReason={bookedService.cancellationReason} />
-  //     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-  //       <div className="p-4 shadow md:col-span-2 bg-base-100 rounded-box">
-  //         <ServiceCardCompact
-  //           serviceImage={service.serviceImage}
-  //           serviceName={service.serviceName}
-  //           serviceType={service.serviceType}
-  //           description={service.description}
-  //           estimatedPrice={service.estimatedPrice}
-  //         />
-
-  //         <div className="divider"></div>
-
-  //         {/* Customer Details */}
-  //         <UserInfoCompact
-  //           profileImage={user.profileImage}
-  //           userName={user.userName}
-  //           email={user.email}
-  //           phone={user.phone ?? ' '}
-  //         />
-
-  //         {/* Status Timeline */}
-
-  //         <BookingStepper status={bookedService.serviceStatus} />
-
-  //         <ScheduleAndPaymentInfo
-  //           bookedDate={formattedBookedDate}
-  //           serviceDate={formattedServiceDate}
-  //           serviceTime={formattedServiceTime}
-  //           isPending={isPending}
-  //           estimatedServiceTime={bookedService.estimatedServiceTime}
-  //           paymentStatus={bookedService.paymentStatus}
-  //           paymentType={bookedService.paymentType}
-  //         />
-
-  //         <div className="flex flex-wrap justify-center gap-2 mt-4">
-  //           {isPending && (
-  //             <>
-  //               <button className="btn btn-success" onClick={() => setShowAcceptModal(true)}>
-  //                 Accept Booking
-  //               </button>
-  //               <button className="btn btn-error" onClick={() => setShowCancelModal(true)}>
-  //                 Cancel Booking
-  //               </button>
-  //             </>
-  //           )}
-
-  //           {isConfirmed && (
-  //             <>
-  //               <button className="btn btn-primary" onClick={() => setShowStatusModal(true)}>
-  //                 Update Status
-  //               </button>
-  //             </>
-  //           )}
-
-  //           <Link to={'/service-provider/chat/' + user._id}>
-  //             <button className="btn btn-secondary">Contact Customer</button>
-  //           </Link>
-
-  //           {isConfirmed && (
-  //             <>
-  //               <button className="btn btn-success" onClick={() => setRescheduleModal(true)}>
-  //                 reschedule your booking
-  //               </button>
-  //             </>
-  //           )}
-
-  //           {(isInProgress || isPaymentRequested || isCompleted) && !bookedService.serviceBills && (
-  //             <button className="btn btn-info" onClick={() => setShowInvoiceModal(true)}>
-  //               Upload Bills
-  //             </button>
-  //           )}
-
-  //           {isInProgress && (
-  //             <button className="w-full mt-4 btn btn-warning" onClick={() => setPaymentForm(true)}>
-  //               Request Payment
-  //             </button>
-  //           )}
-
-  //           {paymentForm && (
-  //             <PaymentModal
-  //               payment={payment}
-  //               setPayment={(data: Ipayment) => setPayment(data)}
-  //               closeModal={() => setPaymentForm(false)}
-  //               makePaymentRequest={handlePaymentRequest}
-  //             />
-  //           )}
-  //         </div>
-  //       </div>
-
-  //       <div className="md:col-span-1">
-  //         <div className="mb-4 shadow card bg-base-100">
-  //           <ServiceDateTime
-  //             serviceDateTime={bookedService?.preferredSlot || 0}
-  //             userType="serviceProvider"
-  //             isCancelled={isCancelled ? true : false}
-  //           />
-  //         </div>
-  //         <div className="mb-4 ">
-  //           <ServiceAddressCard address={bookedService.address} liveLocation={bookedService.liveLocation} />
-  //         </div>
-  //         <div className=" w-full">
-  //           <span className="text-lg font-semibold text-primary">user review</span>
-  //           <StarRating comment={bookingData.review.comment} rating={bookingData.review.rating} />
-  //         </div>
-
-  //         {/* Price Details */}
-  //         {bookedService.payment && <PriceDetailsCard payment={bookedService.payment} />}
-  //       </div>
-  //     </div>
-
-  //     <AcceptServiceModal
-  //       estimatedTime={estimatedTime}
-  //       max={max}
-  //       min={min}
-  //       handleAcceptBooking={() => handleAcceptBooking('accept')}
-  //       setEstimatedTime={setEstimatedTime}
-  //       setShow={setShowAcceptModal}
-  //       show={showAcceptModal}
-  //     />
-
-  //     <RescheduleBookingModal
-  //       estimatedTime={estimatedTime}
-  //       setEstimatedTime={setEstimatedTime}
-  //       setShowAcceptModal={setRescheduleModal}
-  //       handleAcceptBooking={() => handleAcceptBooking('reschedule')}
-  //       reason={reason}
-  //       setReason={setReason}
-  //       show={rescheduleModal}
-  //     />
-
-  //     <CancelBookingModal
-  //       show={showCancelModal}
-  //       setShow={setShowCancelModal}
-  //       cancelReason={cancelReason}
-  //       setCancelReason={setCancelReason}
-  //       handleCancelBooking={handleCancelBooking}
-  //     />
-
-  //     <StatusUpdateModal
-  //       show={showStatusModal}
-  //       onClose={() => setShowStatusModal(false)}
-  //       onUpdate={handleStatusUpdate}
-  //       statusList={['confirmed', 'inProgress']}
-  //       selectedStatus={newStatus}
-  //       setSelectedStatus={setNewStatus}
-  //     />
-
-  //     <UploadDocumentsModal
-  //       showModal={showInvoiceModal}
-  //       setShowModal={setShowInvoiceModal}
-  //       invoiceFiles={invoiceFiles}
-  //       setInvoiceFiles={setInvoiceFiles}
-  //       onUpload={handleInvoiceUpload}
-  //     />
-  //   </div>
-  // );
 
   return (
     <div className="container mx-auto min-h-screen p-4 md:p-6 bg-gradient-to-br from-primary/5 to-base-100">

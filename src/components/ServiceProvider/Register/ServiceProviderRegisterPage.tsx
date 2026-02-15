@@ -21,7 +21,11 @@ const ServiceProviderRegisterPage: React.FC<RegisterFormProps> = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>({
+    defaultValues: {
+      serviceMode: 'Offline',
+    },
+  });
   const [profileImg, setProfileImg] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [services, setServices] = useState<string[]>([]);
@@ -66,7 +70,7 @@ const ServiceProviderRegisterPage: React.FC<RegisterFormProps> = () => {
         serviceProviderPhone: serviceProvider.serviceProviderPhone,
         serviceProviderEmail: serviceProvider.serviceProviderEmail,
         experience: serviceProvider.experience,
-        serviceMode: serviceProvider.serviceMode,
+        serviceMode: serviceProvider.serviceMode||"Offline",
         SocialMedia: serviceProvider.SocialMedia,
       });
 
@@ -126,6 +130,21 @@ const ServiceProviderRegisterPage: React.FC<RegisterFormProps> = () => {
         setLocationError('Location is required. Please select a valid location');
         return;
       }
+     
+  
+      if(!bankDetails.accountHolderName||bankDetails.accountHolderName.length<3||bankDetails.accountHolderName.length>20){
+        HotToastError('Please enter a valid account holder name (3-20 characters)');
+        return;
+      }
+      if(!bankDetails.accountNumber||bankDetails.accountNumber.length<10||bankDetails.accountNumber.length>16){
+        HotToastError('Please enter a valid account number (10-16 digits)');
+        return;
+      }
+      if(!bankDetails.ifscCode||bankDetails.ifscCode.length!=11){
+        HotToastError('Please enter a valid IFSC code (11 characters)');
+        return;
+      }
+    
 
       if (data.serviceProviderEmail && !validateEmail(data.serviceProviderEmail)) {
         HotToastError('Please enter a valid email');
@@ -208,8 +227,9 @@ const ServiceProviderRegisterPage: React.FC<RegisterFormProps> = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        setImageError('File size exceeds 5MB limit');
+      if (file.size > 2 * 1024 * 1024) {
+        HotToastError('File size exceeds 2MB limit');
+        setImageError('File size exceeds 2MB limit');
         return;
       }
 
@@ -359,51 +379,66 @@ const ServiceProviderRegisterPage: React.FC<RegisterFormProps> = () => {
     );
   }
 
-  return (
-    <div className="w-full max-w-3xl mx-auto mt-4 shadow-xl card bg-base-200">
-      <div className="card-body">
-        <h2 className="mx-auto mb-6 text-3xl font-bold text-center card-title text-primary">
-          Service Provider Registration
-        </h2>
+return (
+  <div className='bg-hex-pattern min-h-screen pb-20'>
 
-        <RegisterForm
-          register={register}
-          handleSubmit={handleSubmit}
-          errors={errors}
-          onSubmit={onSubmit}
-          profileImg={profileImg}
-          handleImageChange={handleImageChange}
-          imageError={imageError}
-          services={services}
-          newService={newService}
-          setNewService={setNewService}
-          addService={addService}
-          removeService={removeService}
-          skills={skills}
-          newSkill={newSkill}
-          newSkillLevel={newSkillLevel}
-          setNewSkill={setNewSkill}
-          setNewSkillLevel={setNewSkillLevel}
-          addSkill={addSkill}
-          removeSkill={removeSkill}
-          description={description}
-          setDescription={setDescription}
-          location={location}
-          setLocation={setLocation}
-          locationError={locationError}
-          bankDetails={bankDetails}
-          setBankDetails={setBankDetails}
-          documentImg1={documentImg1}
-          documentImg2={documentImg2}
-          setDocumentImg1={setDocumentImg1}
-          setDocumentImg2={setDocumentImg2}
-          documentError={documentError}
-          loading={loading}
-          isReapplyMode={isReapplyMode}
-        />
+
+    <div className="max-w-5xl mx-auto px-4">
+      <div className="bg-base-100 rounded-3xl shadow-xl border border-base-300 overflow-hidden">
+        <div className="h-2 bg-primary w-full"></div>
+        
+        <div className="p-6 md:p-12">
+          <header className="mb-10 text-center">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-base-content tracking-tight">
+              Service Provider <span className="text-primary">Registration</span>
+            </h2>
+            <p className="text-base-content/60 mt-2">Fill in the details below to set up your professional profile</p>
+          </header>
+
+          <RegisterForm
+            register={register}
+            handleSubmit={handleSubmit}
+            errors={errors}
+            onSubmit={onSubmit}
+            profileImg={profileImg}
+            handleImageChange={handleImageChange}
+            imageError={imageError}
+            services={services}
+            newService={newService}
+            setNewService={setNewService}
+            addService={addService}
+            removeService={removeService}
+            skills={skills}
+            newSkill={newSkill}
+            newSkillLevel={newSkillLevel}
+            setNewSkill={setNewSkill}
+            setNewSkillLevel={setNewSkillLevel}
+            addSkill={addSkill}
+            removeSkill={removeSkill}
+            description={description}
+            setDescription={setDescription}
+            location={location}
+            setLocation={setLocation}
+            locationError={locationError}
+            bankDetails={bankDetails}
+            setBankDetails={setBankDetails}
+            documentImg1={documentImg1}
+            documentImg2={documentImg2}
+            setDocumentImg1={setDocumentImg1}
+            setDocumentImg2={setDocumentImg2}
+            documentError={documentError}
+            loading={loading}
+            isReapplyMode={isReapplyMode}
+          />
+        </div>
       </div>
+      
+      <p className="text-center text-base-content/40 text-xs mt-6">
+        <strong>Service Provider Verification:</strong> Our admin team will verify your account. Please provide original details.
+      </p>
     </div>
-  );
+  </div>
+);
 };
 
 export default ServiceProviderRegisterPage;

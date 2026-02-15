@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import AssistanceSidebar from './AssistanceSidebar';
-import AssistanceWindow from './AssistanceWindow';
-import { IChatSession, Message } from '../../../utils/types/IAiassistance';
-import { getRequest, postRequest } from '../../../utils/makeRequestInstance';
+import AssistanceSidebar from '../../components/ServiceProvider/aiAssistance/AssistanceSidebar';
+import AssistanceWindow from '../../components/ServiceProvider/aiAssistance/AssistanceWindow';
+import { IChatSession, Message } from '../../utils/types/IAiassistance';
+import { getRequest, postRequest } from '../../utils/makeRequestInstance';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
+import { RootState } from '../../redux/store';
 
 export default function AssistancePage() {
   const { chatId } = useParams();

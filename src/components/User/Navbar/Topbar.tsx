@@ -39,7 +39,7 @@ const TopBar = ({
   handleLogOut,
 }: TopBarProps) => {
   const serviceProviderLanding = () => {
-    navigate(ROUTES.SERVICEPROVIDER.DASHBOARD);
+    navigate(ROUTES.SERVICEPROVIDER.ROOT + '/' + ROUTES.SERVICEPROVIDER.DASHBOARD);
   };
 
   const tabs = [

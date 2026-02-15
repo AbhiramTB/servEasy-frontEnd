@@ -92,7 +92,7 @@ interface BookedService {
   address: Address;
   createdAt: string;
   updatedAt: string;
-  serviceBills?: [string];
+serviceBills?: string[];
   preferredSlot: IServiceDateTime;
   bookingHistory?: IBookingHistory[];
 
@@ -249,6 +249,8 @@ const ServiceBookingDetails = () => {
 
       if (res.status === 200) {
         setBookingData(res.data.service);
+        console.log(res.data.service.serviceBills)
+console.log();
         setReview(res.data.service.review);
       }
     } catch (err) {
@@ -761,12 +763,13 @@ const ServiceBookingDetails = () => {
             <BookingHistoryList history={bookedService.bookingHistory ?? []} />
           </div>
 
-          {!isCompleted && (
-            <div className="mt-6 shadow-xl card bg-base-100">
+          {  (
+            <div className="">
               <div className="card-body">
-                <h3 className="mb-2 font-semibold text-primary">More options</h3>
+                {/* <h3 className="mb-2 font-semibold text-primary">More options</h3> */}
 
-                {showBills && bookingData.bookedService.serviceBills && (
+
+                {showBills&&bookingData?.bookedService?.serviceBills&&bookingData?.bookedService?.serviceBills?.length>0 && (
                   <ShowBills
                     close={() => setShowBills(false)}
                     serviceName={bookingData.service.serviceName}
