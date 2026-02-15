@@ -57,12 +57,12 @@ const UserRoutes = () => {
         <Route path={ROUTES.USER.VIDEO_CALL} element={<VideoCall />} />
         <Route path={ROUTES.USER.BOOKED_SERVICE_DETAILS} element={<ServiceBookingDetails />} />
         <Route path={ROUTES.USER.BOOKED_SERVICE_ONLINE_DETAILS} element={<ServiceBookingDetailsOnline />} />
+        <Route path={ROUTES.USER.COUPON} element={<CouponsPage />} />
 
         <Route path={ROUTES.USER.CHAT_WITH_PROVIDER} element={<ChatUser />} />
         <Route path={ROUTES.USER.CHATS} element={<ChatsUser />} />
       </Route>
 
-      <Route path={ROUTES.USER.COUPON} element={<CouponsPage />} />
       <Route path={ROUTES.SERVICEPROVIDER.REGISTER} element={<ServiceProviderRegisterPage />} />
       <Route path="/payment/verify" element={<PaymentVerify />} />
     </Route>
