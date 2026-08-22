@@ -14,13 +14,13 @@ export interface IChatNotification {
   senderProfile: string;
   callRoomId: string;
   content: string;
-  read: Boolean;
+  read: boolean;
 }
 
 export interface INotification {
   type: 'notification';
   content: string;
-  read: Boolean;
+  read: boolean;
 }
 
 export interface ISavedNotification {
