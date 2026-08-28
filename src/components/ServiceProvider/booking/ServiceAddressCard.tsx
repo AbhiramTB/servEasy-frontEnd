@@ -35,7 +35,7 @@ const ServiceAddressCard: React.FC<ServiceAddressCardProps> = ({ address, liveLo
         </div>
       </div>
 
-      {liveLocation?.lat && liveLocation?.lng && (
+      {(liveLocation&&liveLocation.lat && liveLocation.lng ) && (
         <div className="px-4 pb-4 bg-base-300">
           <h3 className="my-2 font-sans text-base text-center">User Location on Map</h3>
           <iframe
